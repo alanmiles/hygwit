@@ -1,6 +1,11 @@
-<%= provide(:title, "Home") %>
-<h1>HYGWIT</h1>
-<p> 
-  This is the home page for HYGWIT - the achievement-focused HR toolset for Gulf businesses.  Have You Got What It Takes?
-</p>
+<div class="center hero-unit">
+  <h1>HYGWIT</h1>
+  <h2> 
+    The achievement-focused HR toolset for Gulf businesses.
+  </h2>
   
+   <%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
+</div>
+
+<%= link_to image_tag("hroomph.jpg", alt: "HROomph", :height="200" width="200"), 'http://www.hroomph.com' %>
+

@@ -1,0 +1,12 @@
+<footer class="footer">
+  <small>
+    From the <a href="http://www.hroomph.com">HROomph Initiative</a>
+  </small>
+  <nav>
+    <ul>
+      <li><%= link_to "About",   about_path %></li>
+      <li><%= link_to "Contact", contact_path %></li>
+      <li><a href="http://www.hroomph.com/explorations">Blog</a></li>
+    </ul>
+  </nav>
+</footer>
