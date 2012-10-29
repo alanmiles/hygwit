@@ -17,8 +17,8 @@ development:
   encoding: unicode
   database: hygwit_development
   pool: 5
-  username: postgres
-  password: nelim2sala
+  username: hygwit
+  password:
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -43,13 +43,13 @@ test:
   encoding: unicode
   database: hygwit_test
   pool: 5
-  username: postgres
-  password: nelim2sala
+  username: hygwit
+  password:
 
-#production:
-#  adapter: postgresql
-#  encoding: unicode
-#  database: hygwit_production
-#  pool: 5
-#  username: hygwit
-#  password:
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: hygwit_production
+  pool: 5
+  username: hygwit
+  password:
