@@ -1,3 +1,4 @@
+<%= provide(:title, "Home") %>
 <h1>HYGWIT</h1>
 <p> 
   This is the home page for HYGWIT - the achievement-focused HR toolset for Gulf businesses.  Have You Got What It Takes?
