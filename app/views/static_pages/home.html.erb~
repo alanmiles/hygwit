@@ -7,5 +7,5 @@
    <%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
 </div>
 
-<%= link_to image_tag("hroomph.jpg", alt: "HROomph", :height="200" width="200"), 'http://www.hroomph.com' %>
+<%= link_to image_tag("hroomph.jpg", alt: "HROomph", size: "200x200"), 'http://www.hroomph.com' %>
 
