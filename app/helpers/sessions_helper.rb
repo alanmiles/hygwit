@@ -42,4 +42,10 @@ module SessionsHelper
     end
   end
   
+  def check_admin
+    if signed_in? && !current_user.admin?
+      redirect_to root_path, notice: "You must be a HROomph admin to issue this instruction." 
+    end
+  end
+  
 end

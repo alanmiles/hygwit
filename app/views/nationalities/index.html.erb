@@ -10,11 +10,13 @@
       <%= nationality.nationality %>
       | <%= link_to "change", edit_nationality_path(nationality) %>
       | <%= link_to "delete", nationality, method: :delete,
-                             data: { confirm: "Delete #{nationality.nationality}?  Sure?" } %>
+                             data: { confirm: "Delete '#{nationality.nationality}'?  Sure?" } %>
     
     </li>
   <% end %>
 </ul>
-<div style="padding-top: 10px">
-  <%= link_to "Add a nationality", new_nationality_path, class: "btn btn-small" %>
-</div>
+<% if Nationality.count > 10 %>
+  <div style="padding-top: 10px">
+    <%= link_to "Add a nationality", new_nationality_path, class: "btn btn-small" %>
+  </div>
+<% end %>

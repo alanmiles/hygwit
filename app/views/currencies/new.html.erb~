@@ -1,12 +1,12 @@
-<% provide(:title, 'New Nationality') %>
-<h1>New Nationality</h1>
+<% provide(:title, 'New currency') %>
+<h1>New currency</h1>
 <div class="row">
   <div class="span6 offset3">
-    <%= form_for(@nationality) do |f| %>
+    <%= form_for(@currency) do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
       <%= render 'fields', f: f %>
       <%= f.submit "Create", class: "btn btn-primary" %>
-      <%= link_to "Back", nationalities_path, class: "btn" %>
+      <%= link_to "Back", currencies_path, class: "btn" %>
     <% end %>
   </div>
 </div>

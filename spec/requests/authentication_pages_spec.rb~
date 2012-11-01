@@ -100,18 +100,6 @@ describe "AuthenticationPages" do
       end
     end
     
-    describe "as signed-in user" do
-      let(:user) { FactoryGirl.create(:user) }
-      before { sign_in user }
-      
-      describe "trying to get to the sign-up form" do
-        before { visit signup_path }
-        specify { response.should redirect_to(root_path) }
-      end
-       
-    
-    end
-    
     describe "as wrong user" do
       let(:user) { FactoryGirl.create(:user) }
       let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }

@@ -61,7 +61,7 @@ describe "AuthenticationPages" do
         describe "after signing in" do
 
           it "should render the desired protected page" do
-            page.should have_selector('title', text: 'Edit user')
+            page.should have_selector('title', text: 'Edit User')
           end
           
           describe "when signing in again" do

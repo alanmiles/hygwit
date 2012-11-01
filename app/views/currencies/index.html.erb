@@ -1,0 +1,23 @@
+<% provide(:title, 'Currencies') %>
+<h1>Currencies</h1>
+
+<div style="padding-bottom: 10px">
+  <%= link_to "Add a currency", new_currency_path, class: "btn btn-small" %>
+</div>
+<ul class="itemlist">
+  <% @currencies.each do |currency| %>
+    <li>
+      <%= currency.currency %>
+      <%= currency.code %>
+      | <%= link_to "change", edit_currency_path(currency) %>
+      | <%= link_to "delete", currency, method: :delete,
+                             data: { confirm: "Delete '#{currency.code}'?  Sure?" } %>
+    
+    </li>
+  <% end %>
+</ul>
+<% if Currency.count > 10 %>
+  <div style="padding-top: 10px">
+    <%= link_to "Add a currency", new_currency_path, class: "btn btn-small" %>
+  </div>
+<% end %>
