@@ -1,0 +1,23 @@
+# == Schema Information
+#
+# Table name: nationalities
+#
+#  id          :integer          not null, primary key
+#  nationality :string(255)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
+require 'spec_helper'
+
+describe Nationality do
+  
+  before do
+    @nationality = Nationality.new(nationality: 'British')
+  end
+  
+  subject { @nationality }
+
+  it { should respond_to(:nationality) }
+  it { should be_valid }
+end

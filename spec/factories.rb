@@ -9,4 +9,8 @@ FactoryGirl.define do
       admin true
     end
   end
+  
+  factory :nationality do
+    sequence(:nationality) { |n| "Nationality #{n}" }
+  end
 end
