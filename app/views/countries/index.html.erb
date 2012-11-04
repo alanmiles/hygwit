@@ -1,0 +1,31 @@
+<% provide(:title, 'Countries') %>
+
+<h1>Countries</h1>
+<div class="row">
+  <div class="span6 offset3">
+
+<div style="padding-bottom: 10px">
+  <%= link_to "Add a country", new_country_path, class: "btn btn-small" %>
+</div>
+
+<ul class="itemlist">
+  <% @countries.each do |country| %>
+    <li>
+      <%= link_to country.country, country %> - 
+      <%= country.nationality.nationality %> - 
+      <%= country.currency.currency %>
+      | <%= link_to "change", edit_country_path(country) %>
+      | <%= link_to "delete", country, method: :delete,
+                             data: { confirm: "Delete '#{country.country}'?  Sure?" } %>
+    
+    </li>
+  <% end %>
+</ul>
+
+<% if Country.count > 10 %>
+  <div style="padding-top: 10px">
+    <%= link_to "Add a country", new_country_path, class: "btn btn-small" %>
+  </div>
+<% end %>
+</div>
+</div>

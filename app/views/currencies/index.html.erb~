@@ -9,6 +9,7 @@
     <li>
       <%= currency.currency %>
       <%= currency.code %>
+      (<%= currency.decimal_places %> decimal places) unless currency.decimal_places == 2
       | <%= link_to "change", edit_currency_path(currency) %>
       | <%= link_to "delete", currency, method: :delete,
                              data: { confirm: "Delete '#{currency.code}'?  Sure?" } %>
@@ -16,6 +17,8 @@
     </li>
   <% end %>
 </ul>
-<div style="padding-top: 10px">
-  <%= link_to "Add a currency", new_currency_path, class: "btn btn-small" %>
-</div>
+<% if Currency.count > 10 %>
+  <div style="padding-top: 10px">
+    <%= link_to "Add a currency", new_currency_path, class: "btn btn-small" %>
+  </div>
+<% end %>

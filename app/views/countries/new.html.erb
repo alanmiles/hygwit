@@ -1,0 +1,23 @@
+<% provide(:title, 'New Country') %>
+<h1>New Country</h1>
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@country) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+     
+      <%= f.label :country %>
+      <%= f.text_field :country %>
+
+      <%= f.label :nationality_id, "Nationality" %>
+      <%= collection_select(:country, :nationality_id, 
+          @nationalities, :id, :nationality, prompt: 'Please select')  %>
+
+      <%= f.label :currency_id, "Currency" %>
+      <%= collection_select(:country, :currency_id, 
+          @currencies, :id, :currency_code, prompt: 'Please select')  %>
+          
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "Back", countries_path, class: "btn" %>
+    <% end %>
+  </div>
+</div>

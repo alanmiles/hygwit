@@ -11,6 +11,8 @@
 class Nationality < ActiveRecord::Base
   attr_accessible :nationality
   
+  has_many :countries
+  
   validates :nationality, presence: true, length: { maximum: 50 },
   												uniqueness: { case_sensitive: false }
   												

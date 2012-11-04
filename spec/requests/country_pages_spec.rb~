@@ -7,6 +7,7 @@ describe "CountryPages" do
   before do
     @example = FactoryGirl.create(:nationality, nationality: 'Omani') 
     @currency = Currency.create(currency: 'Omani Riyals', code: 'OMR')
+    @country = Country.create(country: "Oman", currency_id: @currency.id, nationality_id: @example.id)
   end
   
   describe "when not logged in" do
@@ -48,7 +49,26 @@ describe "CountryPages" do
         end
       end
     end 
+    
+    describe "country controller" do
+    
+      before { visit new_country_path }
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    
+      describe "when trying to access the index" do
+    
+        before { visit countries_path }
       
+        it "should render the sign-in path" do
+          page.should have_selector('.alert', text: 'sign in')
+          page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+    end 
+          
   end
   
   describe "when logged in as non-admin" do
@@ -131,6 +151,50 @@ describe "CountryPages" do
         specify { response.should redirect_to(root_path) }
       end
     end
+    
+    
+    
+    describe "countries controller" do
+    
+      describe "accessing the 'new' page" do
+    
+        before { visit new_country_path }
+      
+        it { should_not have_selector('title', text: 'New country') }
+        it "should render the root_path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Achievement-flavored HR')
+        end
+      end
+    
+      describe "when trying to access the index" do
+    
+        before { visit countries_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Achievement-flavored HR')
+        end
+      end
+    
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the Countries#destroy action" do
+          before { delete country_path(@country) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the Countries#update action" do
+        before { put country_path(@country) }
+        specify { response.should redirect_to(root_path) }
+      end
+    end
+    
+    
+    
+    
   end
   
   describe "when logged in as admin" do
@@ -271,6 +335,10 @@ describe "CountryPages" do
           it "should be able to delete a currency" do
             expect { click_link('delete') }.to change(Currency, :count).by(-1)
           end
+          
+          describe "when > 10 currencies" do
+            pending("should have a bottom 'Add button + not when < 10 entries") 
+          end
        
         end
       end
@@ -347,5 +415,145 @@ describe "CountryPages" do
         end
       end 
     end
+    
+    
+    
+    describe "country controller" do
+    
+      before do
+        @currency_1 = Currency.create(currency: 'Pounds Sterling', code: 'GBP')
+        @currency_2 = Currency.create(currency: 'Bahraini Dinars', code: 'BHD')
+        @nationality_1 = Nationality.create(nationality: 'British')
+        @nationality_2 = Nationality.create(nationality: 'Bahraini')
+        @country_1 = Country.create(country: 'UK', 
+           currency_id: @currency_1.id, nationality_id: @nationality_1.id)
+        @country_2 = Country.create(country: 'Bahrain', 
+           currency_id: @currency_2.id, nationality_id: @nationality_2.id)
+      end
+      
+      
+      describe "index" do
+      
+        before do  
+          visit countries_path
+        end
+     
+        it { should have_selector('title', text: 'Countries') }
+        it { should have_selector('h1', text: 'Countries') }
+      
+        describe "list " do
+      
+          it { should have_link('change', href: edit_country_path(@country)) }
+          it { should have_link('delete', href: country_path(@country)) }
+          it { should have_link('Add', href: new_country_path) }
+          it { should have_link(@country.country, href: country_path(@country)) }
+          it { should have_selector('ul.itemlist li:nth-child(2)', text: 'UK') }
+        
+          describe "country already in use" do
+        
+            it "should not have 'Delete' button"
+          end
+        
+          it "should be able to delete a country" do
+            expect { click_link('delete') }.to change(Country, :count).by(-1)
+          end
+          
+          describe "when > 10 countries" do
+            pending("should have a bottom 'Add button + not when < 10 entries") 
+          end
+       
+        end
+      end
+      
+      describe "show" do
+      
+        before { visit country_path(@country) }
+        
+        it { should have_selector('title', text: @country.country) }
+        it { should have_selector('h1',		 text: @country.country) }
+        it { should have_link('Edit', href: edit_country_path(@country)) }
+        it { should have_link('List', href: countries_path) }
+      
+      end
+    
+      describe "accessing the 'new' page" do
+    
+        before { visit new_country_path }
+      
+        it { should have_selector('title', text: 'New Country') }
+        it { should have_selector('h1',    text: 'New Country') }
+        it { should have_link('Back', href: countries_path) }
+    
+        describe "creating a new Country" do
+      
+          before do 
+            fill_in "Country", with: "Scotland"
+            select "GBP (Pounds Sterling)",  from: "country_currency_id"
+            select "British", from: "Nationality"
+          end
+        
+          it "should create a country and redirect to the 'show' page" do
+            expect { click_button "Create" }.to change(Country, :count).by(1)
+            page.should have_selector('h1', text: 'Scotland')
+          end         
+        end
+      
+        describe "creating a record that fails validation" do
+      
+          before { fill_in "Country",  with: "" }
+        
+          it "should not create a ccountry" do
+            expect { click_button "Create" }.not_to change(Country, :count)
+            page.should have_selector('h1', text: 'New Country')
+            page.should have_content('error')
+          end  
+      
+        end
+      end
+    
+      describe "edit" do
+    
+        before do
+          @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR')
+          @nationality_3 = Nationality.create(nationality: 'Saudi')
+          @country_3 = Country.create(country: 'Saudi Arabia', nationality_id: @nationality_3.id, currency_id: @currency_3.id)
+          visit edit_country_path(@country_3)
+        end
+    
+        it { should have_selector('title', text: 'Edit Country') }
+        it { should have_selector('h1',    text: 'Edit Country') }
+        it { should have_selector('input', value: @country_3.country) }
+        it { should have_link('List', href: countries_path) }
+    
+        describe "with invalid data" do
+          before do
+            fill_in 'Country', with: " "
+            click_button "Save changes"
+          end
+        
+          it { should have_selector('title', text: 'Edit Country') }
+          it { should have_content('error') }
+          specify { @country_3.reload.country.should == 'Saudi Arabia' }
+        end
+      
+        describe "with valid data" do
+      
+          let(:new_country) { "Kingdom of Saudi Arabia" }
+     
+          before do
+            fill_in 'Country', with: new_country
+            click_button "Save changes" 
+          end
+      
+          it { should have_selector('title', text: 'Countries') }
+          it { should have_selector('div.alert.alert-success') }
+          specify { @country_3.reload.country.should == new_country }
+        end
+      end 
+    end
+    
+    
+    
+    
   end
 end

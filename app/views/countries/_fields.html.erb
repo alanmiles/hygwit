@@ -1,0 +1,100 @@
+<div class="line-space"><i>Please set all fields, save, then <strong>alert HROomph HQ when complete</strong>.</i></div>
+
+<div>
+  <span class="span3 r-float"><%= f.text_field :country %></span>
+  <%= f.label :country, class: "vert-down" %>
+</div>
+
+<div style="clear:both">
+  <span class="span3 r-float"><%= collection_select(:country, :nationality_id, 
+          @nationalities, :id, :nationality, prompt: 'Please select')  %></span>
+  <%= f.label :nationality_id, "Nationality", class: "vert-down" %>
+</div>
+
+<div style="clear:both">
+  <span class="span3 r-float"><%= collection_select(:country, :currency_id, 
+          @currencies, :id, :currency_code, prompt: 'Please select')  %></span>
+  <%= f.label :currency_id, "Currency", class: "vert-down" %>
+</div>
+       
+<div style="clear:both">  
+  <span class="span3 r-float"><%= f.text_field :max_hours_day, class: "number-field" %></span> 
+  <%= f.label :max_hours_day, "Maximum hours per day", class: "vert-down" %>
+</div>
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :max_hours_week, class: "number-field" %></span>
+  <%= f.label :max_hours_week, "Maximum hours per week", class: "vert-down" %>
+</div>                 
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :max_hours_day_ramadan, class: "number-field" %></span>
+  <%= f.label :max_hours_day_ramadan, "Maximum hours per day - Ramadan", class: "vert-down" %>
+</div>
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :max_hours_week_ramadan, class: "number-field" %></span>
+  <%= f.label :max_hours_week_ramadan, "Maximum hours per week - Ramadan", class: "vert-down" %>
+  
+</div>
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :nightwork_start, class: "number-field" %></span>
+  <%= f.label :nightwork_start, "Night-work begins at ... (hh:mm:ss)", class: "vert-down" %>
+</div>
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :nightwork_end, class: "number-field" %></span>
+  <%= f.label :nightwork_end, "Night-work ends at ... (hh:mm:ss)", class: "vert-down" %>
+</div>
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :OT_rate_standard, class: "number-field" %></span>
+  <%= f.label :OT_rate_standard, "Standard overtime rate" %>
+</div>
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :OT_rate_special, class: "number-field" %></span> 
+  <%= f.label :OT_rate_special, "Overtime rate - nights and weekends", class: "vert-down" %>          
+</div>
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :probation_days, class: "number-field" %></span>
+  <%= f.label :probation_days, class: "vert-down" %>
+</div>
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :retirement_age_m, class: "number-field" %></span>
+  <%= f.label :retirement_age_m, "Retirement age - male", class: "vert-down" %>
+  
+</div>
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :retirement_age_f, class: "number-field" %></span>
+  <%= f.label :retirement_age_f, "Retirement age - female", class: "vert-down" %>
+</div>
+
+<div style="clear:both" class= "line-space"> 
+  <span class="span3 r-float"><%= f.check_box :taxation %></span>
+  <span class="vert-down">Taxation applies?</span>
+</div>
+
+<div style ="clear:both" class= "line-space">
+  <span class="span3 r-float"><%= f.check_box :insurance %></span>
+  <span class="vert-down">National insurance applies?</span>
+</div> 
+
+<div style ="clear:both" class= "line-space">
+  <span class="span3 r-float"><%= f.check_box :sickness_accruals %></span>
+  <span class="vert-down">Annual sickness accrual applies?</span>
+</div>
+
+<div style="clear:both" class="line-space"> 
+  <span class="span3 r-float vert-down"><%= f.text_field :max_loan_ded_salary, class: "number-field" %></span>
+  <%= f.label :max_loan_ded_salary, "Maximum percentage of salary deducted for loan repayments" %>
+</div>
+
+<div style="clear:both">
+  <%= f.label :notes %>
+  <%= f.text_area :notes %>
+</div>

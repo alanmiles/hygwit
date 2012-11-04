@@ -9,4 +9,13 @@ FactoryGirl.define do
       admin true
     end
   end
+  
+  factory :nationality do
+    sequence(:nationality) { |n| "Nationality #{n}" }
+  end
+  
+  factory :currency do
+    currency "Qatari Riyals"
+    code "QAR"
+  end
 end

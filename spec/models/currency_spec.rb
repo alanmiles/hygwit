@@ -2,11 +2,12 @@
 #
 # Table name: currencies
 #
-#  id         :integer          not null, primary key
-#  currency   :string(255)
-#  code       :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id             :integer          not null, primary key
+#  currency       :string(255)
+#  code           :string(255)
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  decimal_places :integer          default(2)
 #
 
 require 'spec_helper'
@@ -21,6 +22,7 @@ describe Currency do
 
   it { should respond_to(:currency) }
   it { should respond_to(:code) }
+  it { should respond_to(:decimal_places) }
   it { should be_valid }
   
   describe "when currency is not present" do
@@ -59,6 +61,16 @@ describe Currency do
       @duplicate.code.upcase
       @duplicate.save
     end
+    it { should_not be_valid }
+  end
+  
+  describe "when decimal_places is nil" do
+    before { @currency.decimal_places = nil }
+    it { should_not be_valid }
+  end
+    
+  describe "when decimal_places is not a numeral" do
+    before { @currency.decimal_places = "Two" }
     it { should_not be_valid }
   end
 end

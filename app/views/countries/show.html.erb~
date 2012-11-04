@@ -1,0 +1,58 @@
+<% provide(:title, @country.country) %>
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1>
+        <%= @country.country %>
+      </h1>
+      <div><%= @country.nationality.nationality %></div>
+      <div><%= @country.currency.currency_code %></div>
+      
+    </section>
+    <%= link_to "Edit", edit_country_path(@country), class: "btn btn-primary" %>
+      <%= link_to "List", countries_path, class: "btn" %>  
+  </aside>
+  
+  <div class="span6 offset0 top-line-space">
+    <h3 class="line-space">Set-up parameters</h3>
+    <div class="line-space">
+      <div>Maximum working hours per day<span class="r-float"><%= @country.max_hours_day %></span></div>
+      <div>Maximum working hours per week<span class="r-float"><%= @country.max_hours_week %></span></div>
+      <% unless @country.max_hours_day_ramadan.blank? %>
+        <div>Maximum working hours per day - Muslims in Ramadan<span class="r-float"><%= @country.max_hours_day_ramadan %></span></div>
+      <% end %>
+      <% unless @country.max_hours_week_ramadan.blank? %>
+        <div>Maximum working hours per week - Muslims in Ramadan<span class="r-float"><%= @country.max_hours_week_ramadan %></span></div>
+      <% end %>
+    </div>
+    <div class="line-space">
+      <div>For OT calculations, night-work begins at - 
+        <span class="r-float"><%= @country.nightwork_end.try(:strftime, "%H:%M") %></span></div>
+      <div>For OT calculations, night-work ends at - 
+        <span class="r-float"><%= @country.nightwork_start.try(:strftime, "%H:%M") %></span></div>
+      <div>OT rate - standard (% of hourly salary)<span class="r-float"><%= @country.OT_rate_standard %></span></div>
+      <div>OT rate - evenings and weekends (% of hourly salary)<span class="r-float"><%= @country.OT_rate_special %></span></div>
+    </div>
+    <div class="line-space">
+      <div>Probation days<span class="r-float"><%= @country.probation_days %></span></div>
+      <div>Retirement age - male<span class="r-float"><%= @country.retirement_age_m %></span></div>
+      <div>Retirement age - female<span class="r-float"><%= @country.retirement_age_f %></span></div>
+    </div>
+    <div class="line-space">
+      <div>Taxation applies?<span class="r-float"><%= @country.taxation_status %></span></div>
+      <div>Insurance applies?<span class="r-float"><%= @country.insurance_status %></span></div>
+    </div>
+    <div class="line-space">
+      <div>Maximum percentage of salary deducted for loans?<span class="r-float"><%= @country.max_loan_ded_salary %></span></div>
+    </div>
+    <% unless @country.notes.blank? %>
+      <div class="line-space">
+        <div>Notes</div>
+        <div style="font-size: 0.9em; line-height: 2">
+          <%= simple_format(@country.notes) %>
+        </div>
+      </div> 
+    <% end %>
+  </div> 
+</div>
+
