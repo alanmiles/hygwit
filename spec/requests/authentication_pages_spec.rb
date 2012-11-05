@@ -43,6 +43,21 @@ describe "AuthenticationPages" do
         it { should have_link('Sign in') }
       end
     end
+    
+    describe "by admin user" do
+      
+      let(:admin) { FactoryGirl.create(:admin) }
+      before { sign_in admin }
+    
+      it { should have_selector('h1', text: 'Administrator Menu') }
+      it { should have_link('Nationalities', href: nationalities_path) }
+      it { should have_link('Currencies', href: currencies_path) }
+      it { should have_link('Countries', href: countries_path) }
+      it { should have_link('Settings', href: edit_user_path(admin)) }
+      it { should have_link('Sign out', href: signout_path) }
+      it { should_not have_link('Sign in', href: signin_path) }
+      
+    end
   end
   
   describe "authorization" do

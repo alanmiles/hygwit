@@ -8,5 +8,9 @@
       </h1>
     </section>
   </aside>
+  
+  <div class="span8">
+    <%= render 'administrator_menu' if @user.admin? %>
+  </div>
 </div>
 

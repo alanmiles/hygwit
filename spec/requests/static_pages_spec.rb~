@@ -17,6 +17,14 @@ describe "Static pages" do
     it_should_behave_like "all static pages"
     it { should_not have_selector 'title', text: '| Home' }
   end
+  
+  describe "Admin on arrival" do
+    admin = FactoryGirl.create(:admin)
+    sign_in admin
+    before { visit root_path }
+    
+    it { should have_selector('h1', text: "Administrator Menu") }
+  end
 
   describe "Help page" do
     before { visit help_path }
@@ -54,7 +62,7 @@ describe "Static pages" do
     click_link "Home"
     click_link "Sign up now!"
     page.should have_selector 'title', text: full_title('Sign up')
-    click_link "hyygwit"
+    click_link "hygwit"
     page.should have_selector 'title', text: full_title('')
   end
   

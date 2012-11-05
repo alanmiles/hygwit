@@ -35,8 +35,6 @@ textarea {
   }
 }
 
-
-
 /* typography */
 
 h1, h2, h3, h4, h5, h6 {
@@ -44,7 +42,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 3em;
+  font-size: 2em;
   letter-spacing: -2px;
   margin-bottom: 30px;
   text-align: center;
@@ -187,13 +185,23 @@ select {
   padding-top: 5px;
 }
 
-.text-right {
+.number-field {
   text-align: right;
 }
 
 .infobox {
   font-size: 1em;
   line-height: 1.3;
+}
+
+.menulist {
+  list-style: none;
+  margin: 0;
+  li {
+    font-size: 1.3em;
+    overflow: auto;
+    padding: 10px 0;
+  }
 }
 
 .r-float {
