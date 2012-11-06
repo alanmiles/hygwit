@@ -41,10 +41,16 @@ module SessionsHelper
       redirect_to signin_url, notice: "Please sign in."
     end
   end
-  
+   
   def check_admin
     if signed_in? && !current_user.admin?
       redirect_to root_path, notice: "You must be a HROomph admin to issue this instruction." 
+    end
+  end
+  
+  def illegal_action
+    unless signed_in?
+      redirect_to root_path, notice: "Illegal action"
     end
   end
   

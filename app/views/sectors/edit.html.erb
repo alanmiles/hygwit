@@ -1,0 +1,15 @@
+<% provide(:title, "Edit Sector") %> 
+<h1>Edit Sector</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@sector) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      
+      <%= f.submit "Save change", class: "btn btn-primary" %>
+      <%= link_to 'Back', sectors_path, class: "btn" %>
+    <% end %>
+  </div>
+</div>
+

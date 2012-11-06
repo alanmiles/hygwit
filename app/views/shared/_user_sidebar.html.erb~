@@ -1,0 +1,9 @@
+<aside class="span4">
+  <section>
+    <h1>
+      <%= gravatar_for current_user %>
+      <%= current_user.name %>
+    </h1>
+    <%= @alert unless @alert.nil? %>
+  </section>
+</aside>

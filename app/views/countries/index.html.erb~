@@ -1,30 +1,33 @@
 <% provide(:title, 'Countries') %>
 
-<div class="span6 offset3">
-<h1>Countries</h1>
+<div class="row">
+  <%= render 'shared/user_sidebar' %>
+  
+  <div class="span8">
+    <h1 class="align-left">Countries</h1>
+    
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a country", new_country_path, class: "btn" %>
+    </div>
 
-
-<div style="padding-bottom: 10px">
-  <%= link_to "Add a country", new_country_path, class: "btn btn-small" %>
-</div>
-
-<ul class="itemlist">
-  <% @countries.each do |country| %>
-    <li>
-      <%= link_to country.country, country %> - 
-      <%= country.nationality.nationality %> - 
-      <%= country.currency.currency %>
-      | <%= link_to "change", edit_country_path(country) %>
-      | <%= link_to "delete", country, method: :delete,
+    <ul class="itemlist">
+      <% @countries.each do |country| %>
+        <li>
+          <%= link_to country.country, country %> - 
+          <%= country.nationality.nationality %> - 
+          <%= country.currency.currency %>
+          | <%= link_to "change", edit_country_path(country) %>
+          | <%= link_to "delete", country, method: :delete,
                              data: { confirm: "Delete '#{country.country}'?  Sure?" } %>
     
-    </li>
-  <% end %>
-</ul>
+        </li>
+      <% end %>
+    </ul>
 
-<% if Country.count > 10 %>
-  <div style="padding-top: 10px">
-    <%= link_to "Add a country", new_country_path, class: "btn btn-small" %>
+    <% if Country.count > 10 %>
+      <div style="padding-top: 10px">
+        <%= link_to "Add a country", new_country_path, class: "btn" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
 </div>

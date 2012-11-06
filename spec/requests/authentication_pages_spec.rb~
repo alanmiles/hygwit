@@ -49,7 +49,7 @@ describe "AuthenticationPages" do
       let(:admin) { FactoryGirl.create(:admin) }
       before { sign_in admin }
     
-      it { should have_selector('h2', text: 'Administrator Menu') }
+      it { should have_selector('h1', text: 'Administrator Menu') }
       it { should have_link('Nationalities', href: nationalities_path) }
       it { should have_link('Currencies', href: currencies_path) }
       it { should have_link('Countries', href: countries_path) }

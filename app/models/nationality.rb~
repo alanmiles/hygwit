@@ -11,10 +11,38 @@
 class Nationality < ActiveRecord::Base
   attr_accessible :nationality
   
-  belongs_to :country
+  has_many :countries
   
   validates :nationality, presence: true, length: { maximum: 50 },
   												uniqueness: { case_sensitive: false }
   												
   default_scope order: 'nationalities.nationality ASC'
+  
+  def country_links
+    self.countries.count
+  end
+  
+  def linked?
+    country_links > 0
+  end
+  
+  def self.total_unlinked
+    cnt = 0
+    @nationalities = self.all
+    @nationalities.each do |nationality|
+      unless nationality.linked?
+        cnt +=1
+      end      
+    end
+    return cnt
+  end
+  
+  def self.total_unlinked_message
+    if self.total_unlinked == 0
+      return "All nationalities linked"
+    else
+      return "#{pluralize(self.total_unlinked, 'nationality')} unlinked"
+    end  
+  end
+  
 end

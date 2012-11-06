@@ -1,4 +1,4 @@
-<h1 style="text-align: left">Administrator Menu</h1>
+<h1 class="align-left">Administrator Menu</h1>
 <ul class="menulist">
   <li><%= link_to "Nationalities", nationalities_path %></li>
   <li><%= link_to "Currencies", currencies_path %></li>

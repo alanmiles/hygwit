@@ -1,7 +1,8 @@
 class CurrenciesController < ApplicationController
   
   before_filter :check_admin
-  before_filter :signed_in_user
+  before_filter :signed_in_user, except: [:update, :destroy]
+  before_filter :illegal_action, only: [:update, :destroy]
   
   def index
     @currencies = Currency.all
@@ -36,9 +37,15 @@ class CurrenciesController < ApplicationController
   end
   
   def destroy
-    @currency = Currency.find(params[:id]).destroy
-    flash[:success]= "'#{@currency.code}' destroyed"
-    redirect_to currencies_path
+    @currency = Currency.find(params[:id])
+    if @currency.linked?
+      flash[:notice] = "Illegal action"
+      redirect_to root_path
+    else
+      @currency.destroy
+      flash[:success]= "'#{@currency.code}' destroyed"
+      redirect_to currencies_path
+    end
   end
   
 end

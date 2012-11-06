@@ -25,4 +25,23 @@ class Currency < ActiveRecord::Base
   def currency_code
     "#{code} (#{currency})" 
   end
+  
+  def country_links
+    self.countries.count
+  end
+  
+  def linked?
+    country_links > 0
+  end
+  
+  def self.total_unlinked
+    cnt = 0
+    @currencies = self.all
+    @currencies.each do |currency|
+      unless currency.linked?
+        cnt +=1
+      end      
+    end
+    return cnt
+  end
 end

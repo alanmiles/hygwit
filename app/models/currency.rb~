@@ -13,7 +13,7 @@
 class Currency < ActiveRecord::Base
   attr_accessible :code, :currency, :decimal_places
   
-  belongs_to :country
+  has_many :countries
   
   validates :currency, presence: true, length: { maximum: 50 }
   validates :code, presence: true, length: { maximum: 3 },
@@ -24,5 +24,13 @@ class Currency < ActiveRecord::Base
   
   def currency_code
     "#{code} (#{currency})" 
+  end
+  
+  def country_links
+    self.countries.count
+  end
+  
+  def linked?
+    country_links > 0
   end
 end

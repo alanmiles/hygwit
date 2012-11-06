@@ -1,26 +1,39 @@
 <% provide(:title, 'Currencies') %>
-<h1>Currencies</h1>
 
-<div style="padding-bottom: 10px">
-  <%= link_to "Add a currency", new_currency_path, class: "btn btn-small" %>
-</div>
-<ul class="itemlist">
-  <% @currencies.each do |currency| %>
-    <li>
-      <%= currency.currency %>
-      <%= currency.code %>
-      <% unless currency.decimal_places == 2 %>
-        <i>(<%= currency.decimal_places %> decimal places)</i>
-      <% end %>
-      | <%= link_to "change", edit_currency_path(currency) %>
-      | <%= link_to "delete", currency, method: :delete,
+<div class="row">
+  <aside class="span4">
+    <section>
+      <%= render 'shared/user_sidebar' %>
+    </section>
+    <%= linked_currencies %>
+  </aside>
+  <div class="span8">
+
+    <h1 class="align-left">Currencies</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a currency", new_currency_path, class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <% @currencies.each do |currency| %>
+        <li>
+          <%= currency.currency %>
+          <%= currency.code %>
+          <% unless currency.decimal_places == 2 %>
+            <i>(<%= currency.decimal_places %> decimal places)</i>
+          <% end %>
+          | <%= link_to "change", edit_currency_path(currency) %>
+          <% unless currency.linked? %>
+            | <%= link_to "delete", currency, method: :delete,
                              data: { confirm: "Delete '#{currency.code}'?  Sure?" } %>
-    
-    </li>
-  <% end %>
-</ul>
-<% if Currency.count > 10 %>
-  <div style="padding-top: 10px">
-    <%= link_to "Add a currency", new_currency_path, class: "btn btn-small" %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+    <% if Currency.count > 10 %>
+      <div style="padding-top: 10px">
+        <%= link_to "Add a currency", new_currency_path, class: "btn" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

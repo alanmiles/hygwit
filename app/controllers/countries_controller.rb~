@@ -39,7 +39,7 @@ class CountriesController < ApplicationController
     @country= Country.find(params[:id])
     if @country.update_attributes(params[:country])
       flash[:success] = "'#{@country.country}' updated"
-      redirect_to countries_path
+      redirect_to @country
     else
       @nationalities = Nationality.all
       @currencies = Currency.all

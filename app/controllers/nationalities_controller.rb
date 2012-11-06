@@ -1,7 +1,8 @@
 class NationalitiesController < ApplicationController
   
   before_filter :check_admin
-  before_filter :signed_in_user
+  before_filter :signed_in_user, except: [:update, :destroy]
+  before_filter :illegal_action, only: [:update, :destroy]
   
   def index
     @nationalities = Nationality.all
@@ -36,9 +37,15 @@ class NationalitiesController < ApplicationController
   end
   
   def destroy
-    @nationality = Nationality.find(params[:id]).destroy
-    flash[:success]= "'#{@nationality.nationality}' destroyed"
-    redirect_to nationalities_path
+    @nationality = Nationality.find(params[:id])
+    if @nationality.linked?
+      flash[:notice] = "Illegal action"
+      redirect_to root_path
+    else
+      @nationality.destroy
+      flash[:success]= "'#{@nationality.nationality}' destroyed"
+      redirect_to nationalities_path
+    end
   end
   
 end

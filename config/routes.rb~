@@ -1,16 +1,15 @@
 Hygwit::Application.routes.draw do
 
-  get "countries/index"
+  get "sectors/index"
 
-  get "countries/new"
+  get "sectors/new"
 
-  get "countries/edit"
-
-  get "countries/show"
+  get "sectors/edit"
 
   resources :users
   resources :nationalities
   resources :currencies
+  resources :countries
   resources :sessions, only: [:new, :create, :destroy]
 
   root to: 'static_pages#home'

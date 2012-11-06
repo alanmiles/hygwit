@@ -29,6 +29,19 @@ describe "CountryPages" do
           page.should have_selector('h1', text: 'Sign in')
         end
       end
+      
+      describe "when trying to change the nationality data" do
+      
+        describe "with a PUT request" do
+          before { put nationality_path(@example) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete nationality_path(@example) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
     end  
      
     describe "currency controller" do
@@ -48,6 +61,19 @@ describe "CountryPages" do
           page.should have_selector('h1', text: 'Sign in')
         end
       end
+      
+      describe "when trying to change the currency data" do
+      
+        describe "with a PUT request" do
+          before { put currency_path(@currency) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete currency_path(@currency) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
     end 
     
     describe "country controller" do
@@ -65,6 +91,19 @@ describe "CountryPages" do
         it "should render the sign-in path" do
           page.should have_selector('.alert', text: 'sign in')
           page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the country data" do
+      
+        describe "with a PUT request" do
+          before { put country_path(@country) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete country_path(@country) }
+          specify { response.should redirect_to(root_path) }        
         end
       end
     end 
@@ -210,6 +249,8 @@ describe "CountryPages" do
           @example= FactoryGirl.create(:nationality, nationality: 'French')
           @example_1 = Nationality.create(nationality: 'British')
           @example_2 = Nationality.create(nationality: 'Algerian')
+          @currency_1 = Currency.create(currency: 'Pounds', code: 'GBP')
+          @country_1 = Country.create(country: 'UK', nationality_id: @example_1.id, currency_id: @currency_1.id)
           visit nationalities_path
         end
       
@@ -220,20 +261,20 @@ describe "CountryPages" do
       
           it { should have_link('change', href: edit_nationality_path(@example)) }
           it { should have_link('delete', href: nationality_path(@example)) }
+          it { should_not have_link('delete', href: nationality_path(@example_1)) }  #because already linked to country
           it { should have_link('Add', href: new_nationality_path) }
           it { should have_selector('ul.itemlist li:nth-child(3)', text: 'French') }
         
-          describe "nationality already in use" do
-        
-            it "should not have 'Delete' button"
-          end
-        
-          it "should be able to delete a nationality" do
+          it "should delete nationality (when delete button is shown)" do
             expect { click_link('delete') }.to change(Nationality, :count).by(-1)
           end
           
           describe "when > 10 nationalities" do
             pending("should have a bottom 'Add button + not when < 10 entries") 
+          end
+          
+          describe "alert when nationalities are not linked to countries" do
+            pending("shows how many unlinked or that all are linked")
           end
        
         end
@@ -304,7 +345,27 @@ describe "CountryPages" do
           it { should have_selector('div.alert.alert-success') }
           specify { @example_3.reload.nationality.should == new_nat }
         end
-      end 
+      end
+      
+      describe "deletions" do
+      
+        before do  
+          @nationality_4 = Nationality.create(nationality: 'New Zealander')
+          @nationality_2 = Nationality.create(nationality: 'Bahraini')
+          @currency = Currency.create(currency: 'Bahraini Dinars', code: 'BHD')
+          @country = Country.create(country: 'Bahrain', nationality_id: @nationality_2.id, currency_id: @currency.id)
+        end 
+          
+        describe "non-deletion of nationalities linked to countries" do
+          before { delete nationality_path(@nationality_2) }
+          specify { response.should redirect_to(root_path) }      
+        end
+          
+        describe "deletion of nationalities unlinked to countries" do
+          before { delete nationality_path(@nationality_4) }
+          specify { response.should redirect_to(nationalities_path) }  
+        end
+      end  
     end
     
     describe "currency controller" do
@@ -314,6 +375,8 @@ describe "CountryPages" do
         before do  
           @currency_1 = Currency.create(currency: 'Pounds Sterling', code: 'GBP')
           @currency_2 = Currency.create(currency: 'Bahrain Dinars', code: 'BHD')
+          @nationality = Nationality.create(nationality: 'Bahraini')
+          @country = Country.create(country: 'Bahrain', nationality_id: @nationality.id, currency_id: @currency_2.id)
           visit currencies_path
         end
       
@@ -323,14 +386,10 @@ describe "CountryPages" do
         describe "list " do
       
           it { should have_link('change', href: edit_currency_path(@currency)) }
-          it { should have_link('delete', href: currency_path(@currency)) }
+          it { should have_link('delete', href: currency_path(@currency_1)) }
+          it { should_not have_link('delete', href: currency_path(@currency_2)) }  #because already in use
           it { should have_link('Add', href: new_currency_path) }
           it { should have_selector('ul.itemlist li:nth-child(2)', text: 'Pounds Sterling') }
-        
-          describe "currency already in use" do
-        
-            it "should not have 'Delete' button"
-          end
         
           it "should be able to delete a currency" do
             expect { click_link('delete') }.to change(Currency, :count).by(-1)
@@ -338,6 +397,10 @@ describe "CountryPages" do
           
           describe "when > 10 currencies" do
             pending("should have a bottom 'Add button + not when < 10 entries") 
+          end
+          
+          describe "alert when currencies are not linked to countries" do
+            pending("shows how many unlinked or that all are linked")
           end
        
         end
@@ -413,6 +476,26 @@ describe "CountryPages" do
           it { should have_selector('title', text: 'Currencies') }
           it { should have_selector('div.alert.alert-success') }
           specify { @currency_3.reload.code.should == new_code }
+        end
+      end
+      
+      describe "deletions" do
+      
+        before do  
+          @currency_4 = Currency.create(currency: 'New Zealand Dollar', code: 'NZD')
+          @currency_2 = Currency.create(currency: 'Bahrain Dinars', code: 'BHD')
+          @nationality = Nationality.create(nationality: 'Bahraini')
+          @country = Country.create(country: 'Bahrain', nationality_id: @nationality.id, currency_id: @currency_2.id)
+        end 
+          
+        describe "non-deletion of currencies linked to countries" do
+          before { delete currency_path(@currency_2) }
+          specify { response.should redirect_to(root_path) }      
+        end
+          
+        describe "deletion of currencies unlinked to countries" do
+          before { delete currency_path(@currency_4) }
+          specify { response.should redirect_to(currencies_path) }  
         end
       end 
     end
