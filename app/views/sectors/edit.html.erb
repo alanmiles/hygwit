@@ -8,7 +8,7 @@
       <%= render 'fields', f: f %>
       
       <%= f.submit "Save change", class: "btn btn-primary" %>
-      <%= link_to 'Back', sectors_path, class: "btn" %>
+      <%= link_to 'Back', sectors_path, class: "btn" if current_user.admin? %>
     <% end %>
   </div>
 </div>

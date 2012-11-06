@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121105194738) do
+ActiveRecord::Schema.define(:version => 20121106150419) do
 
   create_table "countries", :force => true do |t|
     t.string   "country"
@@ -47,6 +47,14 @@ ActiveRecord::Schema.define(:version => 20121105194738) do
   end
 
   add_index "currencies", ["code"], :name => "index_currencies_on_code"
+
+  create_table "jobfamilies", :force => true do |t|
+    t.string   "job_family"
+    t.boolean  "approved",   :default => false
+    t.integer  "created_by"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
 
   create_table "nationalities", :force => true do |t|
     t.string   "nationality"

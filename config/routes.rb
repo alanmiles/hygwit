@@ -5,6 +5,7 @@ Hygwit::Application.routes.draw do
   resources :currencies
   resources :countries
   resources :sectors
+  resources :jobfamilies
   resources :sessions, only: [:new, :create, :destroy]
 
   root to: 'static_pages#home'
