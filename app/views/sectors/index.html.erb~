@@ -1,6 +1,18 @@
 <% provide(:title, 'Sectors') %>
 <div class="row">
-  <%= render 'shared/user_sidebar' %>
+  <aside class="span4">
+    <section>
+      <%= render 'shared/user_sidebar' %>
+    </section>
+      <div style="padding: 15px">
+        <div class="line-space">
+          <%= sector_instruction_1 %>
+        </div>
+        <div>
+          <%= sector_instruction_2 %>
+        </div>
+      </div>
+  </aside>
   
   <div class="span8">
     <h1 class="align-left">Sectors</h1>

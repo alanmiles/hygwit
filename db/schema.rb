@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121106150419) do
+ActiveRecord::Schema.define(:version => 20121107083040) do
 
   create_table "countries", :force => true do |t|
     t.string   "country"
@@ -63,6 +63,14 @@ ActiveRecord::Schema.define(:version => 20121106150419) do
   end
 
   add_index "nationalities", ["nationality"], :name => "index_nationalities_on_nationality"
+
+  create_table "qualities", :force => true do |t|
+    t.string   "quality"
+    t.boolean  "approved",   :default => false
+    t.integer  "created_by"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
 
   create_table "sectors", :force => true do |t|
     t.string   "sector"

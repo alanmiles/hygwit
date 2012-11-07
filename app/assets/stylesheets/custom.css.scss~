@@ -138,6 +138,14 @@ aside {
   }
 }
 
+.instruction {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #eaeaea;
+  border-radius: 5px;  
+  @include box_sizing;
+}
+
 .user_avatars {
   overflow: auto;
   margin-top: 10px;
@@ -187,6 +195,10 @@ select {
 
 .number-field {
   text-align: right;
+}
+
+.align-left {
+  text-align: left;
 }
 
 .infobox {

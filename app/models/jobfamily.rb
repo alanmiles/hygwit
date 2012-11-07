@@ -16,4 +16,6 @@ class Jobfamily < ActiveRecord::Base
   validates :job_family, presence: true, length: { maximum: 50 },
                      uniqueness: { case_sensitive: false }
   validates :created_by, presence: true
+  
+  default_scope order: 'jobfamilies.job_family ASC'
 end

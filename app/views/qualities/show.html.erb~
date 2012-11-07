@@ -1,0 +1,14 @@
+<% provide(:title, @quality.quality) %>
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1>
+        <%= @quality.quality %>
+      </h1>
+    </section>
+    <%= link_to "Edit", edit_quality_path(@quality), class: "btn btn-primary" %>
+      <%= link_to "Qualities list", qualities_path, class: "btn" %>  
+  </aside>
+ 
+</div>
+

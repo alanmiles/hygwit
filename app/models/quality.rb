@@ -1,22 +1,21 @@
 # == Schema Information
 #
-# Table name: sectors
+# Table name: qualities
 #
 #  id         :integer          not null, primary key
-#  sector     :string(255)
-#  created_by :integer
+#  quality    :string(255)
 #  approved   :boolean          default(FALSE)
+#  created_by :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 
-class Sector < ActiveRecord::Base
-
-  attr_accessible :approved, :sector, :created_by
+class Quality < ActiveRecord::Base
+  attr_accessible :approved, :created_by, :quality
   
-  validates :sector, presence: true, length: { maximum: 50 },
+  validates :quality, presence: true, length: { maximum: 50 },
                      uniqueness: { case_sensitive: false }
   validates :created_by, presence: true
   
-  default_scope order: 'sectors.sector ASC'
+  default_scope order: 'qualities.quality ASC'
 end

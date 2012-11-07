@@ -136,7 +136,7 @@ describe "AdminPages" do
           it { should have_link('change', href: edit_sector_path(@sector)) }
           it { should have_link('delete', href: sector_path(@sector)) }
           it { should have_link('Add', href: new_sector_path) }
-          it { should have_selector('ul.itemlist li:nth-child(3)', text: 'Manufacturing') }
+          it { should have_selector('ul.itemlist li:nth-child(4)', text: 'Manufacturing') }
         
           describe "sector already in use" do
         

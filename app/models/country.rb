@@ -40,6 +40,8 @@ class Country < ActiveRecord::Base
   validates :nationality_id, 		presence: true
   validates :currency_id,				presence: true
   
+  default_scope order: 'countries.country ASC'
+  
   def taxation_status
     if taxation?
       "Yes"

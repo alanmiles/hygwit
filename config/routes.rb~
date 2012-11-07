@@ -1,16 +1,19 @@
 Hygwit::Application.routes.draw do
 
-  get "jobfamilies/index"
+  get "qualities/index"
 
-  get "jobfamilies/new"
+  get "qualities/show"
 
-  get "jobfamilies/edit"
+  get "qualities/new"
+
+  get "qualities/edit"
 
   resources :users
   resources :nationalities
   resources :currencies
   resources :countries
   resources :sectors
+  resources :jobfamilies
   resources :sessions, only: [:new, :create, :destroy]
 
   root to: 'static_pages#home'

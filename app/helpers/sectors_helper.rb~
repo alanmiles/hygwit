@@ -9,7 +9,6 @@ module SectorsHelper
   
   def sector_instruction_2
     
-    "To keep the Sectors list manageable, we're restricting it to 60 entries.  All new entries need to be approved by HROomph 
-    before going live." 
+    "To keep the list manageable, we're restricting it to 60 entries.  All new entries need to be approved by HROomph before going live." 
   end
 end

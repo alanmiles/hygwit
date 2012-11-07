@@ -48,5 +48,13 @@ class Country < ActiveRecord::Base
     end
   end
   
+  def insurance_status
+    if insurance?
+      "Yes"
+    else
+      "No"
+    end
+  end
+  
   
 end

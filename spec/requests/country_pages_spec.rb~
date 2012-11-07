@@ -266,7 +266,6 @@ describe "CountryPages" do
           it { should have_selector('ul.itemlist li:nth-child(3)', text: 'French') }
         
           it "should delete nationality (when delete button is shown)" do
-            #pending("test fails because of deletion constraint on nationalities linked to countries")
             expect { click_link('delete') }.to change(Nationality, :count).by(-1)
           end
           
