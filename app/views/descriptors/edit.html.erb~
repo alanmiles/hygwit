@@ -1,0 +1,21 @@
+<% provide(:title, "Edit Descriptor) %>
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1>
+        <%= @quality.quality %>
+      </h1>
+    </section>
+  </aside>
+  <div class="span6 offset0 top-line-space">
+    <h3 class="line-space">Edit Descriptor <%= @descriptor.grade %></h3>
+    <%= form_for(@descriptor) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      
+      <%= f.submit "Save change", class: "btn btn-primary" %>
+      <%= link_to 'Back', quality_path(@descriptor.quality_id), class: "btn" if current_user.admin? %>
+    <% end %> 
+  </div>
+</div>
+

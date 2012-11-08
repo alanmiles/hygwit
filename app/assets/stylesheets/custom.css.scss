@@ -170,7 +170,7 @@ input, textarea, .uneditable-input {
   background-color: white;
   @include box_sizing;
 }
-
+ 
 select {
   background-color: white;
   width: 100%;
@@ -199,6 +199,10 @@ select {
 
 .align-left {
   text-align: left;
+}
+
+.align-right {
+  text-align: right;
 }
 
 .infobox {

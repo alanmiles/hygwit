@@ -9,6 +9,15 @@
     <%= link_to "Edit", edit_quality_path(@quality), class: "btn btn-primary" %>
       <%= link_to "Qualities list", qualities_path, class: "btn" %>  
   </aside>
- 
+  <div class="span6 offset0 top-line-space">
+    <h3 class="line-space">Descriptors</h3>
+    <ul class="itemlist">
+      <% @descriptors.each do |descriptor| %>
+        <li id="item-<%=descriptor.grade %>" class="line-space"><span class="span1"><%= descriptor.grade %></span>
+          <span class="span4"><%= descriptor.descriptor %></span>
+          <span style="padding-left: 10px"><%= link_to "change", edit_descriptor_path(descriptor) %></span
+        </li>
+      <% end %>    
+    </ul>
+  </div>
 </div>
-

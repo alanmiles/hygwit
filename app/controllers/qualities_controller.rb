@@ -9,6 +9,7 @@ class QualitiesController < ApplicationController
   
   def show
     @quality = Quality.find(params[:id])
+    @descriptors = @quality.descriptors
   end
 
   def new

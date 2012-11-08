@@ -1,0 +1,4 @@
+
+<%= f.text_area :descriptor, rows: "3" %>
+
+<%= f.hidden_field :updated_by %>

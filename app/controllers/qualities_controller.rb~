@@ -8,7 +8,7 @@ class QualitiesController < ApplicationController
   end
   
   def show
-    @quality = Qaulity.find(params[:id])
+    @quality = Quality.find(params[:id])
   end
 
   def new

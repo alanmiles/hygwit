@@ -141,7 +141,7 @@ aside {
 .instruction {
   padding: 20px;
   background-color: #f5f5f5;
-  border: 1px solid #eaeaea;
+  border: 1px solid #dadada;
   border-radius: 5px;  
   @include box_sizing;
 }
@@ -171,6 +171,10 @@ input, textarea, .uneditable-input {
   @include box_sizing;
 }
 
+.smallbox {
+ height: 5em;
+}
+ 
 select {
   background-color: white;
   width: 100%;
@@ -199,6 +203,10 @@ select {
 
 .align-left {
   text-align: left;
+}
+
+.align-right {
+  text-align: right;
 }
 
 .infobox {

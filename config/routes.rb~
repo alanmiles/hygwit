@@ -1,12 +1,6 @@
 Hygwit::Application.routes.draw do
 
-  get "qualities/index"
-
-  get "qualities/show"
-
-  get "qualities/new"
-
-  get "qualities/edit"
+  get "descriptors/edit"
 
   resources :users
   resources :nationalities
@@ -14,6 +8,8 @@ Hygwit::Application.routes.draw do
   resources :countries
   resources :sectors
   resources :jobfamilies
+  resources :qualities
+  resources :descriptors, only: [:edit, :update]  
   resources :sessions, only: [:new, :create, :destroy]
 
   root to: 'static_pages#home'

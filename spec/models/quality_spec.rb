@@ -23,6 +23,7 @@ describe Quality do
   it { should respond_to(:quality) }
   it { should respond_to(:approved) }
   it { should respond_to(:created_by) }
+  it { should respond_to(:descriptors) }
   it { should be_valid }
   
   describe "when quality is not present" do

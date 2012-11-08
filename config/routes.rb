@@ -1,5 +1,7 @@
 Hygwit::Application.routes.draw do
 
+  get "descriptors/edit"
+
   resources :users
   resources :nationalities
   resources :currencies
@@ -7,6 +9,7 @@ Hygwit::Application.routes.draw do
   resources :sectors
   resources :jobfamilies
   resources :qualities
+  resources :descriptors, only: [:edit, :update]  
   resources :sessions, only: [:new, :create, :destroy]
 
   root to: 'static_pages#home'
