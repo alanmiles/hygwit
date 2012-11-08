@@ -1,6 +1,10 @@
 Hygwit::Application.routes.draw do
 
-  get "descriptors/edit"
+  get "grievance_types/index"
+
+  get "grievance_types/new"
+
+  get "grievance_types/edit"
 
   resources :users
   resources :nationalities
@@ -9,7 +13,9 @@ Hygwit::Application.routes.draw do
   resources :sectors
   resources :jobfamilies
   resources :qualities
-  resources :descriptors, only: [:edit, :update]  
+  resources :descriptors, only: [:edit, :update]
+  resources :leaving_reasons  
+  resources :disciplinary_categories
   resources :sessions, only: [:new, :create, :destroy]
 
   root to: 'static_pages#home'

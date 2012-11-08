@@ -1,0 +1,14 @@
+<% provide(:title, "Edit Grievance Type") %> 
+<h1>Edit Grievance Type</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@grievance_type) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      
+      <%= f.submit "Save change", class: "btn btn-primary" %>
+      <%= link_to 'Back', grievance_types_path, class: "btn" %>
+    <% end %>
+  </div>
+</div>

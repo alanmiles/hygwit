@@ -1,0 +1,12 @@
+<% provide(:title, 'New Disciplinary Category') %>
+<h1>New Disciplinary Category</h1>
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@disciplinary_cat) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "Back", disciplinary_categories_path, class: "btn" %>
+    <% end %>
+  </div>
+</div>

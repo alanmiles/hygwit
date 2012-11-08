@@ -1,0 +1,8 @@
+<%= f.label :reason %>
+<%= f.text_field :reason %>
+
+<div id="terminating" class= "line-space">
+<span class="span3 r-float"><%= f.check_box :terminated %></span>
+<%= f.label :terminated %>
+</div>
+

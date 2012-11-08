@@ -1,0 +1,16 @@
+# == Schema Information
+#
+# Table name: leaving_reasons
+#
+#  id         :integer          not null, primary key
+#  reason     :string(255)
+#  terminated :boolean          default(FALSE)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+require 'spec_helper'
+
+describe LeavingReason do
+  pending "add some examples to (or delete) #{__FILE__}"
+end

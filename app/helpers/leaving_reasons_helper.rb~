@@ -1,0 +1,2 @@
+module LeavingReasonsHelper
+end

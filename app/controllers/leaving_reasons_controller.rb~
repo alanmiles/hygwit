@@ -1,0 +1,14 @@
+class LeavingReasonsController < ApplicationController
+  
+  before_filter :signed_in_user
+  before_filter :check_admin
+  
+  def index
+  end
+
+  def new
+  end
+
+  def edit
+  end
+end

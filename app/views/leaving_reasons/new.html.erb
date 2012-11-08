@@ -1,0 +1,12 @@
+<% provide(:title, 'New Leaving Reason') %>
+<h1>New Leaving Reason</h1>
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@leaving_reason) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "Back", leaving_reasons_path, class: "btn" %>
+    <% end %>
+  </div>
+</div>

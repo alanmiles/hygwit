@@ -1,0 +1,34 @@
+<% provide(:title, 'Leaving Reasons') %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <%= render 'shared/user_sidebar' %>
+    </section>
+  </aside>
+  <div class="instruction">
+    <div class="line-space">
+      <%= leaving_instruction_1 %>
+    </div>     
+  </div>
+  <div class="span8">
+    <h1 class="align-left">Leaving Reasons</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a reason", new_leaving_reason_path, class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <% @leaving_reasons.each do |reason| %>
+        <li>
+          <%= reason.reason %>
+          <% if reason.terminated? %>
+            | Termination
+          <% end %>
+          | <%= link_to "change", edit_leaving_reason_path(reason) %>
+          | <%= link_to "delete", reason, method: :delete,
+                             data: { confirm: "Delete '#{reason.reason}'?  Sure?" } %>
+    
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121107153401) do
+ActiveRecord::Schema.define(:version => 20121108223455) do
 
   create_table "countries", :force => true do |t|
     t.string   "country"
@@ -58,10 +58,29 @@ ActiveRecord::Schema.define(:version => 20121107153401) do
     t.datetime "updated_at",                    :null => false
   end
 
+  create_table "disciplinary_categories", :force => true do |t|
+    t.string   "category"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "grievance_types", :force => true do |t|
+    t.string   "grievance"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "jobfamilies", :force => true do |t|
     t.string   "job_family"
     t.boolean  "approved",   :default => false
     t.integer  "created_by"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  create_table "leaving_reasons", :force => true do |t|
+    t.string   "reason"
+    t.boolean  "terminated", :default => false
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
   end
