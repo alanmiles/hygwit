@@ -9,6 +9,7 @@ describe "AdminPages" do
     @jobfamily = Jobfamily.create(job_family: 'Sales', created_by: 1)
     @leaving_reason = LeavingReason.create(reason: 'Resigned')
     @disciplinary_cat = DisciplinaryCategory.create(category: "Inappropriate behavior")
+    @grievance_type = GrievanceType.create(grievance: "Unfair criticism")
   end
   
   describe "when not logged in" do
@@ -28,6 +29,19 @@ describe "AdminPages" do
         it "should render the sign-in path" do
           page.should have_selector('.alert', text: 'sign in')
           page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the sector data" do
+      
+        describe "with a PUT request" do
+          before { put sector_path(@sector) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete sector_path(@sector) }
+          specify { response.should redirect_to(root_path) }        
         end
       end
     end
@@ -50,6 +64,19 @@ describe "AdminPages" do
           page.should have_selector('h1', text: 'Sign in')
         end
       end
+      
+      describe "when trying to change the jobfamily data" do
+      
+        describe "with a PUT request" do
+          before { put jobfamily_path(@jobfamily) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete jobfamily_path(@jobfamily) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
     end
     
     describe "LeavingReason controller" do
@@ -67,6 +94,19 @@ describe "AdminPages" do
         it "should render the sign-in path" do
           page.should have_selector('.alert', text: 'sign in')
           page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the leaving_reason data" do
+      
+        describe "with a PUT request" do
+          before { put leaving_reason_path(@leaving_reason) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete leaving_reason_path(@leaving_reason) }
+          specify { response.should redirect_to(root_path) }        
         end
       end
     end
@@ -88,6 +128,19 @@ describe "AdminPages" do
           page.should have_selector('h1', text: 'Sign in')
         end
       end
+      
+      describe "when trying to change the disciplinary category data" do
+      
+        describe "with a PUT request" do
+          before { put disciplinary_category_path(@disciplinary_cat) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete disciplinary_category_path(@disciplinary_cat) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
     end
     
     describe "GrievanceTypes controller" do
@@ -105,6 +158,19 @@ describe "AdminPages" do
         it "should render the sign-in path" do
           page.should have_selector('.alert', text: 'sign in')
           page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the grievance_type data" do
+      
+        describe "with a PUT request" do
+          before { put grievance_type_path(@grievance_type) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete grievance_type_path(@grievance_type) }
+          specify { response.should redirect_to(root_path) }        
         end
       end
     end
@@ -127,23 +193,34 @@ describe "AdminPages" do
         end
       end
       
-      describe "adding a new sector successfully" do
-        pending("this should be fine but should be unapproved")
-        pending("no return to list button")
+      describe "when trying to enter a new record" do
+      
+        before { visit new_sector_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Achievement-flavored HR')
+        end
+
       end
       
-      describe "editing a sector" do
-        pending("this should be possible only for non-approved entries added by the user")
-        pending("no return to list button")
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the Sectors#destroy action" do
+          before { delete sector_path(@sector) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
       end
-      
-      describe "deleting a sector" do
-        pending("this should be possible only for non-approved entries added by the user")
+    
+      describe "submitting a PUT request to the Sectors#update action" do
+        before { put sector_path(@sector) }
+        specify { response.should redirect_to(root_path) }
       end
       
     end
     
-    describe "jobfamily controller" do
+    describe "jobfamilies controller" do
     
       describe "when trying to access the index" do
         
@@ -155,18 +232,29 @@ describe "AdminPages" do
         end
       end
       
-      describe "adding a new jobfamily successfully" do
-        pending("this should be fine but should be unapproved")
-        pending("no return to list button")
+      describe "when trying to enter a new record" do
+      
+        before { visit new_jobfamily_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Achievement-flavored HR')
+        end
+
       end
       
-      describe "editing a job_family" do
-        pending("this should be possible only for non-approved entries added by the user")
-        pending("no return to list button")
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the Jobfamilies#destroy action" do
+          before { delete jobfamily_path(@jobfamily) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
       end
-      
-      describe "deleting a job_family" do
-        pending("this should be possible only for non-approved entries added by the user")
+    
+      describe "submitting a PUT request to the Jobfamilies#update action" do
+        before { put jobfamily_path(@jobfamily) }
+        specify { response.should redirect_to(root_path) }
       end
       
     end
@@ -193,6 +281,20 @@ describe "AdminPages" do
         end
 
       end
+      
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the LeavingReasons#destroy action" do
+          before { delete leaving_reason_path(@leaving_reason) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the Nationalities#update action" do
+        before { put leaving_reason_path(@leaving_reason) }
+        specify { response.should redirect_to(root_path) }
+      end
     end
       
     describe "DisciplinaryCategories controller" do
@@ -217,6 +319,20 @@ describe "AdminPages" do
         end
 
       end
+      
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the DisciplinaryCategories#destroy action" do
+          before { delete disciplinary_category_path(@disciplinary_cat) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the Nationalities#update action" do
+        before { put disciplinary_category_path(@disciplinary_cat) }
+        specify { response.should redirect_to(root_path) }
+      end
     end
     
     describe "GrievanceTypes controller" do
@@ -240,6 +356,20 @@ describe "AdminPages" do
           page.should have_selector('h2', text: 'Achievement-flavored HR')
         end
 
+      end
+      
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the GrievanceTypes#destroy action" do
+          before { delete grievance_type_path(@grievance_type) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the Nationalities#update action" do
+        before { put grievance_type_path(@grievance_type) }
+        specify { response.should redirect_to(root_path) }
       end
     end
   end
@@ -697,7 +827,7 @@ describe "AdminPages" do
           it { should have_link('change', href: edit_grievance_type_path(@gtype)) }
           it { should have_link('delete', href: grievance_type_path(@gtype)) }
           it { should have_link('Add', href: new_grievance_type_path) }
-          it { should have_selector('ul.itemlist li:nth-child(3)', text: 'Violence') }
+          it { should have_selector('ul.itemlist li:nth-child(4)', text: 'Violence') }
         
           describe "grievance type already in use" do
         

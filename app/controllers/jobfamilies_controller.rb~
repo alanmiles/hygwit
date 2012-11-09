@@ -1,6 +1,7 @@
 class JobfamiliesController < ApplicationController
   
-  before_filter :signed_in_user
+  before_filter :signed_in_user, except: [:update, :destroy]
+  before_filter :illegal_action, only: [:update, :destroy]
   before_filter :check_admin, only: :index
   
   def index
@@ -14,7 +15,7 @@ class JobfamiliesController < ApplicationController
   end
   
   def create
-    @jobfamily = Jobfamily.new(params[:sector])
+    @jobfamily = Jobfamily.new(params[:jobfamily])
     if @jobfamily.save
       flash[:success] = "'#{@jobfamily.job_family}' added"
       redirect_to jobfamilies_path

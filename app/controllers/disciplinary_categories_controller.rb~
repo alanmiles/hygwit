@@ -22,7 +22,7 @@ class DisciplinaryCategoriesController < ApplicationController
   end
 
   def edit
-   @@disciplinary_cat = DisciplinaryCategory.find(params[:id])
+   @disciplinary_cat = DisciplinaryCategory.find(params[:id])
   end
   
   def update

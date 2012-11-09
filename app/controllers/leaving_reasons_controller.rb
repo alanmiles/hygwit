@@ -1,6 +1,7 @@
 class LeavingReasonsController < ApplicationController
   
-  before_filter :signed_in_user
+  before_filter :signed_in_user, except: [:update, :destroy]
+  before_filter :illegal_action, only: [:update, :destroy]
   before_filter :check_admin
   
   def index
