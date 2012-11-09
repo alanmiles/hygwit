@@ -1,0 +1,22 @@
+<% provide(:title, "Edit Absence Type") %> 
+<h1>Edit Absence Type</h1>
+
+<div class="row">
+  <aside class="span3">
+    <div class="instruction">
+      <div>
+        <%= absence_guidance %>
+      </div> 
+    </div>
+  </aside>
+  <div class="span6 offset0">
+    <%= form_for(@absence) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      
+      <%= f.submit "Save changes", class: "btn btn-primary" %>
+      <%= link_to 'Back', absence_types_path, class: "btn" if current_user.admin? %>
+    <% end %>
+  </div>
+</div>
+

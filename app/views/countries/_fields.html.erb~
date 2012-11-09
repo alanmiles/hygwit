@@ -89,7 +89,7 @@
   <span class="vert-down">Annual sickness accrual applies?</span>
 </div>
 
-<div style="clear:both"> 
+<div style="clear:both" class="line-space"> 
   <span class="span3 r-float vert-down"><%= f.text_field :max_loan_ded_salary, class: "number-field" %></span>
   <%= f.label :max_loan_ded_salary, "Maximum percentage of salary deducted for loan repayments" %>
 </div>

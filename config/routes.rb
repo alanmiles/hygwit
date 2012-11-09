@@ -12,6 +12,7 @@ Hygwit::Application.routes.draw do
   resources :disciplinary_categories
   resources :grievance_types
   resources :sessions, only: [:new, :create, :destroy]
+  resources :absence_types
 
   root to: 'static_pages#home'
 

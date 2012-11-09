@@ -121,7 +121,7 @@ describe "CountryPages" do
     
         before { visit new_nationality_path }
       
-        it { should_not have_selector('title', text: 'New nationality') }
+        it { should_not have_selector('title', text: 'New Nationality') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
           page.should have_selector('h2', text: 'Achievement-flavored HR')
@@ -159,7 +159,7 @@ describe "CountryPages" do
     
         before { visit new_currency_path }
       
-        it { should_not have_selector('title', text: 'New currency') }
+        it { should_not have_selector('title', text: 'New Currency') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
           page.should have_selector('h2', text: 'Achievement-flavored HR')
@@ -199,7 +199,7 @@ describe "CountryPages" do
     
         before { visit new_country_path }
       
-        it { should_not have_selector('title', text: 'New country') }
+        it { should_not have_selector('title', text: 'New Country') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
           page.should have_selector('h2', text: 'Achievement-flavored HR')

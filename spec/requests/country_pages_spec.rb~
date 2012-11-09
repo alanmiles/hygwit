@@ -531,7 +531,7 @@ describe "CountryPages" do
           it { should have_link('delete', href: country_path(@country)) }
           it { should have_link('Add', href: new_country_path) }
           it { should have_link(@country.country, href: country_path(@country)) }
-          it { should have_selector('ul.itemlist li:nth-child(2)', text: 'UK') }
+          it { should have_selector('ul.itemlist li:nth-child(3)', text: 'UK') }
         
           describe "country already in use" do
         

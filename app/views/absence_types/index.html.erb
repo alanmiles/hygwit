@@ -1,0 +1,53 @@
+<% provide(:title, 'Absence Types') %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <%= render 'shared/user_sidebar' %>
+    </section>
+    <div class="instruction">
+      <div class="line-space">
+        <%= absence_instruction_1 %>
+      </div>
+      <div class="line-space">
+        <%= absence_instruction_2 %>
+      </div> 
+      <div class="line-space">
+        <%= absence_instruction_3 %>
+      </div>    
+    </div>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Absence Types</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add an absence type", new_absence_type_path, class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <li>
+        <strong>
+        <span class="span1">Code</span>
+        <span class="span1">Paid (%)</span>
+        <span class="span1">Sickness?</span>
+        <span class="span1">Max days</span>
+        <span class="span1">Certify?</span>
+        <span class="span2">Notes</span>
+        </strong>
+      </li>
+      <% @absences.each do |absence| %>
+        <li>
+          <span class="span1"><%= absence.absence_code %></span>
+          <span class="span1"><%= absence.paid %></span>
+          <span class="span1"><%= absence.sickness? ? 'Yes' : 'No' %></span>
+          <span class="span1"><%= absence.maximum_days_year.nil? ? '--' : absence.maximum_days_year %></span>
+          <span class="span1"><%= absence.documentation_required? ? 'Yes' : 'No' %></span>
+          <span class="span2"><%= absence.notes %></span>
+          | <%= link_to "edit", edit_absence_type_path(absence) %>
+          | <%= link_to "del", absence, method: :delete,
+                             data: { confirm: "Delete '#{absence.absence_code}'?  Sure?" } %>
+    
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

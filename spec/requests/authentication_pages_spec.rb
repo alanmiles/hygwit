@@ -57,6 +57,7 @@ describe "AuthenticationPages" do
       it { should have_link('Job Families', href: jobfamilies_path) }
       it { should have_link('Personal Qualities', href: qualities_path) }
       it { should have_link('Leaving Reasons', href: leaving_reasons_path) }
+      it { should have_link('Absence Types', href: absence_types_path) }
       it { should have_link('Disciplinary Categories', href: disciplinary_categories_path) }
       it { should have_link('Grievance Types', href: grievance_types_path) }
       it { should have_link('Settings', href: edit_user_path(admin)) }
