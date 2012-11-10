@@ -60,6 +60,7 @@ describe "AuthenticationPages" do
       it { should have_link('Absence Types', href: absence_types_path) }
       it { should have_link('Disciplinary Categories', href: disciplinary_categories_path) }
       it { should have_link('Grievance Types', href: grievance_types_path) }
+      it { should have_link('Contract Types', href: contracts_path) }
       it { should have_link('Settings', href: edit_user_path(admin)) }
       it { should have_link('Sign out', href: signout_path) }
       it { should_not have_link('Sign in', href: signin_path) }

@@ -1,5 +1,11 @@
 Hygwit::Application.routes.draw do
 
+  get "contracts/index"
+
+  get "contracts/new"
+
+  get "contracts/edit"
+
   resources :users
   resources :nationalities
   resources :currencies
@@ -13,6 +19,7 @@ Hygwit::Application.routes.draw do
   resources :grievance_types
   resources :sessions, only: [:new, :create, :destroy]
   resources :absence_types
+  resources :contracts
 
   root to: 'static_pages#home'
 

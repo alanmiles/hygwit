@@ -1,0 +1,29 @@
+<% provide(:title, 'Contract Types') %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <%= render 'shared/user_sidebar' %>
+    </section>
+      
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Contract Types</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a contract", new_contract_path, class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <% @contracts.each do |contract| %>
+        <li>
+          <%= contract.contract %>
+          | <%= link_to "change", edit_contract_path(contract) %>
+          | <%= link_to "delete", contract, method: :delete,
+                             data: { confirm: "Delete '#{contract.contract}'?  Sure?" } %>
+    
+        </li>
+      <% end %>
+    </ul>
+    
+  </div>
+</div>

@@ -7,10 +7,20 @@
         <%= @user.name %>
       </h1>
     </section>
+    <% if @user.admin? %>
+      <div class="instruction">
+        <div class="line-space">
+          <%= admin_notes_1 %>
+        </div>
+        <div class="line-space">
+          <%= admin_notes_2 %>
+        </div>     
+      </div>
+    <% end %>
   </aside>
   
-  <div class="span8">
-    <%= render 'administrator_menu' if current_user.admin? %>
+  <div class="span7 offset1">
+    <%= render 'administrator_menu' if @user.admin? %>
   </div>
 </div>
 

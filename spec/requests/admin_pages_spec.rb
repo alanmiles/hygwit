@@ -10,6 +10,7 @@ describe "AdminPages" do
     @leaving_reason = LeavingReason.create(reason: 'Resigned')
     @disciplinary_cat = DisciplinaryCategory.create(category: "Inappropriate behavior")
     @grievance_type = GrievanceType.create(grievance: "Unfair criticism")
+    @contract = Contract.create(contract: "Seconded")
   end
   
   describe "when not logged in" do
@@ -170,6 +171,38 @@ describe "AdminPages" do
       
         describe "with a DELETE request" do
           before { delete grievance_type_path(@grievance_type) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
+    end
+    
+    describe "Contracts controller" do
+    
+      before { visit new_contract_path }
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    
+      describe "when trying to access the index" do
+    
+        before { visit contracts_path }
+      
+        it "should render the sign-in path" do
+          page.should have_selector('.alert', text: 'sign in')
+          page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the sector data" do
+      
+        describe "with a PUT request" do
+          before { put contract_path(@contract) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete contract_path(@contract) }
           specify { response.should redirect_to(root_path) }        
         end
       end
@@ -369,6 +402,44 @@ describe "AdminPages" do
     
       describe "submitting a PUT request to the Nationalities#update action" do
         before { put grievance_type_path(@grievance_type) }
+        specify { response.should redirect_to(root_path) }
+      end
+    end
+    
+    describe "Contracts controller" do
+    
+      describe "when trying to access the index" do
+        
+        before { visit contracts_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Achievement-flavored HR')
+        end
+      end
+      
+      describe "when trying to enter a new record" do
+      
+        before { visit new_contract_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Achievement-flavored HR')
+        end
+
+      end
+      
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the Contracts#destroy action" do
+          before { delete contract_path(@contract) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the Nationalities#update action" do
+        before { put contract_path(@contract) }
         specify { response.should redirect_to(root_path) }
       end
     end
@@ -907,6 +978,108 @@ describe "AdminPages" do
           it { should have_selector('title', text: 'Grievance Types') }
           it { should have_selector('div.alert.alert-success') }
           specify { @gtype_3.reload.grievance.should == new_grievance }
+        end
+      end 
+    end
+    
+    describe "Contracts controller" do
+    
+      describe "index" do
+      
+        before do  
+          @contract_2 = Contract.create(contract: 'Volunteer')
+          @contract_3 = Contract.create(contract: 'Full-time')
+          visit contracts_path
+        end
+      
+        it { should have_selector('title', text: 'Contract Types') }
+        it { should have_selector('h1', text: 'Contract Types') }
+      
+        describe "list " do
+      
+          it { should have_link('change', href: edit_contract_path(@contract)) }
+          it { should have_link('delete', href: contract_path(@contract)) }
+          it { should have_link('Add', href: new_contract_path) }
+          it { should have_selector('ul.itemlist li:nth-child(3)', text: 'Volunteer') }
+        
+          describe "contract already in use" do
+        
+            it "should not have 'Delete' button"
+          end
+        
+          it "should be able to delete a contract" do
+            expect { click_link('delete') }.to change(Contract, :count).by(-1)
+          end
+          
+        end
+      end
+    
+      describe "accessing the 'new' page" do
+    
+        before { visit new_contract_path }
+      
+        it { should have_selector('title', text: 'New Contract') }
+        it { should have_selector('h1',    text: 'New Contract') }
+        it { should have_link('Back', href: contracts_path) }
+    
+        describe "creating a new contract" do
+      
+          before do
+            fill_in "Contract",  with: "Temporary"
+          end
+        
+          it "should create a contract" do
+            expect { click_button "Create" }.to change(Contract, :count).by(1)
+          end         
+        end
+      
+        describe "creating a record that fails validation" do
+      
+          before { fill_in "Contract",  with: "" }
+        
+          it "should not create a contract" do
+            expect { click_button "Create" }.not_to change(Contract, :count)
+            page.should have_selector('h1', text: 'New Contract')
+            page.should have_content('error')
+          end  
+      
+        end
+      end
+    
+      describe "edit" do
+    
+        before do
+          @contract_3 = Contract.create(contract: 'Intern')
+          visit edit_contract_path(@contract_3)
+        end
+    
+        it { should have_selector('title', text: 'Edit Contract') }
+        it { should have_selector('h1',    text: 'Edit Contract') }
+        it { should have_selector('input', value: @contract_3.contract) }
+        it { should have_link('Back', href: contracts_path) }
+    
+        describe "with invalid data" do
+          before do
+            fill_in 'Contract', with: " "
+            click_button "Save change"
+          end
+        
+          it { should have_selector('title', text: 'Edit Contract') }
+          it { should have_content('error') }
+          specify { @contract_3.reload.contract.should == 'Intern' }
+        end
+      
+        describe "with valid data" do
+      
+          let(:new_contract) { "Consultant" }
+          before do
+            fill_in 'Contract', with: new_contract
+            click_button "Save change"
+          end
+      
+          it { should have_selector('title', text: 'Contract Types') }
+          it { should have_selector('div.alert.alert-success') }
+          specify { @contract_3.reload.contract.should == new_contract }
         end
       end 
     end
