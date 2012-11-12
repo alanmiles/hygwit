@@ -4,8 +4,11 @@
   <aside class="span4">
     <section>
       <%= render 'shared/user_sidebar' %>   
-    <section>
-    <%= link_message %>
+    </section>
+    <% if current_user.superuser? %>
+      <div id="statistics">    
+        <%= link_message %>
+      </div>
   </aside>
   
   <div class="span8">

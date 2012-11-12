@@ -5,7 +5,11 @@
     <section>
       <%= render 'shared/user_sidebar' %>   
     </section>
-    <%= link_message %>
+    <% if current_user.superuser? %>
+      <div id="statistics">    
+        <%= link_message %>
+      </div>
+    <% end %>
   </aside>
   
   <div class="span8">

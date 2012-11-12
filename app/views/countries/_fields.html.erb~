@@ -1,5 +1,3 @@
-<div class="line-space"><i>Please set all fields, save, then <strong>alert HROomph HQ when complete</strong>.</i></div>
-
 <div>
   <span class="span3 r-float"><%= f.text_field :country %></span>
   <%= f.label :country, class: "vert-down" %>
@@ -27,16 +25,17 @@
   <%= f.label :max_hours_week, "Maximum hours per week", class: "vert-down" %>
 </div>                 
 
-<div style="clear:both"> 
-  <span class="span3 r-float"><%= f.text_field :max_hours_day_ramadan, class: "number-field" %></span>
-  <%= f.label :max_hours_day_ramadan, "Maximum hours per day - Ramadan", class: "vert-down" %>
-</div>
+<% if @country.rules =="Gulf" %>
+  <div id="ramadan-days" style="clear:both"> 
+    <span class="span3 r-float"><%= f.text_field :max_hours_day_ramadan, class: "number-field" %></span>
+    <%= f.label :max_hours_day_ramadan, "Maximum hours per day - Ramadan", class: "vert-down" %>
+  </div>
 
-<div style="clear:both"> 
-  <span class="span3 r-float"><%= f.text_field :max_hours_week_ramadan, class: "number-field" %></span>
-  <%= f.label :max_hours_week_ramadan, "Maximum hours per week - Ramadan", class: "vert-down" %>
-  
-</div>
+  <div style="clear:both"> 
+    <span class="span3 r-float"><%= f.text_field :max_hours_week_ramadan, class: "number-field" %></span>
+    <%= f.label :max_hours_week_ramadan, "Maximum hours per week - Ramadan", class: "vert-down" %>
+  </div>
+<% end %>
 
 <div style="clear:both"> 
   <span class="span3 r-float"><%= f.text_field :nightwork_start, class: "number-field" %></span>
@@ -84,10 +83,12 @@
   <span class="vert-down">National insurance applies?</span>
 </div> 
 
-<div style ="clear:both" class= "line-space">
-  <span class="span3 r-float"><%= f.check_box :sickness_accruals %></span>
-  <span class="vert-down">Annual sickness accrual applies?</span>
-</div>
+<% if @country.rules =="Gulf" %>
+  <div style ="clear:both" class= "line-space">
+    <span class="span3 r-float"><%= f.check_box :sickness_accruals %></span>
+    <span class="vert-down">Annual sickness accrual applies?</span>
+  </div>
+<% end %>
 
 <div style="clear:both" class="line-space"> 
   <span class="span3 r-float vert-down"><%= f.text_field :max_loan_ded_salary, class: "number-field" %></span>
@@ -96,5 +97,5 @@
 
 <div style="clear:both">
   <%= f.label :notes %>
-  <%= f.text_area :notes %>
+  <%= f.text_area :notes, rows: "5" %>
 </div>

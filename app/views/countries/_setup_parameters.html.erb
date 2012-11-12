@@ -1,0 +1,42 @@
+    <div class="line-space">
+      <div>Maximum working hours per day<span class="r-float"><%= @country.max_hours_day %></span></div>
+      <div>Maximum working hours per week<span class="r-float"><%= @country.max_hours_week %></span></div>
+      <% if @country.rules =="Gulf" %>
+        <div id="ramadan-day">Maximum working hours per day - Muslims in Ramadan
+               <span class="r-float"><%= @country.max_hours_day_ramadan %></span></div>
+        <div id="ramadan-week">Maximum working hours per week - Muslims in Ramadan
+               <span class="r-float"><%= @country.max_hours_week_ramadan %></span></div>
+      <% end %>
+    </div>
+    <div class="line-space">
+      <div>For OT calculations, night-work begins at - 
+        <span class="r-float"><%= @country.nightwork_end.try(:strftime, "%H:%M") %></span></div>
+      <div>For OT calculations, night-work ends at - 
+        <span class="r-float"><%= @country.nightwork_start.try(:strftime, "%H:%M") %></span></div>
+      <div>OT rate - standard (% of hourly salary)<span class="r-float"><%= @country.OT_rate_standard %></span></div>
+      <div>OT rate - evenings and weekends (% of hourly salary)<span class="r-float"><%= @country.OT_rate_special %></span></div>
+    </div>
+    <div class="line-space">
+      <div>Probation days<span class="r-float"><%= @country.probation_days %></span></div>
+      <div>Retirement age - male<span class="r-float"><%= @country.retirement_age_m %></span></div>
+      <div>Retirement age - female<span class="r-float"><%= @country.retirement_age_f %></span></div>
+    </div>
+    <div class="line-space">
+      <div>Taxation applies?<span class="r-float"><%= @country.taxation_status %></span></div>
+      <div>Insurance applies?<span class="r-float"><%= @country.insurance_status %></span></div>
+    </div>
+    <div class="line-space">
+      <div>Maximum percentage of salary deducted for loans?<span class="r-float"><%= @country.max_loan_ded_salary %></span></div>
+       <% if @country.rules =="Gulf" %>
+         <div id="sick-accrual">Sickness accruals may be accumulated?
+            <span class="r-float"><%= @country.sickness_accruals? ? "Yes" : "No" %></span></div>
+       <% end %>
+    </div>
+    <% unless @country.notes.blank? %>
+      <div class="line-space">
+        <div>Notes</div>
+         <div>
+          <%= simple_format(@country.notes, class: 'infobox') %>
+        </div>
+      </div> 
+    <% end %>

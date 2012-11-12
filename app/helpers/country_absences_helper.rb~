@@ -1,0 +1,7 @@
+module CountryAbsencesHelper
+
+  def absence_country_guidance
+  
+    "Include all the absence types that are likely to apply to business in #{@country.country }."
+  end
+end

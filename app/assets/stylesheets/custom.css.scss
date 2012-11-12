@@ -144,6 +144,7 @@ aside {
   border: 1px solid #dadada;
   border-radius: 5px;  
   @include box_sizing;
+  margin-left: 0px;
 }
 
 .user_avatars {
@@ -170,7 +171,12 @@ input, textarea, .uneditable-input {
   background-color: white;
   @include box_sizing;
 }
- 
+
+.content-block {
+  padding: 10px 0;
+  border-top: 1px solid $grayLighter;
+}
+
 select {
   background-color: white;
   width: 100%;

@@ -5,9 +5,10 @@ describe "CountryPages" do
   subject { page }
   
   before do
+    @absence_type = FactoryGirl.create(:absence_type, absence_code: "SF")
     @example = FactoryGirl.create(:nationality, nationality: 'Omani') 
     @currency = Currency.create(currency: 'Omani Riyals', code: 'OMR')
-    @country = Country.create(country: "Oman", currency_id: @currency.id, nationality_id: @example.id)
+    @country = Country.create(country: "Oman", currency_id: @currency.id, nationality_id: @example.id, rules: "Gulf")
   end
   
   describe "when not logged in" do
@@ -121,7 +122,7 @@ describe "CountryPages" do
     
         before { visit new_nationality_path }
       
-        it { should_not have_selector('title', text: 'New nationality') }
+        it { should_not have_selector('title', text: 'New Nationality') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
           page.should have_selector('h2', text: 'Achievement-flavored HR')
@@ -159,7 +160,7 @@ describe "CountryPages" do
     
         before { visit new_currency_path }
       
-        it { should_not have_selector('title', text: 'New currency') }
+        it { should_not have_selector('title', text: 'New Currency') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
           page.should have_selector('h2', text: 'Achievement-flavored HR')
@@ -199,7 +200,7 @@ describe "CountryPages" do
     
         before { visit new_country_path }
       
-        it { should_not have_selector('title', text: 'New country') }
+        it { should_not have_selector('title', text: 'New Country') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
           page.should have_selector('h2', text: 'Achievement-flavored HR')
@@ -256,6 +257,7 @@ describe "CountryPages" do
       
         it { should have_selector('title', text: 'Nationalities') }
         it { should have_selector('h1', text: 'Nationalities') }
+        it { should_not have_selector('#statistics', text: 'unlinked') }
       
         describe "list " do
       
@@ -556,8 +558,23 @@ describe "CountryPages" do
         it { should have_selector('title', text: @country.country) }
         it { should have_selector('h1',		 text: @country.country) }
         it { should have_link('Edit', href: edit_country_path(@country)) }
-        it { should have_link('List', href: countries_path) }
-      
+        it { should have_link('All countries', href: countries_path) } 
+        it { should have_selector('#ramadan-day', text: 'Ramadan') } 
+        it { should have_selector('#ramadan-week', text: 'Ramadan') }
+        it { should have_selector('#sick-accrual', text: 'Sickness accruals') }
+        it { should have_selector('h3',		 text: 'Set-up parameters') } 
+        it { should have_selector('h3',		 text: 'Absence codes') }
+        it { should have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
+        it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
+        it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
+        
+        describe "where country does not follow 'Gulf' rules" do
+          before { visit country_path(@country_1) }
+        
+          it { should_not have_selector('#ramadan-day', text: 'Ramadan') } 
+          it { should_not have_selector('#ramadan-week', text: 'Ramadan') }
+          it { should_not have_selector('#sick-accrual', text: 'Sickness accruals') }
+        end     
       end
     
       describe "accessing the 'new' page" do
@@ -571,6 +588,7 @@ describe "CountryPages" do
         describe "creating a new Country" do
       
           before do 
+            5.times { FactoryGirl.create(:absence_type) }
             fill_in "Country", with: "Scotland"
             select "GBP (Pounds Sterling)",  from: "country_currency_id"
             select "British", from: "Nationality"
@@ -608,7 +626,17 @@ describe "CountryPages" do
         it { should have_selector('h1',    text: 'Edit Country') }
         it { should have_selector('input', value: @country_3.country) }
         it { should have_link('List', href: countries_path) }
-    
+        it { should_not have_selector('#ramadan-day', text: "Ramadan") } 
+        it { should_not have_selector('#ramadan-week', text: "Ramadan") }
+        it { should_not have_selector('#sick-accrual', text: "sickness accrual") }         
+        
+        describe "for countries with 'Gulf' rules" do
+          before { visit edit_country_path(@country) }
+          it { should have_selector('#ramadan-day', text: "Ramadan") } 
+          it { should have_selector('#ramadan-week', text: "Ramadan") }
+          it { should have_selector('#sick-accrual', text: "sickness accrual") }        
+        end
+                
         describe "with invalid data" do
           before do
             fill_in 'Country', with: " "
@@ -636,8 +664,29 @@ describe "CountryPages" do
       end 
     end
     
+  end
+  
+  describe "when logged in as superuser" do
     
+    let(:superuser) { FactoryGirl.create(:superuser) }
+    before { sign_in superuser }
     
+    describe "nationality controller" do
     
+      describe "index" do
+      
+        before do  
+          @example= FactoryGirl.create(:nationality, nationality: 'French')
+          @example_1 = Nationality.create(nationality: 'British')
+          @example_2 = Nationality.create(nationality: 'Algerian')
+          @currency_1 = Currency.create(currency: 'Pounds', code: 'GBP')
+          @country_1 = Country.create(country: 'UK', nationality_id: @example_1.id, currency_id: @currency_1.id)
+          visit nationalities_path
+        end
+        
+        it { should have_selector('#statistics', text: 'unlinked') }
+      end
+    
+    end
   end
 end

@@ -1,0 +1,25 @@
+<% provide(:title, 'New Absence Type') %>
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @country.country %>
+      </h1>
+      <div class="instruction">
+        <div>
+          <%= absence_country_guidance %>
+        </div> 
+      </div>
+    </section>
+  </aside>
+  <div class="span6 offset0">
+    <h1>New Absence Type</h1>
+    <%= form_for([@country, @absence]) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "All absence types", "#", class: "btn" %>
+      <%= link_to "Set-up page - #{@country.country}", @country, class: "btn" %>
+    <% end %>
+  </div>
+</div>

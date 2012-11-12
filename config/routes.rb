@@ -1,15 +1,11 @@
 Hygwit::Application.routes.draw do
 
-  get "contracts/index"
-
-  get "contracts/new"
-
-  get "contracts/edit"
-
   resources :users
   resources :nationalities
   resources :currencies
-  resources :countries
+  resources :countries do
+    resources :country_absences, shallow: true
+  end
   resources :sectors
   resources :jobfamilies
   resources :qualities

@@ -8,6 +8,11 @@ FactoryGirl.define do
     factory :admin do
       admin true
     end
+    
+    factory :superuser do
+      admin true
+      superuser true
+    end
   end
   
   factory :nationality do
@@ -18,5 +23,20 @@ FactoryGirl.define do
   factory :currency do
     currency "Qatari Riyals"
     code "QAR"
+  end
+  
+  factory :absence_type do
+    sequence(:absence_code) { |n| "AB#{n}" }
+  end
+  
+  factory :country do
+    country :Qatar
+    nationality
+    currency
+  end
+  
+  factory :country_absence do
+    absence_code "SF"
+    country
   end
 end
