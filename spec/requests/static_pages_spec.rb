@@ -19,9 +19,10 @@ describe "Static pages" do
   end
   
   describe "Admin on arrival" do
-    admin = FactoryGirl.create(:admin)
+ 
     before do
-      sign_in admin
+      @admin = FactoryGirl.create(:admin, name: "Static Pages", email: "staticp@example.com")
+      sign_in @admin
       visit root_path 
     end
     

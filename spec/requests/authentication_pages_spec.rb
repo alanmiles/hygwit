@@ -28,13 +28,16 @@ describe "AuthenticationPages" do
     end
     
     describe "with valid information" do
-      let(:user) { FactoryGirl.create(:user) }
-      before { sign_in user }
-
-      it { should have_selector('title', text: user.name) }
+      
+      before do
+        @user = FactoryGirl.create(:user, name: "Authentic", email: "authentic@email.com")
+        sign_in @user
+      end
+      
+      it { should have_selector('title', text: @user.name) }
       it { should have_link('Users',    href: users_path) }
-      it { should have_link('Profile', href: user_path(user)) }
-      it { should have_link('Settings', href: edit_user_path(user)) }
+      it { should have_link('Profile', href: user_path(@user)) }
+      it { should have_link('Settings', href: edit_user_path(@user)) }
       it { should have_link('Sign out', href: signout_path) }
       it { should_not have_link('Sign in', href: signin_path) }
       
@@ -46,8 +49,10 @@ describe "AuthenticationPages" do
     
     describe "by admin user" do
       
-      let(:admin) { FactoryGirl.create(:admin) }
-      before { sign_in admin }
+      before do
+        @admin = FactoryGirl.create(:admin, name: "Auth Admin", email: "authadmin@example.com")
+        sign_in @admin
+      end
     
       it { should have_selector('h1', text: 'Administrator Menu') }
       it { should have_link('Nationalities', href: nationalities_path) }
@@ -61,23 +66,36 @@ describe "AuthenticationPages" do
       it { should have_link('Disciplinary Categories', href: disciplinary_categories_path) }
       it { should have_link('Grievance Types', href: grievance_types_path) }
       it { should have_link('Contract Types', href: contracts_path) }
-      it { should have_link('Settings', href: edit_user_path(admin)) }
+      it { should have_link('Settings', href: edit_user_path(@admin)) }
       it { should have_link('Sign out', href: signout_path) }
       it { should_not have_link('Sign in', href: signin_path) }
+      it { should_not have_link('Country Administrators', href: country_admins_path) }
       
+    end
+    
+    describe "by superuser" do
+      
+      before do
+        @superuser = FactoryGirl.create(:superuser, name: "HROomphAdmin", email: "hroomphadmin@example.com")
+        sign_in @superuser
+      end
+      
+      it { should have_link('Country Administrators', href: country_admins_path) }
+    
     end
   end
   
   describe "authorization" do
 
     describe "for non-signed-in users" do
-      let(:user) { FactoryGirl.create(:user) }
-
+    
+      before { @user = FactoryGirl.create(:user, name: "Tester", email: "tester@example.com") }
+     
       describe "when attempting to visit a protected page" do
         before do
-          visit edit_user_path(user)
-          fill_in "Email",    with: user.email
-          fill_in "Password", with: user.password
+          visit edit_user_path(@user)
+          fill_in "Email",    with: @user.email
+          fill_in "Password", with: @user.password
           click_button "Sign in"
         end
 
@@ -91,13 +109,13 @@ describe "AuthenticationPages" do
             before do
               delete signout_path
               visit signin_path
-              fill_in "Email",    with: user.email
-              fill_in "Password", with: user.password
+              fill_in "Email",    with: @user.email
+              fill_in "Password", with: @user.password
               click_button "Sign in"
             end
 
             it "should render the default (profile) page" do
-              page.should have_selector('title', text: user.name) 
+              page.should have_selector('title', text: @user.name) 
             end
           end
         end
@@ -106,12 +124,12 @@ describe "AuthenticationPages" do
       describe "in the Users controller" do
 
         describe "visiting the edit page" do
-          before { visit edit_user_path(user) }
+          before { visit edit_user_path(@user) }
           it { should have_selector('title', text: 'Sign in') }
         end
 
         describe "submitting to the update action" do
-          before { put user_path(user) }
+          before { put user_path(@user) }
           specify { response.should redirect_to(signin_path) }
         end
         
@@ -124,29 +142,34 @@ describe "AuthenticationPages" do
     end
     
     describe "as wrong user" do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
-      before { sign_in user }
-
+    
+      before do
+        @user = FactoryGirl.create(:user, name: "Right User", email: "rightuser@example.com")
+        @wrong_user = FactoryGirl.create(:user, name: "Wrong User", email: "wrong@example.com")
+        sign_in @user
+      end
+      
       describe "visiting Users#edit page" do
-        before { visit edit_user_path(wrong_user) }
+        before { visit edit_user_path(@wrong_user) }
         it { should_not have_selector('title', text: full_title('Edit user')) }
       end
 
       describe "submitting a PUT request to the Users#update action" do
-        before { put user_path(wrong_user) }
+        before { put user_path(@wrong_user) }
         specify { response.should redirect_to(root_path) }
       end
     end
     
     describe "as non-admin user" do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:non_admin) { FactoryGirl.create(:user) }
-
-      before { sign_in non_admin }
-
+      
+      before do
+        @user = FactoryGirl.create(:user, name: "One More", email: "onemore@example.com")
+        @non_admin = FactoryGirl.create(:user, name: "Non Admin", email: "nonadmin@example.com")
+        sign_in @non_admin
+      end
+      
       describe "submitting a DELETE request to the Users#destroy action" do
-        before { delete user_path(user) }
+        before { delete user_path(@user) }
         specify { response.should redirect_to(root_path) }        
       end
     end

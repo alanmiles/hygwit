@@ -1,5 +1,11 @@
 Hygwit::Application.routes.draw do
 
+  get "country_admins/new"
+
+  get "country_admins/index"
+
+  get "country_admins/edit"
+
   resources :users
   resources :nationalities
   resources :currencies

@@ -1,7 +1,7 @@
 <% provide(:title, 'Nationalities') %>
 
 <div class="row">
-  <aside class="span4">
+  <aside class="span4 large">
     <section>
       <%= render 'shared/user_sidebar' %>   
     </section>
@@ -9,6 +9,7 @@
       <div id="statistics">    
         <%= link_message %>
       </div>
+    <% end %>
   </aside>
   
   <div class="span8">

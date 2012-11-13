@@ -39,4 +39,9 @@ FactoryGirl.define do
     absence_code "SF"
     country
   end
+  
+  factory :country_admin do
+    user
+    country
+  end
 end

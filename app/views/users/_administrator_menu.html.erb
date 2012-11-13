@@ -11,4 +11,5 @@
   <li><%= link_to "Disciplinary Categories", disciplinary_categories_path %></li>
   <li><%= link_to "Grievance Types", grievance_types_path %></li>
   <li><%= link_to "Contract Types", contracts_path %></li>
+  <li><%= link_to "Country Administrators", country_admins_path if current_user.superuser? %></li>
 </ul>

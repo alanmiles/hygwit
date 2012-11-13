@@ -48,6 +48,16 @@ module SessionsHelper
     end
   end
   
+  def check_superuser
+    unless signed_in? 
+      redirect_to root_path, notice: "You must be a HROomph superuser to issue this instruction." 
+    else  
+      unless current_user.superuser?
+        redirect_to user_path(current_user), notice: "You must be a HROomph superuser to issue this instruction." 
+      end
+    end
+  end
+  
   def illegal_action
     unless signed_in?
       redirect_to root_path, notice: "Illegal action"

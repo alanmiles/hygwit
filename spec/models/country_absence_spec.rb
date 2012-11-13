@@ -18,13 +18,17 @@ require 'spec_helper'
 
 describe CountryAbsence do
   
-  let(:country) { FactoryGirl.create(:country) }
-  before { @absence = country.country_absences.build(absence_code: "SF") }
+  before do
+    @nationality = FactoryGirl.create(:nationality, nationality: "Indian")
+    @currency = FactoryGirl.create(:currency, currency: "Rupee", code: "IRY")
+    @country = Country.create(country: "India", nationality_id: @nationality.id, currency_id: @currency.id)
+    @absence = @country.country_absences.build(absence_code: "S1")
+  end
   
   subject { @absence }
   
   it { should respond_to(:country_id) }
-  its(:country) { should == country }
+  its(:country) { should == @country }
   it { should respond_to(:absence_code) }
   it { should respond_to(:paid) }
   it { should respond_to(:sickness) }
@@ -37,7 +41,7 @@ describe CountryAbsence do
   describe "accessible attributes" do
     it "should not allow access to country_id" do
       expect do
-        CountryAbsence.new(country_id: country.id)
+        CountryAbsence.new(country_id: @country.id)
       end.to raise_error(ActiveModel::MassAssignmentSecurity::Error)
     end    
   end

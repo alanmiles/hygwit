@@ -33,9 +33,9 @@ require 'spec_helper'
 describe Country do
   
   before do
-    @nationality = FactoryGirl.create(:nationality)
-    @currency = FactoryGirl.create(:currency)
-    @country = Country.new(country: "Qatar", nationality_id: @nationality.id, currency_id: @currency.id)
+    @nationality = FactoryGirl.create(:nationality, nationality: "Canadian")
+    @currency = FactoryGirl.create(:currency, currency: "Canadian Dollars", code: "CAD")
+    @country = Country.new(country: "Canada", nationality_id: @nationality.id, currency_id: @currency.id)
   end
   
   subject { @country }

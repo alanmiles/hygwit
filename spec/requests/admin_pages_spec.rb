@@ -211,8 +211,10 @@ describe "AdminPages" do
   
   describe "when logged in as non-admin" do
   
-    let(:user) { FactoryGirl.create(:user) }
-    before { sign_in user }
+    before do
+      user = FactoryGirl.create(:user, name: "A User", email: "auser@example.com")
+      sign_in user
+    end
     
     describe "sector controller" do
     
@@ -447,8 +449,10 @@ describe "AdminPages" do
   
   describe "when logged in as admin" do
   
-    let(:admin) { FactoryGirl.create(:admin) }
-    before { sign_in admin }
+    before do
+      admin = FactoryGirl.create(:admin, name: "Admin Admin", email: "adminadmin@example.com")
+      sign_in admin
+    end
     
     describe "sector controller" do
     

@@ -16,6 +16,7 @@ Hygwit::Application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   resources :absence_types
   resources :contracts
+  resources :country_admins
 
   root to: 'static_pages#home'
 

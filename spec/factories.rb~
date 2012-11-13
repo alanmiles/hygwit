@@ -25,7 +25,7 @@ FactoryGirl.define do
     code "QAR"
   end
   
-  factory :absence_code do
+  factory :absence_type do
     sequence(:absence_code) { |n| "AB#{n}" }
   end
   
@@ -37,6 +37,11 @@ FactoryGirl.define do
   
   factory :country_absence do
     absence_code "SF"
+    country
+  end
+  
+  factory :country_admin do
+    admin
     country
   end
 end

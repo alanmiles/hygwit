@@ -113,8 +113,10 @@ describe "CountryPages" do
   
   describe "when logged in as non-admin" do
   
-    let(:user) { FactoryGirl.create(:user) }
-    before { sign_in user }
+    before do
+      user = FactoryGirl.create(:user, name: "Country checker", email: "cchecker@example.com")
+      sign_in user
+    end
     
     describe "nationality controller" do
     
@@ -239,8 +241,10 @@ describe "CountryPages" do
   
   describe "when logged in as admin" do
     
-    let(:admin) { FactoryGirl.create(:admin) }
-    before { sign_in admin }
+    before do
+      admin = FactoryGirl.create(:admin, name: "Country Admin", email: "countryadmin@example.com")
+      sign_in admin
+    end
     
     describe "nationality controller" do
     
@@ -611,7 +615,7 @@ describe "CountryPages" do
       
           before { fill_in "Country",  with: "" }
         
-          it "should not create a ccountry" do
+          it "should not create a country" do
             expect { click_button "Create" }.not_to change(Country, :count)
             page.should have_selector('h1', text: 'New Country')
             page.should have_content('error')
@@ -675,8 +679,10 @@ describe "CountryPages" do
   
   describe "when logged in as superuser" do
     
-    let(:superuser) { FactoryGirl.create(:superuser) }
-    before { sign_in superuser }
+    before do
+      superuser = FactoryGirl.create(:superuser, name: "S User", email: "suser@example.com")
+      sign_in superuser 
+    end
     
     describe "nationality controller" do
     

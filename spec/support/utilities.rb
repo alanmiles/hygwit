@@ -21,8 +21,4 @@ def sign_in(user)
   cookies[:remember_token] = user.remember_token
 end
 
-def country_setup
-  let(:nationality) { FactoryGirl.create(:nationality) }
-  let(:currency) 		{ FactoryGirl.create(:currency) }
-  let(:country) 		{ FactoryGirl.create(:country, nationality_id: nationality.id, currency_id: currency.id) }
-end
+

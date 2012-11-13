@@ -96,6 +96,7 @@ p {
 /* sidebar */
 
 aside {
+  .makeColumn(2);
   section {
     padding: 10px 0;
     border-top: 1px solid $grayLighter;
@@ -175,10 +176,6 @@ input, textarea, .uneditable-input {
 .content-block {
   padding: 10px 0;
   border-top: 1px solid $grayLighter;
-  &:first-child {
-    border: 0;
-    padding-top: 0;
-  }
 }
 
 select {

@@ -89,8 +89,10 @@ describe "MasterQualitiesPages" do
   
   describe "when logged in as non-admin" do
   
-    let(:user) { FactoryGirl.create(:user) }
-    before { sign_in user }
+    before do
+      user = FactoryGirl.create(:user, name: "Quality Man", email: "quality@example.com")
+      sign_in user
+    end
     
     describe "qualities controller" do
     
@@ -129,8 +131,10 @@ describe "MasterQualitiesPages" do
   
   describe "when logged in as admin" do
   
-    let(:admin) { FactoryGirl.create(:admin) }
-    before { sign_in admin }
+    before do
+      @admin =FactoryGirl.create(:admin, name: "Admin Q", email: "adminq@example.com")
+      sign_in @admin
+    end
     
     describe "qualities controller" do
     
@@ -222,7 +226,7 @@ describe "MasterQualitiesPages" do
           it { should have_selector('title', text: @quality.quality) }
           it { should have_link('Qualities list', href: qualities_path) }
           specify { @descriptor.reload.reviewed.should == false }
-          specify { @descriptor.reload.updated_by.should == admin.id }
+          specify { @descriptor.reload.updated_by.should == @admin.id }
         end
         
       end

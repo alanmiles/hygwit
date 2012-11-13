@@ -20,3 +20,9 @@ def sign_in(user)
   # Sign in when not using Capybara as well.
   cookies[:remember_token] = user.remember_token
 end
+
+def country_setup
+  @nationality = FactoryGirl.create(:nationality)
+  @currency = FactoryGirl.create(:currency)
+  @country = FactoryGirl.create(:country, nationality_id: @nationality.id, currency_id: @currency.id)
+end

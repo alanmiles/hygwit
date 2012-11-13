@@ -1,0 +1,38 @@
+<% provide(:title, 'Country Administrators') %>
+
+<div class="row">
+  <aside class="span4">
+    <h4 class="line-space">SUPERUSERS ONLY</h4>
+    <section>
+      <%= render 'shared/user_sidebar' %>
+    </section>
+    <h4 class="line-space">SUPERUSERS ONLY</h4>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Country Administrators</h1>
+    
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a country administrator", new_country_admin_path, class: "btn" %>
+    </div>
+
+    <ul class="itemlist">
+      <% @country_admins.each do |admin| %>
+        <li>
+          <%= admin.country.country %> - 
+          <%= admin.user.name %> 
+          | <%= link_to "change", edit_country_admin_path(admin) %>
+          | <%= link_to "delete", admin, method: :delete,
+                             data: { confirm: "Remove #{admin.user.name} as administrator for #{admin.country.country}?  Sure?" } %>
+    
+        </li>
+      <% end %>
+    </ul>
+
+    <% if CountryAdmin.count > 10 %>
+      <div style="padding-top: 10px">
+        <%= link_to "Add a country administrator", new_country_admin_path, class: "btn" %>
+      </div>
+    <% end %>
+  </div>
+</div>

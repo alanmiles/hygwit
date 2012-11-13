@@ -5,10 +5,11 @@ describe "User pages" do
   subject { page }
   
   describe "index" do
-    let(:user) { FactoryGirl.create(:user) }
+    
 
     before(:each) do
-      sign_in user
+      @user = FactoryGirl.create(:user, name: "One User", email: "oneuser@email.com")
+      sign_in @user
       visit users_path
     end
 

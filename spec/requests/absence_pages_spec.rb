@@ -44,12 +44,17 @@ describe "AbsencePages" do
     
     describe "CountryAbsences controller" do
     
-      country_setup
-      let(:country_absence) { CountryAbsence.find_by_country_id_and_absence_code(country.id, @absence.absence_code) }
+      before do
+        @nationality = FactoryGirl.create(:nationality, nationality: "German")
+        @currency = FactoryGirl.create(:currency, currency: "Marks", code: "DM")
+        @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
+      end 
+      
+      let(:country_absence) { CountryAbsence.find_by_country_id_and_absence_code(@country.id, @absence.absence_code) }
      
       describe "when trying to access the 'new' page" do
       
-        before { visit new_country_country_absence_path(country) }
+        before { visit new_country_country_absence_path(@country) }
         it "should render the home page" do
           page.should have_selector('.alert', text: 'Please sign in')
           page.should have_selector('h1', text: 'Sign in') 
@@ -58,7 +63,7 @@ describe "AbsencePages" do
     
       describe "when trying to access the index" do
     
-        before { visit country_country_absences_path(country) }
+        before { visit country_country_absences_path(@country) }
       
         it "should render the sign-in path" do
           page.should have_selector('.alert', text: 'sign in')
@@ -84,8 +89,10 @@ describe "AbsencePages" do
   
   describe "when logged in as non-admin" do
   
-    let(:user) { FactoryGirl.create(:user) }
-    before { sign_in user }
+    before do
+      user = FactoryGirl.create(:user, name: "Abscheck", email: "abscheck@example.com") 
+      sign_in user
+    end
     
     describe "AbsenceTypes controller" do
     
@@ -128,12 +135,17 @@ describe "AbsencePages" do
     
     describe "CountryAbsences controller" do
     
-      country_setup
-      let(:country_absence) { CountryAbsence.find_by_country_id_and_absence_code(country.id, @absence.absence_code) }
+      before do
+        @nationality = FactoryGirl.create(:nationality, nationality: "German")
+        @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
+        @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
+      end 
+      
+      let(:country_absence) { CountryAbsence.find_by_country_id_and_absence_code(@country.id, @absence.absence_code) }
       
       describe "accessing the 'new' page" do
     
-        before { visit new_country_country_absence_path(country) }
+        before { visit new_country_country_absence_path(@country) }
       
         it { should_not have_selector('title', text: 'New Absence Type') }
         it "should render the root_path" do
@@ -144,7 +156,7 @@ describe "AbsencePages" do
     
       describe "when trying to access the index" do
     
-        before { visit country_country_absences_path(country) }
+        before { visit country_country_absences_path(@country) }
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
@@ -174,8 +186,10 @@ describe "AbsencePages" do
   
   describe "when logged in as admin" do
     
-    let(:admin) { FactoryGirl.create(:admin) }
-    before { sign_in admin }
+    before do
+      admin = FactoryGirl.create(:admin, name: "An Admin", email: "anadmin@example.com")
+      sign_in admin
+    end
     
     describe "AbsenceTypes controller" do
     
@@ -281,20 +295,24 @@ describe "AbsencePages" do
     
     describe "CountryAbsences controller" do
     
-      country_setup
+      before do
+        @nationality = FactoryGirl.create(:nationality, nationality: "German")
+        @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
+        @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
+      end 
       #let(:nationality) { FactoryGirl.create(:nationality) }
       #let(:currency) 		{ FactoryGirl.create(:currency) }
       #let(:country) 		{ FactoryGirl.create(:country, nationality_id: nationality.id, currency_id: currency.id) }
         
       describe "add a new absence-type for the country" do
       
-        before { visit new_country_country_absence_path(country.id) }
+        before { visit new_country_country_absence_path(@country.id) }
         
         it { should have_selector('title', text: 'New Absence Type') }
         it { should have_selector('h1', text: 'New Absence Type') }
-        it { should have_selector('h1', text: country.country) }
-        it { should have_link('All absence types', href: country_country_absences_path(country)) }
-        it { should have_link('Set-up page', href: country_path(country)) }
+        it { should have_selector('h1', text: @country.country) }
+        it { should have_link('All absence types', href: country_country_absences_path(@country)) }
+        it { should have_link('Set-up page', href: country_path(@country)) }
       
         describe "with valid data" do
         
@@ -306,8 +324,8 @@ describe "AbsencePages" do
           it "should create a new absence type for the country" do
             expect { click_button "Create" }.to change(CountryAbsence, :count).by(1)
             page.should have_selector('h1', text: 'Absence Types')
-            page.should have_selector('h1', text: country.country)
-            page.should have_selector('title', text: "Absence Types: #{country.country}")
+            page.should have_selector('h1', text: @country.country)
+            page.should have_selector('title', text: "Absence Types: #{@country.country}")
           end 
         end
         
@@ -320,7 +338,7 @@ describe "AbsencePages" do
           it "should not create a new absence type for the country" do
             expect { click_button "Create" }.not_to change(CountryAbsence, :count)
             page.should have_selector('h1', text: 'New Absence Type')
-            page.should have_selector('h1', text: country.country)
+            page.should have_selector('h1', text: @country.country)
             page.should have_content('error')    
           end
         end
@@ -328,21 +346,21 @@ describe "AbsencePages" do
       
       describe "index of absences for country" do
       
-        before { visit country_country_absences_path(country) }
+        before { visit country_country_absences_path(@country) }
         
-        it { should have_selector('h1', text: country.country) }
-        it { should have_selector('title', text: "Absence Types: #{country.country}") }
+        it { should have_selector('h1', text: @country.country) }
+        it { should have_selector('title', text: "Absence Types: #{@country.country}") }
         it { should have_selector('h1', text: 'Absence Types') }
-        it { should have_link('Add an absence type', href: new_country_country_absence_path(country)) }
-        it { should have_link('Back to set-up page', href: country_path(country)) }
-        it { should have_link('edit', href: edit_country_absence_path(country.country_absences.first)) }
-        it { should have_link('del', href: country_absence_path(country.country_absences.first)) }
+        it { should have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
+        it { should have_link('Back to set-up page', href: country_path(@country)) }
+        it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
+        it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
         
         describe "editing an absence in the correct country" do
           before { click_link 'edit' }
           
           it { should have_selector('title', text: "Edit Absence Type") }
-          it { should have_selector('h1', text: country.country) }
+          it { should have_selector('h1', text: @country.country) }
         
         end
         
@@ -356,14 +374,14 @@ describe "AbsencePages" do
       
       describe "editing one of the country's absences" do
       
-        let(:country_absence) { CountryAbsence.find_by_country_id_and_absence_code(country.id, @absence.absence_code) }
+        let(:country_absence) { CountryAbsence.find_by_country_id_and_absence_code(@country.id, @absence.absence_code) }
         before { visit edit_country_absence_path(country_absence) }
         
-        it { should have_selector('h1', text: country.country) }
+        it { should have_selector('h1', text: @country.country) }
         it { should have_selector('title', text: "Edit Absence Type") }
         it { should have_selector('h1', text: 'Edit Absence Type') }
-        it { should have_link('All absence types', href: country_country_absences_path(country)) }
-        it { should have_link('Set-up page', href: country_path(country)) }      
+        it { should have_link('All absence types', href: country_country_absences_path(@country)) }
+        it { should have_link('Set-up page', href: country_path(@country)) }      
       
         describe "updating with valid data" do
           
@@ -373,8 +391,8 @@ describe "AbsencePages" do
             click_button "Save changes"
           end
           
-          it { should have_selector('h1', text: country.country) }
-          it { should have_selector('title', text: "Absence Types: #{country.country}") }
+          it { should have_selector('h1', text: @country.country) }
+          it { should have_selector('title', text: "Absence Types: #{@country.country}") }
           it { should have_selector('h1', text: 'Absence Types') }
           #it { should have_selector('title', text: 'Edit Absence Type') }
           #it { should have_content('error') }
@@ -389,7 +407,7 @@ describe "AbsencePages" do
             click_button "Save changes"
           end
           
-          it { should have_selector('h1', text: country.country) }
+          it { should have_selector('h1', text: @country.country) }
           it { should have_selector('title', text: 'Edit Absence Type') }
           it { should have_content('error') }
           specify { country_absence.reload.absence_code.should == "UL" }   

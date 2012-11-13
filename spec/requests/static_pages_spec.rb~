@@ -19,9 +19,12 @@ describe "Static pages" do
   end
   
   describe "Admin on arrival" do
-    admin = FactoryGirl.create(:admin)
-    sign_in admin
-    before { visit root_path }
+ 
+    before do
+      @admin = FactoryGirl.create(:admin, name: "Static", email: "static@example.com")
+      sign_in @admin
+      visit root_path 
+    end
     
     it { should have_selector('h1', text: "Administrator Menu") }
   end

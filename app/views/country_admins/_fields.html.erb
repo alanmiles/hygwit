@@ -1,0 +1,7 @@
+<%= f.label :country_id, "Country" %>
+<%= collection_select(:country_admin, :country_id, 
+          @countries, :id, :country, prompt: 'Please select')  %>
+
+<%= f.label :user_id, "User" %>
+<%= collection_select(:country_admin, :user_id, 
+          @admins, :id, :name, prompt: 'Please select')  %>
