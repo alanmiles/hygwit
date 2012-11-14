@@ -1,0 +1,44 @@
+sector;created_by;approved
+Agriculture;1;true
+Marine;1;true
+Automobiles;1;true
+Banking;1;true
+Chemicals;1;true
+Business Services;1;true
+Clothing & Textiles;1;true
+Construction & Materials;1;true
+Containers & Packaging;1;true
+Delivery/Logistics;1;true
+Education & Training;1;true
+IT;1;true
+Energy;1;true
+Engineering;1;true
+Environment & Waste;1;true
+Facilities Management;1;true
+Forestry & Paper;1;true
+Healthcare;1;true
+Pharmaceuticals;1;true
+Insurance;1;true
+Manufacturing;1;true
+Media;1;true
+Mining & Metals;1;true
+Oil & Gas;1;true
+Aerospace & Defence;1;true
+Household Goods;1;true
+Health & Beauty;1;true
+Public Sector;1;true
+Retail;1;true
+Sport;1;true
+Telecommunications;1;true
+Tourism & Leisure;1;true
+Transportation;1;true
+Utilities;1;true
+Biotechnology;1;true
+Energy;1;true
+Infrastructure;1;true
+Property;1;true
+Legal;1;true
+Food & Beverages;1;true
+Financial Services;1;true
+Entertainment;1;true
+The Arts;1;true

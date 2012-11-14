@@ -2,30 +2,33 @@
 #
 # Table name: countries
 #
-#  id                     :integer          not null, primary key
-#  country                :string(255)
-#  nationality_id         :integer
-#  currency_id            :integer
-#  taxation               :boolean          default(FALSE)
-#  insurance              :boolean          default(TRUE)
-#  probation_days         :integer          default(90)
-#  max_hours_day          :integer          default(9)
-#  max_hours_week         :integer          default(45)
-#  max_hours_day_ramadan  :integer          default(6)
-#  max_hours_week_ramadan :integer          default(30)
-#  sickness_accruals      :boolean          default(FALSE)
-#  retirement_age_m       :integer          default(60)
-#  retirement_age_f       :integer          default(55)
-#  OT_rate_standard       :decimal(3, 2)
-#  OT_rate_special        :decimal(3, 2)
-#  nightwork_start        :time
-#  nightwork_end          :time
-#  max_loan_ded_salary    :integer          default(15)
-#  notes                  :text
-#  complete               :boolean          default(FALSE)
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  rules                  :string(255)
+#  id                       :integer          not null, primary key
+#  country                  :string(255)
+#  nationality_id           :integer
+#  currency_id              :integer
+#  taxation                 :boolean          default(FALSE)
+#  insurance                :boolean          default(TRUE)
+#  probation_days           :integer          default(90)
+#  max_hours_day            :integer          default(9)
+#  max_hours_week           :integer          default(45)
+#  max_hours_day_ramadan    :integer          default(6)
+#  max_hours_week_ramadan   :integer          default(30)
+#  sickness_accruals        :boolean          default(FALSE)
+#  retirement_age_m         :integer          default(60)
+#  retirement_age_f         :integer          default(55)
+#  OT_rate_standard         :decimal(3, 2)
+#  OT_rate_special          :decimal(3, 2)
+#  nightwork_start          :time
+#  nightwork_end            :time
+#  max_loan_ded_salary      :integer          default(15)
+#  notes                    :text
+#  complete                 :boolean          default(FALSE)
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  rules                    :string(255)
+#  gratuity_applies         :boolean          default(FALSE)
+#  minimum_vacation_days    :integer          default(21)
+#  vacation_by_working_days :boolean          default(FALSE)
 #
 
 require 'spec_helper'
@@ -46,7 +49,9 @@ describe Country do
   it { should respond_to(:taxation) }
   it { should respond_to(:complete) }
   it { should respond_to(:rules) }
+  it { should respond_to(:minimum_vacation_days) }
   it { should respond_to(:country_absences) }
+  
   
   it { should be_valid }
   

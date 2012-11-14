@@ -678,8 +678,8 @@ describe "AdminPages" do
       
         before do  
           @reason = LeavingReason.create(reason: 'Retired')
-          @reason_2 = LeavingReason.create(reason: 'Redundant', terminated: true)
-          @reason_3 = LeavingReason.create(reason: 'Disciplinary', terminated: true)
+          @reason_2 = LeavingReason.create(reason: 'Redundant', full_benefits: true)
+          @reason_3 = LeavingReason.create(reason: 'Disciplinary', full_benefits: true)
           visit leaving_reasons_path
         end
       
@@ -718,7 +718,7 @@ describe "AdminPages" do
       
           before do
             fill_in "Reason",  with: "Death"
-            check "Check if this is a termination"
+            check "Check if leaver receives full leaving benefits"
           end
         
           it "should create a leaving reason" do
@@ -742,7 +742,7 @@ describe "AdminPages" do
       describe "edit" do
     
         before do
-          @reason_3 = LeavingReason.create(reason: 'Fighting', terminated: true)
+          @reason_3 = LeavingReason.create(reason: 'Fighting', full_benefits: true)
           visit edit_leaving_reason_path(@reason_3)
         end
     
@@ -768,14 +768,14 @@ describe "AdminPages" do
           let(:new_reason) { "Early retirement" }
           before do
             fill_in 'Reason', with: new_reason
-            uncheck 'Check if this is a termination'
+            uncheck 'Check if leaver receives full leaving benefits'
             click_button "Save changes"
           end
       
           it { should have_selector('title', text: 'Leaving Reasons') }
           it { should have_selector('div.alert.alert-success') }
           specify { @reason_3.reload.reason.should == new_reason }
-          specify { @reason_3.reload.terminated.should == false }
+          specify { @reason_3.reload.full_benefits.should == false }
         end
       end 
     end

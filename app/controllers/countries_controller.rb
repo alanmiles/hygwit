@@ -38,6 +38,8 @@ class CountriesController < ApplicationController
   end
   
   def update
+    params[:country].parse_time_select! :nightwork_start
+    params[:country].parse_time_select! :nightwork_end
     @country= Country.find(params[:id])
     if @country.update_attributes(params[:country])
       flash[:success] = "'#{@country.country}' updated"

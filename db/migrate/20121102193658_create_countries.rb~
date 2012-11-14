@@ -5,7 +5,7 @@ class CreateCountries < ActiveRecord::Migration
       t.integer :nationality_id
       t.integer :currency_id
       t.boolean :taxation, default: false
-      t.boolean, :insurance, default: true
+      t.boolean :insurance, default: true
       t.integer :probation_days, default: 90
       t.integer :max_hours_day, default: 9
       t.integer :max_hours_week, default: 45
@@ -16,8 +16,8 @@ class CreateCountries < ActiveRecord::Migration
       t.integer :retirement_age_f, default: 55
       t.decimal :OT_rate_standard, precision: 3, scale: 2
       t.decimal :OT_rate_special, precision: 3, scale: 2
-      t.time :nightwork_start, default: 21:00
-      t.time :nightwork_end, default: 05:00
+      t.time :nightwork_start
+      t.time :nightwork_end
       t.integer :max_loan_ded_salary, default: 15
       t.text :notes
       t.boolean :complete, default: false

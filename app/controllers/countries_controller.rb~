@@ -10,6 +10,7 @@ class CountriesController < ApplicationController
   
   def show
     @country = Country.find(params[:id])
+    @absences = @country.country_absences
   end
 
   def new
@@ -19,6 +20,8 @@ class CountriesController < ApplicationController
   end
   
   def create
+    params[:country].parse_time_select! :nightwork_start
+    params[:country].parse_time_select! :nightwork_end
     @country = Country.new(params[:country])
     if @country.save
       flash[:success] = "'#{@country.country}' added"
@@ -37,6 +40,8 @@ class CountriesController < ApplicationController
   end
   
   def update
+    params[:country].parse_time_select! :nightwork_start
+    params[:country].parse_time_select! :nightwork_end
     @country= Country.find(params[:id])
     if @country.update_attributes(params[:country])
       flash[:success] = "'#{@country.country}' updated"

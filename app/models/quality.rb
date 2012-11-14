@@ -11,6 +11,7 @@
 #
 
 class Quality < ActiveRecord::Base
+  
   attr_accessible :approved, :created_by, :quality
   
   after_create  :build_descriptors

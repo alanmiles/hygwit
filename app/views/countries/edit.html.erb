@@ -1,14 +1,27 @@
-<% provide(:title, "Edit Country") %> 
-<h1>Edit Country</h1>
-
+<% provide(:title, "Edit Labor Law Regulations") %> 
 <div class="row">
-  <div class="span6 offset3">
+  <div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @country.country %>
+      </h1>
+      <div class="instruction">
+        <div>
+          <%= labor_law_instructions %>
+        </div> 
+      </div>
+    </section>
+  </aside>
+  <div class="span6 offset0">
+  <h1>Edit Labor Law Regulations</h1>
     <%= form_for(@country) do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
       <%= render 'fields', f: f %>
       
       <%= f.submit "Save changes", class: "btn btn-primary" %>
-      <%= link_to 'List', countries_path, class: "btn" %>
+      <%= link_to 'Back to country settings', @country, class: "btn" %>
+      <%= link_to 'List countries', countries_path, class: "btn" %>
     <% end %>
   </div>
 </div>

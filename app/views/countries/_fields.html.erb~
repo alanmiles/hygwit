@@ -26,24 +26,36 @@
 </div>                 
 
 <% if @country.rules =="Gulf" %>
-  <div id="ramadan-days" style="clear:both"> 
+  <div id="ramadan-day" style="clear:both"> 
     <span class="span3 r-float"><%= f.text_field :max_hours_day_ramadan, class: "number-field" %></span>
     <%= f.label :max_hours_day_ramadan, "Maximum hours per day - Ramadan", class: "vert-down" %>
   </div>
 
-  <div style="clear:both"> 
+  <div id="ramadan-week" style="clear:both"> 
     <span class="span3 r-float"><%= f.text_field :max_hours_week_ramadan, class: "number-field" %></span>
     <%= f.label :max_hours_week_ramadan, "Maximum hours per week - Ramadan", class: "vert-down" %>
   </div>
 <% end %>
 
 <div style="clear:both"> 
-  <span class="span3 r-float"><%= f.text_field :nightwork_start, class: "number-field" %></span>
-  <%= f.label :nightwork_start, "Night-work begins at ... (hh:mm:ss)", class: "vert-down" %>
+  <span class="span1.5 r-float"><%= f.time_select :nightwork_start,
+     :combined => true,
+     :default => Time.now.change(:hour => 19, :min => 00),
+     :minute_interval => 30,
+     :time_separator => "",
+     :start_hour => 0,
+     :end_hour => 23 %></span>
+  <%= f.label :nightwork_start, "Night-work begins at", class: "vert-down" %>
 </div>
 
 <div style="clear:both"> 
-  <span class="span3 r-float"><%= f.text_field :nightwork_end, class: "number-field" %></span>
+  <span class="span3 r-float"><%= f.time_select :nightwork_end, 
+     :combined => true,
+     :default => Time.now.change(:hour => 07, :min => 00),
+     :minute_interval => 30,
+     :time_separator => "",
+     :start_hour => 0,
+     :end_hour => 23 %></span>
   <%= f.label :nightwork_end, "Night-work ends at ... (hh:mm:ss)", class: "vert-down" %>
 </div>
 
@@ -55,6 +67,17 @@
 <div style="clear:both"> 
   <span class="span3 r-float"><%= f.text_field :OT_rate_special, class: "number-field" %></span> 
   <%= f.label :OT_rate_special, "Overtime rate - nights and weekends", class: "vert-down" %>          
+</div>
+
+<div style="clear:both"> 
+  <span class="span3 r-float"><%= f.text_field :minimum_vacation_days, class: "number-field" %></span>
+  <%= f.label :minimum_vacation_days, class: "vert-down" %>
+</div>
+
+<div class="line-space" style="clear:both"> 
+  <span class="span3 r-float"><%= f.radio_button("vacation_by_working_days", true) %> Working days &nbsp; &nbsp;
+    <%= f.radio_button("vacation_by_working_days", false) %> Calendar days</span>
+  <%= f.label :vacation_by_working_days, "Vacation calculation basis" %>
 </div>
 
 <div style="clear:both"> 
@@ -81,10 +104,17 @@
 <div style ="clear:both" class= "line-space">
   <span class="span3 r-float"><%= f.check_box :insurance %></span>
   <span class="vert-down">National insurance applies?</span>
-</div> 
+</div>
 
 <% if @country.rules =="Gulf" %>
-  <div style ="clear:both" class= "line-space">
+  <div id="gratuity" style="clear:both" class= "line-space"> 
+    <span class="span3 r-float"><%= f.check_box :gratuity_applies %></span>
+    <span class="vert-down">Leavers' gratuity applies?</span>
+  </div>
+<% end %> 
+
+<% if @country.rules =="Gulf" %>
+  <div id="sick-accrual" style ="clear:both" class= "line-space">
     <span class="span3 r-float"><%= f.check_box :sickness_accruals %></span>
     <span class="vert-down">Annual sickness accrual applies?</span>
   </div>

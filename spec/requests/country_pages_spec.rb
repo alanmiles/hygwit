@@ -566,7 +566,8 @@ describe "CountryPages" do
         it { should have_selector('#ramadan-day', text: 'Ramadan') } 
         it { should have_selector('#ramadan-week', text: 'Ramadan') }
         it { should have_selector('#sick-accrual', text: 'Sickness accruals') }
-        it { should have_selector('h3',		 text: 'Set-up parameters') } 
+        it { should have_selector('#gratuity', text: "Leavers' gratuity applies?") } 
+        it { should have_selector('h3',		 text: 'Local Labor Law Regulations') } 
         it { should have_selector('h3',		 text: 'Absence codes') }
         it { should have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
         it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
@@ -578,6 +579,7 @@ describe "CountryPages" do
           it { should_not have_selector('#ramadan-day', text: 'Ramadan') } 
           it { should_not have_selector('#ramadan-week', text: 'Ramadan') }
           it { should_not have_selector('#sick-accrual', text: 'Sickness accruals') }
+          it { should_not have_selector('#gratuity', text: "Leavers' gratuity applies?") } 
         end
         
         describe "deleting an absence code" do
@@ -633,8 +635,8 @@ describe "CountryPages" do
           visit edit_country_path(@country_3)
         end
     
-        it { should have_selector('title', text: 'Edit Country') }
-        it { should have_selector('h1',    text: 'Edit Country') }
+        it { should have_selector('title', text: 'Edit Labor Law Regulations') }
+        it { should have_selector('h1',    text: 'Edit Labor Law Regulations') }
         it { should have_selector('input', value: @country_3.country) }
         it { should have_link('List', href: countries_path) }
         it { should_not have_selector('#ramadan-day', text: "Ramadan") } 
@@ -654,7 +656,7 @@ describe "CountryPages" do
             click_button "Save changes"
           end
         
-          it { should have_selector('title', text: 'Edit Country') }
+          it { should have_selector('title', text: 'Edit Labor Law Regulations') }
           it { should have_content('error') }
           specify { @country_3.reload.country.should == 'Saudi Arabia' }
         end

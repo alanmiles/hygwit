@@ -21,8 +21,8 @@
       <% @leaving_reasons.each do |reason| %>
         <li>
           <%= reason.reason %>
-          <% if reason.terminated? %>
-            | Termination
+          <% if reason.full_benefits? %>
+            | Full leaving benefits
           <% end %>
           | <%= link_to "change", edit_leaving_reason_path(reason) %>
           | <%= link_to "delete", reason, method: :delete,

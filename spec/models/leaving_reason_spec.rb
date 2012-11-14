@@ -2,11 +2,11 @@
 #
 # Table name: leaving_reasons
 #
-#  id         :integer          not null, primary key
-#  reason     :string(255)
-#  terminated :boolean          default(FALSE)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :integer          not null, primary key
+#  reason        :string(255)
+#  full_benefits :boolean          default(FALSE)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 
 require 'spec_helper'
@@ -20,7 +20,7 @@ describe LeavingReason do
   subject { @leaving_reason }
 
   it { should respond_to(:reason) }
-  it { should respond_to(:terminated) }
+  it { should respond_to(:full_benefits) }
   it { should be_valid }
   
   describe "when reason is not present" do

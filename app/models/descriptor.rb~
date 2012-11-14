@@ -13,7 +13,7 @@
 #
 
 class Descriptor < ActiveRecord::Base
-  attr_accessible :descriptor, :grade, :reviewed
+  attr_accessible :descriptor, :grade, :reviewed, :updated_by, :quality_id
   
   belongs_to :quality
   

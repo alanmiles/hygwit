@@ -10,20 +10,25 @@
     </div>
     <div class="line-space">
       <div>For OT calculations, night-work begins at - 
-        <span class="r-float"><%= @country.nightwork_end.try(:strftime, "%H:%M") %></span></div>
-      <div>For OT calculations, night-work ends at - 
         <span class="r-float"><%= @country.nightwork_start.try(:strftime, "%H:%M") %></span></div>
+      <div>For OT calculations, night-work ends at - 
+        <span class="r-float"><%= @country.nightwork_end.try(:strftime, "%H:%M") %></span></div>
       <div>OT rate - standard (% of hourly salary)<span class="r-float"><%= @country.OT_rate_standard %></span></div>
       <div>OT rate - evenings and weekends (% of hourly salary)<span class="r-float"><%= @country.OT_rate_special %></span></div>
-    </div>
+    </div>    
     <div class="line-space">
+      <div>Minimum vacation days<span class="r-float"><%= @country.minimum_vacation_days %>
+         <%= @country.vacation_by_working_days? ? "working days" : "calendar days" %></span></div>
       <div>Probation days<span class="r-float"><%= @country.probation_days %></span></div>
       <div>Retirement age - male<span class="r-float"><%= @country.retirement_age_m %></span></div>
       <div>Retirement age - female<span class="r-float"><%= @country.retirement_age_f %></span></div>
     </div>
     <div class="line-space">
-      <div>Taxation applies?<span class="r-float"><%= @country.taxation_status %></span></div>
-      <div>Insurance applies?<span class="r-float"><%= @country.insurance_status %></span></div>
+      <div>Taxation applies?<span class="r-float"><%= @country.taxation? ? "Yes" : "No" %></span></div>
+      <div>Insurance applies?<span class="r-float"><%= @country.insurance? ? "Yes" : "No" %></span></div>
+      <% if @country.rules =="Gulf" %>
+        <div id="gratuity">Leavers' gratuity applies?<span class="r-float"><%= @country.gratuity_applies? ? "Yes" : "No" %></span></div>
+      <% end %>
     </div>
     <div class="line-space">
       <div>Maximum percentage of salary deducted for loans?<span class="r-float"><%= @country.max_loan_ded_salary %></span></div>

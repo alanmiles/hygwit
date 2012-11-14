@@ -4,12 +4,13 @@
     <section>
       <%= render 'shared/user_sidebar' %>
     </section>
+    <div class="instruction">
+      <div class="line-space">
+        <%= leaving_instruction_1 %>
+      </div>     
+    </div>
   </aside>
-  <div class="instruction">
-    <div class="line-space">
-      <%= leaving_instruction_1 %>
-    </div>     
-  </div>
+  
   <div class="span8">
     <h1 class="align-left">Leaving Reasons</h1>
 
