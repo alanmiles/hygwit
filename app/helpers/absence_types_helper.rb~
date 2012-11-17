@@ -19,4 +19,8 @@ module AbsenceTypesHelper
      adjustments so that the correct codes and values are entered for the business."
   end
   
+  def absence_guidance
+  
+    "Include only universal absence types - those that would normally apply in ANY country."
+  end
 end

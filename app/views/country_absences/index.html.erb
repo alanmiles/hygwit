@@ -6,14 +6,14 @@
         <%= @country.country %>
       </h1>
     </section>
-    <div class="instruction">
-      <div class="line-space">
-        <%= absence_country_instruction_1 %>
+    <section>
+      <div class="instruction">
+        <%= render "instructions" %>  
       </div>
-      <div class="line-space">
-        <%= absence_country_instruction_2 %>
-      </div>   
-    </div>
+    </section>
+    <section>
+      <%= render "stats" %>
+    </section>
   </aside>
   
   <div class="span8">
@@ -24,30 +24,7 @@
       <%= link_to "Back to set-up page - #{@country.country}", @country, class: "btn" %>
     </div>
     <ul class="itemlist">
-      <li>
-        <strong>
-        <span class="span1">Code</span>
-        <span class="span1">Paid (%)</span>
-        <span class="span1">Sickness?</span>
-        <span class="span1">Max days</span>
-        <span class="span1">Certify?</span>
-        <span class="span2">Notes</span>
-        </strong>
-      </li>
-      <% @absences.each do |absence| %>
-        <li>
-          <span class="span1"><%= absence.absence_code %></span>
-          <span class="span1"><%= absence.paid %></span>
-          <span class="span1"><%= absence.sickness? ? 'Yes' : 'No' %></span>
-          <span class="span1"><%= absence.maximum_days_year.nil? ? '--' : absence.maximum_days_year %></span>
-          <span class="span1"><%= absence.documentation_required? ? 'Yes' : 'No' %></span>
-          <span class="span2"><%= absence.notes %></span>
-          | <%= link_to "edit", edit_country_absence_path(absence) %>
-          | <%= link_to "del", absence, method: :delete,
-                             data: { confirm: "Delete '#{absence.absence_code}' for #{@country.country}?  Sure?" } %>
-    
-        </li>
-      <% end %>
+      <%= render "list" %>
     </ul>
   </div>
 </div>

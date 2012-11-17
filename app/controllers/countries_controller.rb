@@ -52,9 +52,14 @@ class CountriesController < ApplicationController
   end
   
   def destroy
-    @country = Country.find(params[:id]).destroy
-    flash[:success]= "'#{@country.country}' destroyed"
-    redirect_to countries_path
+    if current_user.superuser?
+      @country = Country.find(params[:id]).destroy
+      flash[:success]= "'#{@country.country}' destroyed"
+      redirect_to countries_path
+    else
+      flash[:notice] = "Illegal action"
+      redirect_to root_path
+    end
   end
   
 end

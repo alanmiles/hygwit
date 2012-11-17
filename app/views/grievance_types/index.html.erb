@@ -1,14 +1,7 @@
 <% provide(:title, 'Grievance Types') %>
 <div class="row">
   <aside class="span4">
-    <section>
-      <%= render 'shared/user_sidebar' %>
-    </section>
-    <div class="instruction">
-      <div class="line-space">
-        <%= grievance_instruction_1 %>
-      </div>     
-    </div>
+    <%= render "shared/admin_sidebar" %>
   </aside>
   
   <div class="span8">
@@ -18,15 +11,7 @@
       <%= link_to "Add a grievance type", new_grievance_type_path, class: "btn" %>
     </div>
     <ul class="itemlist">
-      <% @grievance_types.each do |grievance| %>
-        <li>
-          <%= grievance.grievance %>
-          | <%= link_to "change", edit_grievance_type_path(grievance) %>
-          | <%= link_to "delete", grievance, method: :delete,
-                             data: { confirm: "Delete '#{grievance.grievance}'?  Sure?" } %>
-    
-        </li>
-      <% end %>
+      <%= render "list" %>
     </ul>
   </div>
 </div>

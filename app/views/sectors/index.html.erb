@@ -1,17 +1,7 @@
 <% provide(:title, 'Sectors') %>
 <div class="row">
   <aside class="span4">
-    <section>
-      <%= render 'shared/user_sidebar' %>
-    </section>
-      <div class="instruction">
-        <div class="line-space">
-          <%= sector_instruction_1 %>
-        </div>
-        <div>
-          <%= sector_instruction_2 %>
-        </div>
-      </div>
+    <%= render "shared/admin_sidebar" %>
   </aside>
   
   <div class="span8">
@@ -21,15 +11,7 @@
       <%= link_to "Add a sector", new_sector_path, class: "btn" %>
     </div>
     <ul class="itemlist">
-      <% @sectors.each do |sector| %>
-        <li>
-          <%= sector.sector %>
-          | <%= link_to "change", edit_sector_path(sector) %>
-          | <%= link_to "delete", sector, method: :delete,
-                             data: { confirm: "Delete '#{sector.sector}'?  Sure?" } %>
-    
-        </li>
-      <% end %>
+      <%= render "list" %>
     </ul>
     <% if Sector.count > 10 %>
       <div style="padding-top: 10px">

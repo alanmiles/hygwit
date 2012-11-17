@@ -1,0 +1,9 @@
+      <% @disciplinary_cats.each do |category| %>
+        <li>
+          <%= category.category %>
+          | <%= link_to "change", edit_disciplinary_category_path(category) %>
+          | <%= link_to "delete", category, method: :delete,
+                             data: { confirm: "Delete '#{category.category}'?  Sure?" } %>
+    
+        </li>
+      <% end %>

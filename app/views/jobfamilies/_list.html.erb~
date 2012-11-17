@@ -1,0 +1,10 @@
+      <% @jobfamilies.each do |jobfamily| %>
+        <li>
+          <%= render "shared/superuser_notifications", :model_name => jobfamily %>
+          <%= jobfamily.job_family %>
+          | <%= link_to "change", edit_jobfamily_path(jobfamily) %>
+          | <%= link_to "delete", jobfamily, method: :delete,
+                             data: { confirm: "Delete '#{jobfamily.job_family}'?  Sure?" } %>
+    
+        </li>
+      <% end %>

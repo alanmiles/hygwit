@@ -5,6 +5,11 @@
     <section>
       <%= render 'shared/user_sidebar' %>
     </section>
+    <section>
+      <% if current_user.superuser? %>
+        <%= render "stats" %>
+      <% end %>
+    </section>
   </aside>
   <div class="span8">
 
@@ -14,20 +19,7 @@
       <%= link_to "Add a currency", new_currency_path, class: "btn" %>
     </div>
     <ul class="itemlist">
-      <% @currencies.each do |currency| %>
-        <li>
-          <%= currency.currency %>
-          <%= currency.code %>
-          <% unless currency.decimal_places == 2 %>
-            <i>(<%= currency.decimal_places %> decimal places)</i>
-          <% end %>
-          | <%= link_to "change", edit_currency_path(currency) %>
-          <% unless currency.linked? %>
-            | <%= link_to "delete", currency, method: :delete,
-                             data: { confirm: "Delete '#{currency.code}'?  Sure?" } %>
-          <% end %>
-        </li>
-      <% end %>
+      <%= render "list" %>
     </ul>
     <% if Currency.count > 10 %>
       <div style="padding-top: 10px">

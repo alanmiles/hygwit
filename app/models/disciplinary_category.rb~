@@ -10,4 +10,9 @@
 
 class DisciplinaryCategory < ActiveRecord::Base
   attr_accessible :category
+  
+  validates :category, presence: true, length: { maximum: 50 },
+                     uniqueness: { case_sensitive: false }
+                     
+  default_scope order: 'disciplinary_categories.category ASC'
 end

@@ -48,6 +48,5 @@ class CountryAdminsController < ApplicationController
     @country_admin = CountryAdmin.find(params[:id]).destroy
     flash[:success]= "#{@country_admin.user.name} is no longer an administrator for #{@country_admin.country.country}"
     redirect_to country_admins_path
-    end
   end
 end

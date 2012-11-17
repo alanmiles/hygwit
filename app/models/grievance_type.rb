@@ -15,4 +15,20 @@ class GrievanceType < ActiveRecord::Base
                      uniqueness: { case_sensitive: false }
                      
   default_scope order: 'grievance_types.grievance ASC'
+  
+  def recent?
+    created_at >= 7.days.ago
+  end
+  
+  def self.total_recent
+    GrievanceType.where("created_at >=?", 7.days.ago).count
+  end
+  
+  def updated?
+    updated_at >= 7.days.ago && created_at < 7.days.ago
+  end
+  
+  def self.total_updated
+    GrievanceType.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
+  end
 end

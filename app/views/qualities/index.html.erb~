@@ -1,20 +1,7 @@
 <% provide(:title, 'Personal Qualities') %>
 <div class="row">
   <aside class="span4">
-    <section>
-      <%= render 'shared/user_sidebar' %>
-    </section>
-    <div class="instruction">
-      <div class="line-space">
-        <%= qualities_instruction_1 %>
-      </div>
-      <div class="line-space">
-        <%= qualities_instruction_2 %>
-      </div>
-      <div>
-        <%= qualities_instruction_3 %>
-      </div>
-    </div>
+    <%= render "shared/admin_sidebar" %>
   </aside>
   
   <div class="span8">
@@ -24,15 +11,7 @@
       <%= link_to "Add a quality", new_quality_path, class: "btn" %>
     </div>
     <ul class="itemlist">
-      <% @qualities.each do |quality| %>
-        <li>
-          <%= quality.quality %>
-          | <%= link_to "change", quality %>
-          | <%= link_to "delete", quality, method: :delete,
-                             data: { confirm: "Delete '#{quality.quality}' - including all its descriptors?  Are you sure?" } %>
-    
-        </li>
-      <% end %>
+      <%= render "list" %>
     </ul>
     <% if Quality.count > 10 %>
       <div style="padding-top: 10px">

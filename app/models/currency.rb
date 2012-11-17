@@ -34,6 +34,22 @@ class Currency < ActiveRecord::Base
     country_links > 0
   end
   
+  def recent?
+    created_at >= 7.days.ago
+  end
+  
+  def self.total_recent
+    Currency.where("created_at >=?", 7.days.ago).count
+  end
+  
+  def updated?
+    updated_at >= 7.days.ago && created_at < 7.days.ago
+  end
+  
+  def self.total_updated
+    Currency.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
+  end
+  
   def self.total_unlinked
     cnt = 0
     @currencies = self.all

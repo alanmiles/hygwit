@@ -5,11 +5,9 @@
     <section>
       <%= render 'shared/user_sidebar' %>   
     </section>
-    <% if current_user.superuser? %>
-      <div id="statistics">    
-        <%= link_message %>
-      </div>
-    <% end %>
+    <section>
+      <%= render "stats" %>
+    </section>
   </aside>
   
   <div class="span8">
@@ -19,16 +17,7 @@
       <%= link_to "Add a nationality", new_nationality_path, class: "btn" %>
     </div>
     <ul class="itemlist">
-      <% @nationalities.each do |nationality| %>
-        <li>
-          <%= nationality.nationality %>
-          | <%= link_to "change", edit_nationality_path(nationality) %>
-          <% unless nationality.linked? %>
-            | <%= link_to "delete", nationality, method: :delete,
-                             data: { confirm: "Delete '#{nationality.nationality}'?  Sure?" } %>
-          <% end %>
-        </li>
-      <% end %>
+      <%= render "list" %>
     </ul>
     <% if Nationality.count > 10 %>
       <div style="padding-top: 10px">

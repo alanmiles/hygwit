@@ -18,5 +18,21 @@ class Sector < ActiveRecord::Base
                      uniqueness: { case_sensitive: false }
   validates :created_by, presence: true
   
-  default_scope order: 'sector.sector ASC'
+  default_scope order: 'sectors.sector ASC'
+  
+  def recent?
+    created_at >= 7.days.ago
+  end
+  
+  def self.total_recent
+    Sector.where("created_at >=?", 7.days.ago).count
+  end
+  
+  def updated?
+    updated_at >= 7.days.ago && created_at < 7.days.ago
+  end
+  
+  def self.total_updated
+    Sector.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
+  end
 end

@@ -1,0 +1,7 @@
+      <div class="line-space">
+          <%= sector_instruction_1 %>
+        </div>
+        <div>
+          <%= sector_instruction_2 %>
+        </div>
+      </div>

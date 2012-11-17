@@ -1,0 +1,11 @@
+    <section>
+      <%= render 'shared/user_sidebar' %>
+    </section>
+    <section>
+      <%= render "instructions" %>
+    </section>
+    <section>
+      <% if current_user.superuser? %>
+        <%= render "stats" %>
+      <% end %>
+    </section>

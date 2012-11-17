@@ -1,0 +1,9 @@
+      <div class="instruction">
+        <%= absence_instruction_1 %>
+      </div>
+      <div class="line-space">
+        <%= absence_instruction_2 %>
+      </div> 
+      <div class="line-space">
+        <%= absence_instruction_3 %>
+      </div> 

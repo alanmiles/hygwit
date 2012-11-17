@@ -4,14 +4,14 @@
     <section>
       <%= render 'shared/user_sidebar' %>
     </section>
-      <div style="padding: 15px">
-        <div class="line-space">
-          <%= sector_instruction_1 %>
-        </div>
-        <div>
-          <%= sector_instruction_2 %>
-        </div>
-      </div>
+    <section>
+      <%= render "instructions" %>
+    </section>
+    <section>
+      <% if current_user.superuser? %>
+        <%= render "stats" %>
+      <% end %>
+    </section> 
   </aside>
   
   <div class="span8">
@@ -21,15 +21,7 @@
       <%= link_to "Add a sector", new_sector_path, class: "btn" %>
     </div>
     <ul class="itemlist">
-      <% @sectors.each do |sector| %>
-        <li>
-          <%= sector.sector %>
-          | <%= link_to "change", edit_sector_path(sector) %>
-          | <%= link_to "delete", sector, method: :delete,
-                             data: { confirm: "Delete '#{sector.sector}'?  Sure?" } %>
-    
-        </li>
-      <% end %>
+      <%= render "list" %>
     </ul>
     <% if Sector.count > 10 %>
       <div style="padding-top: 10px">

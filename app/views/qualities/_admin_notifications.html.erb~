@@ -1,0 +1,14 @@
+          <% if current_user.admin? %>
+            <% if quality.recent? %>
+              <span class="recent"> * </span>
+            <% end %>
+            <% if quality.updated? %>
+              <span class="updates"> ^ </span>
+            <% end %>
+            <% if quality.descriptors.includes_updates? %>
+              <span class="updates"> # </span>
+            <% end %>
+            <% if quality.descriptors.requires_edits? %>
+              <span class="updates"> W </span>
+            <% end %>
+          <% end %>

@@ -96,7 +96,6 @@ p {
 /* sidebar */
 
 aside {
-  .makeColumn(2);
   section {
     padding: 10px 0;
     border-top: 1px solid $grayLighter;
@@ -199,6 +198,12 @@ select {
 .vert-down {
   padding-top: 5px;
 }
+
+.recent, .updates {
+  color: crimson;
+}
+
+
 
 .number-field {
   text-align: right;

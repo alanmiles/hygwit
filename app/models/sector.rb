@@ -19,4 +19,20 @@ class Sector < ActiveRecord::Base
   validates :created_by, presence: true
   
   default_scope order: 'sectors.sector ASC'
+  
+  def recent?
+    approved == false
+  end
+  
+  def self.total_recent
+    Sector.where("approved =?", false).count
+  end
+  
+  def updated?
+    updated_at >= 7.days.ago && created_at < 7.days.ago
+  end
+  
+  def self.total_updated
+    Sector.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
+  end
 end

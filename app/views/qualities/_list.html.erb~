@@ -1,0 +1,10 @@
+     <% @qualities.each do |quality| %>
+        <li>
+          <%= render "shared/superuser_notifications", :model_name => quality %>
+          <%= quality.quality %>
+          | <%= link_to "details / change", quality %>
+          | <%= link_to "delete", quality, method: :delete,
+                             data: { confirm: "Delete '#{quality.quality}' - including all its descriptors?  Are you sure?" } %>
+    
+        </li>
+      <% end %>

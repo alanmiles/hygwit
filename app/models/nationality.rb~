@@ -26,6 +26,10 @@ class Nationality < ActiveRecord::Base
     country_links > 0
   end
   
+  def recent?
+    created_at >= 7.days.ago
+  end
+  
   def self.total_unlinked
     cnt = 0
     @nationalities = self.all
@@ -37,12 +41,8 @@ class Nationality < ActiveRecord::Base
     return cnt
   end
   
-  def self.total_unlinked_message
-    if self.total_unlinked == 0
-      return "All nationalities linked"
-    else
-      return "#{pluralize(self.total_unlinked, 'nationality')} unlinked"
-    end  
+  def self.total_recent
+    Nationality.where("created_at >=?", 7.days.ago).count
   end
   
 end

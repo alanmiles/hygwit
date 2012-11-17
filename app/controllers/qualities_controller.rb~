@@ -9,12 +9,13 @@ class QualitiesController < ApplicationController
   
   def show
     @quality = Quality.find(params[:id])
+    @descriptors = @quality.descriptors
   end
 
   def new
     @quality = Quality.new
     @quality.created_by = current_user.id
-    @quality.approved = true if current_user.admin
+    @quality.approved = true if current_user.superuser?
   end
   
   def create

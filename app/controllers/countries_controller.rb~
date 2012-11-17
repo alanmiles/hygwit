@@ -20,8 +20,6 @@ class CountriesController < ApplicationController
   end
   
   def create
-    params[:country].parse_time_select! :nightwork_start
-    params[:country].parse_time_select! :nightwork_end
     @country = Country.new(params[:country])
     if @country.save
       flash[:success] = "'#{@country.country}' added"

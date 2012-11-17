@@ -1,8 +1,9 @@
  
-   
-    <div style="padding-bottom: 10px">
-      <%= link_to "Add an absence type", new_country_country_absence_path(@country), class: "btn" %>
-    </div>
+     <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+      <div style="padding-bottom: 10px">
+        <%= link_to "Add an absence type", new_country_country_absence_path(@country), class: "btn" %>
+      </div>
+    <% end %>
     <ul class="itemlist">
       <li>
         <strong>
@@ -16,7 +17,17 @@
       </li>
       <% @absences.each do |absence| %>
         <li>
-          <span class="span1"><%= absence.absence_code %></span>
+          <span class="span1">
+            <% if current_user.superuser? %>
+              <% if absence.recent? %>
+                <span class="recent"> * </span>
+              <% end %>
+              <% if absence.updated? %>
+                <span class="updates"> ^ </span>
+              <% end %>
+            <% end %>
+            <%= absence.absence_code %>
+          </span>
           <span class="span1"><%= absence.paid %></span>
           <span class="span1"><%= absence.sickness? ? 'Yes' : 'No' %></span>
           <span class="span1"><%= absence.maximum_days_year.nil? ? '--' : absence.maximum_days_year %></span>

@@ -1,0 +1,9 @@
+        <div id="recent-adds">
+          <%= recent_countries %>
+        </div>
+        <div id="recent-updates">
+          <%= updated_countries %>
+        </div>
+          <div id="still-incomplete">
+          <%= incomplete_countries %>
+        </div>

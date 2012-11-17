@@ -15,13 +15,17 @@ class QualitiesController < ApplicationController
   def new
     @quality = Quality.new
     @quality.created_by = current_user.id
-    @quality.approved = true if current_user.admin
+    @quality.approved = true if current_user.superuser?
   end
   
   def create
     @quality = Quality.new(params[:quality])
     if @quality.save
-      flash[:success] = "'#{@quality.quality}' added"
+      if current_user.superuser?
+        flash[:success] = "'#{@quality.quality}' added"
+      else
+        flash[:success] = "'#{@quality.quality}' added.  Now it will be checked by the HROomph team before it goes live."
+      end
       redirect_to @quality
     else
       @quality.created_by = current_user.id

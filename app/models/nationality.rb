@@ -26,6 +26,18 @@ class Nationality < ActiveRecord::Base
     country_links > 0
   end
   
+  def recent?
+    created_at >= 7.days.ago
+  end
+  
+  def updated?
+    updated_at >= 7.days.ago && created_at < 7.days.ago
+  end
+  
+  def self.total_updated
+    Nationality.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
+  end
+  
   def self.total_unlinked
     cnt = 0
     @nationalities = self.all
@@ -35,6 +47,10 @@ class Nationality < ActiveRecord::Base
       end      
     end
     return cnt
+  end
+  
+  def self.total_recent
+    Nationality.where("created_at >=?", 7.days.ago).count
   end
   
 end

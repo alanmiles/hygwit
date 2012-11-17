@@ -1,4 +1,4 @@
-quality;grade;descriptor
+quality_id;grade;descriptor
 Attendance;A;No absences without valid reason in 6 months.
 Attendance;B;Missed fewer than 2 days without valid reason in 6 months.
 Attendance;C;Missed more than 2 but fewer than 5 days without valid reason in 6 months.

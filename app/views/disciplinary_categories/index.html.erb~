@@ -1,2 +1,32 @@
-<h1>DisciplinaryCategories#index</h1>
-<p>Find me in app/views/disciplinary_categories/index.html.erb</p>
+<% provide(:title, 'Disciplinary Categories') %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <%= render 'shared/user_sidebar' %>
+    </section>
+    <div class="instruction">
+      <div class="line-space">
+        <%= disciplinary_instruction_1 %>
+      </div>     
+    </div>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Disciplinary Categories</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a category", new_disciplinary_category_path, class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <% @disciplinary_cats.each do |category| %>
+        <li>
+          <%= category.category %>
+          | <%= link_to "change", edit_disciplinary_category_path(category) %>
+          | <%= link_to "delete", category, method: :delete,
+                             data: { confirm: "Delete '#{category.category}'?  Sure?" } %>
+    
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

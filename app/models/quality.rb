@@ -24,6 +24,22 @@ class Quality < ActiveRecord::Base
   
   default_scope order: 'qualities.quality ASC'
   
+  def recent?
+    approved == false
+  end
+  
+  def self.total_recent
+    Quality.where("approved =?", false).count
+  end
+  
+  def updated?
+    updated_at >= 7.days.ago && created_at < 7.days.ago
+  end
+  
+  def self.total_updated
+    Quality.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
+  end
+  
   private
   
     def build_descriptors

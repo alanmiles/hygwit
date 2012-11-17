@@ -1,17 +1,7 @@
 <% provide(:title, 'Job Families') %>
 <div class="row">
   <aside class="span4">
-    <section>
-      <%= render 'shared/user_sidebar' %>
-    </section>
-    <div class="instruction">
-      <div class="line-space">
-        <%= families_instruction_1 %>
-      </div>
-      <div>
-        <%= families_instruction_2 %>
-      </div>
-    </div>
+    <%= render "shared/admin_sidebar" %>
   </aside>
   
   <div class="span8">
@@ -21,15 +11,7 @@
       <%= link_to "Add a job family", new_jobfamily_path, class: "btn" %>
     </div>
     <ul class="itemlist">
-      <% @jobfamilies.each do |jobfamily| %>
-        <li>
-          <%= jobfamily.job_family %>
-          | <%= link_to "change", edit_jobfamily_path(jobfamily) %>
-          | <%= link_to "delete", jobfamily, method: :delete,
-                             data: { confirm: "Delete '#{jobfamily.job_family}'?  Sure?" } %>
-    
-        </li>
-      <% end %>
+      <%= render "list" %>
     </ul>
     <% if Jobfamily.count > 10 %>
       <div style="padding-top: 10px">

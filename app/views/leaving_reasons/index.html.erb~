@@ -4,11 +4,12 @@
     <section>
       <%= render 'shared/user_sidebar' %>
     </section>
-    <div class="instruction">
-      <div class="line-space">
-        <%= leaving_instruction_1 %>
-      </div>     
-    </div>
+    <section>
+      <%= render "instructions" %>
+    </section>
+    <section>     
+      <%= render "stats" %>
+    </section>
   </aside>
   
   <div class="span8">
@@ -21,8 +22,8 @@
       <% @leaving_reasons.each do |reason| %>
         <li>
           <%= reason.reason %>
-          <% if reason.terminated? %>
-            | Termination
+          <% if reason.full_benefits? %>
+            | Full leaving benefits
           <% end %>
           | <%= link_to "change", edit_leaving_reason_path(reason) %>
           | <%= link_to "delete", reason, method: :delete,

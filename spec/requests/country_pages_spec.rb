@@ -242,8 +242,9 @@ describe "CountryPages" do
   describe "when logged in as admin" do
     
     before do
-      admin = FactoryGirl.create(:admin, name: "Country Admin", email: "countryadmin@example.com")
-      sign_in admin
+      @admin = FactoryGirl.create(:admin, name: "Country Admin", email: "countryadmin@example.com")
+      sign_in @admin
+      
     end
     
     describe "nationality controller" do
@@ -261,7 +262,9 @@ describe "CountryPages" do
       
         it { should have_selector('title', text: 'Nationalities') }
         it { should have_selector('h1', text: 'Nationalities') }
-        it { should_not have_selector('#statistics', text: 'unlinked') }
+        it { should_not have_selector('#statistics', text: 'unlinked') }  #superuser only
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -275,14 +278,6 @@ describe "CountryPages" do
             expect { click_link('delete') }.to change(Nationality, :count).by(-1)
           end
           
-          describe "when > 10 nationalities" do
-            pending("should have a bottom 'Add button + not when < 10 entries") 
-          end
-          
-          describe "alert when nationalities are not linked to countries" do
-            pending("shows how many unlinked or that all are linked")
-          end
-       
         end
       end
     
@@ -364,7 +359,7 @@ describe "CountryPages" do
           
         describe "non-deletion of nationalities linked to countries" do
           before { delete nationality_path(@nationality_2) }
-          specify { response.should redirect_to(root_path) }      
+          specify { response.should redirect_to root_path }      
         end
           
         describe "deletion of nationalities unlinked to countries" do
@@ -396,6 +391,9 @@ describe "CountryPages" do
           it { should_not have_link('delete', href: currency_path(@currency_2)) }  #because already in use
           it { should have_link('Add', href: new_currency_path) }
           it { should have_selector('ul.itemlist li:nth-child(2)', text: 'Pounds Sterling') }
+          it { should_not have_selector('#statistics', text: 'unlinked') }  #superuser only
+          it { should_not have_selector('#recent-adds') }
+          it { should_not have_selector('.recent', text: "*") }
         
           it "should be able to delete a currency" do
             expect { click_link('delete') }.to change(Currency, :count).by(-1)
@@ -534,19 +532,16 @@ describe "CountryPages" do
         describe "list " do
       
           it { should have_link('change', href: edit_country_path(@country)) }
-          it { should have_link('delete', href: country_path(@country)) }
+          it { should_not have_link('delete', href: country_path(@country)) }
           it { should have_link('Add', href: new_country_path) }
-          it { should have_link(@country.country, href: country_path(@country)) }
+          it { should have_link("settings", href: country_path(@country)) }
           it { should have_selector('ul.itemlist li:nth-child(3)', text: 'UK') }
+          it { should_not have_selector('#statistics', text: 'unlinked') }
+          it { should_not have_selector('#recent-adds') }
+          it { should_not have_selector('.recent', text: "*") }
+          it { should_not have_selector('.incomplete', text: "!") }
+          it { should_not have_selector('#still-incomplete') }  
         
-          describe "country already in use" do
-        
-            it "should not have 'Delete' button"
-          end
-        
-          it "should be able to delete a country" do
-            expect { click_link('delete') }.to change(Country, :count).by(-1)
-          end
           
           describe "when > 10 countries" do
             pending("should have a bottom 'Add button + not when < 10 entries") 
@@ -561,7 +556,7 @@ describe "CountryPages" do
         
         it { should have_selector('title', text: @country.country) }
         it { should have_selector('h1',		 text: @country.country) }
-        it { should have_link('Edit', href: edit_country_path(@country)) }
+        it { should_not have_link('Edit', href: edit_country_path(@country)) } #unless one of the country's administrators
         it { should have_link('All countries', href: countries_path) } 
         it { should have_selector('#ramadan-day', text: 'Ramadan') } 
         it { should have_selector('#ramadan-week', text: 'Ramadan') }
@@ -569,9 +564,16 @@ describe "CountryPages" do
         it { should have_selector('#gratuity', text: "Leavers' gratuity applies?") } 
         it { should have_selector('h3',		 text: 'Local Labor Law Regulations') } 
         it { should have_selector('h3',		 text: 'Absence codes') }
-        it { should have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
+        it { should_not have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
         it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
         it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
+        it { should_not have_selector("#completion", text: "SETTINGS") }
+        it { should_not have_selector("#update-status", text: "When a country administrator emails to tell you") }
+        it { should_not have_selector("#update-status", text: "As a country administrator it's your job") }
+        it { should have_selector("#update-status", text: "You're not registered as an administrator") }
+        it { should_not have_selector('#recent-adds', text: "additions (*) in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
+        
         
         describe "where country does not follow 'Gulf' rules" do
           before { visit country_path(@country_1) }
@@ -641,7 +643,8 @@ describe "CountryPages" do
         it { should have_link('List', href: countries_path) }
         it { should_not have_selector('#ramadan-day', text: "Ramadan") } 
         it { should_not have_selector('#ramadan-week', text: "Ramadan") }
-        it { should_not have_selector('#sick-accrual', text: "sickness accrual") }         
+        it { should_not have_selector('#sick-accrual', text: "sickness accrual") }
+        it { should_not have_selector("#completion", text: "Are all settings complete?") }         
         
         describe "for countries with 'Gulf' rules" do
           before { visit edit_country_path(@country) }
@@ -677,6 +680,25 @@ describe "CountryPages" do
       end 
     end
     
+    describe "when a country administrator" do
+    
+      before do 
+        CountryAdmin.create!(user_id: @admin.id, country_id: @country.id)
+      end
+      
+      describe "show" do
+      
+        before { visit country_path(@country) }
+        
+        it { should have_link('Edit regulations', href: edit_country_path(@country)) }
+        it { should have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
+        it { should_not have_selector("#update-status", text: "When a country administrator emails to tell you") }
+        it { should have_selector("#update-status", text: "As a country administrator it's your job") }
+        it { should_not have_selector("#update-status", text: "You're not registered as an administrator") }
+        it { should_not have_selector('#recent-adds', text: "additions (*) in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
+      end
+    end
   end
   
   describe "when logged in as superuser" do
@@ -700,8 +722,87 @@ describe "CountryPages" do
         end
         
         it { should have_selector('#statistics', text: 'unlinked') }
+        it { should have_selector('#recent-adds') }
+        it { should have_selector('.recent', text: "*") }
       end
     
+    end
+    
+    describe "currencies controller" do
+    
+      describe "index" do
+      
+        before do  
+          @currency_1 = Currency.create(currency: 'Pounds Sterling', code: 'GBP')
+          @currency_2 = Currency.create(currency: 'Bahrain Dinars', code: 'BHD')
+          @nationality = Nationality.create(nationality: 'Bahraini')
+          @country = Country.create(country: 'Bahrain', nationality_id: @nationality.id, currency_id: @currency_2.id)
+          visit currencies_path
+        end
+      
+        it { should have_selector('#statistics', text: 'unlinked') }
+        it { should have_selector('#recent-adds') }
+        it { should have_selector('.recent', text: "*") }
+      
+      end
+    
+    end
+    
+    describe "countries controller" do
+    
+      before do
+        @currency_1 = Currency.create(currency: 'Pounds Sterling', code: 'GBP')
+        @currency_2 = Currency.create(currency: 'Bahraini Dinars', code: 'BHD')
+        @nationality_1 = Nationality.create(nationality: 'British')
+        @nationality_2 = Nationality.create(nationality: 'Bahraini')
+        @country_1 = Country.create(country: 'UK', 
+           currency_id: @currency_1.id, nationality_id: @nationality_1.id)
+        @country_2 = Country.create(country: 'Bahrain', 
+           currency_id: @currency_2.id, nationality_id: @nationality_2.id)
+      end
+      
+      describe "index" do
+      
+        before do  
+          visit countries_path
+        end
+        
+        it { should have_link('delete', href: country_path(@country_1)) }
+        it { should have_selector('#recent-adds') }
+        it { should have_selector('.recent', text: "*") }
+        it { should have_selector('.incomplete', text: "!") } 
+        it { should have_selector('#still-incomplete') } 
+        it "should be able to delete a country" do
+          expect { click_link('delete') }.to change(Country, :count).by(-1)
+        end
+      
+      end
+    
+      describe "edit" do
+    
+        before do
+          @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR')
+          @nationality_3 = Nationality.create(nationality: 'Saudi')
+          @country_3 = Country.create(country: 'Saudi Arabia', nationality_id: @nationality_3.id, currency_id: @currency_3.id)
+          visit edit_country_path(@country_3)
+        end
+        
+        it { should have_selector("#completion", text: "Are all settings complete?") }
+      end
+      
+      describe "show" do
+      
+        before { visit country_path(@country) }
+        
+        it { should have_selector("#completion", text: "SETTINGS") }
+        it { should have_link('Edit regulations', href: edit_country_path(@country)) }
+        it { should have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
+        it { should have_selector("#update-status", text: "When a country administrator emails to tell you") }
+        it { should_not have_selector("#update-status", text: "As a country administrator it's your job") }
+        it { should_not have_selector("#update-status", text: "You're not registered as an administrator") }
+        it { should have_selector('#recent-adds', text: "additions (*) in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+      end
     end
   end
 end

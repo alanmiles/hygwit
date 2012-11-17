@@ -9,17 +9,39 @@
       <div><%= @country.currency.currency_code %></div>
       
     </section>
-    
-      <%= link_to "All countries", countries_path, class: "btn" %>  
+    <section>
+      <% if current_user.superuser? %>
+        <div id="completion" class="line-space">
+          <%= @country.complete? ? "SETTINGS COMPLETE" : "SETTINGS INCOMPLETE" %>
+        </div>
+      <% end %>
+      <div id="update-status" class="instruction">
+         <%= render "instructions_show" %>
+      </div>
+      <div class="top-line-space">
+        <%= link_to "All countries", countries_path, class: "btn" %>  
+      </div>
+    </section>
+    <section>
+      <% if current_user.superuser? %>
+        <%= render "absence_stats" %>
+      <% end %>
+    </section>
   </aside>
   <div class="span6 offset0 top-line-space content-block">
     <h3 class="line-space">Local Labor Law Regulations</h3>
-    <div class="line-space">
-      <%= link_to "Edit regulations", edit_country_path(@country), class: "btn" %>
-    </div>
+    <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+      <div class="line-space">
+        <%= link_to "Edit regulations", edit_country_path(@country), class: "btn" %>
+      </div>
+    <% end %>
     <%= render "setup_parameters" %>
   </div>
-  <div class="span9 offset3 top-line-space content-block">  
+  <% if current_user.superuser? %>
+    <div class="span9 offset0 top-line-space content-block">
+  <% else %>
+    <div class="span9 offset3 top-line-space content-block">
+  <% end %>  
     <h3 class="line-space">Absence codes</h3>
     <%= render "absence_codes" %>
   </div> 

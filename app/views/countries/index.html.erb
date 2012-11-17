@@ -5,6 +5,9 @@
     <section>
       <%= render 'shared/user_sidebar' %>
     </section>
+    <section>
+      <%= render "stats" %>
+    </section>
   </aside>
   
   <div class="span8">
@@ -15,17 +18,7 @@
     </div>
 
     <ul class="itemlist">
-      <% @countries.each do |country| %>
-        <li>
-          <%= link_to country.country, country %> - 
-          <%= country.nationality.nationality %> - 
-          <%= country.currency.currency %>
-          | <%= link_to "change", edit_country_path(country) %>
-          | <%= link_to "delete", country, method: :delete,
-                             data: { confirm: "Delete '#{country.country}'?  Sure?" } %>
-    
-        </li>
-      <% end %>
+        <%= render "list" %>
     </ul>
 
     <% if Country.count > 10 %>

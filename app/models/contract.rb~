@@ -14,5 +14,5 @@ class Contract < ActiveRecord::Base
   validates :contract, presence: true, length: { maximum: 25 },
                      uniqueness: { case_sensitive: false }
                      
-  default_scope order: 'contract.contract ASC'
+  default_scope order: 'contracts.contract ASC'
 end

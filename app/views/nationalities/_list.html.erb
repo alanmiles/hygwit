@@ -1,0 +1,18 @@
+      <% @nationalities.each do |nationality| %>
+        <li>
+          <% if current_user.superuser? %>
+            <% if nationality.recent? %>
+              <span class="recent"> * </span>
+            <% end %>
+            <% if nationality.updated? %>
+              <span class="updates"> ^ </span>
+            <% end %>
+          <% end %>
+          <%= nationality.nationality %>
+          | <%= link_to "change", edit_nationality_path(nationality) %>
+          <% unless nationality.linked? %>
+            | <%= link_to "delete", nationality, method: :delete,
+                             data: { confirm: "Delete '#{nationality.nationality}'?  Sure?" } %>
+          <% end %>
+        </li>
+      <% end %>

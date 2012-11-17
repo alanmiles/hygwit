@@ -467,6 +467,8 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Sectors') }
         it { should have_selector('h1', text: 'Sectors') }
+        it { should_not have_selector('#recent-adds', text: "needing approval") }
+        it { should_not have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -576,6 +578,8 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Job Families') }
         it { should have_selector('h1', text: 'Job Families') }
+        it { should_not have_selector('#recent-adds', text: "needing approval") }
+        it { should_not have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -685,6 +689,8 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Leaving Reasons') }
         it { should have_selector('h1', text: 'Leaving Reasons') }
+        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -793,6 +799,8 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Disciplinary Categories') }
         it { should have_selector('h1', text: 'Disciplinary Categories') }
+        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -896,6 +904,8 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Grievance Types') }
         it { should have_selector('h1', text: 'Grievance Types') }
+        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -998,6 +1008,8 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Contract Types') }
         it { should have_selector('h1', text: 'Contract Types') }
+        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -1086,6 +1098,112 @@ describe "AdminPages" do
           specify { @contract_3.reload.contract.should == new_contract }
         end
       end 
+    end
+  end
+  
+  describe "when logged in as superuser" do
+    
+    before do
+      superuser = FactoryGirl.create(:superuser, name: "S User", email: "suser@example.com")
+      sign_in superuser 
+    end
+    
+    describe "sectors controller" do
+    
+      describe "index" do
+      
+        before do  
+          @sector = Sector.create(sector: 'Business', created_by: 1)
+          @sector_2 = Sector.create(sector: 'Manufacturing', created_by: 1)
+          @sector_3 = Sector.create(sector: 'Automobile', created_by: 1)
+          visit sectors_path
+        end
+      
+        it { should have_selector('#recent-adds', text: "needing approval") }
+        it { should have_selector('.recent', text: "*") }
+      
+      end
+    end
+    
+    describe "jobfamilies controller" do
+    
+      describe "index" do
+      
+        before do  
+          @jobfamily = Jobfamily.create(job_family: 'Banking', created_by: 1)
+          @jobfamily_2 = Jobfamily.create(job_family: 'Management', created_by: 1)
+          @jobfamily_3 = Jobfamily.create(job_family: 'Audit', created_by: 1)
+          visit jobfamilies_path
+        end
+        
+        it { should have_selector('#recent-adds', text: "needing approval") }
+        it { should have_selector('.recent', text: "*") }
+        
+      end
+    end
+    
+    describe "LeavingReasons controller" do
+    
+      describe "index" do
+      
+        before do  
+          @reason = LeavingReason.create(reason: 'Retired')
+          @reason_2 = LeavingReason.create(reason: 'Redundant', full_benefits: true)
+          @reason_3 = LeavingReason.create(reason: 'Disciplinary', full_benefits: true)
+          visit leaving_reasons_path
+        end
+      
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+      end
+    end
+    
+    describe "DisciplinaryCategories controller" do
+    
+      describe "index" do
+      
+        before do  
+          @dcat = DisciplinaryCategory.create(category: 'Theft')
+          @dcat_2 = DisciplinaryCategory.create(category: 'Disobeying instructions')
+          @dcat_3 = DisciplinaryCategory.create(category: 'Ignoring health & safety rules')
+          visit disciplinary_categories_path
+        end
+      
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+        
+      end
+    end
+    
+    describe "GrievanceTypes controller" do
+    
+      describe "index" do
+      
+        before do  
+          @gtype = GrievanceType.create(grievance: 'Violence')
+          @gtype_2 = GrievanceType.create(grievance: 'Sexual harrassment')
+          @gtype_3 = GrievanceType.create(grievance: 'No career advancement')
+          visit grievance_types_path
+        end
+        
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+      end
+    end
+    
+    describe "Contracts controller" do
+    
+      describe "index" do
+      
+        before do  
+          @contract_2 = Contract.create(contract: 'Volunteer')
+          @contract_3 = Contract.create(contract: 'Full-time')
+          visit contracts_path
+        end
+      
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+      end
     end
   end
 end

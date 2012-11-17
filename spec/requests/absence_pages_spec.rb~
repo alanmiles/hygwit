@@ -204,13 +204,15 @@ describe "AbsencePages" do
       
         it { should have_selector('title', text: 'Absence Types') }
         it { should have_selector('h1', text: 'Absence Types') }
-      
+        it { should_not have_selector('#recent-adds', text: "additions in past 7 days") }
+        
         describe "list " do
       
           it { should have_link('edit', href: edit_absence_type_path(@absence)) }
           it { should have_link('del', href: absence_type_path(@absence)) }
           it { should have_link('Add', href: new_absence_type_path) }
           it { should have_selector('ul.itemlist li:nth-child(4)', text: 'UL') }  #allows for table header
+          it { should_not have_selector('.recent', text: "*") }
         
           it "should delete absence_type" do
             expect { click_link('del') }.to change(AbsenceType, :count).by(-1)
@@ -300,13 +302,10 @@ describe "AbsencePages" do
         @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
         @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
       end 
-      #let(:nationality) { FactoryGirl.create(:nationality) }
-      #let(:currency) 		{ FactoryGirl.create(:currency) }
-      #let(:country) 		{ FactoryGirl.create(:country, nationality_id: nationality.id, currency_id: currency.id) }
         
       describe "add a new absence-type for the country" do
       
-        before { visit new_country_country_absence_path(country.id) }
+        before { visit new_country_country_absence_path(@country.id) }
         
         it { should have_selector('title', text: 'New Absence Type') }
         it { should have_selector('h1', text: 'New Absence Type') }
@@ -355,6 +354,8 @@ describe "AbsencePages" do
         it { should have_link('Back to set-up page', href: country_path(@country)) }
         it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
         it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
+        it { should_not have_selector('#recent-adds', text: "additions in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
         
         describe "editing an absence in the correct country" do
           before { click_link 'edit' }
@@ -413,6 +414,48 @@ describe "AbsencePages" do
           specify { country_absence.reload.absence_code.should == "UL" }   
         end
       end 
+    end
+  end
+  
+  describe "when logged in as superuser" do
+  
+    before do
+      superuser = FactoryGirl.create(:superuser, name: "S User", email: "suser@example.com")
+      sign_in superuser 
+    end
+  
+    describe "AbsenceTypes controller" do
+    
+      describe "index" do
+      
+        before do  
+          @absence_2 = AbsenceType.create(absence_code: "AB", paid: 0, notes: "Absence - no reason given")
+          @absence_3 = AbsenceType.create(absence_code: "S50", paid: 50, sickness: true,
+          								maximum_days_year: 15, documentation_required: true, notes: "Sickness on half-pay")
+          visit absence_types_path
+        end
+      
+        it { should have_selector('#recent-adds', text: "added in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+        
+      end
+    end
+    
+    describe "CountryAbsences controller" do
+    
+      before do
+        @nationality = FactoryGirl.create(:nationality, nationality: "German")
+        @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
+        @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
+      end
+      
+      describe "index of absences for country" do
+      
+        before { visit country_country_absences_path(@country) } 
+      
+        it { should have_selector('#recent-adds', text: "additions in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+      end
     end
   end 
 end

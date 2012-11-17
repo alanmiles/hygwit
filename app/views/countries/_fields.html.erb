@@ -125,7 +125,15 @@
   <%= f.label :max_loan_ded_salary, "Maximum percentage of salary deducted for loan repayments" %>
 </div>
 
-<div style="clear:both">
+<div class="line-space" style="clear:both">
   <%= f.label :notes %>
   <%= f.text_area :notes, rows: "5" %>
 </div>
+
+<% if current_user.superuser? %>
+  <div id="completion" style ="clear:both" class= "line-space">
+    <span class="span3 r-float"><%= f.check_box :complete %></span>
+    <span class="vert-down">Are all settings complete? (Superuser)</span>
+  </div>
+
+<% end %>

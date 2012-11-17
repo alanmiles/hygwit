@@ -26,4 +26,20 @@ class CountryAbsence < ActiveRecord::Base
   validates :notes,							length: { maximum: 140 }
   
   default_scope order: 'country_absences.absence_code ASC'
+  
+  def recent?
+    created_at >= 7.days.ago
+  end
+  
+  def self.total_recent(country)
+    CountryAbsence.where("country_id = ? and created_at >=?", country.id, 7.days.ago).count
+  end
+  
+  def updated?
+    updated_at >= 7.days.ago && created_at < 7.days.ago
+  end
+  
+  def self.total_updated(country)
+    CountryAbsence.where("country_id = ? and updated_at >=? and created_at <?", country.id, 7.days.ago, 7.days.ago).count
+  end
 end

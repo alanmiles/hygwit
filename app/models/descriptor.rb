@@ -24,4 +24,33 @@ class Descriptor < ActiveRecord::Base
   validates :updated_by,	presence: true, numericality: { integer: true }
   
   default_scope order: 'descriptors.grade ASC'
+  
+  def updated?
+    updated_at >= 7.days.ago && created_at < 7.days.ago
+  end
+  
+  def self.all_updated
+    Descriptor.where("updated_at >=? and created_at <=?", 7.days.ago, 7.days.ago).count
+  end
+  
+  def self.includes_updates?
+    Descriptor.all_updated > 0
+  end
+  
+  #def self.total_updated(quality)
+  #  Descriptor.where("quality_id = ? and updated_at >=? and created_at <=?", quality.id, 7.days.ago, 7.days.ago).count
+  #end
+  
+  def not_written?
+    descriptor == "Descriptor for #{self.grade}"
+  end
+  
+  def self.total_unwritten
+    Descriptor.where("descriptor LIKE ?", "%Descriptor for%").count
+  end
+  
+  def self.requires_edits?
+    Descriptor.total_unwritten > 0
+  end
+ 
 end

@@ -1,0 +1,9 @@
+     <% @grievance_types.each do |grievance| %>
+        <li>
+          <%= grievance.grievance %>
+          | <%= link_to "change", edit_grievance_type_path(grievance) %>
+          | <%= link_to "delete", grievance, method: :delete,
+                             data: { confirm: "Delete '#{grievance.grievance}'?  Sure?" } %>
+    
+        </li>
+      <% end %>

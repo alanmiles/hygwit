@@ -1,0 +1,6 @@
+        <div id="recent-adds">
+          <%= recent_jobfamilies %>
+        </div>
+        <div id="recent-jobfamilies">
+          <%= updated_sectors %>
+        </div>

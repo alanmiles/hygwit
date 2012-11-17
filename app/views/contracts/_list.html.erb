@@ -1,0 +1,10 @@
+      <% @contracts.each do |contract| %>
+        <li>
+          <%= render "shared/superuser_notifications", model_name: contract %>
+          <%= contract.contract %>
+          | <%= link_to "change", edit_contract_path(contract) %>
+          | <%= link_to "delete", contract, method: :delete,
+                             data: { confirm: "Delete '#{contract.contract}'?  Sure?" } %>
+    
+        </li>
+      <% end %>

@@ -13,7 +13,7 @@ class CountryAdminsController < ApplicationController
   def create
     @country_admin = CountryAdmin.new(params[:country_admin])
     if @country_admin.save
-      flash[:success] = "'#{@country_admin.user.name}' is now an administrator for #{@country_admin.country.country}"
+      flash[:success] = "#{@country_admin.user.name} is now an administrator for #{@country_admin.country.country}"
       redirect_to country_admins_path
     else
       @countries = Country.all

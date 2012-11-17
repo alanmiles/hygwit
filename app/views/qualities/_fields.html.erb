@@ -1,9 +1,13 @@
 <%= f.label :quality %>
 <%= f.text_field :quality %>
 
-<div id="approving" class= "line-space">
-<span class="span3 r-float"><%= f.check_box :approved %></span>
-<%= f.label :approved %>
-</div>
-
+<% if current_user.superuser? %>
+  <div id="approving" class= "line-space">
+    <span class="span3 r-float"><%= f.check_box :approved %></span>
+    <%= f.label :approved %>
+  </div>
+<% else %>
+  <%= f.hidden_field :approved %>
+<% end %>
+  
 <%= f.hidden_field :created_by %>

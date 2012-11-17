@@ -14,4 +14,3 @@ module JobfamiliesHelper
      before going live." 
   end
 end
-end

@@ -1,8 +1,9 @@
  
-   
-    <div style="padding-bottom: 10px">
-      <%= link_to "Add an absence type", new_country_country_absence_path(@country), class: "btn" %>
-    </div>
+     <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+      <div style="padding-bottom: 10px">
+        <%= link_to "Add an absence type", new_country_country_absence_path(@country), class: "btn" %>
+      </div>
+    <% end %>
     <ul class="itemlist">
       <li>
         <strong>

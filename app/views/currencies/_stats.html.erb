@@ -1,0 +1,11 @@
+      <% if current_user.superuser? %>   
+        <div id="statistics">    
+          <%= linked_currencies %>
+        </div>
+        <div id="recent-adds">
+          <%= recent_currencies %>
+        </div>
+        <div id="recent-updates">
+          <%= updated_currencies %>
+        </div>
+      <% end %>

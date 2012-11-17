@@ -33,6 +33,12 @@ class User < ActiveRecord::Base
   
   default_scope order: 'users.name ASC' 
     
+  def administrator?(country)
+    @country = Country.find_by_country(country)
+    @records = CountryAdmin.where("country_id = ? and user_id = ?", @country, self).count
+    @records > 0
+  end
+    
   private
 
     def create_remember_token

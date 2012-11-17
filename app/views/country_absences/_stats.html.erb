@@ -1,0 +1,8 @@
+      <% if current_user.superuser? %>
+        <div id="recent-adds">
+          <%= recent_country_absences(@country) %>
+        </div>
+        <div id="recent-updates">
+          <%= updated_country_absences(@country) %>
+        </div>
+      <% end %>

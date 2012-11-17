@@ -1,2 +1,32 @@
-<h1>GrievanceTypes#index</h1>
-<p>Find me in app/views/grievance_types/index.html.erb</p>
+<% provide(:title, 'Grievance Types') %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <%= render 'shared/user_sidebar' %>
+    </section>
+    <div class="instruction">
+      <div class="line-space">
+        <%= grievance_instruction_1 %>
+      </div>     
+    </div>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Grievance Types</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a grievance type", new_grievance_type_path, class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <% @grievance_types.each do |grievance| %>
+        <li>
+          <%= grievance.grievance %>
+          | <%= link_to "change", edit_grievance_type_path(grievance) %>
+          | <%= link_to "delete", grievance, method: :delete,
+                             data: { confirm: "Delete '#{grievance.grievance}'?  Sure?" } %>
+    
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
