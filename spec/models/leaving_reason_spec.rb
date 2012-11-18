@@ -5,6 +5,7 @@
 #  id            :integer          not null, primary key
 #  reason        :string(255)
 #  full_benefits :boolean          default(FALSE)
+#  created_by    :integer          default(1)
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #

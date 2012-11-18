@@ -2,7 +2,7 @@
 <%= f.text_field :reason %>
 
 <div id="terminating" class= "line-space">
-<span class="span3 r-float"><%= f.check_box :terminated %></span>
+<span class="span3 r-float"><%= f.check_box :full_benefits %></span>
 <%= f.label :full_benefits, "Check if leaver receives full leaving benefits" %>
 </div>
 

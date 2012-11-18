@@ -5,4 +5,4 @@
 <%= f.text_field :code %>
 
 <%= f.label :decimal_places, "Number of decimal places to display" %>
-<%= f.text_field :decimal_places %>label
+<%= f.text_field :decimal_places %>

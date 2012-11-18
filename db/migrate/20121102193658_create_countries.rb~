@@ -9,8 +9,8 @@ class CreateCountries < ActiveRecord::Migration
       t.integer :probation_days, default: 90
       t.integer :max_hours_day, default: 9
       t.integer :max_hours_week, default: 45
-      t.integer :max_hours_day_ramadan, default: 6
-      t.integer :max_hours_week_ramadan, default: 30
+      t.integer :max_hours_day_ramadan
+      t.integer :max_hours_week_ramadan
       t.boolean :sickness_accruals, default: false
       t.integer :retirement_age_m, default: 60
       t.integer :retirement_age_f, default: 55

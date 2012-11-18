@@ -3,8 +3,6 @@
           <%= render "shared/superuser_notifications", model_name: category %>
           <%= category.category %>
           | <%= link_to "change", edit_disciplinary_category_path(category) %>
-          | <%= link_to "delete", category, method: :delete,
-                             data: { confirm: "Delete '#{category.category}'?  Sure?" } %>
-    
+          <%= render "shared/admin_deletes", model_name: category %>
         </li>
       <% end %>

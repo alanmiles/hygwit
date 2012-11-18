@@ -4,7 +4,7 @@
 #
 #  id         :integer          not null, primary key
 #  sector     :string(255)
-#  created_by :integer
+#  created_by :integer          default(1)
 #  approved   :boolean          default(FALSE)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -19,6 +19,10 @@ class Sector < ActiveRecord::Base
   validates :created_by, presence: true
   
   default_scope order: 'sectors.sector ASC'
+  
+  def self_ref
+    sector
+  end
   
   def recent?
     approved == false

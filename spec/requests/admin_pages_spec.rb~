@@ -450,8 +450,8 @@ describe "AdminPages" do
   describe "when logged in as admin" do
   
     before do
-      admin = FactoryGirl.create(:admin, name: "Admin Admin", email: "adminadmin@example.com")
-      sign_in admin
+      @admin = FactoryGirl.create(:admin, name: "Admin Admin", email: "adminadmin@example.com")
+      sign_in @admin
     end
     
     describe "sector controller" do
@@ -459,9 +459,9 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @sector = Sector.create(sector: 'Business', created_by: 1)
-          @sector_2 = Sector.create(sector: 'Manufacturing', created_by: 1)
-          @sector_3 = Sector.create(sector: 'Automobile', created_by: 1)
+          @sector = Sector.create(sector: 'Business', created_by: @admin.id)
+          @sector_2 = Sector.create(sector: 'Manufacturing', created_by: 999999)
+          @sector_3 = Sector.create(sector: 'Automobile', created_by: 999999)
           visit sectors_path
         end
       
@@ -474,6 +474,7 @@ describe "AdminPages" do
       
           it { should have_link('change', href: edit_sector_path(@sector)) }
           it { should have_link('delete', href: sector_path(@sector)) }
+          it { should_not have_link('delete', href: sector_path(@sector_2)) }
           it { should have_link('Add', href: new_sector_path) }
           it { should have_selector('ul.itemlist li:nth-child(4)', text: 'Manufacturing') }
         
@@ -570,9 +571,9 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @jobfamily = Jobfamily.create(job_family: 'Banking', created_by: 1)
-          @jobfamily_2 = Jobfamily.create(job_family: 'Management', created_by: 1)
-          @jobfamily_3 = Jobfamily.create(job_family: 'Audit', created_by: 1)
+          @jobfamily = Jobfamily.create(job_family: 'Banking', created_by: @admin.id)
+          @jobfamily_2 = Jobfamily.create(job_family: 'Management', created_by: 999999)
+          @jobfamily_3 = Jobfamily.create(job_family: 'Audit', created_by: 999999)
           visit jobfamilies_path
         end
       
@@ -585,6 +586,7 @@ describe "AdminPages" do
       
           it { should have_link('change', href: edit_jobfamily_path(@jobfamily)) }
           it { should have_link('delete', href: jobfamily_path(@jobfamily)) }
+          it { should_not have_link('delete', href: jobfamily_path(@jobfamily_2)) }
           it { should have_link('Add', href: new_jobfamily_path) }
           it { should have_selector('ul.itemlist li:nth-child(3)', text: 'Management') }
         
@@ -681,9 +683,9 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @reason = LeavingReason.create(reason: 'Retired')
-          @reason_2 = LeavingReason.create(reason: 'Redundant', full_benefits: true)
-          @reason_3 = LeavingReason.create(reason: 'Disciplinary', full_benefits: true)
+          @reason = LeavingReason.create(reason: 'Retired', created_by: @admin.id)
+          @reason_2 = LeavingReason.create(reason: 'Redundant', full_benefits: true, created_by: 999999)
+          @reason_3 = LeavingReason.create(reason: 'Disciplinary', full_benefits: true, created_by: 999999)
           visit leaving_reasons_path
         end
       
@@ -696,6 +698,7 @@ describe "AdminPages" do
       
           it { should have_link('change', href: edit_leaving_reason_path(@reason)) }
           it { should have_link('delete', href: leaving_reason_path(@reason)) }
+          it { should_not have_link('delete', href: leaving_reason_path(@reason_2)) }
           it { should have_link('Add', href: new_leaving_reason_path) }
           it { should have_selector('ul.itemlist li:nth-child(4)', text: 'Retired') }
         
@@ -791,9 +794,9 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @dcat = DisciplinaryCategory.create(category: 'Theft')
-          @dcat_2 = DisciplinaryCategory.create(category: 'Disobeying instructions')
-          @dcat_3 = DisciplinaryCategory.create(category: 'Ignoring health & safety rules')
+          @dcat = DisciplinaryCategory.create(category: 'Theft', created_by: @admin.id)
+          @dcat_2 = DisciplinaryCategory.create(category: 'Disobeying instructions', created_by: 999999)
+          @dcat_3 = DisciplinaryCategory.create(category: 'Ignoring health & safety rules', created_by: 999999)
           visit disciplinary_categories_path
         end
       
@@ -806,6 +809,7 @@ describe "AdminPages" do
       
           it { should have_link('change', href: edit_disciplinary_category_path(@dcat)) }
           it { should have_link('delete', href: disciplinary_category_path(@dcat)) }
+          it { should_not have_link('delete', href: disciplinary_category_path(@dcat_2)) }
           it { should have_link('Add', href: new_disciplinary_category_path) }
           it { should have_selector('ul.itemlist li:nth-child(4)', text: 'Theft') }
         
@@ -896,9 +900,9 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @gtype = GrievanceType.create(grievance: 'Violence')
-          @gtype_2 = GrievanceType.create(grievance: 'Sexual harrassment')
-          @gtype_3 = GrievanceType.create(grievance: 'No career advancement')
+          @gtype = GrievanceType.create(grievance: 'Violence', created_by: @admin.id)
+          @gtype_2 = GrievanceType.create(grievance: 'Sexual harrassment', created_by: 999999)
+          @gtype_3 = GrievanceType.create(grievance: 'No career advancement', created_by: 999999)
           visit grievance_types_path
         end
       
@@ -911,6 +915,7 @@ describe "AdminPages" do
       
           it { should have_link('change', href: edit_grievance_type_path(@gtype)) }
           it { should have_link('delete', href: grievance_type_path(@gtype)) }
+          it { should_not have_link('delete', href: grievance_type_path(@gtype_2)) }
           it { should have_link('Add', href: new_grievance_type_path) }
           it { should have_selector('ul.itemlist li:nth-child(4)', text: 'Violence') }
         
@@ -1001,18 +1006,21 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @contract_2 = Contract.create(contract: 'Volunteer')
-          @contract_3 = Contract.create(contract: 'Full-time')
+          @contract_2 = Contract.create(contract: 'Volunteer', created_by: @admin.id)
+          @contract_3 = Contract.create(contract: 'Full-time', created_by: 999999)
           visit contracts_path
         end
       
         it { should have_selector('title', text: 'Contract Types') }
         it { should have_selector('h1', text: 'Contract Types') }
+        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
       
         describe "list " do
       
           it { should have_link('change', href: edit_contract_path(@contract)) }
-          it { should have_link('delete', href: contract_path(@contract)) }
+          it { should have_link('delete', href: contract_path(@contract_2)) }
+          it { should_not have_link('delete', href: contract_path(@contract_3)) }
           it { should have_link('Add', href: new_contract_path) }
           it { should have_selector('ul.itemlist li:nth-child(3)', text: 'Volunteer') }
         
@@ -1102,8 +1110,8 @@ describe "AdminPages" do
   describe "when logged in as superuser" do
     
     before do
-      superuser = FactoryGirl.create(:superuser, name: "S User", email: "suser@example.com")
-      sign_in superuser 
+      @superuser = FactoryGirl.create(:superuser, name: "S User", email: "suser@example.com")
+      sign_in @superuser 
     end
     
     describe "sectors controller" do
@@ -1111,14 +1119,16 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @sector = Sector.create(sector: 'Business', created_by: 1)
-          @sector_2 = Sector.create(sector: 'Manufacturing', created_by: 1)
-          @sector_3 = Sector.create(sector: 'Automobile', created_by: 1)
+          @sector = Sector.create(sector: 'Business', created_by: @superuser.id)
+          @sector_2 = Sector.create(sector: 'Manufacturing', created_by: 999999)
+          @sector_3 = Sector.create(sector: 'Automobile', created_by: 999999)
           visit sectors_path
         end
       
         it { should have_selector('#recent-adds', text: "needing approval") }
         it { should have_selector('.recent', text: "*") }
+        it { should have_link('delete', href: sector_path(@sector)) }
+        it { should have_link('delete', href: sector_path(@sector_2)) }
       
       end
     end
@@ -1128,14 +1138,16 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @jobfamily = Jobfamily.create(job_family: 'Banking', created_by: 1)
-          @jobfamily_2 = Jobfamily.create(job_family: 'Management', created_by: 1)
-          @jobfamily_3 = Jobfamily.create(job_family: 'Audit', created_by: 1)
+          @jobfamily = Jobfamily.create(job_family: 'Banking', created_by: @superuser.id)
+          @jobfamily_2 = Jobfamily.create(job_family: 'Management', created_by: 999999)
+          @jobfamily_3 = Jobfamily.create(job_family: 'Audit', created_by: 999999)
           visit jobfamilies_path
         end
         
         it { should have_selector('#recent-adds', text: "needing approval") }
         it { should have_selector('.recent', text: "*") }
+        it { should have_link('delete', href: jobfamily_path(@jobfamily)) }
+        it { should have_link('delete', href: jobfamily_path(@jobfamily_2)) }
         
       end
     end
@@ -1145,14 +1157,16 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @reason = LeavingReason.create(reason: 'Retired')
-          @reason_2 = LeavingReason.create(reason: 'Redundant', full_benefits: true)
-          @reason_3 = LeavingReason.create(reason: 'Disciplinary', full_benefits: true)
+          @reason = LeavingReason.create(reason: 'Retired', created_by: @superuser.id)
+          @reason_2 = LeavingReason.create(reason: 'Redundant', full_benefits: true, created_by: 999999)
+          @reason_3 = LeavingReason.create(reason: 'Disciplinary', full_benefits: true, created_by: 999999)
           visit leaving_reasons_path
         end
       
         it { should have_selector('#recent-adds', text: "in past 7 days") }
         it { should have_selector('.recent', text: "*") }
+        it { should have_link('delete', href: leaving_reason_path(@reason)) }
+        it { should have_link('delete', href: leaving_reason_path(@reason_2)) }
       end
     end
     
@@ -1161,14 +1175,16 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @dcat = DisciplinaryCategory.create(category: 'Theft')
-          @dcat_2 = DisciplinaryCategory.create(category: 'Disobeying instructions')
-          @dcat_3 = DisciplinaryCategory.create(category: 'Ignoring health & safety rules')
+          @dcat = DisciplinaryCategory.create(category: 'Theft', created_by: @superuser.id)
+          @dcat_2 = DisciplinaryCategory.create(category: 'Disobeying instructions', created_by: 999999)
+          @dcat_3 = DisciplinaryCategory.create(category: 'Ignoring health & safety rules', created_by: 999999)
           visit disciplinary_categories_path
         end
       
         it { should have_selector('#recent-adds', text: "in past 7 days") }
         it { should have_selector('.recent', text: "*") }
+        it { should have_link('delete', href: disciplinary_category_path(@dcat)) }
+        it { should have_link('delete', href: disciplinary_category_path(@dcat_2)) }
         
       end
     end
@@ -1178,14 +1194,33 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @gtype = GrievanceType.create(grievance: 'Violence')
-          @gtype_2 = GrievanceType.create(grievance: 'Sexual harrassment')
-          @gtype_3 = GrievanceType.create(grievance: 'No career advancement')
+          @gtype = GrievanceType.create(grievance: 'Violence', created_by: @superuser.id)
+          @gtype_2 = GrievanceType.create(grievance: 'Sexual harrassment', created_by: 999999)
+          @gtype_3 = GrievanceType.create(grievance: 'No career advancement', created_by: 999999)
           visit grievance_types_path
         end
         
         it { should have_selector('#recent-adds', text: "in past 7 days") }
         it { should have_selector('.recent', text: "*") }
+        it { should have_link('delete', href: grievance_type_path(@gtype)) }
+        it { should have_link('delete', href: grievance_type_path(@gtype_2)) }
+      end
+    end
+    
+    describe "Contracts controller" do
+    
+      describe "index" do
+      
+        before do  
+          @contract_2 = Contract.create(contract: 'Volunteer', created_by: @superuser.id)
+          @contract_3 = Contract.create(contract: 'Full-time', created_by: 999999)
+          visit contracts_path
+        end
+      
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+        it { should have_link('delete', href: contract_path(@contract_2)) }
+        it { should have_link('delete', href: contract_path(@contract_3)) }
       end
     end
   end

@@ -1,12 +1,11 @@
       <% @leaving_reasons.each do |reason| %>
         <li>
+          <%= render "shared/superuser_notifications", model_name: reason %>
           <%= reason.reason %>
           <% if reason.full_benefits? %>
             | Full leaving benefits
           <% end %>
           | <%= link_to "change", edit_leaving_reason_path(reason) %>
-          | <%= link_to "delete", reason, method: :delete,
-                             data: { confirm: "Delete '#{reason.reason}'?  Sure?" } %>
-    
+          <%= render "shared/admin_deletes", model_name: quality %>
         </li>
       <% end %>

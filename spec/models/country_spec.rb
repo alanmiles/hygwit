@@ -11,8 +11,8 @@
 #  probation_days           :integer          default(90)
 #  max_hours_day            :integer          default(9)
 #  max_hours_week           :integer          default(45)
-#  max_hours_day_ramadan    :integer          default(6)
-#  max_hours_week_ramadan   :integer          default(30)
+#  max_hours_day_ramadan    :integer
+#  max_hours_week_ramadan   :integer
 #  sickness_accruals        :boolean          default(FALSE)
 #  retirement_age_m         :integer          default(60)
 #  retirement_age_f         :integer          default(55)
@@ -23,6 +23,7 @@
 #  max_loan_ded_salary      :integer          default(15)
 #  notes                    :text
 #  complete                 :boolean          default(FALSE)
+#  created_by               :integer          default(1)
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #  rules                    :string(255)

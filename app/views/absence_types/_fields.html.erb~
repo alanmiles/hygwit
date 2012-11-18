@@ -14,7 +14,7 @@
 
 <div class= "line-space"> 
   <span class="span3 r-float"><%= f.check_box :documentation_required %></span>
-  <span class="vert-down">Documentation required?</span>
+  <span class="vert-down">Documentary evidence required?</span>
 </div>
 
 <%= f.label :notes %>

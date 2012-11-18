@@ -10,6 +10,7 @@ class GrievanceTypesController < ApplicationController
 
   def new
     @grievance_type = GrievanceType.new
+    @grievance_type.created_by = current_user.id
   end
   
   def create
@@ -18,6 +19,7 @@ class GrievanceTypesController < ApplicationController
       flash[:success] = "'#{@grievance_type.grievance}' added"
       redirect_to grievance_types_path
     else
+      @grievance_type.created_by = current_user.id
       render 'new'
     end
   end
@@ -37,9 +39,21 @@ class GrievanceTypesController < ApplicationController
   end
   
   def destroy
-    @grievance_type = GrievanceType.find(params[:id]).destroy
-    flash[:success]= "'#{@grievance_type.grievance}' destroyed"
-    redirect_to grievance_types_path
+    @grievance_type = DisciplinaryCategory.find(params[:id])
+    if current_user.superuser?
+      @grievance_type.destroy
+      flash[:success]= "'#{@grievance_type.grievance}' destroyed"
+      redirect_to grievance_types_path
+    else
+      if @grievance_type.created_by == current_user.id
+        @grievance_type.destroy
+        flash[:success]= "'#{@grievance_type.grievance}' destroyed"
+        redirect_to grievance_types_path
+      else
+        flash[:notice] = "Illegal action.  You can only remove grievance types you have created."
+        redirect_to grievance_types_path
+      end
+    end 
   end
   
 end

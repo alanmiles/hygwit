@@ -40,8 +40,20 @@ class JobfamiliesController < ApplicationController
   end
   
   def destroy
-    @jobfamily = Jobfamily.find(params[:id]).destroy
-    flash[:success]= "'#{@jobfamily.job_family}' destroyed"
-    redirect_to jobfamilies_path
+    @jobfamily = Jobfamily.find(params[:id])
+    if current_user.superuser?
+      @jobfamily.destroy
+      flash[:success]= "'#{@jobfamily.job_family}' destroyed"
+      redirect_to jobfamilies_path
+    else
+      if @jobfamily.created_by == current_user.id
+        @jobfamily.destroy
+        flash[:success]= "'#{@jobfamily.job_family}' destroyed"
+        redirect_to jobfamilies_path
+      else
+        flash[:notice] = "Illegal action.  You can only remove job families you have created."
+        redirect_to jobfamilies_path
+      end
+    end
   end
 end

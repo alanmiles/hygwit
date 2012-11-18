@@ -21,6 +21,7 @@ class CreateCountries < ActiveRecord::Migration
       t.integer :max_loan_ded_salary, default: 15
       t.text :notes
       t.boolean :complete, default: false
+      t.integer :created_by, default: 1
 
       t.timestamps
     end

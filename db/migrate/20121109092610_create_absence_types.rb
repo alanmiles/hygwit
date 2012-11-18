@@ -7,6 +7,7 @@ class CreateAbsenceTypes < ActiveRecord::Migration
       t.integer :maximum_days_year
       t.boolean :documentation_required, default: true
       t.string :notes
+      t.integer :created_by, default: 1
 
       t.timestamps
     end

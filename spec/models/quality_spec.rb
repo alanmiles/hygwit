@@ -5,7 +5,7 @@
 #  id         :integer          not null, primary key
 #  quality    :string(255)
 #  approved   :boolean          default(FALSE)
-#  created_by :integer
+#  created_by :integer          default(1)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

@@ -10,6 +10,7 @@ class NationalitiesController < ApplicationController
 
   def new
     @nationality = Nationality.new
+    @nationality.created_by = current_user.id
   end
   
   def create
@@ -18,6 +19,7 @@ class NationalitiesController < ApplicationController
       flash[:success] = "'#{@nationality.nationality}' added"
       redirect_to nationalities_path
     else
+      @nationality.created_by = current_user.id
       render 'new'
     end
   end
@@ -42,9 +44,20 @@ class NationalitiesController < ApplicationController
       flash[:notice] = "Illegal action"
       redirect_to root_path
     else
-      @nationality.destroy
-      flash[:success]= "'#{@nationality.nationality}' destroyed"
-      redirect_to nationalities_path
+      if current_user.superuser?
+        @nationality.destroy
+        flash[:success]= "'#{@nationality.nationality}' destroyed"
+        redirect_to nationalities_path
+      else
+        if @nationality.created_by == current_user.id
+          @nationality.destroy
+          flash[:success]= "'#{@nationality.nationality}' destroyed"
+          redirect_to nationalities_path
+        else
+          flash[:notice] = "Illegal action.  You can only remove nationalities you have created."
+          redirect_to nationalities_path
+        end
+      end
     end
   end
   

@@ -4,7 +4,7 @@
 #
 #  id         :integer          not null, primary key
 #  sector     :string(255)
-#  created_by :integer
+#  created_by :integer          default(1)
 #  approved   :boolean          default(FALSE)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -21,11 +21,11 @@ class Sector < ActiveRecord::Base
   default_scope order: 'sectors.sector ASC'
   
   def recent?
-    created_at >= 7.days.ago
+    approved == false
   end
   
   def self.total_recent
-    Sector.where("created_at >=?", 7.days.ago).count
+    Sector.where("approved =?", false).count
   end
   
   def updated?

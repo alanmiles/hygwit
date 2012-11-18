@@ -20,4 +20,4 @@
                              data: { confirm: "Delete '#{country.country}'?  Sure?" } %>
           <% end %>
         </li>
-      end
+      <% end %>

@@ -10,6 +10,7 @@
 #  maximum_days_year      :integer
 #  documentation_required :boolean          default(TRUE)
 #  notes                  :string(255)
+#  created_by             :integer          default(1)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #

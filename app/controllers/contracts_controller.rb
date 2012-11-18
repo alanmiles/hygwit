@@ -10,6 +10,7 @@ class ContractsController < ApplicationController
 
   def new
     @contract = Contract.new
+    @contract.created_by = current_user.id
   end
   
   def create
@@ -18,6 +19,7 @@ class ContractsController < ApplicationController
       flash[:success] = "'#{@contract.contract}' added"
       redirect_to contracts_path
     else
+      @contract.created_by = current_user.id
       render 'new'
     end
   end
@@ -37,8 +39,20 @@ class ContractsController < ApplicationController
   end
   
   def destroy
-    @contract = Contract.find(params[:id]).destroy
-    flash[:success]= "'#{@contract.contract}' destroyed"
-    redirect_to contracts_path
+    @contract = Contract.find(params[:id])
+    if current_user.superuser?
+      @contract.destroy
+      flash[:success]= "'#{@contract.contract}' destroyed"
+      redirect_to contracts_path
+    else
+      if @contract.created_by == current_user.id
+        @contract.destroy
+        flash[:success]= "'#{@contract.contract}' destroyed"
+        redirect_to contracts_path
+      else
+        flash[:notice] = "Illegal action.  You can only remove contract-types you have created."
+        redirect_to contracts_path
+      end
+    end
   end
 end

@@ -3,10 +3,10 @@ class CreateCountryAbsences < ActiveRecord::Migration
     create_table :country_absences do |t|
       t.integer :country_id
       t.string :absence_code
-      t.integer :paid
-      t.boolean :sickness
+      t.integer :paid, default: 100
+      t.boolean :sickness, default: false
       t.integer :maximum_days_year
-      t.boolean :documentation_required
+      t.boolean :documentation_required, default: true
       t.string :notes
 
       t.timestamps

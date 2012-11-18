@@ -20,14 +20,16 @@ ActiveRecord::Schema.define(:version => 20121113112223) do
     t.integer  "maximum_days_year"
     t.boolean  "documentation_required", :default => true
     t.string   "notes"
+    t.integer  "created_by",             :default => 1
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
   end
 
   create_table "contracts", :force => true do |t|
     t.string   "contract"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "created_by", :default => 1
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "countries", :force => true do |t|
@@ -39,8 +41,8 @@ ActiveRecord::Schema.define(:version => 20121113112223) do
     t.integer  "probation_days",                                         :default => 90
     t.integer  "max_hours_day",                                          :default => 9
     t.integer  "max_hours_week",                                         :default => 45
-    t.integer  "max_hours_day_ramadan",                                  :default => 6
-    t.integer  "max_hours_week_ramadan",                                 :default => 30
+    t.integer  "max_hours_day_ramadan"
+    t.integer  "max_hours_week_ramadan"
     t.boolean  "sickness_accruals",                                      :default => false
     t.integer  "retirement_age_m",                                       :default => 60
     t.integer  "retirement_age_f",                                       :default => 55
@@ -51,6 +53,7 @@ ActiveRecord::Schema.define(:version => 20121113112223) do
     t.integer  "max_loan_ded_salary",                                    :default => 15
     t.text     "notes"
     t.boolean  "complete",                                               :default => false
+    t.integer  "created_by",                                             :default => 1
     t.datetime "created_at",                                                                :null => false
     t.datetime "updated_at",                                                                :null => false
     t.string   "rules"
@@ -67,6 +70,7 @@ ActiveRecord::Schema.define(:version => 20121113112223) do
     t.integer  "maximum_days_year"
     t.boolean  "documentation_required", :default => true
     t.string   "notes"
+    t.integer  "created_by",             :default => 1
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
   end
@@ -81,6 +85,7 @@ ActiveRecord::Schema.define(:version => 20121113112223) do
   create_table "currencies", :force => true do |t|
     t.string   "currency"
     t.string   "code"
+    t.integer  "created_by",     :default => 1
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.integer  "decimal_places", :default => 2
@@ -100,20 +105,22 @@ ActiveRecord::Schema.define(:version => 20121113112223) do
 
   create_table "disciplinary_categories", :force => true do |t|
     t.string   "category"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "created_by", :default => 1
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "grievance_types", :force => true do |t|
     t.string   "grievance"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "created_by", :default => 1
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "jobfamilies", :force => true do |t|
     t.string   "job_family"
     t.boolean  "approved",   :default => false
-    t.integer  "created_by"
+    t.integer  "created_by", :default => 1
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
   end
@@ -121,14 +128,16 @@ ActiveRecord::Schema.define(:version => 20121113112223) do
   create_table "leaving_reasons", :force => true do |t|
     t.string   "reason"
     t.boolean  "full_benefits", :default => false
+    t.integer  "created_by",    :default => 1
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
   end
 
   create_table "nationalities", :force => true do |t|
     t.string   "nationality"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "created_by",  :default => 1
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   add_index "nationalities", ["nationality"], :name => "index_nationalities_on_nationality"
@@ -136,14 +145,14 @@ ActiveRecord::Schema.define(:version => 20121113112223) do
   create_table "qualities", :force => true do |t|
     t.string   "quality"
     t.boolean  "approved",   :default => false
-    t.integer  "created_by"
+    t.integer  "created_by", :default => 1
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
   end
 
   create_table "sectors", :force => true do |t|
     t.string   "sector"
-    t.integer  "created_by"
+    t.integer  "created_by", :default => 1
     t.boolean  "approved",   :default => false
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false

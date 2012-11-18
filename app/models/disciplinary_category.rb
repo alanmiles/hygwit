@@ -4,17 +4,22 @@
 #
 #  id         :integer          not null, primary key
 #  category   :string(255)
+#  created_by :integer          default(1)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 
 class DisciplinaryCategory < ActiveRecord::Base
-  attr_accessible :category
+  attr_accessible :category, :created_by
   
   validates :category, presence: true, length: { maximum: 50 },
                      uniqueness: { case_sensitive: false }
                                          
   default_scope order: 'disciplinary_categories.category ASC'
+  
+  def self_ref
+    category
+  end
   
   def recent?
     created_at >= 7.days.ago

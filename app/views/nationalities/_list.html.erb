@@ -11,8 +11,7 @@
           <%= nationality.nationality %>
           | <%= link_to "change", edit_nationality_path(nationality) %>
           <% unless nationality.linked? %>
-            | <%= link_to "delete", nationality, method: :delete,
-                             data: { confirm: "Delete '#{nationality.nationality}'?  Sure?" } %>
+            <%= render "shared/admin_deletes", model_name: nationality %>
           <% end %>
         </li>
       <% end %>

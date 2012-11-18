@@ -5,13 +5,14 @@
 #  id             :integer          not null, primary key
 #  currency       :string(255)
 #  code           :string(255)
+#  created_by     :integer          default(1)
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  decimal_places :integer          default(2)
 #
 
 class Currency < ActiveRecord::Base
-  attr_accessible :code, :currency, :decimal_places
+  attr_accessible :code, :currency, :decimal_places, :created_by
   
   has_many :countries
   
@@ -21,6 +22,10 @@ class Currency < ActiveRecord::Base
   validates :decimal_places, presence: true, numericality: { integer: true }
   												
   default_scope order: 'currencies.code ASC'
+  
+  def self_ref
+    code
+  end
   
   def currency_code
     "#{code} (#{currency})" 

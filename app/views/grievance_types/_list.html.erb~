@@ -1,5 +1,6 @@
      <% @grievance_types.each do |grievance| %>
         <li>
+          <%= render "shared/superuser_notifications", model_name: grievance %>
           <%= grievance.grievance %>
           | <%= link_to "change", edit_grievance_type_path(grievance) %>
           | <%= link_to "delete", grievance, method: :delete,

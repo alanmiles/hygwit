@@ -10,6 +10,7 @@ class LeavingReasonsController < ApplicationController
 
   def new
     @leaving_reason = LeavingReason.new
+    @leaving_reason.created_by = current_user.id
   end
   
   def create
@@ -18,6 +19,7 @@ class LeavingReasonsController < ApplicationController
       flash[:success] = "'#{@leaving_reason.reason}' added"
       redirect_to leaving_reasons_path
     else
+      @leaving_reason.created_by = current_user.id
       render 'new'
     end
   end
@@ -37,8 +39,20 @@ class LeavingReasonsController < ApplicationController
   end
   
   def destroy
-    @leaving_reason = LeavingReason.find(params[:id]).destroy
-    flash[:success]= "'#{@leaving_reason.reason}' destroyed"
-    redirect_to leaving_reasons_path
+    @leaving_reason = LeavingReason.find(params[:id])
+    if current_user.superuser?
+      @leaving_reason.destroy
+      flash[:success]= "'#{@leaving_reason.reason}' destroyed"
+      redirect_to leaving_reasons_path
+    else
+      if @leaving_reason.created_by == current_user.id
+        @leaving_reason.destroy
+        flash[:success]= "'#{@leaving_reason.reason}' destroyed"
+        redirect_to leaving_reasons_path
+      else
+        flash[:notice] = "Illegal action.  You can only remove leaving reasons you have created."
+        redirect_to leaving_reasons_path
+      end
+    end 
   end
 end

@@ -5,7 +5,7 @@
 #  id         :integer          not null, primary key
 #  quality    :string(255)
 #  approved   :boolean          default(FALSE)
-#  created_by :integer
+#  created_by :integer          default(1)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
@@ -23,6 +23,10 @@ class Quality < ActiveRecord::Base
   validates :created_by, presence: true
   
   default_scope order: 'qualities.quality ASC'
+  
+  def self_ref
+    quality
+  end
   
   def recent?
     approved == false

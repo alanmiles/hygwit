@@ -133,7 +133,7 @@
 <% if current_user.superuser? %>
   <div id="completion" style ="clear:both" class= "line-space">
     <span class="span3 r-float"><%= f.check_box :complete %></span>
-    <span class="vert-down">Are the settings complete? (Superuser)</span>
+    <span class="vert-down">Are all settings complete? (Superuser)</span>
   </div>
 
 <% end %>

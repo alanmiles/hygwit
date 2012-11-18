@@ -17,6 +17,7 @@ class CountriesController < ApplicationController
     @country = Country.new
     @nationalities = Nationality.all
     @currencies = Currency.all
+    @country.created_by = current_user.id
   end
   
   def create
@@ -27,6 +28,7 @@ class CountriesController < ApplicationController
     else
       @nationalities = Nationality.all
       @currencies = Currency.all
+      @country.created_by = current_user.id
       render 'new'
     end
   end
@@ -52,13 +54,20 @@ class CountriesController < ApplicationController
   end
   
   def destroy
+    @country = Country.find(params[:id])
     if current_user.superuser?
-      @country = Country.find(params[:id]).destroy
+      @country.destroy
       flash[:success]= "'#{@country.country}' destroyed"
       redirect_to countries_path
     else
-      flash[:notice] = "Illegal action"
-      redirect_to root_path
+      if @country.created_by == current_user.id
+        @country.destroy
+        flash[:success]= "'#{@country.country}' destroyed"
+        redirect_to countries_path
+      else
+        flash[:notice] = "Illegal action.  You can only remove countries you have created."
+        redirect_to countries_path
+      end
     end
   end
   

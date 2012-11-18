@@ -3,7 +3,7 @@ class CreateQualities < ActiveRecord::Migration
     create_table :qualities do |t|
       t.string :quality
       t.boolean :approved, default: false
-      t.integer :created_by
+      t.integer :created_by, default: 1
 
       t.timestamps
     end

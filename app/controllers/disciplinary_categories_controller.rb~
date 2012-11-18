@@ -1,6 +1,7 @@
 class DisciplinaryCategoriesController < ApplicationController
   
-  before_filter :signed_in_user
+  before_filter :signed_in_user, except: [:update, :destroy]
+  before_filter :illegal_action, only: [:update, :destroy]
   before_filter :check_admin
   
   def index
@@ -9,6 +10,7 @@ class DisciplinaryCategoriesController < ApplicationController
 
   def new
     @disciplinary_cat = DisciplinaryCategory.new
+    @disciplinary_cat.created_by = current_user.id
   end
   
   def create
@@ -17,6 +19,7 @@ class DisciplinaryCategoriesController < ApplicationController
       flash[:success] = "'#{@disciplinary_cat.category}' added"
       redirect_to disciplinary_categories_path
     else
+      @disciplinary_cat.created_by = current_user.id
       render 'new'
     end
   end

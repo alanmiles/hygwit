@@ -15,9 +15,6 @@
           <%= country.country %> 
           | <%= link_to "settings", country %>
           | <%= link_to "change name", edit_country_path(country) %>
-          <% if current_user.superuser? %>
-            | <%= link_to "delete", country, method: :delete,
-                             data: { confirm: "Delete '#{country.country}'?  Sure?" } %>
-          <% end %>
+          <%= render "shared/admin_deletes", model_name: country %>
         </li>
       <% end %>

@@ -5,6 +5,7 @@
 #  id             :integer          not null, primary key
 #  currency       :string(255)
 #  code           :string(255)
+#  created_by     :integer          default(1)
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  decimal_places :integer          default(2)

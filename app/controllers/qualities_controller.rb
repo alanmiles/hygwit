@@ -48,8 +48,20 @@ class QualitiesController < ApplicationController
   end
   
   def destroy
-    @quality = Quality.find(params[:id]).destroy
-    flash[:success]= "'#{@quality.quality}' destroyed"
-    redirect_to qualities_path
+    @quality = Quality.find(params[:id])
+    if current_user.superuser?
+      @quality.destroy
+      flash[:success]= "'#{@quality.quality}' destroyed"
+      redirect_to qualities_path
+    else
+      if @quality.created_by == current_user.id
+        @quality.destroy
+        flash[:success]= "'#{@quality.quality}' destroyed"
+        redirect_to qualities_path
+      else
+        flash[:notice] = "Illegal action.  You can only remove qualities you have created."
+        redirect_to qualities_path
+      end
+    end 
   end
 end

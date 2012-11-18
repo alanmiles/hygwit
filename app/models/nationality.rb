@@ -4,12 +4,13 @@
 #
 #  id          :integer          not null, primary key
 #  nationality :string(255)
+#  created_by  :integer          default(1)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
 
 class Nationality < ActiveRecord::Base
-  attr_accessible :nationality
+  attr_accessible :nationality, :created_by
   
   has_many :countries
   
@@ -17,6 +18,10 @@ class Nationality < ActiveRecord::Base
   												uniqueness: { case_sensitive: false }
   												
   default_scope order: 'nationalities.nationality ASC'
+  
+  def self_ref
+    nationality
+  end
   
   def country_links
     self.countries.count

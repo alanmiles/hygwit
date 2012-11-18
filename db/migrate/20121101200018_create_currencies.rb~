@@ -6,5 +6,6 @@ class CreateCurrencies < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :currencies, :code
   end
 end

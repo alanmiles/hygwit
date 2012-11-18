@@ -1,5 +1,6 @@
       <% @disciplinary_cats.each do |category| %>
         <li>
+          <%= render "shared/superuser_notifications", model_name: category %>
           <%= category.category %>
           | <%= link_to "change", edit_disciplinary_category_path(category) %>
           | <%= link_to "delete", category, method: :delete,

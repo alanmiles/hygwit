@@ -1,6 +1,7 @@
      <% @qualities.each do |quality| %>
         <li>
-          <%= render "shared/superuser_notifications", :model_name => quality %>
+          <%= render "admin_notifications", quality: quality %>
+          
           <%= quality.quality %>
           | <%= link_to "details / change", quality %>
           | <%= link_to "delete", quality, method: :delete,

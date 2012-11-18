@@ -11,7 +11,7 @@
       <% @absences.each do |absence| %>
         <li>
           <span class="span1">
-            <%= render "shared/superuser_notifications", :model_name => absence %>
+            <%= render "shared/superuser_notifications", model_name: absence %>
             <%= absence.absence_code %>
           </span>
           <span class="span1"><%= absence.paid %></span>
@@ -20,8 +20,7 @@
           <span class="span1"><%= absence.documentation_required? ? 'Yes' : 'No' %></span>
           <span class="span2"><%= absence.notes %></span>
           | <%= link_to "edit", edit_absence_type_path(absence) %>
-          | <%= link_to "del", absence, method: :delete,
-                             data: { confirm: "Delete '#{absence.absence_code}'?  Sure?" } %>
+          <%= render "admin_deletes", model_name: contract %>
     
         </li>
       <% end %>

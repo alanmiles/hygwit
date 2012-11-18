@@ -10,6 +10,7 @@ class CurrenciesController < ApplicationController
 
   def new
     @currency = Currency.new
+    @currency.created_by = current_user.id
   end
   
   def create
@@ -18,6 +19,7 @@ class CurrenciesController < ApplicationController
       flash[:success] = "'#{@currency.code}' added"
       redirect_to currencies_path
     else
+      @currency.created_by = current_user.id
       render 'new'
     end
   end
@@ -42,9 +44,20 @@ class CurrenciesController < ApplicationController
       flash[:notice] = "Illegal action"
       redirect_to root_path
     else
-      @currency.destroy
-      flash[:success]= "'#{@currency.code}' destroyed"
-      redirect_to currencies_path
+     if current_user.superuser?
+        @currency.destroy
+        flash[:success]= "'#{@currency.code}' destroyed"
+        redirect_to currencies_path
+      else
+        if @currency.created_by == current_user.id
+          @currency.destroy
+          flash[:success]= "'#{@currency.code}' destroyed"
+          redirect_to currencies_path
+        else
+          flash[:notice] = "Illegal action.  You can only remove currencies you have created."
+          redirect_to currencies_path
+        end
+      end
     end
   end
   

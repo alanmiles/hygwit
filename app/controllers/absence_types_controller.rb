@@ -14,6 +14,7 @@ class AbsenceTypesController < ApplicationController
 
   def new
     @absence = AbsenceType.new
+    @absence.created_by = current_user.id
   end
   
   def create
@@ -22,6 +23,7 @@ class AbsenceTypesController < ApplicationController
       flash[:success] = "Absence code '#{@absence.absence_code}' added"
       redirect_to absence_types_path
     else
+      @absence.created_by = current_user.id
       render 'new'
     end
   end
@@ -41,9 +43,21 @@ class AbsenceTypesController < ApplicationController
   end
   
   def destroy
-    @absence = AbsenceType.find(params[:id]).destroy
-    flash[:success] = "Absence code #{@absence.absence_code} has been successfully destroyed."
-    redirect_to absence_types_path
+    @absence = AbsenceType.find(params[:id])
+    if current_user.superuser?
+      @absence.destroy
+      flash[:success]= "'#{@absence.absence_code}' destroyed"
+      redirect_to absence_types_path
+    else
+      if @absence.created_by == current_user.id
+        @absence.destroy
+        flash[:success]= "'#{@absence.absence_code}' destroyed"
+        redirect_to absence_types_path
+      else
+        flash[:notice] = "Illegal action.  You can only remove absence-types you have created."
+        redirect_to absence_types_path
+      end
+    end
   end
   
 end

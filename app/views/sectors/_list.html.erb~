@@ -1,13 +1,6 @@
      <% @sectors.each do |sector| %>
         <li>
-          <% if current_user.superuser? %>
-            <% if sector.recent? %>
-              <span class="recent"> * </span>
-            <% end %>
-            <% if sector.updated? %>
-              <span class="updates"> ^ </span>
-            <% end %>
-          <% end %>
+          <%= render "shared/superuser_notifications", :model_name => sector %>
           <%= sector.sector %>
           | <%= link_to "change", edit_sector_path(sector) %>
           | <%= link_to "delete", sector, method: :delete,
