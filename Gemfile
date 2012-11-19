@@ -8,7 +8,8 @@ gem 'faker', '1.0.1'
 gem 'will_paginate', '3.0.3'
 gem 'bootstrap-will_paginate', '0.0.6'
 gem 'jquery-rails', '2.0.2'
-gem "combined_time_select", "~> 0.0.1"
+gem 'combined_time_select', '~> 0.0.1'
+gem 'thin'
 
 group :development, :test do
   gem 'rspec-rails', '2.11.0'
@@ -26,7 +27,6 @@ group :assets do
 end
 
 gem 'annotate', '2.5.0', group: :development
-gem 'thin', '1.5.0', group: :development
 
 group :test do
   gem 'capybara', '1.1.2'
