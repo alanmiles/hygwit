@@ -8,4 +8,4 @@ ActionMailer::Base.smtp_settings = {
 }
 ActionMailer::Base.delivery_method = :smtp
 
-$ curl https://raw.github.com/gist/1690653/mail.rb > config/initializers/mail.rb
+
