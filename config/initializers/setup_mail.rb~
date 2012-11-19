@@ -1,0 +1,9 @@
+    ActionMailer::Base.smtp_settings = {  
+      :address              => "smtp.hroomph.com",  
+      :port                 => 143,  
+      :domain               => "hroomph.com",  
+      :user_name            => "lead",  
+      :password             => "nelim2sala",  
+      :authentication       => "plain",  
+      :enable_starttls_auto => true  
+    }  

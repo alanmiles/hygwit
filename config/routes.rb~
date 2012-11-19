@@ -1,10 +1,6 @@
 Hygwit::Application.routes.draw do
 
-  get "country_admins/new"
-
-  get "country_admins/index"
-
-  get "country_admins/edit"
+  get "password_resets/new"
 
   resources :users
   resources :nationalities
@@ -22,6 +18,7 @@ Hygwit::Application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   resources :absence_types
   resources :contracts
+  resources :country_admins
 
   root to: 'static_pages#home'
 

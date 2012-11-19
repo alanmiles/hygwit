@@ -1,6 +1,7 @@
 Hygwit::Application.routes.draw do
 
   resources :users
+  resources :password_resets
   resources :nationalities
   resources :currencies
   resources :countries do

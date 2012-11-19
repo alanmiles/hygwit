@@ -122,7 +122,12 @@ describe "User pages" do
     end
 
     describe "with invalid information" do
-      before { click_button "Save changes" }
+      before do
+        fill_in "Name",             with: "John"
+        fill_in "Email",            with: "john@example.com"
+        fill_in "Password",         with: "johnpass"
+        click_button "Save changes"
+      end
 
       it { should have_content('error') }
     end

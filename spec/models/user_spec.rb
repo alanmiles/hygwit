@@ -2,15 +2,17 @@
 #
 # Table name: users
 #
-#  id              :integer          not null, primary key
-#  name            :string(255)
-#  email           :string(255)
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  password_digest :string(255)
-#  remember_token  :string(255)
-#  admin           :boolean          default(FALSE)
-#  superuser       :boolean          default(FALSE)
+#  id                     :integer          not null, primary key
+#  name                   :string(255)
+#  email                  :string(255)
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  password_digest        :string(255)
+#  remember_token         :string(255)
+#  admin                  :boolean          default(FALSE)
+#  superuser              :boolean          default(FALSE)
+#  password_reset_token   :string(255)
+#  password_reset_sent_at :datetime
 #
 
 require 'spec_helper'
@@ -117,11 +119,6 @@ describe User do
 
   describe "when password doesn't match confirmation" do
     before { @user.password_confirmation = "mismatch" }
-    it { should_not be_valid }
-  end
-
-  describe "when password confirmation is nil" do
-    before { @user.password_confirmation = nil }
     it { should_not be_valid }
   end
   
