@@ -15,7 +15,6 @@ group :development, :test do
   gem 'guard-rspec', '1.2.1'
   gem 'guard-spork', '1.2.0'  
   gem 'spork', '0.9.2'
-  gem 'thin', '1.5.0'
 end
 
 # Gems used only for assets and not required
@@ -27,6 +26,7 @@ group :assets do
 end
 
 gem 'annotate', '2.5.0', group: :development
+gem 'thin', '1.5.0', group: :development
 
 group :test do
   gem 'capybara', '1.1.2'
