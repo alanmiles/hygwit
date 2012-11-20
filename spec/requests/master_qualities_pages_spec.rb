@@ -102,7 +102,7 @@ describe "MasterQualitiesPages" do
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Achievement-flavored HR')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
         end
       end
       

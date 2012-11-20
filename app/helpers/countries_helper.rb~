@@ -56,7 +56,7 @@ module CountriesHelper
   
   def superuser_incomplete
     "When a country administrator emails to tell you that the settings for #{@country.country} are complete, check the 'Completed'
-    box at the bottom of the 'Edit Regulations' form ... after checking the entries.  Only a Superuser can see/check the
+    box at the bottom of the 'Edit Regulations' form ... after checking the entries.  Only a Superuser can see and check the
     'Completed' box.  After you've done this, local businesses can start entering their records and using the website."
   end
 end

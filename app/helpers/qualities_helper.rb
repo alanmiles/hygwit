@@ -2,7 +2,7 @@ module QualitiesHelper
 
   def qualities_instruction_1
   
-    "In HYGWIT's Performance Management module, we ask businesses to define the 10 personality attributes likely to make 
+    "In HR2.0's Performance Management module, we ask businesses to define the 10 personality attributes likely to make 
     someone successful in each job.  The list is one of the tools we use for recruitment and performance reviews."
     
   end

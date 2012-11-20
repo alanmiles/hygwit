@@ -127,7 +127,7 @@ describe "CountryPages" do
         it { should_not have_selector('title', text: 'New Nationality') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Achievement-flavored HR')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
         end
       end
     
@@ -137,7 +137,7 @@ describe "CountryPages" do
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Achievement-flavored HR')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
         end
       end
     
@@ -165,7 +165,7 @@ describe "CountryPages" do
         it { should_not have_selector('title', text: 'New Currency') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Achievement-flavored HR')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
         end
       end
     
@@ -175,7 +175,7 @@ describe "CountryPages" do
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Achievement-flavored HR')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
         end
       end
     
@@ -205,7 +205,7 @@ describe "CountryPages" do
         it { should_not have_selector('title', text: 'New Country') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Achievement-flavored HR')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
         end
       end
     
@@ -215,7 +215,7 @@ describe "CountryPages" do
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Achievement-flavored HR')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
         end
       end
     
