@@ -15,7 +15,9 @@ Hygwit::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
-
+  
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
   config.action_mailer.smtp_settings = {  
       :address              => "smtp.googlemail.com",  
       :port                 => 587,  
@@ -26,7 +28,7 @@ Hygwit::Application.configure do
       :enable_starttls_auto => true
     }  
   
-  config.action_mailer.perform_deliveries = true
+  
   #require "development_mail_interceptor"
     
   #Mail.register_interceptor(DevelopmentMailInterceptor) if Rails.env.development? 
