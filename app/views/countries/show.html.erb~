@@ -22,13 +22,10 @@
         <%= link_to "All countries", countries_path, class: "btn" %>  
       </div>
     </section>
-    <section>
-      <% if current_user.superuser? %>
-        <%= render "absence_stats" %>
-      <% end %>
-    </section>
+    
   </aside>
-  <div class="span6 offset0 top-line-space content-block">
+  <div class="span9">
+  <div class="span6 offset0 top-line-space">
     <h3 class="line-space">Local Labor Law Regulations</h3>
     <% if current_user.superuser? || current_user.administrator?(@country.country) %>
       <div class="line-space">
@@ -37,9 +34,37 @@
     <% end %>
     <%= render "setup_parameters" %>
   </div>
-  <div class="span9 offset0 top-line-space content-block">  
-    <h3 class="line-space">Absence codes</h3>
-    <%= render "absence_codes" %>
-  </div> 
+  <div class="span9"> 
+    <ul class="menulist"> 
+      <li>
+        <span class="span2"><%= link_to "Absence codes", country_country_absences_path(@country) %></span>
+          <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+              <span id="recent-absences" class="normal-font offset1">
+                <%= recent_country_absences(@country) %>
+                <%= updated_country_absences(@country) %>
+              </span>   
+          <% end %> 
+      </li>
+      <li>
+        <span class="span2"><%= link_to "National holidays", country_holidays_path(@country) %></span>
+          <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+              <span id="recent-holidays" class="normal-font offset1">
+                <%= recent_country_holidays(@country) %>
+                <%= updated_country_holidays(@country) %>
+              </span>   
+          <% end %> 
+      </li>
+      <li>
+        <span class="span2"><%= link_to "Tax calculations", "#" %></span>
+      </li>
+      <li>
+        <span class="span2"><%= link_to "Insurance", "#" %></span>
+      </li>
+      <li>
+        <span class="span2"><%= link_to "Gratuities", "#" %></span>
+      </li>
+    </ul>  
+  </div>
+  </div>
 </div>
 

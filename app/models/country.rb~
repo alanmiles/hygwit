@@ -52,6 +52,10 @@ class Country < ActiveRecord::Base
   
   default_scope order: 'countries.country ASC'
   
+  def self_ref
+    country
+  end
+  
   def recent?
     created_at >= 7.days.ago
   end

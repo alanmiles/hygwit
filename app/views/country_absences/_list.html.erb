@@ -11,7 +11,7 @@
       <% @absences.each do |absence| %>
         <li>
           <span class="span1">
-            <%= render "shared/superuser_notifications", :model_name => absence %>
+            <%= render "shared/superuser_countryadmin_notifications", :model_name => absence %>
             <%= absence.absence_code %>
           </span>
           <span class="span1"><%= absence.paid %></span>
@@ -19,9 +19,11 @@
           <span class="span1"><%= absence.maximum_days_year.nil? ? '--' : absence.maximum_days_year %></span>
           <span class="span1"><%= absence.documentation_required? ? 'Yes' : 'No' %></span>
           <span class="span2"><%= absence.notes %></span>
-          | <%= link_to "edit", edit_country_absence_path(absence) %>
-          | <%= link_to "del", absence, method: :delete,
+          <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+            | <%= link_to "edit", edit_country_absence_path(absence) %>
+            | <%= link_to "del", absence, method: :delete,
                              data: { confirm: "Delete '#{absence.absence_code}' for #{@country.country}?  Sure?" } %>
+          <% end %>
     
         </li>
       <% end %>

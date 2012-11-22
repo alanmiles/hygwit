@@ -319,14 +319,19 @@ describe "AbsencePages" do
           end
         end
     
-        describe "when trying to access the index" do
+        describe "accessing the country absence index, but making no modifications" do
     
           before { visit country_country_absences_path(@country) }
       
-          it "should render the admin home page" do
-            page.should have_selector('.alert', text: 'You must be a registered administrator')
-            page.should have_selector('h1', text: 'Administrator Menu')
-          end
+          it { should have_selector('h1', text: @country.country) }
+          it { should have_selector('title', text: "Absence Types: #{@country.country}") }
+          it { should have_selector('h1', text: 'Absence Types') }
+          it { should_not have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
+          it { should have_link('Back to set-up page', href: country_path(@country)) }
+          it { should_not have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
+          it { should_not have_link('del', href: country_absence_path(@country.country_absences.first)) }
+          it { should_not have_selector('#recent-adds', text: "additions (*) in past 7 days") }
+          it { should_not have_selector('.recent', text: "*") }
         end
     
         describe "when trying to delete" do
@@ -402,8 +407,8 @@ describe "AbsencePages" do
           it { should have_link('Back to set-up page', href: country_path(@country)) }
           it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
           it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
-          it { should_not have_selector('#recent-adds', text: "additions (*) in past 7 days") }
-          it { should_not have_selector('.recent', text: "*") }
+          it { should have_selector('#recent-adds', text: "additions (*) in past 7 days") }
+          it { should have_selector('.recent', text: "*") }
         
           describe "editing an absence in the correct country" do
             before { click_link 'edit' }

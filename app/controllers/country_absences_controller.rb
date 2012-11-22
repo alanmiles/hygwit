@@ -6,7 +6,7 @@ class CountryAbsencesController < ApplicationController
   
   def index
     @country = Country.find(params[:country_id])
-    country_admin_access
+    #country_admin_access
     @absences = @country.country_absences
   end
   

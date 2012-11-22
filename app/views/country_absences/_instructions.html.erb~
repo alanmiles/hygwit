@@ -1,0 +1,10 @@
+    <% if current_user.superuser? || country_user.administrator?(@country.country) %>
+      <div class="line-space">
+        <%= absence_country_instruction_1 %>
+      </div>
+      <div class="line-space">
+        <%= absence_country_instruction_2 %>
+      </div>
+    <% else %>
+      <%= render "shared/non_country_admin_sidebar" %>
+    <% end %>

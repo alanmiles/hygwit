@@ -6,6 +6,7 @@ Hygwit::Application.routes.draw do
   resources :currencies
   resources :countries do
     resources :country_absences, shallow: true
+    resources :holidays, shallow: true
   end
   resources :sectors
   resources :jobfamilies

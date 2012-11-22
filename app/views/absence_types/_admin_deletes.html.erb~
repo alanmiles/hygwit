@@ -1,9 +1,4 @@
-            <% if current_user.superuser? %>
-              | <%= link_to "delete", model_name, method: :delete,
-                             data: { confirm: "Delete '#{model_name.self_ref}'?  Sure?" } %>
-            <% elsif current_user.admin? %>
-              <% if model_name.created_by == current_user.id %>
-                | <%= link_to "delete", model_name, method: :delete,
-                             data: { confirm: "Delete '#{model_name.self_ref}'?  Sure?" } %>
-              <% end %>
+            <% if current_user.superuser? || current_user.admin? %>
+              | <%= link_to "del", absence, method: :delete,
+                             data: { confirm: "Delete '#{absence.self_ref}'?  Sure?" } %>
             <% end %>

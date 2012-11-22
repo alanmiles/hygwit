@@ -18,8 +18,8 @@
       <%= render 'shared/error_messages', object: f.object %>
       <%= render 'fields', f: f %>
       <%= f.submit "Create", class: "btn btn-primary" %>
-      <%= link_to "All absence types", "#", class: "btn" %>
-      <%= link_to "Set-up page - #{@country.country}", @country, class: "btn" %>
+      <%= link_to "All absence types", country_country_absences_path(@country), class: "btn" %>
+      <%= link_to "Country set-up page - #{@country.country}", @country, class: "btn" %>
     <% end %>
   </div>
 </div>

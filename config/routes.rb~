@@ -1,8 +1,13 @@
 Hygwit::Application.routes.draw do
 
-  get "password_resets/new"
+  get "holidays/index"
+
+  get "holidays/new"
+
+  get "holidays/edit"
 
   resources :users
+  resources :password_resets
   resources :nationalities
   resources :currencies
   resources :countries do

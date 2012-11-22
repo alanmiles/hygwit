@@ -554,15 +554,27 @@ describe "CountryPages" do
           it { should_not have_selector('#recent-adds') }
           it { should_not have_selector('.recent', text: "*") }
           it { should_not have_selector('.incomplete', text: "!") }
-          it { should_not have_selector('#still-incomplete') }  
+          it { should_not have_selector('#still-incomplete') } 
+          it { should_not have_selector('.standout', text: "YOU'RE AN ADMINISTRATOR") }
         
-          
           describe "when > 10 countries" do
             pending("should have a bottom 'Add button + not when < 10 entries") 
           end
        
         end
+        
       end
+      
+      describe "index when a country administrator" do
+      
+        before do
+          CountryAdmin.create(user_id: @admin.id, country_id: @country.id)
+          visit countries_path
+        end
+      
+        it { should have_selector('.standout', text: "YOU'RE AN ADMINISTRATOR") }
+      end
+      
       
       describe "show" do
       
@@ -577,17 +589,16 @@ describe "CountryPages" do
         it { should have_selector('#sick-accrual', text: 'Sickness accruals') }
         it { should have_selector('#gratuity', text: "Leavers' gratuity applies?") } 
         it { should have_selector('h3',		 text: 'Local Labor Law Regulations') } 
-        it { should have_selector('h3',		 text: 'Absence codes') }
-        it { should_not have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
-        it { should_not have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) } #not registered cntry admin
-        it { should_not have_link('del', href: country_absence_path(@country.country_absences.first)) } #not registered country admin
         it { should_not have_selector("#completion", text: "SETTINGS") }
         it { should_not have_selector("#update-status", text: "When a country administrator emails to tell you") }
         it { should_not have_selector("#update-status", text: "As a country administrator it's your job") }
         it { should have_selector("#update-status", text: "You're not registered as an administrator") }
-        it { should_not have_selector('#recent-adds', text: "additions (*) in past 7 days") }
-        it { should_not have_selector('.recent', text: "*") }
-        
+        it { should have_selector("#update-status", text: "We're still looking for country administrators") }
+        it { should_not have_selector('#recent-absences', text: "additions (*) in past 7 days") }
+        it { should have_link('Absence codes', href: country_country_absences_path(@country)) } 
+        it { should_not have_selector('#recent-holidays', text: "additions (*) in past 7 days") }
+        it { should have_link('National holidays', href: country_holidays_path(@country)) } 
+            
         
         describe "where country does not follow 'Gulf' rules" do
           before { visit country_path(@country_1) }
@@ -597,6 +608,24 @@ describe "CountryPages" do
           it { should_not have_selector('#sick-accrual', text: 'Sickness accruals') }
           it { should_not have_selector('#gratuity', text: "Leavers' gratuity applies?") } 
         end  
+      end
+      
+      describe "visiting index when there's a full complement of country administrators" do
+          
+        before do
+          @user_2 = FactoryGirl.create(:user, name: "User2", email: "user2@example.com",
+                                         password: "foobar", password_confirmation: "foobar")
+          @user_3 = FactoryGirl.create(:user, name: "User3", email: "user3@example.com",
+                                         password: "foobar", password_confirmation: "foobar")
+          @user_2.toggle!(:admin)
+          @user_3.toggle!(:admin)
+          CountryAdmin.create(user_id: @user_2.id, country_id: @country.id)
+          CountryAdmin.create(user_id: @user_3.id, country_id: @country.id)
+        end
+        
+        before { visit country_path(@country) }
+        it { should_not have_selector("#update-status", text: "We're still looking for country administrators") }
+        
       end
     
       describe "accessing the 'new' page" do
@@ -695,24 +724,14 @@ describe "CountryPages" do
       
       describe "show" do
       
-        before { visit country_path(@country) }
-        
+        before { visit country_path(@country) }    
         it { should have_link('Edit regulations', href: edit_country_path(@country)) }
-        it { should have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
         it { should_not have_selector("#update-status", text: "When a country administrator emails to tell you") }
         it { should have_selector("#update-status", text: "As a country administrator it's your job") }
         it { should_not have_selector("#update-status", text: "You're not registered as an administrator") }
-        it { should_not have_selector('#recent-adds', text: "additions (*) in past 7 days") }
-        it { should_not have_selector('.recent', text: "*") }
-        it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) } 
-        it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
-      
-        describe "deleting an absence code" do
-        
-          it "should be from the correct model" do
-            expect { click_link('del') }.to change(CountryAbsence, :count).by(-1)
-          end
-        end  
+        it { should_not have_selector("#update-status", text: "We're still looking for country administrators") }
+        it { should have_selector('#recent-absences', text: "additions (*) in past 7 days") } 
+        it { should have_selector('#recent-holidays', text: "additions") }
       end
     end
   end
@@ -796,11 +815,8 @@ describe "CountryPages" do
         it { should have_selector('#recent-adds') }
         it { should have_selector('.recent', text: "*") }
         it { should have_selector('.incomplete', text: "!") } 
-        it { should have_selector('#still-incomplete') } 
-        it "should be able to delete a country" do
-          expect { click_link('delete') }.to change(Country, :count).by(-1)
-        end
-      
+        it { should have_selector('#still-incomplete') }   
+        it { should_not have_selector('.standout', text: "YOU'RE AN ADMINISTRATOR") }   
       end
     
       describe "edit" do
@@ -821,14 +837,12 @@ describe "CountryPages" do
         
         it { should have_selector("#completion", text: "SETTINGS") }
         it { should have_link('Edit regulations', href: edit_country_path(@country)) }
-        it { should have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
         it { should have_selector("#update-status", text: "When a country administrator emails to tell you") }
         it { should_not have_selector("#update-status", text: "As a country administrator it's your job") }
         it { should_not have_selector("#update-status", text: "You're not registered as an administrator") }
-        it { should have_selector('#recent-adds', text: "additions (*) in past 7 days") }
-        it { should have_selector('.recent', text: "*") }
-        it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
-        it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
+        it { should_not have_selector("#update-status", text: "We're still looking for country administrators") }
+        it { should have_selector('#recent-absences', text: "additions (*) in past 7 days") } 
+        it { should have_selector('#recent-holidays', text: "additions") }
       end
     end
   end

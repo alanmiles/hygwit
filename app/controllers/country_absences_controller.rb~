@@ -6,7 +6,7 @@ class CountryAbsencesController < ApplicationController
   
   def index
     @country = Country.find(params[:country_id])
-    country_admin_access
+    #country_admin_access
     @absences = @country.country_absences
   end
   
@@ -19,7 +19,6 @@ class CountryAbsencesController < ApplicationController
   
   def create
     @country = Country.find(params[:country_id])
-    
     if current_user.superuser? || current_user.administrator?(@country.country)
       @absence = @country.country_absences.new(params[:country_absence])
       if @absence.save
@@ -33,32 +32,6 @@ class CountryAbsencesController < ApplicationController
       flash[:notice] = "You must be a registered administrator for #{@country.country}."
       redirect_to user_path(current_user) 
     end
-     
-    #unless current_user.superuser?
-    #  admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
-    #  if admin_check.nil?
-    #    flash[:notice] = "You must be a registered administrator for #{@country.country}."
-    #    redirect_to user_path(current_user)
-    #  else
-    #    @absence = @country.country_absences.new(params[:country_absence])
-    #    if @absence.save
-    #      flash[:success] = "Absence code '#{@absence.absence_code}' has been added for #{@country.country}."
-    #      redirect_to country_country_absences_path(@country)
-    #    else
-    #      @absence.created_by = current_user.id
-    #      render 'new'
-    #    end
-    #  end
-    #else
-    #  @absence = @country.country_absences.new(params[:country_absence])
-    #  if @absence.save
-    #    flash[:success] = "Absence code '#{@absence.absence_code}' has been added for #{@country.country}."
-    #    redirect_to country_country_absences_path(@country)
-    #  else
-    #    @absence.created_by = current_user.id
-    #    render 'new'
-    #  end 
-    #end
   end
 
   def edit
@@ -70,7 +43,6 @@ class CountryAbsencesController < ApplicationController
   def update
     @absence = CountryAbsence.find(params[:id])
     @country = Country.find(@absence.country_id)
-    
     if current_user.superuser? || current_user.administrator?(@country.country)
       if @absence.update_attributes(params[:country_absence])
         flash[:success] = "Absence code '#{@absence.absence_code}' for #{@country.country} has been updated."
@@ -82,34 +54,11 @@ class CountryAbsencesController < ApplicationController
       flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
       redirect_to user_path(current_user)
     end
-    
-    #unless current_user.superuser?
-    #  admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
-    #  if admin_check.nil?
-    #    flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
-    #    redirect_to user_path(current_user)
-    #  else
-    #    if @absence.update_attributes(params[:country_absence])
-    #      flash[:success] = "Absence code '#{@absence.absence_code}' for #{@country.country} has been updated."
-    #      redirect_to country_country_absences_path(@country)
-    #    else
-    #      render 'edit'
-    #    end
-    #  end
-    #else
-    #  if @absence.update_attributes(params[:country_absence])
-    #    flash[:success] = "Absence code '#{@absence.absence_code}' for #{@country.country} has been updated."
-    #    redirect_to country_country_absences_path(@country)
-    #  else
-    #    render 'edit'
-    #  end
-    #end
   end
   
   def destroy
     @absence = CountryAbsence.find(params[:id])
     @country = Country.find(@absence.country_id)
-    
     if current_user.superuser? || current_user.administrator?(@country.country)
       @absence.destroy
       flash[:success] = "Absence code #{@absence.absence_code} for #{@country.country} destroyed."
@@ -118,22 +67,6 @@ class CountryAbsencesController < ApplicationController
       flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
       redirect_to user_path(current_user)
     end
-    
-    #unless current_user.superuser?
-    #  admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
-    #  if admin_check.nil?
-    #    flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
-    #    redirect_to user_path(current_user)
-    #  else
-    #    @absence.destroy
-    #    flash[:success] = "Absence code #{@absence.absence_code} for #{@country.country} destroyed."
-    #    redirect_to country_country_absences_path(@country)
-    #  end
-    #else
-    #  @absence.destroy
-    #  flash[:success] = "Absence code #{@absence.absence_code} for #{@country.country} destroyed."
-    #  redirect_to country_country_absences_path(@country)
-    #end
   end
   
   private

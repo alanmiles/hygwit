@@ -18,4 +18,11 @@ class CountryAdmin < ActiveRecord::Base
   validates :user_id, 	  	only_admin: true
   validates :country_id, 		presence: true, uniqueness: { scope: :user_id }
   
+  def self.total(country)
+    self.where("country_id = ?", country).count
+  end
+  
+  def self.all_admins?(country)
+    self.total(country) > 1
+  end
 end

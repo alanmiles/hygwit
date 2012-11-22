@@ -1,0 +1,6 @@
+           <div class="line-space">
+             <%= not_country_admin %>
+           </div>
+           <% unless CountryAdmin.all_admins?(@country) %>
+             <div><%= apply_country_admin %></div>
+           <% end %>

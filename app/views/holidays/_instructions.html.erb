@@ -1,0 +1,12 @@
+    <% if current_user.superuser? || current_user.administrator?(@country.country) %>  
+      <div class="line-space">
+        <%= holidays_country_instruction_1 %>
+      </div>
+      <% if @country.rules == "Gulf" %>
+        <div class="line-space">
+          <%= holidays_country_instruction_2 %>
+        </div>
+      <% end %> 
+    <% else %>
+      <%= render "shared/non_country_admin_sidebar" %>
+    <% end %>

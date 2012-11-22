@@ -199,11 +199,13 @@ select {
   padding-top: 5px;
 }
 
-.recent, .updates {
+.recent, .updates, .incomplete {
   color: crimson;
 }
 
-
+.normal-font {
+  font-size: 12px;
+}
 
 .number-field {
   text-align: right;
@@ -215,6 +217,10 @@ select {
 
 .align-right {
   text-align: right;
+}
+
+.align-center {
+  text-align: center;
 }
 
 .infobox {
@@ -229,6 +235,16 @@ select {
     font-size: 1.3em;
     overflow: auto;
     padding: 10px 0;
+  }
+}
+
+.menulist-push-left {
+  list-style: none;
+  margin: 0;
+  li {
+    font-size: 1.3em;
+    overflow: auto;
+    padding: 10px 0 10px -15px;
   }
 }
 

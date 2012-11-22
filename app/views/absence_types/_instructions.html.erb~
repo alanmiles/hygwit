@@ -1,9 +1,17 @@
-      <div class="instruction">
-        <%= absence_instruction_1 %>
-      </div>
-      <div class="line-space">
-        <%= absence_instruction_2 %>
-      </div> 
-      <div class="line-space">
-        <%= absence_instruction_3 %>
-      </div> 
+  
+    <div class="instruction"> 
+      <% if current_user.superuser? || current_user.administrator?(@country.country)  
+        <div class="line-space">
+          <%= absence_instruction_1 %>
+        </div>
+        <div class="line-space">
+          <%= absence_instruction_2 %>
+        </div> 
+        <div class="line-space">
+          <%= absence_instruction_3 %>
+        </div> 
+      <% else %>
+        <%= render "shared/non_country_admin_sidebar" %>
+      <% end %>
+    </div>
+  

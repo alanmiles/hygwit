@@ -42,6 +42,7 @@ class Country < ActiveRecord::Base
   belongs_to :nationality
   has_many 	 :country_absences, dependent: :destroy
   has_many 	 :country_admins, dependent: :destroy
+  has_many   :holidays, dependent: :destroy
   
   after_create :add_absence_codes
   

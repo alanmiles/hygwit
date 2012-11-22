@@ -1,4 +1,4 @@
-      <% if current_user.superuser? %>
+      <% if current_user.superuser? || current_user.administrator?(@country.country) %>
         <div id="recent-adds">
           <%= recent_country_absences(@country) %>
         </div>

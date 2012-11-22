@@ -18,5 +18,4 @@ class CountryAdmin < ActiveRecord::Base
   validates :user_id, 	  	only_admin: true
   validates :country_id, 		presence: true, uniqueness: { scope: :user_id }
   
-  default_scope order: 'country_admins.countries.country, country_admins.user_id'
 end

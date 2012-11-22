@@ -32,11 +32,6 @@ module CountriesHelper
     end
   end
   
-  def non_admin
-    "You're not registered as an administrator for #{@country.country}.  But if you have expert knowledge of labor legislation here,
-    or if you spot a mistake in the set-up, please email us at support@hroomph.com and tell us more."
-  end
-  
   def admin_incomplete
     "As a country administrator it's your job to make sure that all the settings for #{@country.country} are consistent 
     with the Labor Law, now and in the future.  When you're sure everything is OK, please email us at support@hroomph.com 

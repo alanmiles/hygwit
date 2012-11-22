@@ -52,6 +52,7 @@ describe Country do
   it { should respond_to(:rules) }
   it { should respond_to(:minimum_vacation_days) }
   it { should respond_to(:country_absences) }
+  it { should respond_to(:holidays) }
   
   
   it { should be_valid }
