@@ -327,7 +327,7 @@ describe "AbsencePages" do
           it { should have_selector('title', text: "Absence Types: #{@country.country}") }
           it { should have_selector('h1', text: 'Absence Types') }
           it { should_not have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
-          it { should have_link('Back to set-up page', href: country_path(@country)) }
+          it { should have_link('Back to main settings page', href: country_path(@country)) }
           it { should_not have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
           it { should_not have_link('del', href: country_absence_path(@country.country_absences.first)) }
           it { should_not have_selector('#recent-adds', text: "additions (*) in past 7 days") }
@@ -404,10 +404,10 @@ describe "AbsencePages" do
           it { should have_selector('title', text: "Absence Types: #{@country.country}") }
           it { should have_selector('h1', text: 'Absence Types') }
           it { should have_link('Add an absence type', href: new_country_country_absence_path(@country)) }
-          it { should have_link('Back to set-up page', href: country_path(@country)) }
+          it { should have_link('Back to main settings page', href: country_path(@country)) }
           it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
           it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
-          it { should have_selector('#recent-adds', text: "additions (*) in past 7 days") }
+          it { should have_selector('#recent-adds') }
           it { should have_selector('.recent', text: "*") }
         
           describe "editing an absence in the correct country" do
@@ -509,7 +509,7 @@ describe "AbsencePages" do
       
         before { visit country_country_absences_path(@country) } 
       
-        it { should have_selector('#recent-adds', text: "additions (*) in past 7 days") }
+        it { should have_selector('#recent-adds') }
         it { should have_selector('.recent', text: "*") }
       end
     end

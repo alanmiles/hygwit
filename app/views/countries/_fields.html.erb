@@ -1,55 +1,61 @@
-<div>
-  <span class="span3 r-float"><%= f.text_field :country %></span>
-  <%= f.label :country, class: "vert-down" %>
-</div>
+<% if current_user.superuser? %>
+  <div class="line-space">
+    <span class="span3 r-float"><%= f.text_field :country %></span>
+    <%= f.label :country, class: "vert-down" %>
+  </div>
 
-<div style="clear:both">
-  <span class="span3 r-float"><%= collection_select(:country, :nationality_id, 
+  <div style="clear:both" class="line-space">
+    <span class="span3 r-float"><%= collection_select(:country, :nationality_id, 
           @nationalities, :id, :nationality, prompt: 'Please select')  %></span>
-  <%= f.label :nationality_id, "Nationality", class: "vert-down" %>
-</div>
+    <%= f.label :nationality_id, "Nationality", class: "vert-down" %>
+  </div>
 
-<div style="clear:both">
-  <span class="span3 r-float"><%= collection_select(:country, :currency_id, 
+  <div style="clear:both" class="line-space">
+    <span class="span3 r-float"><%= collection_select(:country, :currency_id, 
           @currencies, :id, :currency_code, prompt: 'Please select')  %></span>
-  <%= f.label :currency_id, "Currency", class: "vert-down" %>
-</div>
+    <%= f.label :currency_id, "Currency", class: "vert-down" %>
+  </div>
+<% end %>
        
-<div style="clear:both">  
+<div style="clear:both" class="line-space">  
   <span class="span3 r-float"><%= f.text_field :max_hours_day, class: "number-field" %></span> 
   <%= f.label :max_hours_day, "Maximum hours per day", class: "vert-down" %>
 </div>
 
-<div style="clear:both"> 
+<div style="clear:both" class="line-space"> 
   <span class="span3 r-float"><%= f.text_field :max_hours_week, class: "number-field" %></span>
   <%= f.label :max_hours_week, "Maximum hours per week", class: "vert-down" %>
 </div>                 
 
 <% if @country.rules =="Gulf" %>
-  <div id="ramadan-day" style="clear:both"> 
+  <div id="ramadan-day" style="clear:both" class="line-space"> 
     <span class="span3 r-float"><%= f.text_field :max_hours_day_ramadan, class: "number-field" %></span>
-    <%= f.label :max_hours_day_ramadan, "Maximum hours per day - Ramadan", class: "vert-down" %>
+    <i class ="icon-question-sign" id="ram-click" style="float:right"></i>
+    <%= f.label :max_hours_day_ramadan, "Max hours per day - Ramadan", class: "vert-down" %>
+    <div id="ram-hours" class="help-inline"><%= ramadan_hours %></div>
   </div>
 
-  <div id="ramadan-week" style="clear:both"> 
+  <div id="ramadan-week" style="clear:both" class="line-space"> 
     <span class="span3 r-float"><%= f.text_field :max_hours_week_ramadan, class: "number-field" %></span>
-    <%= f.label :max_hours_week_ramadan, "Maximum hours per week - Ramadan", class: "vert-down" %>
+    <%= f.label :max_hours_week_ramadan, "Max hours per week - Ramadan", class: "vert-down" %>
   </div>
 <% end %>
 
-<div style="clear:both"> 
-  <span class="span1.5 r-float"><%= f.time_select :nightwork_start,
+<div style="clear:both" class="line-space"> 
+  <span class="span3 r-float"><%= f.time_select :nightwork_start,
      :combined => true,
      :default => Time.now.change(:hour => 19, :min => 00),
      :minute_interval => 30,
      :time_separator => "",
      :start_hour => 0,
      :end_hour => 23 %></span>
+  <i class ="icon-question-sign" id="nw-click" style="float:right"></i>
   <%= f.label :nightwork_start, "Night-work begins at", class: "vert-down" %>
+  <div id="nw-hours" class="help-inline"><%= night_work %></div>
 </div>
 
-<div style="clear:both"> 
-  <span class="span1.5 r-float"><%= f.time_select :nightwork_end, 
+<div style="clear:both" class="line-space"> 
+  <span class="span3 r-float"><%= f.time_select :nightwork_end, 
      :combined => true,
      :default => Time.now.change(:hour => 07, :min => 00),
      :minute_interval => 30,
@@ -59,17 +65,19 @@
   <%= f.label :nightwork_end, "Night-work ends at", class: "vert-down" %>
 </div>
 
-<div style="clear:both"> 
+<div style="clear:both" class="line-space"> 
   <span class="span3 r-float"><%= f.text_field :OT_rate_standard, class: "number-field" %></span>
+  <i class ="icon-question-sign" id="ot-click" style="float:right"></i>
   <%= f.label :OT_rate_standard, "Standard overtime rate" %>
+  <div id="ot-rates" class="help-inline"><%= ot_rates %></div>
 </div>
 
-<div style="clear:both"> 
+<div style="clear:both" class="line-space"> 
   <span class="span3 r-float"><%= f.text_field :OT_rate_special, class: "number-field" %></span> 
   <%= f.label :OT_rate_special, "Overtime rate - nights and weekends", class: "vert-down" %>          
 </div>
 
-<div style="clear:both"> 
+<div style="clear:both" class="line-space"> 
   <span class="span3 r-float"><%= f.text_field :minimum_vacation_days, class: "number-field" %></span>
   <%= f.label :minimum_vacation_days, class: "vert-down" %>
 </div>
@@ -80,18 +88,18 @@
   <%= f.label :vacation_by_working_days, "Vacation calculation basis" %>
 </div>
 
-<div style="clear:both"> 
+<div style="clear:both" class="line-space"> 
   <span class="span3 r-float"><%= f.text_field :probation_days, class: "number-field" %></span>
   <%= f.label :probation_days, class: "vert-down" %>
 </div>
 
-<div style="clear:both"> 
+<div style="clear:both" class="line-space"> 
   <span class="span3 r-float"><%= f.text_field :retirement_age_m, class: "number-field" %></span>
   <%= f.label :retirement_age_m, "Retirement age - male", class: "vert-down" %>
   
 </div>
 
-<div style="clear:both"> 
+<div style="clear:both" class="line-space"> 
   <span class="span3 r-float"><%= f.text_field :retirement_age_f, class: "number-field" %></span>
   <%= f.label :retirement_age_f, "Retirement age - female", class: "vert-down" %>
 </div>
@@ -109,20 +117,43 @@
 <% if @country.rules =="Gulf" %>
   <div id="gratuity" style="clear:both" class= "line-space"> 
     <span class="span3 r-float"><%= f.check_box :gratuity_applies %></span>
+    <i class ="icon-question-sign" id="gratuity-on-click" style="float:right"></i>
     <span class="vert-down">Leavers' gratuity applies?</span>
+    <div id="gratuity-on" class="help-inline"><%= gratuity_explanation %></div>
   </div>
+  
+  <% if @country.gratuity_applies || !@country.gratuity_applies && (!@country.gratuity_ceiling_value.nil? || !@country.gratuity_ceiling_months.nil?) %>
+    <div style ="clear:both" class= "line-space">
+      <span class="span3 r-float"><%= f.text_field :gratuity_ceiling_value, class: "number-field" %></span>
+      <i class ="icon-question-sign" id="val-click" style="float:right"></i>
+      <%= f.label :gratuity_ceiling_value, "Gratuity ceiling - total value", class: "vert-down" %>
+      <div id="c-val" class="help-inline"><%= ceiling_value %></div>
+    </div>
+  
+    <div style ="clear:both" class= "line-space">
+      <span class="span3 r-float"><%= f.text_field :gratuity_ceiling_months, class: "number-field" %></span>
+      <i class ="icon-question-sign" id="month-click" style="float:right"></i>
+      <%= f.label :gratuity_ceiling_months, "Gratuity ceiling - service months", class: "vert-down" %>
+      <div id="c-month" class="help-inline"><%= ceiling_month %></div>
+    </div>
+  <% end %>
+  
 <% end %> 
 
 <% if @country.rules =="Gulf" %>
   <div id="sick-accrual" style ="clear:both" class= "line-space">
     <span class="span3 r-float"><%= f.check_box :sickness_accruals %></span>
+    <i class ="icon-question-sign" id="sick-click" style="float:right"></i>
     <span class="vert-down">Annual sickness accrual applies?</span>
+    <div id="sick-acc" class="help-inline"><%= sickness_accrual %></div>
   </div>
 <% end %>
 
 <div style="clear:both" class="line-space"> 
   <span class="span3 r-float vert-down"><%= f.text_field :max_loan_ded_salary, class: "number-field" %></span>
+  <i class ="icon-question-sign" id="loan-click" style="float:right"></i>
   <%= f.label :max_loan_ded_salary, "Maximum percentage of salary deducted for loan repayments" %>
+  <div id="loan-ded" class="help-inline"><%= loan_percent %></div>
 </div>
 
 <div class="line-space" style="clear:both">
@@ -138,3 +169,5 @@
 <% end %>
 
 <%= f.hidden_field :created_by %>
+
+

@@ -35,21 +35,27 @@ class CountriesController < ApplicationController
 
   def edit
    @country = Country.find(params[:id])
+   country_admin_access
    @nationalities = Nationality.all
    @currencies = Currency.all
   end
   
   def update
-    params[:country].parse_time_select! :nightwork_start
-    params[:country].parse_time_select! :nightwork_end
     @country= Country.find(params[:id])
-    if @country.update_attributes(params[:country])
-      flash[:success] = "'#{@country.country}' updated"
-      redirect_to @country
+    if current_user.superuser? || current_user.administrator?(@country.country)
+      params[:country].parse_time_select! :nightwork_start
+      params[:country].parse_time_select! :nightwork_end
+      if @country.update_attributes(params[:country])
+        flash[:success] = "'#{@country.country}' updated"
+        redirect_to @country
+      else
+        @nationalities = Nationality.all
+        @currencies = Currency.all
+        render "edit"
+      end
     else
-      @nationalities = Nationality.all
-      @currencies = Currency.all
-      render "edit"
+      flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
+      redirect_to user_path(current_user)
     end
   end
   
@@ -70,5 +76,19 @@ class CountriesController < ApplicationController
       end
     end
   end
+  
+  private
+   
+    def country_admin_access
+      if signed_in?
+        unless current_user.superuser?
+          admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
+          if admin_check.nil?
+            flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
+            redirect_to user_path(current_user)
+          end
+        end
+      end
+    end
   
 end

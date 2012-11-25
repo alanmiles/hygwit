@@ -69,7 +69,19 @@ describe "AuthenticationPages" do
       it { should have_link('Settings', href: edit_user_path(@admin)) }
       it { should have_link('Sign out', href: signout_path) }
       it { should_not have_link('Sign in', href: signin_path) }
+      it { should_not have_link('Country Administrators', href: country_admins_path) }
       
+    end
+    
+    describe "by superuser" do
+      
+      before do
+        @superuser = FactoryGirl.create(:superuser, name: "HROomphAdmin", email: "hroomphadmin@example.com")
+        sign_in @superuser
+      end
+      
+      it { should have_link('Country Administrators', href: country_admins_path) }
+    
     end
   end
   

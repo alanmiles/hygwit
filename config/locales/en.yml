@@ -3,6 +3,9 @@
 
 en:
   activerecord:
+    errors:
+      messages:
+        inclusion: "has a value outside the permitted range"
     attributes:
       user:
         password_digest: "Password"

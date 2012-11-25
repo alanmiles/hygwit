@@ -1,0 +1,22 @@
+    <% if current_user.superuser? || current_user.administrator?(@country.country) %>  
+      <div class="line-space">
+        <%= gratuities_country_instruction_1 %>
+      </div>
+      <div class="line-space">
+        <%= gratuities_country_instruction_2 %>
+      </div>
+      <div>
+        <%= gratuities_country_instruction_3 %>
+      </div>
+      <div>
+        <%= gratuities_country_instruction_4 %>
+      </div>
+      <div class="line-space">
+        <%= gratuities_country_instruction_5 %>
+      </div>
+      <div>
+        For more details on HR2.0's leaving gratuity calculations, visit <%= link_to "this page", "#" %> on the HROomph website.
+      </div>
+    <% else %>
+      <%= render "shared/non_country_admin_sidebar" %>
+    <% end %>

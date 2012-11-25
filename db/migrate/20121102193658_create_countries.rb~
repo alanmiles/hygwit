@@ -7,10 +7,10 @@ class CreateCountries < ActiveRecord::Migration
       t.boolean :taxation, default: false
       t.boolean :insurance, default: true
       t.integer :probation_days, default: 90
-      t.integer :max_hours_day, default: 9
-      t.integer :max_hours_week, default: 45
-      t.integer :max_hours_day_ramadan
-      t.integer :max_hours_week_ramadan
+      t.decimal :max_hours_day, default: 9
+      t.decimal :max_hours_week, default: 45
+      t.decimal :max_hours_day_ramadan
+      t.decimal :max_hours_week_ramadan
       t.boolean :sickness_accruals, default: false
       t.integer :retirement_age_m, default: 60
       t.integer :retirement_age_f, default: 55
@@ -21,6 +21,7 @@ class CreateCountries < ActiveRecord::Migration
       t.integer :max_loan_ded_salary, default: 15
       t.text :notes
       t.boolean :complete, default: false
+      t.integer :created_by, default: 1
 
       t.timestamps
     end

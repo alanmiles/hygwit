@@ -12,7 +12,7 @@
       </div>
     </section>
     <section>
-      <%= render "stats" %>
+      <%= render "shared/change_stats" %>
     </section>
   </aside>
   
@@ -23,7 +23,7 @@
       <% if current_user.superuser? || current_user.administrator?(@country.country) %>
         <%= link_to "Add a national holiday", new_country_holiday_path(@country), class: "btn" %>
       <% end %>
-      <%= link_to "Back to country set-up page", @country, class: "btn" %>
+      <%= link_to "Back to main settings page", @country, class: "btn" %>
     </div>
     <ul class="itemlist">
       <%= render "list" %>

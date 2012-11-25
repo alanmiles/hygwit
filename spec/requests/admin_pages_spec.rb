@@ -1144,7 +1144,7 @@ describe "AdminPages" do
           visit jobfamilies_path
         end
         
-        it { should have_selector('#recent-adds', text: "needing approval") }
+        it { should have_selector('#recent-adds') }
         it { should have_selector('.recent', text: "*") }
         it { should have_link('delete', href: jobfamily_path(@jobfamily)) }
         it { should have_link('delete', href: jobfamily_path(@jobfamily_2)) }

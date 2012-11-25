@@ -7,6 +7,7 @@ Hygwit::Application.routes.draw do
   resources :countries do
     resources :country_absences, shallow: true
     resources :holidays, shallow: true
+    resources :gratuity_formulas, shallow: true
   end
   resources :sectors
   resources :jobfamilies

@@ -23,4 +23,8 @@ module ApplicationHelper
     "We're still looking for country administrators for #{@country.country}.  If you have expert knowledge of the local rules and
     regulations and you'd like to get involved, please contact us at lead@hroomph.com and introduce yourself."
   end
+  
+  def extra_help
+    "For extra help, click on" 
+  end
 end

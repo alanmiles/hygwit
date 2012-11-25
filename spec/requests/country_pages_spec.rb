@@ -526,10 +526,10 @@ describe "CountryPages" do
         @currency_2 = Currency.create(currency: 'Bahraini Dinars', code: 'BHD')
         @nationality_1 = Nationality.create(nationality: 'British')
         @nationality_2 = Nationality.create(nationality: 'Bahraini')
-        @country_1 = Country.create(country: 'UK', 
+        @country_1 = Country.create(country: 'United Kingdom', 
            currency_id: @currency_1.id, nationality_id: @nationality_1.id, created_by: 999999)
         @country_2 = Country.create(country: 'Bahrain', 
-           currency_id: @currency_2.id, nationality_id: @nationality_2.id, created_by: @admin.id)
+           currency_id: @currency_2.id, nationality_id: @nationality_2.id, created_by: @admin.id, complete: true)
       end
       
       
@@ -544,18 +544,20 @@ describe "CountryPages" do
       
         describe "list " do
       
-          it { should have_link('change', href: edit_country_path(@country)) }
-          it { should_not have_link('delete', href: country_path(@country_1)) }
-          it { should have_link('delete', href: country_path(@country_2)) }
-          it { should have_link('Add', href: new_country_path) }
+          it { should_not have_link('change', href: edit_country_path(@country)) }  #changes restricted to country admins
+          it { should_not have_link('delete', href: country_path(@country_1)) }  #country additions and deletions restricted to superusers
+          it { should_not have_link('delete', href: country_path(@country_2)) }
+          it { should_not have_link('Add', href: new_country_path) }
           it { should have_link("settings", href: country_path(@country)) }
-          it { should have_selector('ul.itemlist li:nth-child(3)', text: 'UK') }
+          it { should have_selector('ul.itemlist li:nth-child(3)', text: 'United Kingdom') }
           it { should_not have_selector('#statistics', text: 'unlinked') }
           it { should_not have_selector('#recent-adds') }
           it { should_not have_selector('.recent', text: "*") }
           it { should_not have_selector('.incomplete', text: "!") }
           it { should_not have_selector('#still-incomplete') } 
           it { should_not have_selector('.standout', text: "YOU'RE AN ADMINISTRATOR") }
+          it { should have_selector('.itemlist', text: 'BAHRAIN') }  #Capitalized because set-up is complete
+          it { should_not have_selector('.itemlist', text: 'UNITED KINGDOM') }
         
           describe "when > 10 countries" do
             pending("should have a bottom 'Add button + not when < 10 entries") 
@@ -573,6 +575,10 @@ describe "CountryPages" do
         end
       
         it { should have_selector('.standout', text: "YOU'RE AN ADMINISTRATOR") }
+        it { should have_link('change', href: edit_country_path(@country)) }  #changes allowed for country admins
+        it { should_not have_link('delete', href: country_path(@country_1)) }  #country additions and deletions restricted to superusers
+        it { should_not have_link('delete', href: country_path(@country_2)) }
+        it { should_not have_link('Add', href: new_country_path) }
       end
       
       
@@ -587,9 +593,9 @@ describe "CountryPages" do
         it { should have_selector('#ramadan-day', text: 'Ramadan') } 
         it { should have_selector('#ramadan-week', text: 'Ramadan') }
         it { should have_selector('#sick-accrual', text: 'Sickness accruals') }
-        it { should have_selector('#gratuity', text: "Leavers' gratuity applies?") } 
+        it { should have_selector('#gratuity', text: "Leavers' gratuity applies?") }
         it { should have_selector('h3',		 text: 'Local Labor Law Regulations') } 
-        it { should_not have_selector("#completion", text: "SETTINGS") }
+        it { should have_selector("#completion", text: "SETTINGS") }
         it { should_not have_selector("#update-status", text: "When a country administrator emails to tell you") }
         it { should_not have_selector("#update-status", text: "As a country administrator it's your job") }
         it { should have_selector("#update-status", text: "You're not registered as an administrator") }
@@ -598,7 +604,25 @@ describe "CountryPages" do
         it { should have_link('Absence codes', href: country_country_absences_path(@country)) } 
         it { should_not have_selector('#recent-holidays', text: "additions (*) in past 7 days") }
         it { should have_link('National holidays', href: country_holidays_path(@country)) } 
-            
+        it { should_not have_link('Gratuity rules', href: country_gratuity_formulas_path(@country)) } 
+        it { should have_selector('#no-gratuity', text: "is not switched on") }
+        it { should_not have_selector('#recent-gratuities') }
+        it { should_not have_selector('#ceilings', text: "No ceiling") }  #unless gratuity_applies is on    
+        
+        describe "when indemnity ceilings are set" do
+          
+          before do
+            @country.gratuity_ceiling_months = 24
+            @country.gratuity_ceiling_value = 40000
+            @country.gratuity_applies = true
+            @country.save
+            visit country_path(@country)
+          end
+         
+          it { should have_selector('#ceilings', text: "24 months") } 
+          it { should have_link('Gratuity rules', href: country_gratuity_formulas_path(@country)) }
+          it { should_not have_link('#no-gratuity', text: "is not switched on") } 
+        end
         
         describe "where country does not follow 'Gulf' rules" do
           before { visit country_path(@country_1) }
@@ -606,7 +630,9 @@ describe "CountryPages" do
           it { should_not have_selector('#ramadan-day', text: 'Ramadan') } 
           it { should_not have_selector('#ramadan-week', text: 'Ramadan') }
           it { should_not have_selector('#sick-accrual', text: 'Sickness accruals') }
-          it { should_not have_selector('#gratuity', text: "Leavers' gratuity applies?") } 
+          it { should_not have_selector('#gratuity', text: "Leavers' gratuity applies?") }
+          it { should_not have_selector('#ceilings', text: "No ceiling") }  
+          it { should_not have_link('Gratuity rules', href: country_gratuity_formulas_path(@country)) }     
         end  
       end
       
@@ -670,48 +696,64 @@ describe "CountryPages" do
           @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR')
           @nationality_3 = Nationality.create(nationality: 'Saudi')
           @country_3 = Country.create(country: 'Saudi Arabia', nationality_id: @nationality_3.id, currency_id: @currency_3.id)
-          visit edit_country_path(@country_3)
+          
         end
+        
+        describe "if not a country administrator" do
+          before { visit edit_country_path(@country_3) }
+          
+          it { should_not have_selector('title', text: 'Edit Labor Law Regulations') }
+          it "should render the admin home page" do
+            page.should have_selector('.alert', text: 'You must be a registered administrator')
+            page.should have_selector('h1', text: 'Administrator Menu')
+          end
+        
+        end
+        
+        describe "if a country administrator" do
     
-        it { should have_selector('title', text: 'Edit Labor Law Regulations') }
-        it { should have_selector('h1',    text: 'Edit Labor Law Regulations') }
-        it { should have_selector('input', value: @country_3.country) }
-        it { should have_link('List', href: countries_path) }
-        it { should_not have_selector('#ramadan-day', text: "Ramadan") } 
-        it { should_not have_selector('#ramadan-week', text: "Ramadan") }
-        it { should_not have_selector('#sick-accrual', text: "sickness accrual") }
-        it { should_not have_selector("#completion", text: "Are all settings complete?") }         
-        
-        describe "for countries with 'Gulf' rules" do
-          before { visit edit_country_path(@country) }
-          it { should have_selector('#ramadan-day', text: "Ramadan") } 
-          it { should have_selector('#ramadan-week', text: "Ramadan") }
-          it { should have_selector('#sick-accrual', text: "sickness accrual") }        
-        end
-                
-        describe "with invalid data" do
           before do
-            fill_in 'Country', with: " "
-            click_button "Save changes"
+            CountryAdmin.create(user_id: @admin.id, country_id: @country_3.id)
+            CountryAdmin.create(user_id: @admin.id, country_id: @country.id)
           end
-        
+          
+          before { visit edit_country_path(@country_3) }
           it { should have_selector('title', text: 'Edit Labor Law Regulations') }
-          it { should have_content('error') }
-          specify { @country_3.reload.country.should == 'Saudi Arabia' }
-        end
-      
-        describe "with valid data - redirecting to 'show' page" do
-      
-          let(:new_country) { "Kingdom of Saudi Arabia" }
-     
-          before do
-            fill_in 'Country', with: new_country
-            click_button "Save changes" 
-          end
-      
-          it { should have_selector('title', text: 'Kingdom of Saudi Arabia') }
-          it { should have_selector('div.alert.alert-success') }
-          specify { @country_3.reload.country.should == new_country }
+          it { should have_selector('h1',    text: 'Edit Labor Law Regulations') }
+          
+          pending ("check no country input field - next two tests are not working")
+          #it { should_not have_selector('input', value: @country_3.country) }
+          #it { should_not have_selector('input', value: @country_3.nationality_id) }
+          it { should have_selector('input', value: @country_3.probation_days) }
+          it { should have_link('List', href: countries_path) }
+          it { should_not have_selector('#ramadan-day', text: "Ramadan") } 
+          it { should_not have_selector('#ramadan-week', text: "Ramadan") }
+          it { should_not have_selector('#sick-accrual', text: "sickness accrual") }
+          it { should_not have_selector("#completion", text: "Are all settings complete?") }
+          it { should_not have_selector('#country_gratuity_ceiling_months') }          
+        
+          describe "for countries with 'Gulf' rules" do
+            
+            before { visit edit_country_path(@country) }
+            
+            it { should have_selector('#ramadan-day', text: "Ramadan") } 
+            it { should have_selector('#ramadan-week', text: "Ramadan") }
+            it { should have_selector('#sick-accrual', text: "sickness accrual") } 
+            it { should_not have_selector('#country_gratuity_ceiling_months') }   
+          
+          end 
+          
+          describe "Gulf rules and with gratuity_applies switched on" do
+              
+            before do
+              @country.toggle!(:gratuity_applies)
+              visit edit_country_path(@country)
+            end
+            
+            it { should have_selector('#country_gratuity_ceiling_months') } 
+            it { should have_selector('#country_gratuity_ceiling_value') }     
+          end   
+                
         end
       end 
     end
@@ -720,6 +762,7 @@ describe "CountryPages" do
     
       before do 
         CountryAdmin.create!(user_id: @admin.id, country_id: @country.id)
+        @country.toggle!(:gratuity_applies)
       end
       
       describe "show" do
@@ -730,8 +773,9 @@ describe "CountryPages" do
         it { should have_selector("#update-status", text: "As a country administrator it's your job") }
         it { should_not have_selector("#update-status", text: "You're not registered as an administrator") }
         it { should_not have_selector("#update-status", text: "We're still looking for country administrators") }
-        it { should have_selector('#recent-absences', text: "additions (*) in past 7 days") } 
-        it { should have_selector('#recent-holidays', text: "additions") }
+        it { should have_selector('#recent-absences', text: "addition") }
+        it { should have_selector('#recent-holidays', text: "addition") }
+        it { should have_selector('#recent-gratuities', text: "addition") }
       end
     end
   end
@@ -816,7 +860,9 @@ describe "CountryPages" do
         it { should have_selector('.recent', text: "*") }
         it { should have_selector('.incomplete', text: "!") } 
         it { should have_selector('#still-incomplete') }   
-        it { should_not have_selector('.standout', text: "YOU'RE AN ADMINISTRATOR") }   
+        it { should_not have_selector('.standout', text: "YOU'RE AN ADMINISTRATOR") }
+        it { should have_link('change', href: edit_country_path(@country)) }  #superusers can change all
+        it { should have_link('Add', href: new_country_path) }   
       end
     
       describe "edit" do
@@ -829,11 +875,42 @@ describe "CountryPages" do
         end
         
         it { should have_selector("#completion", text: "Are all settings complete?") }
+        it { should have_selector('input', value: @country_3.country) }
+        it { should have_selector('input', value: @country_3.nationality_id) }
+        
+        describe "with invalid data" do
+          before do
+            fill_in 'Country', with: " "
+            click_button "Save changes"
+          end
+        
+          it { should have_selector('title', text: 'Edit Labor Law Regulations') }
+          it { should have_content('error') }
+          specify { @country_3.reload.country.should == 'Saudi Arabia' }
+        end
+      
+        describe "with valid data - redirecting to 'show' page" do
+      
+          let(:new_country) { "Kingdom of Saudi Arabia" }
+     
+          before do
+            fill_in 'Country', with: new_country
+            click_button "Save changes" 
+          end
+      
+          it { should have_selector('title', text: 'Kingdom of Saudi Arabia') }
+          it { should have_selector('div.alert.alert-success') }
+          specify { @country_3.reload.country.should == new_country }
+        end
+        
       end
       
       describe "show" do
       
-        before { visit country_path(@country) }
+        before do
+          @country.toggle!(:gratuity_applies)
+          visit country_path(@country)
+        end
         
         it { should have_selector("#completion", text: "SETTINGS") }
         it { should have_link('Edit regulations', href: edit_country_path(@country)) }
@@ -841,8 +918,9 @@ describe "CountryPages" do
         it { should_not have_selector("#update-status", text: "As a country administrator it's your job") }
         it { should_not have_selector("#update-status", text: "You're not registered as an administrator") }
         it { should_not have_selector("#update-status", text: "We're still looking for country administrators") }
-        it { should have_selector('#recent-absences', text: "additions (*) in past 7 days") } 
-        it { should have_selector('#recent-holidays', text: "additions") }
+        it { should have_selector('#recent-absences', text: "addition") }
+        it { should have_selector('#recent-holidays', text: "addition") }
+        it { should have_selector('#recent-gratuities', text: "addition") }
       end
     end
   end

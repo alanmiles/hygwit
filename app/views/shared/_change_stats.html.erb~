@@ -1,0 +1,16 @@
+      <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+        <div id="recent-adds">
+           <% if model_name.total_recent(@country) > 0 %>
+             <%= pluralize(model_name.total_recent(@country), 'addition') %> (*) in past 7 days.
+           <% else %>
+             No recent additions.
+           <% end %>
+        </div>
+        <div id="recent-updates">
+          <% if model_name.total_updated(@country) > 0 %>
+            <%= pluralize(model_name.total_updated(@country), 'update') %> (^) in past 7 days.
+          <% else %>
+            No recent updates.
+          <% end %>
+        </div>
+      <% end %>

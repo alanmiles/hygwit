@@ -6,16 +6,15 @@ class HolidaysController < ApplicationController
   
   def index
     @country = Country.find(params[:country_id])
-    #country_admin_access
-    #@holidays = @country.holidays
     @holidays = @country.holidays.paginate(page: params[:page], per_page: 20)
+    @recent_adds = Holiday.total_recent(@country)
+    @recent_updates = Holiday.total_updated(@country)
   end
   
   def new
     @country = Country.find(params[:country_id])
     country_admin_access
     @holiday = @country.holidays.new
-    #@holiday.created_by = current_user.id
   end
   
   def create
@@ -26,7 +25,6 @@ class HolidaysController < ApplicationController
         flash[:success] = "Holiday starting on #{@holiday.start_date}' has been added for #{@country.country}."
         redirect_to country_holidays_path(@country)
       else
-        #@holiday.created_by = current_user.id
         render 'new'
       end
     else

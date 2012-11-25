@@ -6,8 +6,9 @@ class CountryAbsencesController < ApplicationController
   
   def index
     @country = Country.find(params[:country_id])
-    #country_admin_access
     @absences = @country.country_absences
+    @recent_adds = CountryAbsence.total_recent(@country)
+    @recent_updates = CountryAbsence.total_updated(@country)
   end
   
   def new

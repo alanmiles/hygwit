@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121120194408) do
+ActiveRecord::Schema.define(:version => 20121123095434) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -39,10 +39,10 @@ ActiveRecord::Schema.define(:version => 20121120194408) do
     t.boolean  "taxation",                                               :default => false
     t.boolean  "insurance",                                              :default => true
     t.integer  "probation_days",                                         :default => 90
-    t.integer  "max_hours_day",                                          :default => 9
-    t.integer  "max_hours_week",                                         :default => 45
-    t.integer  "max_hours_day_ramadan"
-    t.integer  "max_hours_week_ramadan"
+    t.decimal  "max_hours_day",                                          :default => 9.0
+    t.decimal  "max_hours_week",                                         :default => 45.0
+    t.decimal  "max_hours_day_ramadan"
+    t.decimal  "max_hours_week_ramadan"
     t.boolean  "sickness_accruals",                                      :default => false
     t.integer  "retirement_age_m",                                       :default => 60
     t.integer  "retirement_age_f",                                       :default => 55
@@ -60,6 +60,8 @@ ActiveRecord::Schema.define(:version => 20121120194408) do
     t.boolean  "gratuity_applies",                                       :default => false
     t.integer  "minimum_vacation_days",                                  :default => 21
     t.boolean  "vacation_by_working_days",                               :default => false
+    t.integer  "gratuity_ceiling_months"
+    t.decimal  "gratuity_ceiling_value",   :precision => 7, :scale => 0
   end
 
   create_table "country_absences", :force => true do |t|
@@ -108,6 +110,16 @@ ActiveRecord::Schema.define(:version => 20121120194408) do
     t.integer  "created_by", :default => 1
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
+  end
+
+  create_table "gratuity_formulas", :force => true do |t|
+    t.integer  "country_id"
+    t.integer  "service_years_from"
+    t.integer  "service_years_to"
+    t.decimal  "termination_percentage", :precision => 5, :scale => 2
+    t.decimal  "resignation_percentage", :precision => 5, :scale => 2
+    t.datetime "created_at",                                           :null => false
+    t.datetime "updated_at",                                           :null => false
   end
 
   create_table "grievance_types", :force => true do |t|

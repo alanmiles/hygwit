@@ -12,10 +12,19 @@
               <span class="incomplete"> ! </span>
             <% end %>
           <% end %>
-          <%= country.country %> 
+          <% if country.complete? %>
+            <%= country.country.upcase %>
+          <% else %>
+            <%= country.country %>
+          <% end %> 
           | <%= link_to "settings", country %>
-          | <%= link_to "change name", edit_country_path(country) %>
-          <%= render "shared/admin_deletes", model_name: country %>
+          <% if current_user.superuser? || current_user.administrator?(country.country) %>
+            | <%= link_to "change", edit_country_path(country) %>
+          <% end %>
+          <% if current_user.superuser? %>
+            | <%= link_to "delete", country, method: :delete,
+                             data: { confirm: "Delete '#{country.country}'?  Sure?" } %>
+          <% end %>                   
           <% if current_user.administrator?(country.country) %>
             | <span class="standout">YOU'RE AN ADMINISTRATOR</span>
           <% end %>

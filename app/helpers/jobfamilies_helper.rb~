@@ -3,7 +3,7 @@ module JobfamiliesHelper
   def families_instruction_1
   
     "The meanings of company job-titles are not always obvious to an outsider, and this can be a problem when placing recruitment
-     advertisements.  To solve the problem, HYGIT asks businesses to assign each job-title to a more generic JOB FAMILY, which will
+     advertisements.  To solve the problem, HR2.0 asks businesses to assign each job-title to a more generic JOB FAMILY, which will
      make it clear to anyone."
     
   end

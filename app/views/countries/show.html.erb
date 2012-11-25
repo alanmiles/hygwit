@@ -10,11 +10,9 @@
       
     </section>
     <section>
-      <% if current_user.superuser? %>
-        <div id="completion" class="line-space">
-          <%= @country.complete? ? "SETTINGS COMPLETE" : "SETTINGS INCOMPLETE" %>
-        </div>
-      <% end %>
+      <div id="completion" class="line-space">
+        <%= @country.complete? ? "SETTINGS COMPLETE" : "SETTINGS INCOMPLETE" %>
+      </div>
       <div id="update-status" class="instruction">
          <%= render "instructions_show" %>
       </div>
@@ -35,7 +33,7 @@
       <%= render "setup_parameters" %>
     </div>
     <div class="span9"> 
-      <ul class="menulist"> 
+      <ul class="menulist-push-left"> 
         <li>
           <span class="span2"><%= link_to "Absence codes", country_country_absences_path(@country) %></span>
             <% if current_user.superuser? || current_user.administrator?(@country.country) %>
@@ -55,13 +53,26 @@
             <% end %> 
         </li>
         <li>
-          <span class="span2"><%= link_to "Tax calculations", "#" %></span>
+          <span class="span2"><%= link_to "Tax rules", "#" %></span>
         </li>
         <li>
-          <span class="span2"><%= link_to "Insurance", "#" %></span>
+          <span class="span2"><%= link_to "Insurance rules", "#" %></span>
         </li>
         <li>
-          <span class="span2"><%= link_to "Gratuities", "#" %></span>
+          <% if @country.rules == "Gulf" %>
+            <% if @country.gratuity_applies? %>
+              <span class="span2"><%= link_to "Gratuity rules", country_gratuity_formulas_path(@country) %></span>
+              <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+                <span id="recent-gratuities" class="normal-font offset1">
+                  <%= recent_country_gratuities(@country) %>
+                  <%= updated_country_gratuities(@country) %>
+                </span>   
+              <% end %> 
+            <% else %>
+              <span class="span2 standout">Gratuity rules</span>
+              <span id="no-gratuity" class="normal-font offset1">'Gratuity applies' is not switched on.</span> 
+            <% end %>
+          <% end %>
         </li>
       </ul>  
     </div>

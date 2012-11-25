@@ -21,7 +21,7 @@ module CountryAbsencesHelper
   def recent_country_absences(country)
     @recent = CountryAbsence.total_recent(country)  #created within last 7 days
     if @recent > 0
-      return "#{@recent} additions (*) in past 7 days."
+      return "#{pluralize(@recent, 'addition')} (*) in past 7 days."
     else
       return "No recent additions." 
     end
@@ -30,7 +30,7 @@ module CountryAbsencesHelper
   def updated_country_absences(country)
     @updates = CountryAbsence.total_updated(country)  #updated within last 7 days
     if @updates > 0
-      return "#{@updates} updates (^) in past 7 days."
+      return "#{pluralize(@updates, 'update')} (^) in past 7 days."
     else
       return "No recent updates." 
     end

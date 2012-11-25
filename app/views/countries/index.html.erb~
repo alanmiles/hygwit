@@ -5,28 +5,35 @@
     <section>
       <%= render 'shared/user_sidebar' %>
     </section>
+    <% unless current_user.superuser? %>
+      <section>
+        <%= completion %>
+      </section>
+    <% end %>
     <section>
-      <% if current_user.superuser? %>
-        <%= render "stats" %>
-      <% end %>
+      <%= render "stats" %>
     </section>
   </aside>
   
   <div class="span8">
     <h1 class="align-left">Countries</h1>
     
-    <div style="padding-bottom: 10px">
-      <%= link_to "Add a country", new_country_path, class: "btn" %>
-    </div>
+    <% if current_user.superuser? %>
+      <div style="padding-bottom: 10px">
+        <%= link_to "Add a country", new_country_path, class: "btn" %>
+      </div>
+    <% end %>
 
     <ul class="itemlist">
         <%= render "list" %>
     </ul>
-
-    <% if Country.count > 10 %>
-      <div style="padding-top: 10px">
-        <%= link_to "Add a country", new_country_path, class: "btn" %>
-      </div>
+    
+    <% if current_user.superuser? %>
+      <% if Country.count > 10 %>
+        <div style="padding-top: 10px">
+          <%= link_to "Add a country", new_country_path, class: "btn" %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>

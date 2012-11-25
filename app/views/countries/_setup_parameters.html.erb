@@ -26,8 +26,11 @@
     <div class="line-space">
       <div>Taxation applies?<span class="r-float"><%= @country.taxation? ? "Yes" : "No" %></span></div>
       <div>Insurance applies?<span class="r-float"><%= @country.insurance? ? "Yes" : "No" %></span></div>
+    </div>
+    <div class="line-space">
       <% if @country.rules =="Gulf" %>
         <div id="gratuity">Leavers' gratuity applies?<span class="r-float"><%= @country.gratuity_applies? ? "Yes" : "No" %></span></div>
+        <%= render "gratuity_ceilings" if @country.gratuity_applies? %>
       <% end %>
     </div>
     <div class="line-space">

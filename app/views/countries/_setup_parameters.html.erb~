@@ -10,9 +10,9 @@
     </div>
     <div class="line-space">
       <div>For OT calculations, night-work begins at - 
-        <span class="r-float"><%= @country.nightwork_starts.try(:strftime, "%H:%M") %></span></div>
+        <span class="r-float"><%= @country.nightwork_start.try(:strftime, "%H:%M") %></span></div>
       <div>For OT calculations, night-work ends at - 
-        <span class="r-float"><%= @country.nightwork_ends.try(:strftime, "%H:%M") %></span></div>
+        <span class="r-float"><%= @country.nightwork_end.try(:strftime, "%H:%M") %></span></div>
       <div>OT rate - standard (% of hourly salary)<span class="r-float"><%= @country.OT_rate_standard %></span></div>
       <div>OT rate - evenings and weekends (% of hourly salary)<span class="r-float"><%= @country.OT_rate_special %></span></div>
     </div>    
@@ -26,8 +26,17 @@
     <div class="line-space">
       <div>Taxation applies?<span class="r-float"><%= @country.taxation? ? "Yes" : "No" %></span></div>
       <div>Insurance applies?<span class="r-float"><%= @country.insurance? ? "Yes" : "No" %></span></div>
+    </div>
+    <div class="line-space">
       <% if @country.rules =="Gulf" %>
         <div id="gratuity">Leavers' gratuity applies?<span class="r-float"><%= @country.gratuity_applies? ? "Yes" : "No" %></span></div>
+        <% if @country.gratuity_applies? %>
+          <%= render "gratuity_ceilings" %>
+        <% else %>
+          <% unless @country.gratuity_ceiling_value = nil %>
+            <%= render "gratuity_ceilings" %>
+          <% end %>
+        <% end %>
       <% end %>
     </div>
     <div class="line-space">

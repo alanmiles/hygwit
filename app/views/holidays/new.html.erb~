@@ -1,4 +1,4 @@
-<% provide(:title, 'New National Holiday') %>
+<% provide(:title, 'New Gratuity Rule') %>
 <div class="row">
   <aside class="span3">
     <section>
@@ -13,13 +13,13 @@
     </section>
   </aside>
   <div class="span6 offset0">
-    <h1>New National Holiday</h1>
-    <%= form_for([@country, @holiday]) do |f| %>
+    <h1>New Gratuity Rule</h1>
+    <%= form_for([@country, @formula]) do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
       <%= render 'fields', f: f %>
       <%= f.submit "Create", class: "btn btn-primary" %>
       <%= link_to "All national holidays", country_holidays_path(@country), class: "btn" %>
-      <%= link_to "Country set-up page - #{@country.country}", @country, class: "btn" %>
+      <%= link_to "Country set-up page", @country, class: "btn" %>
     <% end %>
   </div>
 </div>

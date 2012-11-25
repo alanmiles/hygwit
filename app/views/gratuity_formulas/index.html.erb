@@ -1,0 +1,32 @@
+<% provide(:title, "Gratuity Table: #{@country.country}") %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= @country.country %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <%= render "instructions" %>  
+      </div>
+    </section>
+    <section>
+      <%= render "shared/change_stats" %>
+    </section>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Gratuity Table</h1>
+
+    <div style="padding-bottom: 10px">
+      <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+        <%= link_to "Add a line to the table", new_country_gratuity_formula_path(@country), class: "btn" %>
+      <% end %>
+      <%= link_to "Back to main settings page", @country, class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <%= render "list" %>
+    </ul>
+  </div>
+</div>

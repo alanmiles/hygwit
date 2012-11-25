@@ -14,10 +14,15 @@
           <% end %>
           <%= country.country %> 
           | <%= link_to "settings", country %>
-          | <%= link_to "change name", edit_country_path(country) %>
-          <%= render "shared/admin_deletes", model_name: country %>
+          <% if current_user.superuser? || current_user.administrator?(country.country) %>
+            | <%= link_to "change", edit_country_path(country) %>
+          <% end %>
+          <% if current_user.superuser? %>
+            | <%= link_to "delete", country, method: :delete,
+                             data: { confirm: "Delete '#{country.country}'?  Sure?" } %>
+          <% end %>                   
           <% if current_user.administrator?(country.country) %>
-            | <span class="updates">YOU'RE AN ADMINISTRATOR</span>
+            | <span class="standout">YOU'RE AN ADMINISTRATOR</span>
           <% end %>
         </li>
       <% end %>

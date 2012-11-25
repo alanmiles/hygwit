@@ -1,0 +1,14 @@
+        <% if @country.gratuity_ceiling_months.nil? && @country.gratuity_ceiling_value.nil? %>
+          <div>No ceiling on leaver gratuity payments.</div>
+        <% else %>
+          <% unless @country.gratuity_ceiling_value.nil? %>
+            <div>Maximum gratuity payment
+              <span class="r-float"><%= @country.currency.code %> <%= @country.gratuity_ceiling_value %></span>
+            </div>          
+          <% end %>
+          <% unless @country.gratuity_ceiling_months.nil? %>
+            <div>Maximum gratuity - monthly salary multiple 
+              <span class="r-float"><%= @country.gratuity_ceiling_months %> months</span> 
+            </div>        
+          <% end %>
+        <% end %>

@@ -9,10 +9,10 @@
 #  taxation                 :boolean          default(FALSE)
 #  insurance                :boolean          default(TRUE)
 #  probation_days           :integer          default(90)
-#  max_hours_day            :integer          default(9)
-#  max_hours_week           :integer          default(45)
-#  max_hours_day_ramadan    :integer
-#  max_hours_week_ramadan   :integer
+#  max_hours_day            :decimal(, )      default(9.0)
+#  max_hours_week           :decimal(, )      default(45.0)
+#  max_hours_day_ramadan    :decimal(, )
+#  max_hours_week_ramadan   :decimal(, )
 #  sickness_accruals        :boolean          default(FALSE)
 #  retirement_age_m         :integer          default(60)
 #  retirement_age_f         :integer          default(55)
@@ -30,26 +30,37 @@
 #  gratuity_applies         :boolean          default(FALSE)
 #  minimum_vacation_days    :integer          default(21)
 #  vacation_by_working_days :boolean          default(FALSE)
+#  gratuity_ceiling_months  :integer
+#  gratuity_ceiling_value   :integer
 #
 
 class Country < ActiveRecord::Base
   attr_accessible :country, :currency_id, :insurance, :max_hours_day, :max_hours_week, :max_loan_ded_salary, 
             :nationality_id, :nightwork_end, :nightwork_start, :probation_days, :retirement_age_f, :retirement_age_m, 
             :sickness_accruals, :taxation, :max_hours_day_ramadan, :max_hours_week_ramadan, :OT_rate_standard,
-            :OT_rate_special, :notes, :rules, :gratuity_applies, :minimum_vacation_days, :vacation_by_working_days, :created_by
+            :OT_rate_special, :notes, :rules, :gratuity_applies, :minimum_vacation_days, :vacation_by_working_days, :created_by, 
+            :gratuity_ceiling_months, :gratuity_ceiling_value, :complete
             
   belongs_to :currency
   belongs_to :nationality
   has_many 	 :country_absences, dependent: :destroy
   has_many 	 :country_admins, dependent: :destroy
   has_many   :holidays, dependent: :destroy
+  has_many	 :gratuity_formulas, dependent: :destroy
   
   after_create :add_absence_codes
   
-  validates :country,						presence: true, length: { maximum: 50 }, uniqueness: { case_sensitive: true }
-  validates :nationality_id, 		presence: true
-  validates :currency_id,				presence: true
-  validates :rules,							length: { maximum: 20, allow_blank: true }
+  validates :country,										presence: true, length: { maximum: 50 }, uniqueness: { case_sensitive: true }
+  validates :nationality_id, 						presence: true
+  validates :currency_id,								presence: true
+  validates :rules,											length: { maximum: 20, allow_blank: true }
+  validates :max_hours_day,							numericality: true
+  validates :max_hours_week,						numericality: true
+  validates :max_hours_day_ramadan,			numericality: { allow_nil: true }
+  validates :max_hours_week_ramadan,		numericality: { allow_nil: true }
+  validates :gratuity_ceiling_months,		numericality: { only_integer: true, allow_nil: true }
+  validates :gratuity_ceiling_value,		numericality: { only_integer: true, allow_nil: true }
+  validate  :gratuity_ceiling_check
   
   default_scope order: 'countries.country ASC'
   
@@ -90,5 +101,13 @@ class Country < ActiveRecord::Base
                                     maximum_days_year: absence.maximum_days_year, 
                                     documentation_required: absence.documentation_required, notes: absence.notes)  
       end         
+    end
+    
+    def gratuity_ceiling_check
+      unless gratuity_applies?
+        unless gratuity_ceiling_months.nil? && gratuity_ceiling_value.nil?
+          errors[:base] << "Before you can turn 'Gratuity applies' off, you first need to remove the values for gratuity ceilings"
+        end
+      end
     end 
 end

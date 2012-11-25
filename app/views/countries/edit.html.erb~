@@ -7,8 +7,11 @@
         <%= @country.country %>
       </h1>
       <div class="instruction">
+        <div class="line-space">
+          <%= labor_law_instructions %>
+        </div>
         <div>
-          <%= absence_country_guidance %>
+          <%= extra_help %>
         </div> 
       </div>
     </section>

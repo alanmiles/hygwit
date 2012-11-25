@@ -9,10 +9,10 @@
 #  taxation                 :boolean          default(FALSE)
 #  insurance                :boolean          default(TRUE)
 #  probation_days           :integer          default(90)
-#  max_hours_day            :integer          default(9)
-#  max_hours_week           :integer          default(45)
-#  max_hours_day_ramadan    :integer
-#  max_hours_week_ramadan   :integer
+#  max_hours_day            :decimal(, )      default(9.0)
+#  max_hours_week           :decimal(, )      default(45.0)
+#  max_hours_day_ramadan    :decimal(, )
+#  max_hours_week_ramadan   :decimal(, )
 #  sickness_accruals        :boolean          default(FALSE)
 #  retirement_age_m         :integer          default(60)
 #  retirement_age_f         :integer          default(55)
@@ -30,6 +30,8 @@
 #  gratuity_applies         :boolean          default(FALSE)
 #  minimum_vacation_days    :integer          default(21)
 #  vacation_by_working_days :boolean          default(FALSE)
+#  gratuity_ceiling_months  :integer
+#  gratuity_ceiling_value   :integer
 #
 
 require 'spec_helper'
@@ -53,6 +55,8 @@ describe Country do
   it { should respond_to(:minimum_vacation_days) }
   it { should respond_to(:country_absences) }
   it { should respond_to(:holidays) }
+  it { should respond_to(:gratuity_ceiling_months) }
+  it { should respond_to(:gratuity_ceiling_value) }
   
   
   it { should be_valid }
@@ -69,6 +73,102 @@ describe Country do
   
   describe "when currency_id is empty" do
     before { @country.currency_id = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when max_hours_day is a decimal" do
+    before { @country.max_hours_day = 8.5 }
+    it { should be_valid }
+  end
+  
+  describe "when max_hours_day is not a number" do
+    before { @country.max_hours_day = "8 hrs" }
+    it { should_not be_valid }
+  end
+  
+  describe "when max_hours_week is a decimal" do
+    before { @country.max_hours_week = 37.5 }
+    it { should be_valid }
+  end
+  
+  describe "when max_hours_week is not a number" do
+    before { @country.max_hours_week = "37.5 hrs" }
+    it { should_not be_valid }
+  end
+  
+  describe "when max_hours_day_ramadan is a decimal" do
+    before { @country.max_hours_day_ramadan = 8.5 }
+    it { should be_valid }
+  end
+  
+  describe "when max_hours_day_ramadan is not a number" do
+    before { @country.max_hours_day_ramadan = "8 hrs" }
+    it { should_not be_valid }
+  end
+  
+  describe "when max_hours_day_ramadan is nil" do
+    before { @country.max_hours_day_ramadan = nil }
+    it { should be_valid }
+  end
+  
+  describe "when max_hours_week_ramadan is a decimal" do
+    before { @country.max_hours_week_ramadan = 37.5 }
+    it { should be_valid }
+  end
+  
+  describe "when max_hours_week_ramadan is not a number" do
+    before { @country.max_hours_week_ramadan = "37.5 hrs" }
+    it { should_not be_valid }
+  end
+  
+  describe "when max_hours_week_ramadan is nil" do
+    before { @country.max_hours_week_ramadan = nil }
+    it { should be_valid }
+  end
+  
+  describe "when gratuity_ceiling_months is a decimal" do
+    before { @country.gratuity_ceiling_months = 37.5 }
+    it { should_not be_valid }
+  end
+  
+  describe "when gratuity_ceiling_months is not a number" do
+    before { @country.gratuity_ceiling_months = "37 months" }
+    it { should_not be_valid }
+  end
+  
+  describe "when gratuity_ceiling_months is nil" do
+    before { @country.gratuity_ceiling_months = nil }
+    it { should be_valid }
+  end
+  
+  
+  describe "when gratuity_ceiling_value is a decimal" do
+    before { @country.gratuity_ceiling_value = 40000.5 }
+    it { should_not be_valid }
+  end
+  
+  describe "when gratuity_ceiling_value is not a number" do
+    before { @country.gratuity_ceiling_value = "40000 months" }
+    it { should_not be_valid }
+  end
+  
+  describe "when gratuity_ceiling_value is nil" do
+    before { @country.gratuity_ceiling_value = nil }
+    it { should be_valid }
+  end
+  
+  describe "when gratuity_applies is off" do
+    before do
+      @country.gratuity_applies = false
+      @country.gratuity_ceiling_months = 24
+      @country.gratuity_ceiling_value = 40000
+    end
+  
+    it { should_not be_valid }
+  end
+  
+  describe "when a comma is added in entry of gratuity_ceiling_value" do
+    before { @country.gratuity_ceiling_value = 40,000 }
     it { should_not be_valid }
   end
   
@@ -136,5 +236,6 @@ describe Country do
       it { should == 10 }
     end
   end
+  
 end
   
