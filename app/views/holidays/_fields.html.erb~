@@ -8,7 +8,7 @@
 <%= f.text_field :start_date, class: "span2" %>
 </div>
 
-<div class="field">
+<div class="field line-space">
 <%= f.label :end_date %>
 <%= f.text_field :end_date, class: "span2" %>
 </div>

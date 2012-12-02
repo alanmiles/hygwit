@@ -1,0 +1,35 @@
+
+      <li>
+        <strong>
+          <span class="span1 pagination-centered">Code</span>
+          <span class="span2 pagination-centered">Description</span>
+          <span class="span1 pagination-centered">Weekly milestone</span>
+          <span class="span1 pagination-centered">Monthly milestone</span>
+          <span class="span1 pagination-centered">Annual milestone</span>
+          <span class="span1 pagination-centered">Effective date</span>
+        </strong>
+      </li>
+      <% @settings.each do |setting| %>
+        <li>
+          <span class="span1 pagination-centered">
+            <%= render "shared/superuser_countryadmin_notifications", :model_name => setting %>
+            <%= setting.shortcode %>
+          </span>
+          <span class="span2 pagination-centered"><%= setting.name %>
+            <span class="standout"><%= cancellation_detail(setting) if setting.cancellation_date? %></span>
+          </span>
+          <span class="span1 pagination-centered"><%= format_number(setting.weekly_milestone) %></span>
+          <span class="span1 pagination-centered"><%= format_number(setting.monthly_milestone) %></span>
+          <span class="span1 pagination-centered"><%= format_number(setting.annual_milestone) %></span>
+          <span class="span1 pagination-centered"><%= date_display(setting.effective_date) %></span>
+          <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+            <span class="r-float">
+          
+              <%= link_to "edit", edit_insurance_setting_path(setting) %>
+              | <%= link_to "del", setting, method: :delete,
+                             data: { confirm: "Delete '#{setting.shortcode}' with effective date #{setting.effective_date}from the insurance settings table for #{@country.country}?  Sure?" } %>
+          
+            </span>
+          <% end %>
+        </li>
+      <% end %>

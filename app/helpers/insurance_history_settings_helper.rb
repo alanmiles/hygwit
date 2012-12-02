@@ -1,0 +1,2 @@
+module InsuranceHistorySettingsHelper
+end

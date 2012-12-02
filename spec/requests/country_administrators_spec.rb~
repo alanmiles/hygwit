@@ -196,7 +196,7 @@ describe "CountryAdministrators" do
           it { should have_selector('title', text: "National Holidays: #{@country.country}") }
           it { should have_selector('h1', text: 'National Holidays') }
           it { should_not have_link('Add a national holiday', href: new_country_holiday_path(@country)) }
-          it { should have_link('Back to country set-up page', href: country_path(@country)) }
+          it { should have_link('Back to main settings page', href: country_path(@country)) }
           it { should_not have_link('edit', href: edit_holiday_path(@country.holidays.first)) }
           it { should_not have_link('delete', href: holiday_path(@country.holidays.first)) }
           it { should_not have_selector('#recent-adds', text: "additions (*) in past 7 days") }
@@ -263,7 +263,7 @@ describe "CountryAdministrators" do
           it { should have_selector('title', text: "Gratuity Table: #{@country.country}") }
           it { should have_selector('h1', text: 'Gratuity Table') }
           it { should_not have_link('Add a line to the table', href: new_country_gratuity_formula_path(@country)) }
-          it { should have_link('Back to country set-up page', href: country_path(@country)) }
+          it { should have_link('Back to main settings page', href: country_path(@country)) }
           it { should_not have_link('edit', href: edit_gratuity_formula_path(@country.gratuity_formulas.first)) }
           it { should_not have_link('delete', href: gratuity_formula_path(@country.gratuity_formulas.first)) }
           it { should_not have_selector('#recent-adds') }
@@ -370,7 +370,7 @@ describe "CountryAdministrators" do
           it { should have_selector('title', text: "National Holidays: #{@country.country}") }
           it { should have_selector('h1', text: 'National Holidays') }
           it { should have_link('Add a national holiday', href: new_country_holiday_path(@country)) }
-          it { should have_link('Back to country set-up page', href: country_path(@country)) }
+          it { should have_link('Back to main settings page', href: country_path(@country)) }
           it { should have_link('edit', href: edit_holiday_path(@country.holidays.first)) }
           it { should have_link('delete', href: holiday_path(@country.holidays.first)) }
           it { should have_selector('#recent-adds') }
@@ -551,7 +551,7 @@ describe "CountryAdministrators" do
             it { should have_selector('title', text: "Gratuity Table: #{@country.country}") }
             it { should have_selector('h1', text: 'Gratuity Table') }
             it { should have_link('Add a line to the table', href: new_country_gratuity_formula_path(@country)) }
-            it { should have_link('Back to country set-up page', href: country_path(@country)) }
+            it { should have_link('Back to main settings page', href: country_path(@country)) }
             it { should have_link('edit', href: edit_gratuity_formula_path(@country.gratuity_formulas.first)) }
             it { should have_link('del', href: gratuity_formula_path(@country.gratuity_formulas.first)) }
             it { should have_selector('#recent-adds') }
@@ -637,7 +637,7 @@ describe "CountryAdministrators" do
         it { should have_selector('title', text: "National Holidays: #{@country.country}") }
         it { should have_selector('h1', text: 'National Holidays') }
         it { should have_link('Add a national holiday', href: new_country_holiday_path(@country)) }
-        it { should have_link('Back to country set-up page', href: country_path(@country)) }
+        it { should have_link('Back to main settings page', href: country_path(@country)) }
         it { should have_link('edit', href: edit_holiday_path(@country.holidays.first)) }
         it { should have_link('delete', href: holiday_path(@country.holidays.first)) }
         it { should have_selector('#recent-adds') }

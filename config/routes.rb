@@ -8,6 +8,12 @@ Hygwit::Application.routes.draw do
     resources :country_absences, shallow: true
     resources :holidays, shallow: true
     resources :gratuity_formulas, shallow: true
+    resources :insurance_settings, shallow: true
+    resources :insurance_history_settings, only: :index
+    resources :insurance_future_settings, only: :index 
+    member do
+      get 'insurance_menu'
+    end
   end
   resources :sectors
   resources :jobfamilies
@@ -29,6 +35,7 @@ Hygwit::Application.routes.draw do
   match '/help',    to: 'static_pages#help'
   match '/about',   to: 'static_pages#about'
   match '/contact', to: 'static_pages#contact'
+ 
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

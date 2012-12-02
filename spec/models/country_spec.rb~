@@ -57,7 +57,7 @@ describe Country do
   it { should respond_to(:holidays) }
   it { should respond_to(:gratuity_ceiling_months) }
   it { should respond_to(:gratuity_ceiling_value) }
-  
+  it { should respond_to(:gratuity_formulas) }
   
   it { should be_valid }
   
@@ -155,6 +155,16 @@ describe Country do
   describe "when gratuity_ceiling_value is nil" do
     before { @country.gratuity_ceiling_value = nil }
     it { should be_valid }
+  end
+  
+  describe "when gratuity_applies is off" do
+    before do
+      @country.gratuity_applies = false
+      @country.gratuity_ceiling_months = 24
+      @country.gratuity_ceiling_value = 40000
+    end
+  
+    it { should_not be_valid }
   end
   
   describe "when a comma is added in entry of gratuity_ceiling_value" do

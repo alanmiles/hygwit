@@ -1,0 +1,69 @@
+<% provide(:title, 'National Insurance Menu') %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1 class="line-space">
+        <%= @country.country %>
+      </h1>
+      <div class="instruction">
+        <div class="line-space">
+          <%= insurance_guide_1 %>
+        </div>
+        <% if @country.insurance? %>  
+          <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+            <div class="line-space">
+              <%= insurance_guide_2 %>
+            </div>
+          <% end %>
+        <% end %>
+        <div>
+          You'll find a detailed explanation of HR2.0's insurance methodology in a <%= link_to "video tutorial", "#" %> 
+          on the HROomph website.
+        </div>
+      </div>
+    </section>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">National Insurance Menu</h1>
+    <div class="line-space">
+      <%= link_to "Return to main settings menu - #{@country.country}", @country, class: "btn" %>
+    </div>
+    <% if @country.insurance? %>
+      <ul class="menulist">
+        <li>
+          <div class="line-space" style= "font-size: .85em">
+            <%= insurance_settings_country_guidance %>
+          </div>
+          Go to <%= link_to "Salary Thresholds", country_insurance_settings_path(@country) %>
+        </li>          
+        <li>
+          <span class="span6">
+            Rubric
+          </span>
+          <%= link_to "Settings", country_insurance_settings_path(@country) %>
+        </li> 
+        <li>
+          <span class="span6">
+            Rubric
+          </span>
+          <%= link_to "Settings", country_insurance_settings_path(@country) %>
+        </li> 
+      </ul>
+    <% else %>
+      <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+        <div class = "standout line-space">
+          National Insurance is currently switched off for <%= @country.country %>
+        </div>
+        <div>
+          To turn it back on, check the 'Insurance applies?' checkbox towards the bottom of the 
+            <%= link_to "Edit country settings", edit_country_path(@country) %> form.
+      <% else %>
+        <div class = "standout line-space">
+          The HR2.0 country administrators for <%= @country.country %> have advised us that National Insurance does not apply.
+        </div>
+        <div>Please advise us (support@hroomph.com) if you believe this decision is wrong.</div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -67,4 +67,17 @@ module SessionsHelper
     end
   end
   
+  def set_insset_cancellation_status
+    session[:insset_cancelled] = true if @setting.cancellation_date?
+    session[:insset_cancelled] = false
+  end
+  
+  def unset_insset_cancellation
+    session[:insset_cancelled] = nil
+  end
+  
+  def insset_cancellation_status_changed?
+    session[:insset_cancelled] == true && !@setting.cancellation_date? || session[:insset_cancelled] == false && @setting.cancellation_date?
+  end
+  
 end

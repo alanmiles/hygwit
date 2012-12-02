@@ -7,7 +7,9 @@
     </section>
     <% unless current_user.superuser? %>
       <section>
-        <%= completion %>
+        <div class="instruction">
+          <%= completion %>
+        </div>
       </section>
     <% end %>
     <section>

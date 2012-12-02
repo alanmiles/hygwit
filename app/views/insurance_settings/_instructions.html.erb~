@@ -1,0 +1,18 @@
+    
+      <div class="line-space">
+        <%= insurance_settings_country_instruction_1 %>
+      </div>
+      <% if current_user.superuser? || current_user.administrator?(@country.country) %>  
+        <div class="line-space">
+          <%= insurance_settings_country_instruction_2 %>
+        </div>
+        <div class="line-space">
+          <%= insurance_settings_country_instruction_3 %>
+        </div>
+        <div>
+          There's a <%= link_to "video tutorial", "#" %> on the HROomph website.  For more help, just contact us at 
+          support@hroomph.com.
+        </div>
+      <% else %>
+        <%= render "shared/non_country_admin_sidebar" %>
+      <% end %>

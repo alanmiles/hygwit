@@ -604,7 +604,8 @@ describe "CountryPages" do
         it { should have_link('Absence codes', href: country_country_absences_path(@country)) } 
         it { should_not have_selector('#recent-holidays', text: "additions (*) in past 7 days") }
         it { should have_link('National holidays', href: country_holidays_path(@country)) } 
-        it { should_not have_link('Gratuity rules', href: country_gratuity_formulas_path(@country)) } 
+        it { should_not have_link('Gratuity rules', href: country_gratuity_formulas_path(@country)) }
+        it { should have_link('National insurance', href: insurance_menu_country_path(@country)) } 
         it { should have_selector('#no-gratuity', text: "is not switched on") }
         it { should_not have_selector('#recent-gratuities') }
         it { should_not have_selector('#ceilings', text: "No ceiling") }  #unless gratuity_applies is on    
@@ -621,7 +622,7 @@ describe "CountryPages" do
          
           it { should have_selector('#ceilings', text: "24 months") } 
           it { should have_link('Gratuity rules', href: country_gratuity_formulas_path(@country)) }
-          it { should_not have_link('#no-gratuity', text: "is not switched on") } 
+          it { should_not have_selector('#no-gratuity', text: "is not switched on") } 
         end
         
         describe "where country does not follow 'Gulf' rules" do
@@ -633,6 +634,18 @@ describe "CountryPages" do
           it { should_not have_selector('#gratuity', text: "Leavers' gratuity applies?") }
           it { should_not have_selector('#ceilings', text: "No ceiling") }  
           it { should_not have_link('Gratuity rules', href: country_gratuity_formulas_path(@country)) }     
+        end
+        
+        describe "when insurance switch is Off" do
+        
+          before do
+            @country.insurance = false
+            @country.save
+            visit country_path(@country)
+          end
+          
+          it { should_not have link('National insurance', href: insurance_menu_country_path(@country)) }
+          it { should have_selector('#no-insurance', text: "is not switched on") }  
         end  
       end
       

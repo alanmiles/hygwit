@@ -48,6 +48,7 @@ class Country < ActiveRecord::Base
   has_many   :holidays, dependent: :destroy
   has_many	 :gratuity_formulas, dependent: :destroy
   
+  
   after_create :add_absence_codes
   
   validates :country,										presence: true, length: { maximum: 50 }, uniqueness: { case_sensitive: true }
@@ -60,7 +61,7 @@ class Country < ActiveRecord::Base
   validates :max_hours_week_ramadan,		numericality: { allow_nil: true }
   validates :gratuity_ceiling_months,		numericality: { only_integer: true, allow_nil: true }
   validates :gratuity_ceiling_value,		numericality: { only_integer: true, allow_nil: true }
-  validates :gratuity_ceiling_check
+  validate  :gratuity_ceiling_check
   
   default_scope order: 'countries.country ASC'
   

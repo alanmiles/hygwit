@@ -1,0 +1,7 @@
+     <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+        <div class="standout line-space">
+          WARNING: Do not delete last year's settings when the government announces changes.
+          The historical settings are important in case back-dated contribution adjustments are needed.  
+          So simply add a new record, with a new effective date.  If you accidentally delete an old setting, re-enter it.  
+        </div>
+      <% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121123095434) do
+ActiveRecord::Schema.define(:version => 20121201000545) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -136,6 +136,31 @@ ActiveRecord::Schema.define(:version => 20121123095434) do
     t.date     "end_date"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "insurance_formulas", :force => true do |t|
+    t.integer  "country_id"
+    t.integer  "minimum_salary"
+    t.integer  "maximum_salary"
+    t.decimal  "employer_contribution",       :precision => 5, :scale => 2, :default => 0.0
+    t.decimal  "employee_contribution",       :precision => 5, :scale => 2, :default => 0.0
+    t.decimal  "employer_contribution_expat", :precision => 5, :scale => 2, :default => 0.0
+    t.decimal  "employee_contribution_expat", :precision => 5, :scale => 2, :default => 0.0
+    t.datetime "created_at",                                                                 :null => false
+    t.datetime "updated_at",                                                                 :null => false
+  end
+
+  create_table "insurance_settings", :force => true do |t|
+    t.integer  "country_id"
+    t.string   "shortcode"
+    t.string   "name"
+    t.decimal  "weekly_milestone"
+    t.decimal  "monthly_milestone"
+    t.decimal  "annual_milestone"
+    t.date     "effective_date"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.date     "cancellation_date"
   end
 
   create_table "jobfamilies", :force => true do |t|

@@ -1,0 +1,39 @@
+<% provide(:title, "Insurance: Future Salary Thresholds") %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= @country.country %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <%= render "insurance_settings/instructions" %>  
+      </div>
+    </section>
+    <section>
+      <%= render "shared/change_stats" %>
+    </section>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Insurance: Future Salary Thresholds</h1>
+
+    <div style="padding-bottom: 10px">
+      <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+        <%= link_to "Add a line to the table", new_country_insurance_setting_path(@country), class: "btn" %>
+      <% end %>
+      <%= link_to "Back to main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
+    </div>
+    <%= render "insurance_settings/warning" %>
+    <div class="line-space">
+      Listed below are <u>planned</u> threshold settings. 
+      <%= link_to "View current settings instead", country_insurance_settings_path(@country), class: "btn" %>
+      <%= link_to "View settings history", 
+         country_insurance_history_settings_path(@country), class: "btn" %>  
+    </div>
+    <ul class="itemlist">
+      <%= render "insurance_settings/list" %>
+    </ul>
+  </div>
+</div>

@@ -56,7 +56,12 @@
           <span class="span2"><%= link_to "Tax rules", "#" %></span>
         </li>
         <li>
-          <span class="span2"><%= link_to "Insurance rules", "#" %></span>
+          <% if @country.insurance? %>
+            <span class="span2"><%= link_to "National insurance", insurance_menu_country_path(@country) %></span>
+          <% else %>
+            <span class="span2 standout">National insurance</span>
+            <span id="no-insurance" class="normal-font offset1">National insurance is not switched on.</span> 
+          <% end %>
         </li>
         <li>
           <% if @country.rules == "Gulf" %>

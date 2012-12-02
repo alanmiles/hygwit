@@ -561,7 +561,7 @@ describe "CountryAdministrators" do
             it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
             it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
         
-            describe "moving to the holiday edit link in the correct country" do
+            describe "moving to the gratuity_formula edit link in the correct country" do
               before { click_link 'edit' }
           
               it { should have_selector('title', text: "Edit Gratuity Rule") }

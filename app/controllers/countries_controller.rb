@@ -77,6 +77,10 @@ class CountriesController < ApplicationController
     end
   end
   
+  def insurance_menu
+    @country = Country.find(params[:id])
+  end
+  
   private
    
     def country_admin_access
