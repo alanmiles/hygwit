@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121201000545) do
+ActiveRecord::Schema.define(:version => 20121202235705) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -136,6 +136,17 @@ ActiveRecord::Schema.define(:version => 20121201000545) do
     t.date     "end_date"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "insurance_codes", :force => true do |t|
+    t.integer  "country_id"
+    t.string   "insurance_code"
+    t.string   "explanation"
+    t.boolean  "checked",        :default => false
+    t.integer  "updated_by",     :default => 1
+    t.date     "cancelled"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
   end
 
   create_table "insurance_formulas", :force => true do |t|

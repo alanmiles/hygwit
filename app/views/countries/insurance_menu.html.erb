@@ -39,15 +39,15 @@
           Go to <%= link_to "Salary Thresholds", country_insurance_settings_path(@country) %>
         </li>          
         <li>
-          <span class="span6">
-            Rubric
-          </span>
-          <%= link_to "Settings", country_insurance_settings_path(@country) %>
+          <div class="line-space" style= "font-size: .85em">
+            <%= insurance_codes_country_guidance %>
+          </div>
+          Go to <%= link_to "Insurance Codes", country_insurance_codes_path(@country) %>
         </li> 
         <li>
-          <span class="span6">
+          <div class="line-space" style= "font-size: .85em">
             Rubric
-          </span>
+          </div>
           <%= link_to "Settings", country_insurance_settings_path(@country) %>
         </li> 
       </ul>

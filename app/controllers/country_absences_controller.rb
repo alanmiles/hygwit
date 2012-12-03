@@ -72,15 +72,4 @@ class CountryAbsencesController < ApplicationController
   
   private
   
-    def country_admin_access
-      if signed_in?
-        unless current_user.superuser?
-          admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
-          if admin_check.nil?
-            flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
-            redirect_to user_path(current_user)
-          end
-        end
-      end
-    end
 end

@@ -59,6 +59,7 @@ describe Country do
   it { should respond_to(:gratuity_ceiling_value) }
   it { should respond_to(:gratuity_formulas) }
   it { should respond_to(:insurance_settings) }
+  it { should respond_to(:insurance_codes) }
   
   it { should be_valid }
   

@@ -11,6 +11,7 @@ Hygwit::Application.routes.draw do
     resources :insurance_settings, shallow: true
     resources :insurance_history_settings, only: :index
     resources :insurance_future_settings, only: :index 
+    resources :insurance_codes, shallow: true
     member do
       get 'insurance_menu'
     end

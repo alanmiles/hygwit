@@ -28,6 +28,7 @@
     <h1 class="align-left">National Insurance Menu</h1>
     <div class="line-space">
       <%= link_to "Return to main settings menu - #{@country.country}", @country, class: "btn" %>
+      <%= link_to "Choose another country", countries_path, class: "btn" %>
     </div>
     <% if @country.insurance? %>
       <ul class="menulist">
@@ -39,9 +40,9 @@
         </li>          
         <li>
           <span class="span6">
-            Rubric
+            <%= insurance_codes_country_guidance %>
           </span>
-          <%= link_to "Settings", country_insurance_settings_path(@country) %>
+          Go to <%= link_to "Insurance Codes", country_insurance_codes_path(@country) %>
         </li> 
         <li>
           <span class="span6">

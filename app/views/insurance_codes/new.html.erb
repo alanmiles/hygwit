@@ -1,0 +1,25 @@
+<% provide(:title, 'New Insurance Code') %>
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @country.country %>
+      </h1>
+      <div class="instruction">
+        <div>
+          <%= insurance_codes_country_guidance %>
+        </div> 
+      </div>
+    </section>
+  </aside>
+  <div class="span6 offset0">
+    <h1>New Insurance Code</h1>
+    <%= form_for([@country, @code]) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "All insurance codes in this country", country_insurance_codes_path(@country), class: "btn" %>
+      <%= link_to "Main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
+    <% end %>
+  </div>
+</div>

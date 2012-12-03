@@ -7,6 +7,8 @@ class HolidaysController < ApplicationController
   def index
     @country = Country.find(params[:country_id])
     @holidays = @country.holidays.paginate(page: params[:page], per_page: 20)
+    @recent_adds = Holiday.total_recent(@country)
+    @recent_updates = Holiday.total_updated(@country)
   end
   
   def new

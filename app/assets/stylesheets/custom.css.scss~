@@ -251,7 +251,7 @@ select {
 
 .menulist-push-left {
   list-style: none;
-  margin-left: -15px;
+  margin-left: -20px;
   li {
     font-size: 1.3em;
     overflow: auto;

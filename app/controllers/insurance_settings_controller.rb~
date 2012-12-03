@@ -110,7 +110,7 @@ class InsuranceSettingsController < ApplicationController
     @country = Country.find(@setting.country_id)
     if current_user.superuser? || current_user.administrator?(@country.country)
       @setting.destroy
-      flash[:success] = "The '#{@setting.shortcode}' line with effective date #{@setting.effective_date.strftime('%d %b %Y')} for #{@country.country} has been destroyed."
+      flash[:success] = "The '#{@setting.shortcode}' line for #{@country.country} with effective date #{@setting.effective_date.strftime('%d %b %Y')} has been destroyed."
       redirect_to country_insurance_settings_path(@country)
     else
       flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
@@ -119,18 +119,6 @@ class InsuranceSettingsController < ApplicationController
   end
   
   private
-  
-    def country_admin_access
-      if signed_in?
-        unless current_user.superuser?
-          admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
-          if admin_check.nil?
-            flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
-            redirect_to user_path(current_user)
-          end
-        end
-      end
-    end
     
     def check_permitted
       unless @country.insurance?

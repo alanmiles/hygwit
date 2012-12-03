@@ -1,0 +1,11 @@
+      <div class="line-space">
+        <%= insurance_codes_country_guidance %>
+      </div>
+      <% if current_user.superuser? || current_user.administrator?(@country.country) %>  
+        <div>
+          We show you how to set up and use HR2.0's insurance tools in our <%= link_to "video tutorial", "#" %> on the HROomph website.  
+          If you have further questions, just contact us at support@hroomph.com.
+        </div>
+      <% else %>
+        <%= render "shared/non_country_admin_sidebar" %>
+      <% end %>

@@ -48,6 +48,7 @@ class Country < ActiveRecord::Base
   has_many   :holidays, dependent: :destroy
   has_many	 :gratuity_formulas, dependent: :destroy
   has_many   :insurance_settings, dependent: :destroy
+  has_many 	 :insurance_codes, dependent: :destroy
   
   
   after_create :add_absence_codes

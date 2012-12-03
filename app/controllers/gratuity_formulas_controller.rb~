@@ -40,7 +40,6 @@ class GratuityFormulasController < ApplicationController
     @formula = GratuityFormula.find(params[:id])
     @country = Country.find(@formula.country_id)
     country_admin_access
-    check_permitted
   end
   
   def update
