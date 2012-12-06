@@ -195,12 +195,20 @@ select {
   padding-bottom: 15px;
 }
 
+.double-line-space {
+  margin-bottom: 30px;
+}
+
 .vert-down {
   padding-top: 5px;
 }
 
 .recent, .updates, .incomplete, .standout {
   color: #CC0000;
+}
+
+.faded {
+  color: $grayLight;
 }
 
 .normal-font {

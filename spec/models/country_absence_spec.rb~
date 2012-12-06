@@ -10,8 +10,11 @@
 #  maximum_days_year      :integer
 #  documentation_required :boolean          default(TRUE)
 #  notes                  :string(255)
+#  created_by             :integer          default(1)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  checked                :boolean          default(FALSE)
+#  updated_by             :integer          default(1)
 #
 
 require 'spec_helper'
@@ -28,7 +31,7 @@ describe CountryAbsence do
   subject { @absence }
   
   it { should respond_to(:country_id) }
-  its(:country) { should == @country.id }
+  its(:country) { should == @country }
   it { should respond_to(:absence_code) }
   it { should respond_to(:paid) }
   it { should respond_to(:sickness) }

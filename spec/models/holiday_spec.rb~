@@ -9,6 +9,8 @@
 #  end_date   :date
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  checked    :boolean          default(FALSE)
+#  updated_by :integer          default(1)
 #
 
 require 'spec_helper'

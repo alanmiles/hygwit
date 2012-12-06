@@ -13,6 +13,8 @@
 #  created_by             :integer          default(1)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  checked                :boolean          default(FALSE)
+#  updated_by             :integer          default(1)
 #
 
 require 'spec_helper'
@@ -36,6 +38,8 @@ describe CountryAbsence do
   it { should respond_to(:maximum_days_year) }
   it { should respond_to(:documentation_required) }
   it { should respond_to(:notes) }
+  it { should respond_to(:checked) }
+  it { should respond_to(:updated_by) }
   
   it { should be_valid }
   

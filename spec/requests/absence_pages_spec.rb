@@ -6,6 +6,10 @@ describe "AbsencePages" do
   
   before do
     @absence = AbsenceType.create(absence_code: "UL", paid: 0, notes: "Unpaid leave") 
+    @nationality = FactoryGirl.create(:nationality, nationality: "German")
+    @currency = FactoryGirl.create(:currency, currency: "Marks", code: "DM")
+    @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
+   
   end
   
   describe "when not logged in" do
@@ -44,11 +48,11 @@ describe "AbsencePages" do
     
     describe "CountryAbsences controller" do
     
-      before do
-        @nationality = FactoryGirl.create(:nationality, nationality: "German")
-        @currency = FactoryGirl.create(:currency, currency: "Marks", code: "DM")
-        @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
-      end 
+      #before do
+      #  @nationality = FactoryGirl.create(:nationality, nationality: "German")
+      #  @currency = FactoryGirl.create(:currency, currency: "Marks", code: "DM")
+      #  @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
+      #end 
       
       let(:country_absence) { CountryAbsence.find_by_country_id_and_absence_code(@country.id, @absence.absence_code) }
      
@@ -135,11 +139,11 @@ describe "AbsencePages" do
     
     describe "CountryAbsences controller" do
     
-      before do
-        @nationality = FactoryGirl.create(:nationality, nationality: "German")
-        @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
-        @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
-      end 
+      #before do
+      #  @nationality = FactoryGirl.create(:nationality, nationality: "German")
+      #  @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
+      #  @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
+     # end 
       
       let(:country_absence) { CountryAbsence.find_by_country_id_and_absence_code(@country.id, @absence.absence_code) }
       
@@ -298,11 +302,11 @@ describe "AbsencePages" do
     
     describe "CountryAbsences controller" do
     
-      before do
-        @nationality = FactoryGirl.create(:nationality, nationality: "German")
-        @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
-        @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
-      end
+      #before do
+      #  @nationality = FactoryGirl.create(:nationality, nationality: "German")
+     #   @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
+      #  @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
+     #end
       
       describe "when not the country administrator" do
       
@@ -409,6 +413,8 @@ describe "AbsencePages" do
           it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
           it { should have_selector('#recent-adds') }
           it { should have_selector('.recent', text: "*") }
+          it { should_not have_selector('#recent-add-checks') }
+        	it { should_not have_selector('.recent', text: "+") }
         
           describe "editing an absence in the correct country" do
             before { click_link 'edit' }
@@ -450,7 +456,9 @@ describe "AbsencePages" do
             it { should have_selector('h1', text: 'Absence Types') }
             #it { should have_selector('title', text: 'Edit Absence Type') }
             #it { should have_content('error') }
-            specify { country_absence.reload.absence_code.should == 'AB' }    
+            specify { country_absence.reload.absence_code.should == 'AB' }
+            specify { country_absence.reload.checked.should == false } 
+            specify { country_absence.reload.updated_by.should == @admin.id }       
                  
           end
         
@@ -499,18 +507,71 @@ describe "AbsencePages" do
     
     describe "CountryAbsences controller" do
     
-      before do
-        @nationality = FactoryGirl.create(:nationality, nationality: "German")
-        @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
-        @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
+      describe "adding a new country absence" do
+        
+        before { visit new_country_country_absence_path(@country) }
+        it { should have_selector('input#country_absence_checked', value: 1) }
+          
+        describe "automatic checking of record entered by superuser" do
+          before do
+            fill_in "Absence code", with: "CA"
+            fill_in "Notes", with: "Court Appearance"
+          end
+            
+          it "should create the new record" do
+            
+            expect { click_button "Create" }.to change(@country.country_absences, :count) 
+            page.should have_selector('h1', text: 'Absence Types')
+            page.should have_selector('h1', text: @country.country)
+            page.should_not have_selector('.recent', text: "+") 
+          end
+        end
       end
       
-      describe "index of absences for country" do
+      describe "checking a new entry via Edit" do
+         
+        before do 
+          @country_absence = CountryAbsence.find_by_country_id_and_absence_code(@country.id, @absence.absence_code)
+          @country_absence.toggle!(:checked)
+          visit edit_country_absence_path(@country_absence)
+        end
+          
+        it { should have_selector('input#country_absence_checked') }
+        it { should have_selector('#update-date', text: "Added") }
+          
+        describe "checking the new entry in the index" do
       
-        before { visit country_country_absences_path(@country) } 
-      
-        it { should have_selector('#recent-adds') }
-        it { should have_selector('.recent', text: "*") }
+        	before { visit country_country_absences_path(@country) }
+        
+          it { should have_selector('h1', text: @country.country) }
+        	it { should have_selector('title', text: "Absence Types") }
+        	it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
+        	it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
+        	it { should_not have_selector('#recent-adds') }
+        	it { should_not have_selector('.recent', text: "*") }
+        	it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
+        	it { should_not have_selector('.instruction', text: "We're still looking for country administrators") }
+        	it { should have_selector('#recent-add-checks') }
+        	it { should have_selector('.recent', text: "+") }
+        
+          describe "deleting a country absence" do
+        
+            it "should be from the correct model" do
+              expect { click_link('del') }.to change(@country.country_absences, :count).by(-1)            
+            end
+          end
+        end
+        
+        describe "not changing updated and checked status when superuser edits the absence" do
+        
+          before do
+            fill_in "Notes", with: "Change the note"
+            click_button "Save changes"
+          end
+          
+          specify { @country_absence.reload.checked == true }
+          specify { @country_absence.reload.updated_by != @superuser.id }
+        end
       end
     end
   end 

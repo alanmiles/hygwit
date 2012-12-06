@@ -1,5 +1,6 @@
 module InsuranceCodesHelper
 
+  
   def insurance_codes_country_guidance
     "INSURANCE CODES are assigned to each employee (normally by the national tax/insurance authorities) and help to determine
     the rate at which salary deductions are made for National Insurance. For example, there may be different codes for those 

@@ -23,9 +23,9 @@ describe "InsurancePages" do
     @setting_cancelled_future = @country.insurance_settings.create(shortcode: "NUF", name: "Not Used Future", weekly_milestone: 250, 
     										monthly_milestone: 1025, annual_milestone: 12300, effective_date: Date.today-130.days, 
     										cancellation_date: Date.today + 30.days)
-    @code = @country.insurance_codes.create(insurance_code: "A", explanation: "Standard employee")	
+    @code = @country.insurance_codes.create(insurance_code: "A", explanation: "Standard employee", checked: true)	
     @old_code	= @country.insurance_codes.create(insurance_code: "Z", explanation: "Cancelled code", 
-    										cancelled: Date.today - 30)								    																				
+    										cancelled: Date.today - 30, checked: true)								    																				
   end
   
   describe "when not logged in" do
@@ -753,6 +753,7 @@ describe "InsurancePages" do
             it { should have_link('All insurance codes', href: country_insurance_codes_path(@country)) }
             it { should have_link("Main insurance menu", href: insurance_menu_country_path(@country)) }
             it { should_not have_selector('#insurance_code_cancelled') }
+            it { should_not have_selector('input#insurance_code_checked') }
       
             describe "with valid data" do
         
@@ -801,6 +802,8 @@ describe "InsurancePages" do
             it { should have_selector('.instruction', text: "in our video tutorial") } 
             it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
             it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
+            it { should_not have_selector('#recent-add-checks') }  #this and the following line reserved for superusers
+            it { should_not have_selector('.recent', text: "+") }
         
             describe "deleting an insurance code" do
         
@@ -818,10 +821,11 @@ describe "InsurancePages" do
             it { should have_selector('h1', text: @country.country) }
             it { should have_selector('title', text: "Edit Insurance Code") }
             it { should have_selector('h1', text: 'Edit Insurance Code') }
-            it { should have_link('All insurance codes', href: country_insurance_codes_path(@country)) }
+            it { should have_link('All codes', href: country_insurance_codes_path(@country)) }
             it { should have_link('Main insurance menu', href: insurance_menu_country_path(@country)) } 
             it { should have_selector('#insurance_code_cancelled') }
             it { should_not have_selector('#insurance_code_insurance_code') }  #code cannot be edited
+            it { should_not have_selector('input#insurance_code_checked') }  #only for superusers
       
             describe "updating with valid data" do
           
@@ -835,7 +839,8 @@ describe "InsurancePages" do
               it { should have_selector('title', text: "Insurance Codes: #{@country.country}") }
               it { should have_selector('h1', text: 'Insurance Codes') }
               specify { code.reload.explanation.should == "Re-installed Code" } 
-              specify { code.reload.updated_by.should == @admin.id }    
+              specify { code.reload.updated_by.should == @admin.id } 
+              specify { code.reload.checked.should == false }   
                  
             end
             
@@ -942,6 +947,58 @@ describe "InsurancePages" do
       
       describe "Insurance Codes controller" do
       
+        describe "entering a new code" do
+        
+          before { visit new_country_insurance_code_path(@country) }
+          it { should have_selector('input#insurance_code_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Insurance code", with: "Expat"
+              fill_in "Explanation", with: "Applies to all expats"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(@country.insurance_codes, :count) 
+              page.should have_selector('h1', text: 'Insurance Codes')
+              page.should have_selector('h1', text: @country.country)
+              page.should_not have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @code.toggle!(:checked)
+            visit edit_insurance_code_path(@code)
+          end
+          
+          it { should have_selector('input#insurance_code_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit country_insurance_codes_path(@country) }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the code" do
+        
+            before do
+              fill_in "Explanation", with: "Change the details"
+              click_button "Save changes"
+            end
+          
+            specify { @code.reload.checked == true }
+            specify { @code.reload.updated_by != @superuser.id }
+          end
+        end
       end
       
     end

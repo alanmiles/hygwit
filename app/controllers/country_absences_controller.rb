@@ -9,13 +9,16 @@ class CountryAbsencesController < ApplicationController
     @absences = @country.country_absences
     @recent_adds = CountryAbsence.total_recent(@country)
     @recent_updates = CountryAbsence.total_updated(@country)
+    @recent_add_checks = CountryAbsence.recent_add_checks(@country)
+    @recent_update_checks = CountryAbsence.recent_update_checks(@country)
   end
   
   def new
     @country = Country.find(params[:country_id])
     country_admin_access
     @absence = @country.country_absences.new
-    @absence.created_by = current_user.id
+    @absence.updated_by = current_user.id
+    @absence.checked = true if current_user.superuser?
   end
   
   def create
@@ -26,7 +29,8 @@ class CountryAbsencesController < ApplicationController
         flash[:success] = "Absence code '#{@absence.absence_code}' has been added for #{@country.country}."
         redirect_to country_country_absences_path(@country)
       else
-        @absence.created_by = current_user.id
+        @absence.updated_by = current_user.id
+        @absence.checked = true if current_user.superuser?
         render 'new'
       end
     else
@@ -39,6 +43,7 @@ class CountryAbsencesController < ApplicationController
     @absence = CountryAbsence.find(params[:id])
     @country = Country.find(@absence.country_id)
     country_admin_access
+    @absence.updated_by = current_user.id unless current_user.superuser?  #superuser check doesn't change inputter reference
   end
   
   def update
@@ -46,9 +51,11 @@ class CountryAbsencesController < ApplicationController
     @country = Country.find(@absence.country_id)
     if current_user.superuser? || current_user.administrator?(@country.country)
       if @absence.update_attributes(params[:country_absence])
+        @absence.update_attributes(checked: false) unless current_user.superuser?
         flash[:success] = "Absence code '#{@absence.absence_code}' for #{@country.country} has been updated."
         redirect_to country_country_absences_path(@country)
       else
+        @absence.updated_by = current_user.id unless current_user.superuser?
         render 'edit'
       end
     else

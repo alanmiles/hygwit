@@ -1,5 +1,6 @@
 module HolidaysHelper
 
+  
   def holidays_country_instruction_1
   
     "Add the PUBLIC HOLIDAYS for the next 12 months or so for #{@country.country} - and then continue to keep the list up-to-date."

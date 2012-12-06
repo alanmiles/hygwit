@@ -10,7 +10,7 @@
       <% @holidays.each do |holiday| %>
         <li>
           <span class="span3">
-            <%= render "shared/superuser_notifications", :model_name => holiday %>
+            <%= render "shared/superuser_countryadmin_notifications", :model_name => holiday %>
             <%= holiday.name %>
           </span>
           <span class="span1.5"><%= date_display(holiday.start_date) %></span>

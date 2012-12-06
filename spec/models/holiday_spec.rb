@@ -9,6 +9,8 @@
 #  end_date   :date
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  checked    :boolean          default(FALSE)
+#  updated_by :integer          default(1)
 #
 
 require 'spec_helper'
@@ -29,6 +31,8 @@ describe Holiday do
   it { should respond_to(:name) }
   it { should respond_to(:start_date) }
   it { should respond_to(:end_date) }
+  it { should respond_to(:checked) }
+  it { should respond_to(:updated_by) }
   
   it { should be_valid }
   

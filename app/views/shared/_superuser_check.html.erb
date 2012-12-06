@@ -1,0 +1,9 @@
+<% if current_user.superuser? %>
+  <div style="clear:both" class="line-space">
+    <% unless object.checked? %>
+      <div id = "update-date"><%= object.update_status  %></div>
+    <% end %>
+    <span class="span5 r-float"><%= f.check_box :checked %></span>
+    <span><%= f.label :checked %></span>
+  </div>
+<% end %>

@@ -1,0 +1,9 @@
+<% if current_user.superuser? %>
+  <div style="clear:both" class="line-space">
+    
+    <div id = "update-date"><%= @code.update_status  %></div>
+    
+    <span class="span5 r-float"><%= f.check_box :checked %></span>
+    <span><%= f.label :checked %></span>
+  </div>
+<% end %>

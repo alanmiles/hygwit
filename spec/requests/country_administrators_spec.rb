@@ -9,7 +9,7 @@ describe "CountryAdministrators" do
     @currency = FactoryGirl.create(:currency, currency: "Saudi Riyals", code: "SAR")
     @country = FactoryGirl.create(:country, country: "Saudi Arabia", nationality_id: @nationality.id, 
     																				currency_id: @currency.id, rules: "Gulf", gratuity_applies: true)
-    @holiday = @country.holidays.create(name: "Eid Al Adha", start_date: "2012-10-31", end_date: "2012-11-02")
+    @holiday = @country.holidays.create(name: "Eid Al Adha", start_date: "2012-10-31", end_date: "2012-11-02", checked: true)
     @gratuity_line = @country.gratuity_formulas.create(service_years_from: 0, service_years_to: 3,
     																			termination_percentage: 50, resignation_percentage: 0)
   end
@@ -330,6 +330,8 @@ describe "CountryAdministrators" do
           it { should have_selector('h1', text: @country.country) }
           it { should have_link('All national holidays', href: country_holidays_path(@country)) }
           it { should have_link("Country set-up page", href: country_path(@country)) }
+          it { should_not have_selector('input#holiday_checked') }         #reserved for superuser
+          it { should_not have_selector('#update-date', text: "Added") }
       
           describe "with valid data" do
         
@@ -379,6 +381,8 @@ describe "CountryAdministrators" do
           it { should have_selector('.instruction', text: "In the Muslim world") }   #Gulf rules apply
           it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
           it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
+          it { should_not have_selector('#recent-add-checks') }
+          it { should_not have_selector('.recent', text: "+") }
         
           describe "moving to the holiday edit link in the correct country" do
             before { click_link 'edit' }
@@ -434,7 +438,10 @@ describe "CountryAdministrators" do
           it { should have_selector('title', text: "Edit National Holiday") }
           it { should have_selector('h1', text: 'Edit National Holiday') }
           it { should have_link('All national holidays', href: country_holidays_path(@country)) }
-          it { should have_link('Country set-up page', href: country_path(@country)) }   
+          it { should have_link('Country set-up page', href: country_path(@country)) } 
+          it { should_not have_selector('input#holiday_checked') }			#reserved for superuser
+          it { should_not have_selector('#update-date', text: "Added") }
+            
       
           describe "updating with valid data" do
           
@@ -446,7 +453,9 @@ describe "CountryAdministrators" do
             it { should have_selector('h1', text: @country.country) }
             it { should have_selector('title', text: "National Holidays: #{@country.country}") }
             it { should have_selector('h1', text: 'National Holidays') }
-            specify { holiday.reload.name.should == 'Eid Al Fitr' }    
+            specify { holiday.reload.name.should == 'Eid Al Fitr' } 
+            specify { holiday.reload.checked.should == false }  
+            specify { holiday.reload.updated_by.should == @admin.id } 
                  
           end
         
@@ -628,37 +637,75 @@ describe "CountryAdministrators" do
     end
     
     describe "holidays controller" do
-    
-      describe "index of holidays for country" do
       
-        before { visit country_holidays_path(@country) }
+      describe "adding a new public holiday" do
         
-        it { should have_selector('h1', text: @country.country) }
-        it { should have_selector('title', text: "National Holidays: #{@country.country}") }
-        it { should have_selector('h1', text: 'National Holidays') }
-        it { should have_link('Add a national holiday', href: new_country_holiday_path(@country)) }
-        it { should have_link('Back to main settings page', href: country_path(@country)) }
-        it { should have_link('edit', href: edit_holiday_path(@country.holidays.first)) }
-        it { should have_link('delete', href: holiday_path(@country.holidays.first)) }
-        it { should have_selector('#recent-adds') }
-        it { should have_selector('.recent', text: "*") }
-        it { should have_selector('.instruction', text: "Add the PUBLIC HOLIDAYS") }
-        it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
-        it { should_not have_selector('.instruction', text: "We're still looking for country administrators") }
-        
-        describe "moving to the holiday edit link in the correct country" do
-          before { click_link 'edit' }
+        before { visit new_country_holiday_path(@country) }
+        it { should have_selector('input#holiday_checked', value: 1) }
           
-          it { should have_selector('title', text: "Edit National Holiday") }
-          it { should have_selector('h1', text: @country.country) }
+        describe "automatic checking of record entered by superuser" do
+          before do
+            fill_in "Holiday name", with: "Christmas 2012"
+            fill_in "Start date", with: "2012-12-25"
+            fill_in "End date", with: "2012-12-26"
+          end
+            
+          it "should create the new record" do
+            
+            expect { click_button "Create" }.to change(@country.holidays, :count) 
+            page.should have_selector('h1', text: 'National Holidays')
+            page.should have_selector('h1', text: @country.country)
+            page.should_not have_selector('.recent', text: "+") 
+          end
+        end
+      end
+      
+      describe "checking a new entry via Edit" do
+         
+        before do 
+          @holiday.toggle!(:checked)
+          visit edit_holiday_path(@holiday)
+        end
+          
+        it { should have_selector('input#holiday_checked') }
+        it { should have_selector('#update-date', text: "Added") }
+          
+        describe "checking the new entry in the index" do
+      
+        	before { visit country_holidays_path(@country) }
         
+          it { should have_selector('h1', text: @country.country) }
+        	it { should have_selector('title', text: "National Holidays: #{@country.country}") }
+        	it { should have_selector('h1', text: 'National Holidays') }
+        	it { should have_link('Add a national holiday', href: new_country_holiday_path(@country)) }
+        	it { should have_link('Back to main settings page', href: country_path(@country)) }
+        	it { should have_link('edit', href: edit_holiday_path(@country.holidays.first)) }
+        	it { should have_link('delete', href: holiday_path(@country.holidays.first)) }
+        	it { should_not have_selector('#recent-adds') }
+        	it { should_not have_selector('.recent', text: "*") }
+        	it { should have_selector('.instruction', text: "Add the PUBLIC HOLIDAYS") }
+        	it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
+        	it { should_not have_selector('.instruction', text: "We're still looking for country administrators") }
+        	it { should have_selector('#recent-add-checks') }
+        	it { should have_selector('.recent', text: "+") }
+        
+          describe "deleting a national holiday" do
+        
+            it "should be from the correct model" do
+              expect { click_link('delete') }.to change(@country.holidays, :count).by(-1)            
+            end
+          end
         end
         
-        describe "deleting a national holiday" do
+        describe "not changing updated and checked status when superuser edits the holiday" do
         
-          it "should be from the correct model" do
-            expect { click_link('del') }.to change(Holiday, :count).by(-1)            
+          before do
+            fill_in "Holiday name", with: "Bank holiday"
+            click_button "Save changes"
           end
+          
+          specify { @holiday.reload.checked == true }
+          specify { @holiday.reload.updated_by != @superuser.id }
         end
       end
     end

@@ -1,4 +1,5 @@
 class InsuranceCodesController < ApplicationController
+ 
   
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :create, :destroy]
@@ -10,6 +11,8 @@ class InsuranceCodesController < ApplicationController
     @codes = @country.insurance_codes.all
     @recent_adds = InsuranceCode.total_recent(@country)
     @recent_updates = InsuranceCode.total_updated(@country)
+    @recent_add_checks = InsuranceCode.recent_add_checks(@country)
+    @recent_update_checks = InsuranceCode.recent_update_checks(@country)
   end
   
   def new
@@ -18,6 +21,8 @@ class InsuranceCodesController < ApplicationController
     check_permitted
     @code = @country.insurance_codes.new
     @code.updated_by = current_user.id
+    @code.checked = true if current_user.superuser?
+    @edit = false
   end
   
   def create
@@ -30,6 +35,8 @@ class InsuranceCodesController < ApplicationController
         redirect_to country_insurance_codes_path(@country)
       else
         @code.updated_by = current_user.id
+        @code.checked = true if current_user.superuser?
+        @edit = false
         render 'new'
       end
     else
@@ -43,7 +50,8 @@ class InsuranceCodesController < ApplicationController
     @country = Country.find(@code.country_id)
     check_permitted
     country_admin_access
-    @code.updated_by = current_user.id
+    @code.updated_by = current_user.id unless current_user.superuser?  #superuser check doesn't change inputter reference
+    @edit = true
   end
   
   def update
@@ -55,10 +63,12 @@ class InsuranceCodesController < ApplicationController
         redirect_to user_path(current_user)
       else
         if @code.update_attributes(params[:insurance_code])
+          @code.update_attributes(checked: false) unless current_user.superuser?
           flash[:success] = "Code '#{@code.insurance_code}' in insurance codes for #{@country.country} has been updated."
           redirect_to country_insurance_codes_path(@country)
         else
-          @code.updated_by = current_user.id
+          @edit = true
+          @code.updated_by = current_user.id unless current_user.superuser? 
           render 'edit'
         end
       end

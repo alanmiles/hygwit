@@ -1,5 +1,7 @@
 module InsuranceCodesHelper
 
+  include RecentChange
+  
   def insurance_codes_country_guidance
     "INSURANCE CODES are assigned to each employee (normally by the national tax/insurance authorities) and help to determine
     the rate at which salary deductions are made for National Insurance. For example, there may be different codes for those 
@@ -28,7 +30,6 @@ module InsuranceCodesHelper
   def code_guidance
     "In 5 characters or less, enter the insurance code, preferably the same one assigned to employees in the government's 
     insurance scheme (so it'll easily be understood by HR2.0 users in the country).  The codes can be cancelled (if the
-    government announces they're no longer in use), but not edited after companies start using them, so choose them with care.
-  
+    government announces they're no longer in use), but not edited after companies start using them, so choose them with care."
   end
 end

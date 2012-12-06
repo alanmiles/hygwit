@@ -35,6 +35,10 @@
 #
 
 class Country < ActiveRecord::Base
+
+  #include UpdateCheck
+  #include RecentChange
+  
   attr_accessible :country, :currency_id, :insurance, :max_hours_day, :max_hours_week, :max_loan_ded_salary, 
             :nationality_id, :nightwork_end, :nightwork_start, :probation_days, :retirement_age_f, :retirement_age_m, 
             :sickness_accruals, :taxation, :max_hours_day_ramadan, :max_hours_week_ramadan, :OT_rate_standard,
@@ -102,7 +106,7 @@ class Country < ActiveRecord::Base
       @absences.each do |absence|
         self.country_absences.create(absence_code: absence.absence_code, paid: absence.paid, sickness: absence.sickness,
                                     maximum_days_year: absence.maximum_days_year, 
-                                    documentation_required: absence.documentation_required, notes: absence.notes)  
+                                    documentation_required: absence.documentation_required, notes: absence.notes, checked: true)  
       end         
     end
     

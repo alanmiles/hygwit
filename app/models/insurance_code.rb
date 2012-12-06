@@ -14,6 +14,9 @@
 #
 
 class InsuranceCode < ActiveRecord::Base
+
+  include UpdateCheck
+  
   attr_accessible :explanation, :checked, :insurance_code, :updated_by, :cancelled
   
   belongs_to :country
@@ -28,7 +31,7 @@ class InsuranceCode < ActiveRecord::Base
   end
   
   def self.total_recent(country)
-    InsuranceCode.where("country_id = ? and created_at >=?", country.id, 7.days.ago).count
+    self.where("country_id = ? and created_at >=?", country.id, 7.days.ago).count
   end
   
   def updated?
@@ -36,7 +39,23 @@ class InsuranceCode < ActiveRecord::Base
   end
   
   def self.total_updated(country)
-    InsuranceCode.where("country_id = ? and updated_at >=? and created_at <?", country.id, 7.days.ago, 7.days.ago).count
+    self.where("country_id = ? and updated_at >=? and created_at <?", country.id, 7.days.ago, 7.days.ago).count
+  end
+  
+  def add_check?
+    checked == false && (created_at + 1.day >= updated_at)
+  end
+  
+  def self.recent_add_checks(country)
+    self.where("country_id = ? AND checked = ? AND (updated_at - created_at) < INTERVAL '1 day'", country.id, false).count
+  end
+  
+  def update_check?
+    checked == false && (created_at + 1.day < updated_at)
+  end
+  
+  def self.recent_update_checks(country)
+    self.where("country_id = ? AND checked = ? AND (updated_at - created_at) >= INTERVAL '1 day'", country.id, false).count
   end
 
 end
