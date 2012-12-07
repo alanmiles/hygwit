@@ -1,0 +1,6 @@
+class AddCheckedToSectors < ActiveRecord::Migration
+  def change
+    add_column :sectors, :checked, :boolean
+    add_column :sectors, :updated_by, :integer
+  end
+end

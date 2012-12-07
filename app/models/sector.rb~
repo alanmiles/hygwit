@@ -8,17 +8,23 @@
 #  approved   :boolean          default(FALSE)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  checked    :boolean          default(FALSE)
+#  updated_by :integer          default(1)
 #
 
 class Sector < ActiveRecord::Base
 
-  attr_accessible :approved, :sector, :created_by
+  attr_accessible :approved, :sector, :created_by, :checked, :updated_by
   
   validates :sector, presence: true, length: { maximum: 50 },
                      uniqueness: { case_sensitive: false }
   validates :created_by, presence: true
   
   default_scope order: 'sectors.sector ASC'
+  
+  def self_ref
+    sector
+  end
   
   def recent?
     approved == false

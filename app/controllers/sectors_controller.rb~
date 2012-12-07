@@ -40,8 +40,20 @@ class SectorsController < ApplicationController
   end
   
   def destroy
-    @sector = Sector.find(params[:id]).destroy
-    flash[:success]= "'#{@sector.sector}' destroyed"
-    redirect_to sectors_path
+    @sector = Sector.find(params[:id])
+    if current_user.superuser?
+      @sector.destroy
+      flash[:success]= "'#{@sector.sector}' destroyed"
+      redirect_to sectors_path
+    else
+      if @sector.created_by == current_user.id
+        @sector.destroy
+        flash[:success]= "'#{@sector.sector}' destroyed"
+        redirect_to sectors_path
+      else
+        flash[:notice] = "Illegal action.  You can only remove sectors you have created."
+        redirect_to sectors_path
+      end
+    end
   end
 end
