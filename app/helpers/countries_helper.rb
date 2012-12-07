@@ -51,8 +51,12 @@ module CountriesHelper
   
   def completion
     "If the country name is in capitals, all the settings have been entered, so local businesses can start using HR2.0. 
-    Otherwise, the country set-up is still incomplete.  If you think you could help as a country administrator, 
-    click on the 'settings' link; in the sidebar. It'll tell you whether we still need assistance."
+    Otherwise, the country set-up is still incomplete."
+  end
+  
+  def assist_as_country_admin
+    "If you think you could help as a country administrator, click on the 'settings' link; in the sidebar. 
+    It'll tell you whether we still need assistance."
   end
   
   def superuser_incomplete
@@ -117,5 +121,5 @@ module CountriesHelper
     everything is working properly.  Then, whenever new salary thresholds or rate adjustments are announced, update the records - 
     being particularly careful to ensure that the effective dates are correct.  It's an important job: all HR2.0 users in your
     country are depending on you."
-  end
+  end 
 end

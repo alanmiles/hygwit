@@ -1,17 +1,7 @@
         
       <% @countries.each do |country| %>  
         <li>
-          <% if current_user.superuser? %>
-            <% if country.recent? %>
-              <span class="recent"> * </span>
-            <% end %>
-            <% if country.updated? %>
-              <span class="updates"> ^ </span>
-            <% end %>
-            <% if country.incomplete? %>
-              <span class="incomplete"> ! </span>
-            <% end %>
-          <% end %>
+          <%= render "shared/superuser_admin_notifications", model_name: country %>
           <% if country.complete? %>
             <%= country.country.upcase %>
           <% else %>

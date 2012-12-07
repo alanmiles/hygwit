@@ -1,10 +1,30 @@
-<%= f.label :currency %>
-<%= f.text_field :currency %>
+<div class = "field line-space">
+  <div class="span2" style="margin-left: 0; line-height: 2">
+    <span class ="r-float"><i class ="icon-question-sign span2" id="currency-click"></i></span>
+  	<%= f.label :currency %>
+  </div>
+  <div id="currency-note" class="help-inline"><%= currency_name_help %></div>
+  <div style="clear:both; margin-top: 15px"><%= f.text_field :currency, class: "span5" %></div>
+</div>
 
-<%= f.label :code %>
-<%= f.text_field :code %>
+<div class = "field line-space">
+  <div class="span2" style="margin-left: 0; line-height: 2">
+    <span class ="r-float"><i class ="icon-question-sign span2" id="code-click"></i></span>
+  	<%= f.label :code %>
+  </div>
+  <div id="code-note" class="help-inline"><%= currency_code_help %></div>
+  <div style="clear:both; margin-top: 15px"><%= f.text_field :code, class: "span2" %></div>
+</div>
 
-<%= f.label :decimal_places, "Number of decimal places to display" %>
-<%= f.text_field :decimal_places %>
+<div class = "field line-space">
+  <div class="span3" style="margin-left: 0; line-height: 2">
+    <span class ="r-float"><i class ="icon-question-sign span2" id="decimals-click"></i></span>
+  	<%= f.label :decimal_places, "Decimal places to display" %>
+  </div>
+  <div id="decimals-note" class="help-inline"><%= currency_decimals_help %></div>
+  <div style="clear:both; margin-top: 15px"><%= f.text_field :decimal_places, class: "span2 number-field" %></div>
+</div>
 
-<%= f.hidden_field :created_by %>
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>

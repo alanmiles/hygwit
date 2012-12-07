@@ -10,10 +10,12 @@
 #  resignation_percentage :decimal(5, 2)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  checked                :boolean          default(FALSE)
+#  updated_by             :integer          default(1)
 #
 
 class GratuityFormula < ActiveRecord::Base
-  attr_accessible :resignation_percentage, :service_years_from, :service_years_to, :termination_percentage
+  attr_accessible :resignation_percentage, :service_years_from, :service_years_to, :termination_percentage, :checked, :updated_by
   
   belongs_to :country
   
@@ -49,7 +51,7 @@ class GratuityFormula < ActiveRecord::Base
   private
     def create_overlapping
       unless GratuityFormula.where(
-          'country_id = ? AND((service_years_from <= ? AND service_years_to >= ?) OR (service_years_from >= ? AND service_years_from <= ?))',
+          'country_id = ? AND((service_years_from < ? AND service_years_to > ?) OR (service_years_from > ? AND service_years_from < ?))',
           country_id,
           service_years_from, service_years_from,
           service_years_from, service_years_to
@@ -60,8 +62,8 @@ class GratuityFormula < ActiveRecord::Base
       
     def update_overlapping  
       unless GratuityFormula.where(
-          'id != ? AND country_id = ? AND((service_years_from <= ? AND service_years_to >= ?) 
-              OR (service_years_from >= ? AND service_years_from <= ?))',
+          'id != ? AND country_id = ? AND((service_years_from < ? AND service_years_to > ?) 
+              OR (service_years_from > ? AND service_years_from < ?))',
           self.id, country_id,
           service_years_from, service_years_from,
           service_years_from, service_years_to

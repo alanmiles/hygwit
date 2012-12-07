@@ -1,0 +1,6 @@
+class AddCheckedToCountries < ActiveRecord::Migration
+  def change
+    add_column :countries, :checked, :boolean
+    add_column :countries, :updated_by, :integer
+  end
+end

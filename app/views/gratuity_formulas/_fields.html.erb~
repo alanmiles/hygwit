@@ -1,19 +1,19 @@
 <div class="field">
   <%= f.label :service_years_from, "Formula applies to qualifying employees with"  %>
-  <%= f.text_field :service_years_from, class: "span3" %>  service years
+  <%= f.text_field :service_years_from, class: "span3 number-field" %>  service years
 </div>
 
 <div class="field line-space">
   <%= f.label :service_years_to, "... up to but not including" %>
-  <%= f.text_field :service_years_to, class: "span3" %>  service years.
+  <%= f.text_field :service_years_to, class: "span3 number-field" %>  service years.
 </div>
 
 <div class="field line-space top-line-space">
   <%= f.label :termination_percentage, "Percentage of monthly salary to pay if company terminates employee service:" %>
-  <%= f.text_field :termination_percentage, class: "span3" %> %
+  <%= f.text_field :termination_percentage, class: "span3 number-field" %> %
 </div>
 
 <div class="field line-space">
   <%= f.label :resignation_percentage, "Percentage of monthly salary to play if employee resigns:" %>
-  <%= f.text_field :resignation_percentage, class: "span3" %> %
+  <%= f.text_field :resignation_percentage, class: "span3 number-field" %> %
 </div>

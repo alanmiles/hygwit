@@ -32,6 +32,8 @@
 #  vacation_by_working_days :boolean          default(FALSE)
 #  gratuity_ceiling_months  :integer
 #  gratuity_ceiling_value   :integer
+#  checked                  :boolean          default(FALSE)
+#  updated_by               :integer          default(1)
 #
 
 require 'spec_helper'
@@ -60,6 +62,8 @@ describe Country do
   it { should respond_to(:gratuity_formulas) }
   it { should respond_to(:insurance_settings) }
   it { should respond_to(:insurance_codes) }
+  it { should respond_to(:updated_by) }
+  it { should respond_to(:checked) }
   
   it { should be_valid }
   

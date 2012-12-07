@@ -9,6 +9,8 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  decimal_places :integer          default(2)
+#  checked        :boolean          default(FALSE)
+#  updated_by     :integer          default(1)
 #
 
 require 'spec_helper'
@@ -24,6 +26,8 @@ describe Currency do
   it { should respond_to(:currency) }
   it { should respond_to(:code) }
   it { should respond_to(:decimal_places) }
+  it { should respond_to(:checked) }
+  it { should respond_to(:updated_by) }
   it { should be_valid }
   
   describe "when currency is not present" do

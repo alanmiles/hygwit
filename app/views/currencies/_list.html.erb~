@@ -15,8 +15,7 @@
           <% end %>
           | <%= link_to "change", edit_currency_path(currency) %>
           <% unless currency.linked? %>
-            | <%= link_to "delete", currency, method: :delete,
-                             data: { confirm: "Delete '#{currency.code}'?  Sure?" } %>
+            <%= render "shared/admin_deletes", model_name: currency %>
           <% end %>
         </li>
       <% end %>

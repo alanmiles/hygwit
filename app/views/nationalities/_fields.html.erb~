@@ -1,2 +1,4 @@
 <%= f.label :nationality %>
 <%= f.text_field :nationality %>
+
+<%= f.hidden_field :created_by %>

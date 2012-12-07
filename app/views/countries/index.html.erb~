@@ -5,15 +5,16 @@
     <section>
       <%= render 'shared/user_sidebar' %>
     </section>
-    <% unless current_user.superuser? %>
-      <section>
-        <div class="instruction">
-          <%= completion %>
-        </div>
-      </section>
-    <% end %>
     <section>
-      <%= render "stats" %>
+      <div class="instruction">
+        <div><%= completion %></div>
+        <% unless current_user.superuser? %>
+          <div><%= assist_as_country_admin %></div>
+        <% end %>
+      </div>
+    </section>
+    <section>
+      <%= render "shared/superuser_admin_stats" %>
     </section>
   </aside>
   

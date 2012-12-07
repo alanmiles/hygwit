@@ -23,7 +23,7 @@
 </div>
 
 <div class="field line-space" style="clear:both">
-  <% if @setting.monthly_milestone? %>
+  <% if @setting.monthly_milestone? && @setting.effective_date <= Date.today %>
     <span class="span3 r-float" id="m-mile">
   <% else %>
     <span class="span3 r-float">

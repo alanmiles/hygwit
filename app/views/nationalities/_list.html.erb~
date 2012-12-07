@@ -11,15 +11,7 @@
           <%= nationality.nationality %>
           | <%= link_to "change", edit_nationality_path(nationality) %>
           <% unless nationality.linked? %>
-            <% if current_user.superuser? %>
-              | <%= link_to "delete", nationality, method: :delete,
-                             data: { confirm: "Delete '#{nationality.self_ref}'?  Sure?" } %>
-            <% elsif current_user.admin? %>
-              <% if nationality.created_by == current_user.id %>
-                | <%= link_to "delete", nationality, method: :delete,
-                             data: { confirm: "Delete '#{nationality.self_ref}'?  Sure?" } %>
-              <% end %>
-            <% end %>
+            <%= render "shared/admin_deletes", model_name: nationality %>
           <% end %>
         </li>
       <% end %>

@@ -10,6 +10,8 @@ class GratuityFormulasController < ApplicationController
     @formulas = @country.gratuity_formulas.all
     @recent_adds = GratuityFormula.total_recent(@country)
     @recent_updates = GratuityFormula.total_updated(@country)
+    @recent_add_checks = GratuityFormula.recent_add_checks(@country)
+    @recent_update_checks = GratuityFormula.recent_update_checks(@country)
   end
   
   def new
@@ -17,6 +19,8 @@ class GratuityFormulasController < ApplicationController
     country_admin_access
     check_permitted
     @formula = @country.gratuity_formulas.new
+    @formula.updated_by = current_user.id
+    @formula.checked = true if current_user.superuser?
   end
   
   def create
@@ -28,6 +32,8 @@ class GratuityFormulasController < ApplicationController
         flash[:success] = "Gratuity table for #{@country.country} has been updated."
         redirect_to country_gratuity_formulas_path(@country)
       else
+        @formula.updated_by = current_user.id
+        @formula.checked = true if current_user.superuser?
         render 'new'
       end
     else
@@ -40,6 +46,7 @@ class GratuityFormulasController < ApplicationController
     @formula = GratuityFormula.find(params[:id])
     @country = Country.find(@formula.country_id)
     country_admin_access
+    @formula.updated_by = current_user.id unless current_user.superuser? 
   end
   
   def update
@@ -47,9 +54,11 @@ class GratuityFormulasController < ApplicationController
     @country = Country.find(@formula.country_id)
     if current_user.superuser? || current_user.administrator?(@country.country)
       if @formula.update_attributes(params[:gratuity_formula])
+        @formula.update_attributes(checked: false) unless current_user.superuser?
         flash[:success] = "Gratuity table for #{@country.country} has been updated."
         redirect_to country_gratuity_formulas_path(@country)
       else
+        @formula.updated_by = current_user.id unless current_user.superuser? 
         render 'edit'
       end
     else

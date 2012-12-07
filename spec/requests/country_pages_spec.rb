@@ -6,9 +6,9 @@ describe "CountryPages" do
   
   before do
     @absence_type = FactoryGirl.create(:absence_type, absence_code: "SF")
-    @example = FactoryGirl.create(:nationality, nationality: 'Omani', created_by: 999999)
-    @currency = Currency.create(currency: 'Omani Riyals', code: 'OMR')
-    @country = Country.create(country: "Oman", currency_id: @currency.id, nationality_id: @example.id, rules: "Gulf")
+    @example = FactoryGirl.create(:nationality, nationality: 'Omani', created_by: 999999, checked: true)
+    @currency = Currency.create(currency: 'Omani Riyals', code: 'OMR', checked: true)
+    @country = Country.create(country: "Oman", currency_id: @currency.id, nationality_id: @example.id, rules: "Gulf", checked: true)
   end
   
   describe "when not logged in" do
@@ -264,8 +264,11 @@ describe "CountryPages" do
         it { should have_selector('title', text: 'Nationalities') }
         it { should have_selector('h1', text: 'Nationalities') }
         it { should_not have_selector('#statistics', text: 'unlinked') }  #superuser only
-        it { should_not have_selector('#recent-adds') }
-        it { should_not have_selector('.recent', text: "*") }
+        it { should have_selector('#recent-adds') }
+        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-add-checks') }
+        it { should_not have_selector('#recent-update-checks') }
+        it { should_not have_selector('.recent', text: "+") }
       
         describe "list " do
       
@@ -316,7 +319,7 @@ describe "CountryPages" do
       describe "edit" do
     
         before do
-          @example_3 = FactoryGirl.create(:nationality, nationality: 'Albanian')
+          @example_3 = FactoryGirl.create(:nationality, nationality: 'Albanian', checked: true)
           visit edit_nationality_path(@example_3)
         end
     
@@ -324,6 +327,8 @@ describe "CountryPages" do
         it { should have_selector('h1',    text: 'Edit Nationality') }
         it { should have_selector('input', value: @example_3.nationality) }
         it { should have_link('Back', href: nationalities_path) }
+        it { should_not have_selector('input#nationality_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
     
         describe "with invalid data" do
           before do
@@ -347,6 +352,8 @@ describe "CountryPages" do
           it { should have_selector('title', text: 'Nationalities') }
           it { should have_selector('div.alert.alert-success') }
           specify { @example_3.reload.nationality.should == new_nat }
+          specify { @example_3.reload.checked.should == false }
+          specify { @example_3.reload.updated_by.should == @admin.id }
         end
       end
       
@@ -405,8 +412,11 @@ describe "CountryPages" do
           it { should have_link('Add', href: new_currency_path) }
           it { should have_selector('ul.itemlist li:nth-child(3)', text: 'Pounds Sterling') }
           it { should_not have_selector('#statistics', text: 'unlinked') }  #superuser only
-          it { should_not have_selector('#recent-adds') }
-          it { should_not have_selector('.recent', text: "*") }
+          it { should have_selector('#recent-adds') }
+          it { should have_selector('.recent', text: "*") }
+          it { should_not have_selector('#recent-add-checks') }
+          it { should_not have_selector('#recent-update-checks') }
+          it { should_not have_selector('.recent', text: "+") }
         
           it "should be able to delete a currency" do
             expect { click_link('delete') }.to change(Currency, :count).by(-1)
@@ -460,7 +470,7 @@ describe "CountryPages" do
       describe "edit" do
     
         before do
-          @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR')
+          @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR', checked: true)
           visit edit_currency_path(@currency_3)
         end
     
@@ -468,6 +478,8 @@ describe "CountryPages" do
         it { should have_selector('h1',    text: 'Edit Currency') }
         it { should have_selector('input', value: @currency_3.code) }
         it { should have_link('Back', href: currencies_path) }
+        it { should_not have_selector('input#currency_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
     
         describe "with invalid data" do
           before do
@@ -493,6 +505,8 @@ describe "CountryPages" do
           it { should have_selector('title', text: 'Currencies') }
           it { should have_selector('div.alert.alert-success') }
           specify { @currency_3.reload.code.should == new_code }
+          specify { @currency_3.reload.checked.should == false }
+          specify { @currency_3.reload.updated_by.should == @admin.id }
         end
       end
       
@@ -551,8 +565,11 @@ describe "CountryPages" do
           it { should have_link("settings", href: country_path(@country)) }
           it { should have_selector('ul.itemlist li:nth-child(3)', text: 'United Kingdom') }
           it { should_not have_selector('#statistics', text: 'unlinked') }
-          it { should_not have_selector('#recent-adds') }
-          it { should_not have_selector('.recent', text: "*") }
+          it { should have_selector('#recent-adds') }
+          it { should have_selector('.recent', text: "*") }
+          it { should_not have_selector('#recent-add-checks') }
+          it { should_not have_selector('#recent-update-checks') }
+          it { should_not have_selector('.recent', text: "+") }
           it { should_not have_selector('.incomplete', text: "!") }
           it { should_not have_selector('#still-incomplete') } 
           it { should_not have_selector('.standout', text: "YOU'RE AN ADMINISTRATOR") }
@@ -671,36 +688,12 @@ describe "CountryPages" do
     
         before { visit new_country_path }
       
-        it { should have_selector('title', text: 'New Country') }
-        it { should have_selector('h1',    text: 'New Country') }
-        it { should have_link('Back', href: countries_path) }
-    
-        describe "creating a new Country" do
-      
-          before do 
-            5.times { FactoryGirl.create(:absence_type) }
-            fill_in "Country", with: "Scotland"
-            select "GBP (Pounds Sterling)",  from: "country_currency_id"
-            select "British", from: "Nationality"
-          end
-        
-          it "should create a country and redirect to the 'show' page" do
-            expect { click_button "Create" }.to change(Country, :count).by(1)
-            page.should have_selector('h1', text: 'Scotland')
-          end         
+        it { should_not have_selector('title', text: 'New Country') }
+        it "should render the home page" do
+          page.should have_selector('.alert', text: 'You must be a HROomph superuser')
+          page.should have_selector('h1', text: 'Administrator Menu')
         end
-      
-        describe "creating a record that fails validation" do
-      
-          before { fill_in "Country",  with: "" }
         
-          it "should not create a country" do
-            expect { click_button "Create" }.not_to change(Country, :count)
-            page.should have_selector('h1', text: 'New Country')
-            page.should have_content('error')
-          end  
-      
-        end
       end
     
       describe "edit" do
@@ -743,7 +736,9 @@ describe "CountryPages" do
           it { should_not have_selector('#ramadan-week', text: "Ramadan") }
           it { should_not have_selector('#sick-accrual', text: "sickness accrual") }
           it { should_not have_selector("#completion", text: "Are all settings complete?") }
-          it { should_not have_selector('#country_gratuity_ceiling_months') }          
+          it { should_not have_selector('#country_gratuity_ceiling_months') }
+          it { should_not have_selector('input#country_checked') }
+          it { should_not have_selector('#update-date', text: "Added") }          
         
           describe "for countries with 'Gulf' rules" do
             
@@ -805,23 +800,76 @@ describe "CountryPages" do
       describe "index" do
       
         before do  
-          @example= FactoryGirl.create(:nationality, nationality: 'French')
-          @example_1 = Nationality.create(nationality: 'British', created_by: @superuser.id)
-          @example_2 = Nationality.create(nationality: 'Algerian', created_by: 999999)
-          @example_3 = Nationality.create(nationality: 'Chinese', created_by: @superuser.id)
+          @example= FactoryGirl.create(:nationality, nationality: 'French', checked: true)
+          @example_1 = Nationality.create(nationality: 'British', created_by: @superuser.id, checked: true)
+          @example_2 = Nationality.create(nationality: 'Algerian', created_by: 999999, checked: true)
+          @example_3 = Nationality.create(nationality: 'Chinese', created_by: @superuser.id, checked: true)
           @currency_1 = Currency.create(currency: 'Pounds', code: 'GBP')
           @country_1 = Country.create(country: 'UK', nationality_id: @example_1.id, currency_id: @currency_1.id)
           visit nationalities_path
         end
         
         it { should have_selector('#statistics', text: 'unlinked') }
-        it { should have_selector('#recent-adds') }
-        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-adds') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should_not have_selector('.recent', text: "+") }  #all records already checked
+        it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: nationality_path(@example)) }    #although not created by current user
         it { should_not have_link('delete', href: nationality_path(@example_1)) }  #because already linked to country
         it { should have_link('delete', href: nationality_path(@example_3)) }  #when created by current user
+         
+        describe "entering a new nationality" do
+        
+          before { visit new_nationality_path }
+          it { should have_selector('input#nationality_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Nationality", with: "Foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(Nationality, :count) 
+              page.should have_selector('h1', text: 'Nationalities')
+              page.should_not have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @example_1.toggle!(:checked)
+            visit edit_nationality_path(@example_1)
+          end
+          
+          it { should have_selector('input#nationality_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit nationalities_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the code" do
+        
+            before do
+              fill_in "Nationality", with: "Brit"
+              click_button "Save change"
+            end
+          
+            specify { @example_1.reload.checked == true }
+            specify { @example_1.reload.updated_by != @superuser.id }
+          end
+        end
       end
-    
     end
     
     describe "currencies controller" do
@@ -829,21 +877,75 @@ describe "CountryPages" do
       describe "index" do
       
         before do  
-          @currency_1 = Currency.create(currency: 'Pounds Sterling', code: 'GBP', created_by: 999999)
-          @currency_2 = Currency.create(currency: 'Bahrain Dinars', code: 'BHD', created_by: @superuser.id)
-          @currency_3 = Currency.create(currency: 'Australian Dollar', code: 'AUD', created_by: @superuser.id)
+          @currency_1 = Currency.create(currency: 'Pounds Sterling', code: 'GBP', created_by: 999999, checked: true)
+          @currency_2 = Currency.create(currency: 'Bahrain Dinars', code: 'BHD', created_by: @superuser.id, checked: true)
+          @currency_3 = Currency.create(currency: 'Australian Dollar', code: 'AUD', created_by: @superuser.id, checked: true)
           @nationality = Nationality.create(nationality: 'Bahraini')
           @country = Country.create(country: 'Bahrain', nationality_id: @nationality.id, currency_id: @currency_2.id)
           visit currencies_path
         end
       
         it { should have_selector('#statistics', text: 'unlinked') }
-        it { should have_selector('#recent-adds') }
-        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-adds') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should_not have_selector('.recent', text: "+") }  #all records already checked
+        it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: currency_path(@currency_1)) }  #although created by a different user
         it { should_not have_link('delete', href: currency_path(@currency_2)) }  #because already in use
         it { should have_link('delete', href: currency_path(@currency_3)) } 
       
+        describe "entering a new currency" do
+        
+          before { visit new_currency_path }
+          it { should have_selector('input#currency_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Currency",  with: "Foobar"
+              fill_in "Code", with: "FOO"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(Currency, :count) 
+              page.should have_selector('h1', text: 'Currencies')
+              page.should_not have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @currency_1.toggle!(:checked)
+            visit edit_currency_path(@currency_1)
+          end
+          
+          it { should have_selector('input#currency_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit currencies_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the code" do
+        
+            before do
+              fill_in "Currency", with: "Pound Sterling"
+              click_button "Save change"
+            end
+          
+            specify { @currency_1.reload.checked == true }
+            specify { @currency_1.reload.updated_by != @superuser.id }
+          end
+        end
       end
     
     end
@@ -856,9 +958,9 @@ describe "CountryPages" do
         @nationality_1 = Nationality.create(nationality: 'British')
         @nationality_2 = Nationality.create(nationality: 'Bahraini')
         @country_1 = Country.create(country: 'UK', 
-           currency_id: @currency_1.id, nationality_id: @nationality_1.id, created_by: 999999)
+           currency_id: @currency_1.id, nationality_id: @nationality_1.id, created_by: 999999, checked: true)
         @country_2 = Country.create(country: 'Bahrain', 
-           currency_id: @currency_2.id, nationality_id: @nationality_2.id, created_by: @superuser.id)
+           currency_id: @currency_2.id, nationality_id: @nationality_2.id, created_by: @superuser.id, checked: true, complete: true)
       end
       
       describe "index" do
@@ -869,16 +971,87 @@ describe "CountryPages" do
         
         it { should have_link('delete', href: country_path(@country_1)) }
         it { should have_link('delete', href: country_path(@country_2)) }
-        it { should have_selector('#recent-adds') }
-        it { should have_selector('.recent', text: "*") }
-        it { should have_selector('.incomplete', text: "!") } 
-        it { should have_selector('#still-incomplete') }   
+        it { should_not have_selector('#recent-adds') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should_not have_selector('.recent', text: "+") }  #all records already checked
+        it { should_not have_selector('.recent', text: "*") }
         it { should_not have_selector('.standout', text: "YOU'RE AN ADMINISTRATOR") }
         it { should have_link('change', href: edit_country_path(@country)) }  #superusers can change all
-        it { should have_link('Add', href: new_country_path) }   
+        it { should have_link('Add', href: new_country_path) }
+        it { should have_selector('.itemlist', text: @country_2.country.upcase) } #because entries are complete   
+      
+        describe "entering a new country" do
+        
+          before { visit new_country_path }
+          it { should_not have_selector('input#currency_checked', value: 1) } #country can only be created by superuser
+          
+          describe "successful entry" do
+          
+            describe "automatic checking of record entered by superuser" do
+              before do
+                5.times { FactoryGirl.create(:absence_type) }
+                fill_in "Country", with: "Wales"
+                select "GBP (Pounds Sterling)",  from: "country_currency_id"
+                select "British", from: "Nationality"
+              end
+            
+              it "should create the new record" do
+            
+                expect { click_button "Create" }.to change(Country, :count).by(1)
+                page.should have_selector('h1', text: 'Wales')
+      
+              end
+            end
+          end
+          
+          describe "unsuccessful entry" do
+          
+            before { fill_in "Country",  with: "" }
+          
+            it "should not create a country" do
+              expect { click_button "Create" }.not_to change(Country, :count)
+              page.should have_selector('h1', text: 'New Country')
+              page.should have_content('error')
+            end 
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @country.toggle!(:checked)
+            visit edit_country_path(@country)
+          end
+          
+          it { should have_selector('input#country_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit countries_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the code" do
+        
+            before do
+              fill_in "Country", with: "Jersey"
+              click_button "Save change"
+            end
+          
+            specify { @country.reload.checked == true }
+            specify { @country.reload.updated_by != @superuser.id }
+          end
+        end
+      
       end
     
-      describe "edit" do
+      describe "edit and deal with completion" do
     
         before do
           @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR')

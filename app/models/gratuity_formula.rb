@@ -10,10 +10,12 @@
 #  resignation_percentage :decimal(5, 2)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  checked                :boolean          default(FALSE)
+#  updated_by             :integer          default(1)
 #
 
 class GratuityFormula < ActiveRecord::Base
-  attr_accessible :resignation_percentage, :service_years_from, :service_years_to, :termination_percentage
+  attr_accessible :resignation_percentage, :service_years_from, :service_years_to, :termination_percentage, :checked, :updated_by
   
   belongs_to :country
   
@@ -44,6 +46,22 @@ class GratuityFormula < ActiveRecord::Base
   
   def self.total_updated(country)
     GratuityFormula.where("country_id = ? and updated_at >=? and created_at <?", country.id, 7.days.ago, 7.days.ago).count
+  end
+  
+  def add_check?
+    checked == false && (created_at + 1.day >= updated_at)
+  end
+  
+  def self.recent_add_checks(country)
+    self.where("country_id = ? AND checked = ? AND (updated_at - created_at) < INTERVAL '1 day'", country.id, false).count
+  end
+  
+  def update_check?
+    checked == false && (created_at + 1.day < updated_at)
+  end
+  
+  def self.recent_update_checks(country)
+    self.where("country_id = ? AND checked = ? AND (updated_at - created_at) >= INTERVAL '1 day'", country.id, false).count
   end
   
   private

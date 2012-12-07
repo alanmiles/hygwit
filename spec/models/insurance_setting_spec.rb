@@ -13,6 +13,8 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  cancellation_date :date
+#  checked           :boolean          default(FALSE)
+#  updated_by        :integer          default(1)
 #
 
 require 'spec_helper'
@@ -39,6 +41,8 @@ describe InsuranceSetting do
   it { should respond_to(:annual_milestone) }
   it { should respond_to(:effective_date) }
   it { should respond_to(:cancellation_date) }
+  it { should respond_to(:checked) }
+  it { should respond_to(:updated_by) }
   
   it { should be_valid }
   

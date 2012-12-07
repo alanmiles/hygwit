@@ -51,4 +51,7 @@
    <div id="date-help" class="help-inline"><%= date_note %></div>
 </div>
 
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>
 

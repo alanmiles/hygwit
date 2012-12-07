@@ -105,4 +105,17 @@ module CountriesHelper
     If you set gratuity to 'On' with this switch, 2 further questions will appear, asking about the ceilings (i.e. the 
     maximum payments) allowed by law.  Save your current changes and then re-open this form to see the new questions."
   end
+  
+  def insurance_guide_1
+    "HR2.0's universal National Insurance tool is designed to work in any country.  Simple to set-up and easy to adjust, the framework
+    is controlled by a country administrator.  For the local business using HR2.0 national insurance contributions are then 
+    calculated automatically." 
+  end
+  
+  def insurance_guide_2
+    "Set up the insurance rules for your country using the three links on the right - and then use the test tool to make sure
+    everything is working properly.  Then, whenever new salary thresholds or rate adjustments are announced, update the records - 
+    being particularly careful to ensure that the effective dates are correct.  It's an important job: all HR2.0 users in your
+    country are depending on you."
+  end
 end

@@ -6,9 +6,10 @@
       <%= render 'shared/user_sidebar' %>   
     </section>
     <section>
-      <% if current_user.superuser? %>
-        <%= render "stats" %>
-      <% end %>
+      <%= render "shared/superuser_admin_stats" %>
+      <div id="statistics">    
+        <%= linked_nationalities %>
+      </div>
     </section>
   </aside>
   

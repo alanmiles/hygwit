@@ -13,10 +13,13 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  cancellation_date :date
+#  checked           :boolean          default(FALSE)
+#  updated_by        :integer          default(1)
 #
 
 class InsuranceSetting < ActiveRecord::Base
-  attr_accessible :annual_milestone, :effective_date, :monthly_milestone, :name, :shortcode, :weekly_milestone, :cancellation_date
+  attr_accessible :annual_milestone, :effective_date, :monthly_milestone, :name, :shortcode, :weekly_milestone, :cancellation_date,
+      :checked, :updated_by
   
   belongs_to :country
   
@@ -29,7 +32,7 @@ class InsuranceSetting < ActiveRecord::Base
   validates :effective_date,			presence: true
   validate  :early_cancellation_date
   validate  :cancellation_with_future_record, on: :update
-  validate  :duplicate_cancelled, after: :create
+  validate  :duplicate_cancelled, on: :create
 
   #default_scope order: "insurance_settings.monthly_milestone"
   

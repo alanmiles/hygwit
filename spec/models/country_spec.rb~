@@ -32,6 +32,8 @@
 #  vacation_by_working_days :boolean          default(FALSE)
 #  gratuity_ceiling_months  :integer
 #  gratuity_ceiling_value   :integer
+#  checked                  :boolean          default(FALSE)
+#  updated_by               :integer          default(1)
 #
 
 require 'spec_helper'

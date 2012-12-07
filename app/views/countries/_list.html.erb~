@@ -12,7 +12,11 @@
               <span class="incomplete"> ! </span>
             <% end %>
           <% end %>
-          <%= country.country %> 
+          <% if country.complete? %>
+            <%= country.country.upcase %>
+          <% else %>
+            <%= country.country %>
+          <% end %> 
           | <%= link_to "settings", country %>
           <% if current_user.superuser? || current_user.administrator?(country.country) %>
             | <%= link_to "change", edit_country_path(country) %>

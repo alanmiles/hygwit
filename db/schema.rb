@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121205200709) do
+ActiveRecord::Schema.define(:version => 20121207100014) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(:version => 20121205200709) do
     t.boolean  "vacation_by_working_days",                               :default => false
     t.integer  "gratuity_ceiling_months"
     t.decimal  "gratuity_ceiling_value",   :precision => 7, :scale => 0
+    t.boolean  "checked",                                                :default => false
+    t.integer  "updated_by",                                             :default => 1
   end
 
   create_table "country_absences", :force => true do |t|
@@ -90,9 +92,11 @@ ActiveRecord::Schema.define(:version => 20121205200709) do
     t.string   "currency"
     t.string   "code"
     t.integer  "created_by",     :default => 1
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
     t.integer  "decimal_places", :default => 2
+    t.boolean  "checked",        :default => false
+    t.integer  "updated_by",     :default => 1
   end
 
   add_index "currencies", ["code"], :name => "index_currencies_on_code"
@@ -120,8 +124,10 @@ ActiveRecord::Schema.define(:version => 20121205200709) do
     t.integer  "service_years_to"
     t.decimal  "termination_percentage", :precision => 5, :scale => 2
     t.decimal  "resignation_percentage", :precision => 5, :scale => 2
-    t.datetime "created_at",                                           :null => false
-    t.datetime "updated_at",                                           :null => false
+    t.datetime "created_at",                                                              :null => false
+    t.datetime "updated_at",                                                              :null => false
+    t.boolean  "checked",                                              :default => false
+    t.integer  "updated_by",                                           :default => 1
   end
 
   create_table "grievance_types", :force => true do |t|
@@ -173,9 +179,11 @@ ActiveRecord::Schema.define(:version => 20121205200709) do
     t.decimal  "monthly_milestone"
     t.decimal  "annual_milestone"
     t.date     "effective_date"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.date     "cancellation_date"
+    t.boolean  "checked",           :default => false
+    t.integer  "updated_by",        :default => 1
   end
 
   create_table "jobfamilies", :force => true do |t|
@@ -197,8 +205,10 @@ ActiveRecord::Schema.define(:version => 20121205200709) do
   create_table "nationalities", :force => true do |t|
     t.string   "nationality"
     t.integer  "created_by",  :default => 1
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.boolean  "checked",     :default => false
+    t.integer  "updated_by",  :default => 1
   end
 
   add_index "nationalities", ["nationality"], :name => "index_nationalities_on_nationality"

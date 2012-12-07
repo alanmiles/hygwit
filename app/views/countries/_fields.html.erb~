@@ -126,7 +126,7 @@
     <div style ="clear:both" class= "line-space">
       <span class="span3 r-float"><%= f.text_field :gratuity_ceiling_value, class: "number-field" %></span>
       <i class ="icon-question-sign" id="val-click" style="float:right"></i>
-      <a name="ceiling"></a><%= f.label :gratuity_ceiling_value, "Gratuity ceiling - total value", class: "vert-down" %>
+      <%= f.label :gratuity_ceiling_value, "Gratuity ceiling - total value", class: "vert-down" %>
       <div id="c-val" class="help-inline"><%= ceiling_value %></div>
     </div>
   

@@ -13,6 +13,9 @@
     </section>
     <section>
       <%= render "shared/change_stats" %>
+      <% if current_user.administrator?(@country.country) || current_user.superuser? %>
+        <span id="change-note"><em>View all changes in the history table</em></span>
+      <% end %>
     </section>
   </aside>
   
@@ -27,7 +30,7 @@
     </div>
     <%= render "warning" %>
     <div class="line-space">
-      Listed below are the current settings. 
+      Listed below are the <u>current</u> settings. 
       <%= link_to "View full history instead", country_insurance_history_settings_path(@country), class: "btn" %>
       <%= link_to "View future settings", 
          country_insurance_future_settings_path(@country), class: "btn" if @country.insurance_settings.future_settings? %>

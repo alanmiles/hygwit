@@ -9,10 +9,15 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  decimal_places :integer          default(2)
+#  checked        :boolean          default(FALSE)
+#  updated_by     :integer          default(1)
 #
 
 class Currency < ActiveRecord::Base
-  attr_accessible :code, :currency, :decimal_places, :created_by
+
+  include UpdateCheck
+  
+  attr_accessible :code, :currency, :decimal_places, :created_by, :updated_by, :checked
   
   has_many :countries
   
@@ -43,7 +48,7 @@ class Currency < ActiveRecord::Base
     created_at >= 7.days.ago
   end
   
-  def self.total_recent
+  def self.all_recent
     Currency.where("created_at >=?", 7.days.ago).count
   end
   
@@ -51,9 +56,25 @@ class Currency < ActiveRecord::Base
     updated_at >= 7.days.ago && created_at < 7.days.ago
   end
   
-  def self.total_updated
+  def self.all_updated
     Currency.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
   end
+  
+  def add_check?
+    checked == false && (created_at + 1.day >= updated_at)
+  end
+  
+  def self.added_require_checks
+    self.where("checked = ? AND (updated_at - created_at) < INTERVAL '1 day'", false).count
+  end
+  
+  def update_check?
+    checked == false && (created_at + 1.day < updated_at)
+  end
+  
+  def self.updated_require_checks
+    self.where("checked = ? AND (updated_at - created_at) >= INTERVAL '1 day'", false).count
+  end 
   
   def self.total_unlinked
     cnt = 0

@@ -6,6 +6,10 @@ class CountriesController < ApplicationController
   
   def index
     @countries = Country.all
+    @recent_adds = Country.all_recent
+    @recent_updates = Country.all_updated
+    @recent_add_checks = Country.added_require_checks
+    @recent_update_checks = Country.updated_require_checks
   end
   
   def show
@@ -17,7 +21,8 @@ class CountriesController < ApplicationController
     @country = Country.new
     @nationalities = Nationality.all
     @currencies = Currency.all
-    @country.created_by = current_user.id
+    @country.updated_by = current_user.id
+    @country.checked = true if current_user.superuser?
   end
   
   def create
@@ -28,7 +33,8 @@ class CountriesController < ApplicationController
     else
       @nationalities = Nationality.all
       @currencies = Currency.all
-      @country.created_by = current_user.id
+      @country.updated_by = current_user.id
+      @country.checked = true if current_user.superuser?
       render 'new'
     end
   end
@@ -38,6 +44,7 @@ class CountriesController < ApplicationController
    country_admin_access
    @nationalities = Nationality.all
    @currencies = Currency.all
+   @country.updated_by = current_user.id unless current_user.superuser? 
   end
   
   def update
@@ -46,11 +53,13 @@ class CountriesController < ApplicationController
       params[:country].parse_time_select! :nightwork_start
       params[:country].parse_time_select! :nightwork_end
       if @country.update_attributes(params[:country])
+        @nationality.update_attributes(checked: false) unless current_user.superuser?
         flash[:success] = "'#{@country.country}' updated"
         redirect_to @country
       else
         @nationalities = Nationality.all
         @currencies = Currency.all
+        @country.updated_by = current_user.id unless current_user.superuser? 
         render "edit"
       end
     else
@@ -75,6 +84,10 @@ class CountriesController < ApplicationController
         redirect_to countries_path
       end
     end
+  end
+  
+  def insurance_menu
+    @country = Country.find(params[:id])
   end
   
   private

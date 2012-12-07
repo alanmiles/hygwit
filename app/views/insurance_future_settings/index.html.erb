@@ -13,6 +13,9 @@
     </section>
     <section>
       <%= render "shared/change_stats" %>
+      <% if current_user.administrator?(@country.country) || current_user.superuser? %>
+        <span id="change-note"><em>Changes are best seen in the history table</em></span>
+      <% end %>
     </section>
   </aside>
   

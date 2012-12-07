@@ -1,4 +1,6 @@
 <%= f.label :nationality %>
 <%= f.text_field :nationality %>
 
-<%= f.hidden_field :created_by %>
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>

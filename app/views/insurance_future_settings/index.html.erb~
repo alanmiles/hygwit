@@ -13,6 +13,9 @@
     </section>
     <section>
       <%= render "shared/change_stats" %>
+      <% if current_user.administrator?(@country.country) || current_user.superuser? %>
+        <span id="change-note"><em>Any changes are best seen in the history table</em></span>
+      <% end %>
     </section>
   </aside>
   
@@ -27,7 +30,7 @@
     </div>
     <%= render "insurance_settings/warning" %>
     <div class="line-space">
-      Listed below are planned threshold settings. 
+      Listed below are <u>planned</u> threshold settings. 
       <%= link_to "View current settings instead", country_insurance_settings_path(@country), class: "btn" %>
       <%= link_to "View settings history", 
          country_insurance_history_settings_path(@country), class: "btn" %>  

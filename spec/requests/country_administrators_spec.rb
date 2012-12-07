@@ -11,7 +11,7 @@ describe "CountryAdministrators" do
     																				currency_id: @currency.id, rules: "Gulf", gratuity_applies: true)
     @holiday = @country.holidays.create(name: "Eid Al Adha", start_date: "2012-10-31", end_date: "2012-11-02", checked: true)
     @gratuity_line = @country.gratuity_formulas.create(service_years_from: 0, service_years_to: 3,
-    																			termination_percentage: 50, resignation_percentage: 0)
+    																			termination_percentage: 50, resignation_percentage: 0, checked: true)
   end
   
   describe "when not logged in" do
@@ -569,6 +569,8 @@ describe "CountryAdministrators" do
             it { should have_selector('.instruction', text: "For more details") } 
             it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
             it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
+            it { should_not have_selector('#recent-add-checks') }
+        		it { should_not have_selector('.recent', text: "+") }
         
             describe "moving to the gratuity_formula edit link in the correct country" do
               before { click_link 'edit' }
@@ -608,7 +610,8 @@ describe "CountryAdministrators" do
               it { should have_selector('title', text: "Gratuity Table: #{@country.country}") }
               it { should have_selector('h1', text: 'Gratuity Table') }
               specify { formula.reload.resignation_percentage.should == 100}    
-                 
+              specify { formula.reload.checked.should == false} 
+              specify { formula.reload.updated_by.should == @admin.id}    
             end
         
             describe "updating with invalid data" do
@@ -707,6 +710,75 @@ describe "CountryAdministrators" do
           specify { @holiday.reload.checked == true }
           specify { @holiday.reload.updated_by != @superuser.id }
         end
+      end
+      
+      describe "gratuity formulas controller" do
+      
+        describe "adding a new gratuity formula" do
+        
+          before { visit new_country_gratuity_formula_path(@country) }
+          it { should have_selector('input#gratuity_formula_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Formula applies to", with: 5
+              fill_in "up to but not including", with: 10
+              fill_in "terminates", with: 100
+              fill_in "resigns", with: 100
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(@country.gratuity_formulas, :count) 
+              page.should have_selector('h1', text: 'Gratuity Table')
+              page.should have_selector('h1', text: @country.country)
+              page.should_not have_selector('.recent', text: "+") 
+            end
+        	end
+      	end
+      
+      	describe "checking a new entry via Edit" do
+         
+        	before do 
+        	  @gratuity_line.toggle!(:checked)
+        	  visit edit_gratuity_formula_path(@gratuity_line)
+        	end
+          
+        	it { should have_selector('input#gratuity_formula_checked') }
+        	it { should have_selector('#update-date', text: "Added") }
+          
+        	describe "checking the new entry in the index" do
+      
+        		before { visit country_gratuity_formulas_path(@country) }
+        
+        	  it { should have_selector('h1', text: @country.country) }
+        		it { should have_selector('title', text: "Gratuity Table") }
+        		it { should have_link('edit', href: edit_gratuity_formula_path(@gratuity_line)) }
+        		it { should have_link('del', href: gratuity_formula_path(@gratuity_line)) }
+        		it { should_not have_selector('#recent-adds') }
+        		it { should_not have_selector('.recent', text: "*") }
+        		it { should have_selector('#recent-add-checks') }
+        		it { should have_selector('.recent', text: "+") }
+        
+        	  describe "deleting a gratuity formula" do
+        
+        	    it "should be from the correct model" do
+        	      expect { click_link('del') }.to change(@country.gratuity_formulas, :count).by(-1)            
+        	    end
+        	  end
+        	end
+        
+        	describe "not changing updated and checked status when superuser edits the gratuity line" do
+        
+        	  before do
+        	    fill_in "Formula applies to", with: 3
+        	    click_button "Save changes"
+        	  end
+          
+        	  specify { @gratuity_line.reload.checked == true }
+        	  specify { @gratuity_line.reload.updated_by != @superuser.id }
+        	end
+      	end
       end
     end
   end

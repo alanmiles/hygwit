@@ -10,11 +10,15 @@
 #  resignation_percentage :decimal(5, 2)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  checked                :boolean          default(FALSE)
+#  updated_by             :integer          default(1)
 #
 
 require 'spec_helper'
 
 describe GratuityFormula do
+  
+  include UpdateCheck
   
   before do
     @nationality = FactoryGirl.create(:nationality, nationality: "Bahraini")
@@ -32,6 +36,8 @@ describe GratuityFormula do
   it { should respond_to(:service_years_to) }
   it { should respond_to(:termination_percentage) }
   it { should respond_to(:resignation_percentage) }
+  it { should respond_to(:checked) }
+  it { should respond_to(:updated_by) }
   
   it { should be_valid }
   

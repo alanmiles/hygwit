@@ -7,13 +7,18 @@
 #  created_by  :integer          default(1)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  checked     :boolean          default(FALSE)
+#  updated_by  :integer          default(1)
 #
 
 class Nationality < ActiveRecord::Base
-  attr_accessible :nationality, :created_by
+
+  include UpdateCheck
+  
+  attr_accessible :nationality, :created_by, :updated_by, :checked
   
   has_many :countries
-  
+ 
   validates :nationality, presence: true, length: { maximum: 50 },
   												uniqueness: { case_sensitive: false }
   												
@@ -39,7 +44,7 @@ class Nationality < ActiveRecord::Base
     updated_at >= 7.days.ago && created_at < 7.days.ago
   end
   
-  def self.total_updated
+  def self.all_updated
     Nationality.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
   end
   
@@ -54,8 +59,24 @@ class Nationality < ActiveRecord::Base
     return cnt
   end
   
-  def self.total_recent
+  def self.all_recent
     Nationality.where("created_at >=?", 7.days.ago).count
   end
+  
+  def add_check?
+    checked == false && (created_at + 1.day >= updated_at)
+  end
+  
+  def self.added_require_checks
+    self.where("checked = ? AND (updated_at - created_at) < INTERVAL '1 day'", false).count
+  end
+  
+  def update_check?
+    checked == false && (created_at + 1.day < updated_at)
+  end
+  
+  def self.updated_require_checks
+    self.where("checked = ? AND (updated_at - created_at) >= INTERVAL '1 day'", false).count
+  end 
   
 end

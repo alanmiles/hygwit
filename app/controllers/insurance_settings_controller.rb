@@ -10,6 +10,8 @@ class InsuranceSettingsController < ApplicationController
     @settings = @country.insurance_settings.current_list
     @recent_adds = InsuranceSetting.total_recent(@country)
     @recent_updates = InsuranceSetting.total_updated(@country)
+    @recent_add_checks = InsuranceSetting.recent_add_checks(@country)
+    @recent_update_checks = InsuranceSetting.recent_update_checks(@country)
     unset_insset_cancellation
   end
   
@@ -18,6 +20,8 @@ class InsuranceSettingsController < ApplicationController
     country_admin_access
     check_permitted
     @setting = @country.insurance_settings.new
+    @setting.updated_by = current_user.id
+    @setting.checked = true if current_user.superuser?
   end
   
   def create
@@ -40,6 +44,8 @@ class InsuranceSettingsController < ApplicationController
           redirect_to country_insurance_history_settings_path(@country)  
         end
       else
+        @setting.updated_by = current_user.id
+        @setting.checked = true if current_user.superuser?
         render 'new'
       end
     else
@@ -54,6 +60,7 @@ class InsuranceSettingsController < ApplicationController
     country_admin_access
     check_permitted
     set_insset_cancellation_status
+    @setting.updated_by = current_user.id unless current_user.superuser?  #superuser check doesn't change inputter reference
   end
   
   def update
@@ -65,6 +72,7 @@ class InsuranceSettingsController < ApplicationController
         redirect_to user_path(current_user)
       else
         if @setting.update_attributes(params[:insurance_setting])
+          @setting.update_attributes(checked: false) unless current_user.superuser?
           if insset_cancellation_status_changed?  
             if @setting.cancellation_date?
               if @setting.cancellation_date > Date.today  
@@ -100,6 +108,7 @@ class InsuranceSettingsController < ApplicationController
             end
           end      
         else
+          @setting.updated_by = current_user.id unless current_user.superuser?
           render 'edit'
         end
       end

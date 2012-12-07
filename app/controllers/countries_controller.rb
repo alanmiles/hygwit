@@ -3,9 +3,14 @@ class CountriesController < ApplicationController
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :destroy]
   before_filter :illegal_action, only: [:update, :destroy]
+  before_filter :check_superuser, only: :new
   
   def index
     @countries = Country.all
+    @recent_adds = Country.all_recent
+    @recent_updates = Country.all_updated
+    @recent_add_checks = Country.added_require_checks
+    @recent_update_checks = Country.updated_require_checks
   end
   
   def show
@@ -17,7 +22,8 @@ class CountriesController < ApplicationController
     @country = Country.new
     @nationalities = Nationality.all
     @currencies = Currency.all
-    @country.created_by = current_user.id
+    @country.updated_by = current_user.id
+    @country.checked = true if current_user.superuser?
   end
   
   def create
@@ -28,7 +34,8 @@ class CountriesController < ApplicationController
     else
       @nationalities = Nationality.all
       @currencies = Currency.all
-      @country.created_by = current_user.id
+      @country.updated_by = current_user.id
+      @country.checked = true if current_user.superuser?
       render 'new'
     end
   end
@@ -38,6 +45,7 @@ class CountriesController < ApplicationController
    country_admin_access
    @nationalities = Nationality.all
    @currencies = Currency.all
+   @country.updated_by = current_user.id unless current_user.superuser? 
   end
   
   def update
@@ -46,11 +54,13 @@ class CountriesController < ApplicationController
       params[:country].parse_time_select! :nightwork_start
       params[:country].parse_time_select! :nightwork_end
       if @country.update_attributes(params[:country])
+        @nationality.update_attributes(checked: false) unless current_user.superuser?
         flash[:success] = "'#{@country.country}' updated"
         redirect_to @country
       else
         @nationalities = Nationality.all
         @currencies = Currency.all
+        @country.updated_by = current_user.id unless current_user.superuser? 
         render "edit"
       end
     else
@@ -83,16 +93,16 @@ class CountriesController < ApplicationController
   
   private
    
-    def country_admin_access
-      if signed_in?
-        unless current_user.superuser?
-          admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
-          if admin_check.nil?
-            flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
-            redirect_to user_path(current_user)
-          end
-        end
-      end
-    end
+    #def country_admin_access
+    #  if signed_in?
+    #    unless current_user.superuser?
+    #      admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
+    #      if admin_check.nil?
+    #        flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
+    #        redirect_to user_path(current_user)
+    #      end
+    #    end
+    #  end
+    #end
   
 end

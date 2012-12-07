@@ -9,22 +9,15 @@ module CurrenciesHelper
     end
   end
   
-  def recent_currencies
-    @recent = Currency.total_recent  #created within last 7 days
-    if @recent > 0
-      return "#{pluralize(@recent, 'currency')} (*) added in past 7 days."
-    else
-      return "No recent additions" 
-    end
+  def currency_name_help
+    "Enter the full name of the currency in 50 characters or fewer."
   end
   
-  def updated_currencies
-    @updates = Currency.total_updated  #updated within last 7 days
-    if @updates > 0
-      return "#{pluralize(@updates, 'currency')} (^) updated in past 7 days."
-    else
-      return "No recent updates" 
-    end
+  def currency_code_help
+    "Enter a three-letter code for the currency.  (Use capital letters.)"
   end
   
+  def currency_decimals_help
+    "Enter a number showing the number of decimal places normally displayed for the currency."
+  end
 end
