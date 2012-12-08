@@ -11,6 +11,7 @@
 #  updated_at :datetime         not null
 #  checked    :boolean          default(FALSE)
 #  updated_by :integer          default(1)
+#  created_by :integer          default(1)
 #
 
 require 'spec_helper'
@@ -33,7 +34,7 @@ describe Holiday do
   it { should respond_to(:end_date) }
   it { should respond_to(:checked) }
   it { should respond_to(:updated_by) }
-  
+  it { should respond_to(:created_by) }
   it { should be_valid }
   
   describe "accessible attributes" do
@@ -114,6 +115,11 @@ describe Holiday do
   
   describe "when holiday dates overlap" do
     before { @country.holidays.create(name: "National Day", start_date: "2013-01-12", end_date: "2013-01-14") }
+    it { should_not be_valid }
+  end
+  
+  describe "when 'created_by' is missing" do
+    before { @holiday.created_by = nil }
     it { should_not be_valid }
   end
   

@@ -3,6 +3,7 @@ class CountriesController < ApplicationController
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :destroy]
   before_filter :illegal_action, only: [:update, :destroy]
+  before_filter :check_superuser, only: :new
   
   def index
     @countries = Country.all
@@ -21,7 +22,7 @@ class CountriesController < ApplicationController
     @country = Country.new
     @nationalities = Nationality.all
     @currencies = Currency.all
-    @country.updated_by = current_user.id
+    @country.created_by = current_user.id
     @country.checked = true if current_user.superuser?
   end
   
@@ -33,7 +34,7 @@ class CountriesController < ApplicationController
     else
       @nationalities = Nationality.all
       @currencies = Currency.all
-      @country.updated_by = current_user.id
+      @country.created_by = current_user.id
       @country.checked = true if current_user.superuser?
       render 'new'
     end
@@ -92,16 +93,16 @@ class CountriesController < ApplicationController
   
   private
    
-    def country_admin_access
-      if signed_in?
-        unless current_user.superuser?
-          admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
-          if admin_check.nil?
-            flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
-            redirect_to user_path(current_user)
-          end
-        end
-      end
-    end
+    #def country_admin_access
+    #  if signed_in?
+    #    unless current_user.superuser?
+    #      admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
+    #      if admin_check.nil?
+    #        flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
+    #        redirect_to user_path(current_user)
+    #      end
+    #    end
+    #  end
+    #end
   
 end

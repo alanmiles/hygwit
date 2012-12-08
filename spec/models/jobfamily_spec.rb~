@@ -5,9 +5,11 @@
 #  id         :integer          not null, primary key
 #  job_family :string(255)
 #  approved   :boolean          default(FALSE)
-#  created_by :integer
+#  created_by :integer          default(1)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  checked    :boolean          default(FALSE)
+#  updated_by :integer          default(1)
 #
 
 require 'spec_helper'

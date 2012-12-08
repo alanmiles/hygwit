@@ -1,0 +1,6 @@
+class AddCheckedToLeavingReasons < ActiveRecord::Migration
+  def change
+    add_column :leaving_reasons, :checked, :boolean
+    add_column :leaving_reasons, :updated_by, :integer
+  end
+end

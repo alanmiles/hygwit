@@ -16,19 +16,17 @@ require 'spec_helper'
 
 describe Sector do
   
-  include UpdateCheck
-  
   before do
-    @sector = Sector.new(sector: 'Banking', created_by: 1)
+    @sector = Sector.new(sector: 'Banking', updated_by: 1)
   end
   
   subject { @sector }
 
   it { should respond_to(:sector) }
   it { should respond_to(:approved) }
-  it { should respond_to(:created_by) }
   it { should respond_to(:updated_by) }
   it { should respond_to(:checked) }
+  it { should respond_to(:created_by) }
   it { should be_valid }
   
   describe "when sector is not present" do

@@ -1,10 +1,8 @@
      <% @sectors.each do |sector| %>
         <li>
-          <%= render "shared/superuser_notifications", :model_name => sector %>
+          <%= render "shared/superuser_admin_notifications", model_name: currency %>
           <%= sector.sector %>
           | <%= link_to "change", edit_sector_path(sector) %>
-          | <%= link_to "delete", sector, method: :delete,
-                             data: { confirm: "Delete '#{sector.sector}'?  Sure?" } %>
-    
+          <%= render "shared/admin_deletes", model_name: sector %>
         </li>
       <% end %>

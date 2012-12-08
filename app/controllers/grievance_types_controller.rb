@@ -6,11 +6,17 @@ class GrievanceTypesController < ApplicationController
   
   def index
     @grievance_types = GrievanceType.all
+    @recent_adds = GrievanceType.all_recent
+    @recent_updates = GrievanceType.all_updated
+    @recent_add_checks = GrievanceType.added_require_checks
+    @recent_update_checks = GrievanceType.updated_require_checks
   end
 
   def new
     @grievance_type = GrievanceType.new
     @grievance_type.created_by = current_user.id
+    @grievance_type.updated_by = current_user.id
+    @grievance_type.checked = true if current_user.superuser?
   end
   
   def create
@@ -20,20 +26,25 @@ class GrievanceTypesController < ApplicationController
       redirect_to grievance_types_path
     else
       @grievance_type.created_by = current_user.id
+      @grievance_type.updated_by = current_user.id
+      @grievance_type.checked = true if current_user.superuser?
       render 'new'
     end
   end
 
   def edit
-   @grievance_type = GrievanceType.find(params[:id])
+    @grievance_type = GrievanceType.find(params[:id])
+    @grievance_type.updated_by = current_user.id unless current_user.superuser? 
   end
   
   def update
     @grievance_type = GrievanceType.find(params[:id])
     if @grievance_type.update_attributes(params[:grievance_type])
+      @grievance_type.update_attributes(checked: false) unless current_user.superuser?
       flash[:success] = "'#{@grievance_type.grievance}' updated"
       redirect_to grievance_types_path
     else
+      @grievance_type.updated_by = current_user.id unless current_user.superuser?
       render "edit"
     end
   end

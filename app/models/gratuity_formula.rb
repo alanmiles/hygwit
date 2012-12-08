@@ -12,10 +12,12 @@
 #  updated_at             :datetime         not null
 #  checked                :boolean          default(FALSE)
 #  updated_by             :integer          default(1)
+#  created_by             :integer          default(1)
 #
 
 class GratuityFormula < ActiveRecord::Base
-  attr_accessible :resignation_percentage, :service_years_from, :service_years_to, :termination_percentage, :checked, :updated_by
+  attr_accessible :resignation_percentage, :service_years_from, :service_years_to, :termination_percentage, :checked, :updated_by,
+  								:created_by
   
   belongs_to :country
   
@@ -29,6 +31,7 @@ class GratuityFormula < ActiveRecord::Base
   validate  :create_overlapping, on: :create
   validate  :update_overlapping, on: :update
   validate  :negative_service_years
+  validates	:created_by,								presence: true
 
   default_scope order: 'gratuity_formulas.service_years_from ASC'
   

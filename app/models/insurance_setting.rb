@@ -15,6 +15,7 @@
 #  cancellation_date :date
 #  checked           :boolean          default(FALSE)
 #  updated_by        :integer          default(1)
+#  created_by        :integer          default(1)
 #
 
 class InsuranceSetting < ActiveRecord::Base
@@ -22,7 +23,7 @@ class InsuranceSetting < ActiveRecord::Base
   include UpdateCheck
   
   attr_accessible :annual_milestone, :effective_date, :monthly_milestone, :name, :shortcode, :weekly_milestone, :cancellation_date,
-      :checked, :updated_by
+      :checked, :updated_by, :created_by
   
   belongs_to :country
   
@@ -33,6 +34,7 @@ class InsuranceSetting < ActiveRecord::Base
   validates :monthly_milestone,		presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :annual_milestone,		presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :effective_date,			presence: true
+  validates :created_by,					presence: true
   validate  :early_cancellation_date
   validate  :cancellation_with_future_record, on: :update
   validate  :duplicate_cancelled, on: :create

@@ -3,8 +3,6 @@
           <%= render "shared/superuser_notifications", model_name: jobfamily %>
           <%= jobfamily.job_family %>
           | <%= link_to "change", edit_jobfamily_path(jobfamily) %>
-          | <%= link_to "delete", jobfamily, method: :delete,
-                             data: { confirm: "Delete '#{jobfamily.job_family}'?  Sure?" } %>
-    
+          <%= render "shared/admin_deletes", model_name: jobfamily %>
         </li>
       <% end %>

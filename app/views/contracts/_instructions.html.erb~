@@ -1,0 +1,5 @@
+      <div class="instruction">  
+        <div class="line-space">
+          <%= contract_instruction_1 %>
+        </div>
+      </div>

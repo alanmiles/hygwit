@@ -1,7 +1,18 @@
 <% provide(:title, 'Personal Qualities') %>
 <div class="row">
   <aside class="span4">
-    <%= render "shared/admin_sidebar" %>
+    <section>
+      <%= render 'shared/user_sidebar' %>
+    </section>
+    <section>
+      <%= render "instructions" %>
+    </section>
+    <section>
+      <h5 class="line-space">QUALITIES</h5>
+      <%= render "shared/superuser_admin_stats" %>
+      <h5 class="line-space">DESCRIPTORS</h5>
+      <%= render "stats" %>
+    </section>
   </aside>
   
   <div class="span8">

@@ -1,6 +1,5 @@
 class InsuranceCodesController < ApplicationController
-  
-  include RecentChange
+ 
   
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :create, :destroy]
@@ -21,7 +20,7 @@ class InsuranceCodesController < ApplicationController
     country_admin_access
     check_permitted
     @code = @country.insurance_codes.new
-    @code.updated_by = current_user.id
+    @code.created_by = current_user.id
     @code.checked = true if current_user.superuser?
     @edit = false
   end
@@ -35,7 +34,7 @@ class InsuranceCodesController < ApplicationController
         flash[:success] = "Insurance codes for #{@country.country} have been updated with '#{@code.insurance_code}'."
         redirect_to country_insurance_codes_path(@country)
       else
-        @code.updated_by = current_user.id
+        @code.created_by = current_user.id
         @code.checked = true if current_user.superuser?
         @edit = false
         render 'new'

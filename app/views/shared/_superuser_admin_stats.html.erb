@@ -1,14 +1,14 @@
       <% if current_user.superuser? %>
         <div id="recent-add-checks">
           <% if @recent_add_checks > 0 %>
-            <%= pluralize(@recent_add_checks, 'addition') %> (+) to be checked.
+            <%= pluralize(@recent_add_checks, 'addition') %> to be checked (+).
           <% else %>
             No additions to be checked.
           <% end %>
         </div>
         <div id="recent-update-checks">
           <% if @recent_update_checks > 0 %>
-            <%= pluralize(@recent_update_checks, 'update') %> (>) to be checked.
+            <%= pluralize(@recent_update_checks, 'update') %> to be checked (>).
           <% else %>
             No updates to be checked.
           <% end %>
@@ -18,14 +18,14 @@
       <% elsif current_user.admin? %>
         <div id="recent-adds">
            <% if @recent_adds > 0 %>
-             <%= pluralize(@recent_adds, 'addition') %> (*) in past 7 days.
+             <%= pluralize(@recent_adds, 'addition') %> in past 7 days (*).
            <% else %>
              No recent additions.
            <% end %>
         </div>
         <div id="recent-updates">
           <% if @recent_updates > 0 %>
-            <%= pluralize(@recent_updates, 'update') %> (^) in past 7 days.
+            <%= pluralize(@recent_updates, 'update') %> in past 7 days (^).
           <% else %>
             No recent updates.
           <% end %>

@@ -1,6 +1,6 @@
       <% @leaving_reasons.each do |reason| %>
         <li>
-          <%= render "shared/superuser_notifications", model_name: reason %>
+          <%= render "shared/superuser_admin_notifications", model_name: reason %>
           <%= reason.reason %>
           <% if reason.full_benefits? %>
             | Full leaving benefits

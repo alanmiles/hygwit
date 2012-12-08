@@ -467,8 +467,11 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Sectors') }
         it { should have_selector('h1', text: 'Sectors') }
-        it { should_not have_selector('#recent-adds', text: "needing approval") }
-        it { should_not have_selector('.recent', text: "*") }
+        it { should have_selector('#recent-adds') }
+        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-add-checks') }
+        it { should_not have_selector('#recent-update-checks') }
+        it { should_not have_selector('.recent', text: "+") }
       
         describe "list " do
       
@@ -501,7 +504,8 @@ describe "AdminPages" do
         it { should have_selector('title', text: 'New Sector') }
         it { should have_selector('h1',    text: 'New Sector') }
         it { should have_link('Back', href: sectors_path) }
-        it { should have_selector('#approving', value: '1', input_checked: 'checked') }
+        it { should_not have_selector('input#sector_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
     
         describe "creating a new sector" do
       
@@ -528,14 +532,15 @@ describe "AdminPages" do
       describe "edit" do
     
         before do
-          @sector_3 = Sector.create(sector: 'Insurance', created_by: 1)
+          @sector_3 = Sector.create(sector: 'Insurance', created_by: 1, checked: true)
           visit edit_sector_path(@sector_3)
         end
     
         it { should have_selector('title', text: 'Edit Sector') }
         it { should have_selector('h1',    text: 'Edit Sector') }
         it { should have_selector('input', value: @sector_3.sector) }
-        it { should have_selector('#approving', type: 'checkbox') }
+        it { should_not have_selector('input#nationality_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
         it { should have_link('Back', href: sectors_path) }
     
         describe "with invalid data" do
@@ -554,14 +559,14 @@ describe "AdminPages" do
           let(:new_sector) { "Food" }
           before do
             fill_in 'Sector', with: new_sector
-            check 'Approved'
             click_button "Save change"
           end
       
           it { should have_selector('title', text: 'Sectors') }
           it { should have_selector('div.alert.alert-success') }
           specify { @sector_3.reload.sector.should == new_sector }
-          specify { @sector_3.reload.approved.should == true }
+          specify { @sector_3.reload.checked.should == false }
+          specify { @sector_3.reload.created_by.should == @admin.id }
         end
       end 
     end
@@ -580,7 +585,7 @@ describe "AdminPages" do
         it { should have_selector('title', text: 'Job Families') }
         it { should have_selector('h1', text: 'Job Families') }
         it { should_not have_selector('#recent-adds', text: "needing approval") }
-        it { should_not have_selector('.recent', text: "*") }
+        it { should have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -613,7 +618,7 @@ describe "AdminPages" do
         it { should have_selector('title', text: 'New Job Family') }
         it { should have_selector('h1',    text: 'New Job Family') }
         it { should have_link('Back', href: jobfamilies_path) }
-        it { should have_selector('#approving', value: '1', input_checked: 'checked') }
+        it { should_not have_selector('#jobfamily_checked', type: 'checkbox') }
     
         describe "creating a new job_family" do
       
@@ -647,7 +652,7 @@ describe "AdminPages" do
         it { should have_selector('title', text: 'Edit Job Family') }
         it { should have_selector('h1',    text: 'Edit Job Family') }
         it { should have_selector('input', value: @jobfamily_3.job_family) }
-        it { should have_selector('#approving', type: 'checkbox') }
+        it { should_not have_selector('#jobfamily_checked', type: 'checkbox') }
         it { should have_link('Back', href: jobfamilies_path) }
     
         describe "with invalid data" do
@@ -666,14 +671,14 @@ describe "AdminPages" do
           let(:new_family) { "Medical Staff" }
           before do
             fill_in 'Job family', with: new_family
-            check 'Approved'
             click_button "Save change"
           end
       
           it { should have_selector('title', text: 'Job Families') }
           it { should have_selector('div.alert.alert-success') }
           specify { @jobfamily_3.reload.job_family.should == new_family }
-          specify { @jobfamily_3.reload.approved.should == true }
+          specify { @jobfamily_3.reload.checked.should == false }
+          specify { @jobfamily_3.reload.created_by.should == @admin.id }
         end
       end 
     end
@@ -691,8 +696,8 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Leaving Reasons') }
         it { should have_selector('h1', text: 'Leaving Reasons') }
-        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
-        it { should_not have_selector('.recent', text: "*") }
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -802,8 +807,8 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Disciplinary Categories') }
         it { should have_selector('h1', text: 'Disciplinary Categories') }
-        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
-        it { should_not have_selector('.recent', text: "*") }
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -908,8 +913,8 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Grievance Types') }
         it { should have_selector('h1', text: 'Grievance Types') }
-        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
-        it { should_not have_selector('.recent', text: "*") }
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -1013,8 +1018,8 @@ describe "AdminPages" do
       
         it { should have_selector('title', text: 'Contract Types') }
         it { should have_selector('h1', text: 'Contract Types') }
-        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
-        it { should_not have_selector('.recent', text: "*") }
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
       
         describe "list " do
       
@@ -1119,17 +1124,70 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @sector = Sector.create(sector: 'Business', created_by: @superuser.id)
-          @sector_2 = Sector.create(sector: 'Manufacturing', created_by: 999999)
-          @sector_3 = Sector.create(sector: 'Automobile', created_by: 999999)
+          @sector = Sector.create(sector: 'Business', created_by: @superuser.id, checked: true)
+          @sector_2 = Sector.create(sector: 'Manufacturing', created_by: 999999, checked: true)
+          @sector_3 = Sector.create(sector: 'Automobile', created_by: 999999, checked: true)
           visit sectors_path
         end
       
-        it { should have_selector('#recent-adds', text: "needing approval") }
-        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-adds') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
+        it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: sector_path(@sector)) }
         it { should have_link('delete', href: sector_path(@sector_2)) }
       
+        describe "entering a new sector" do
+        
+          before { visit new_sector_path }
+          it { should have_selector('input#sector_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Sector", with: "Foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(Sector, :count) 
+              page.should have_selector('h1', text: 'Sectors')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @sector.toggle!(:checked)
+            visit edit_sector_path(@sector)
+          end
+          
+          it { should have_selector('input#sector_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit sectors_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the code" do
+        
+            before do
+              fill_in "Sector", with: "Bizness"
+              click_button "Save change"
+            end
+          
+            specify { @sector.reload.checked == true }
+            specify { @sector.reload.created_by != @superuser.id }
+          end
+        end
       end
     end
     
@@ -1144,8 +1202,8 @@ describe "AdminPages" do
           visit jobfamilies_path
         end
         
-        it { should have_selector('#recent-adds', text: "needing approval") }
-        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: jobfamily_path(@jobfamily)) }
         it { should have_link('delete', href: jobfamily_path(@jobfamily_2)) }
         
@@ -1163,8 +1221,8 @@ describe "AdminPages" do
           visit leaving_reasons_path
         end
       
-        it { should have_selector('#recent-adds', text: "in past 7 days") }
-        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: leaving_reason_path(@reason)) }
         it { should have_link('delete', href: leaving_reason_path(@reason_2)) }
       end
@@ -1181,8 +1239,8 @@ describe "AdminPages" do
           visit disciplinary_categories_path
         end
       
-        it { should have_selector('#recent-adds', text: "in past 7 days") }
-        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: disciplinary_category_path(@dcat)) }
         it { should have_link('delete', href: disciplinary_category_path(@dcat_2)) }
         
@@ -1200,8 +1258,8 @@ describe "AdminPages" do
           visit grievance_types_path
         end
         
-        it { should have_selector('#recent-adds', text: "in past 7 days") }
-        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: grievance_type_path(@gtype)) }
         it { should have_link('delete', href: grievance_type_path(@gtype_2)) }
       end
@@ -1217,8 +1275,8 @@ describe "AdminPages" do
           visit contracts_path
         end
       
-        it { should have_selector('#recent-adds', text: "in past 7 days") }
-        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: contract_path(@contract_2)) }
         it { should have_link('delete', href: contract_path(@contract_3)) }
       end

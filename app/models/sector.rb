@@ -14,7 +14,9 @@
 
 class Sector < ActiveRecord::Base
 
-  attr_accessible :approved, :sector, :created_by, :checked, :updated_by
+  include UpdateCheck
+  
+  attr_accessible :sector, :checked, :updated_by, :created_by
   
   validates :sector, presence: true, length: { maximum: 50 },
                      uniqueness: { case_sensitive: false }

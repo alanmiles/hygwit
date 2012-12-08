@@ -14,6 +14,7 @@ class NationalitiesController < ApplicationController
 
   def new
     @nationality = Nationality.new
+    @nationality.created_by = current_user.id
     @nationality.updated_by = current_user.id
     @nationality.checked = true if current_user.superuser?
   end
@@ -24,6 +25,7 @@ class NationalitiesController < ApplicationController
       flash[:success] = "'#{@nationality.nationality}' added"
       redirect_to nationalities_path
     else
+      @nationality.created_by = current_user.id
       @nationality.updated_by = current_user.id
       @nationality.checked = true if current_user.superuser?
       render 'new'

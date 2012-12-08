@@ -1,0 +1,6 @@
+class AddCheckedToJobFamilies < ActiveRecord::Migration
+  def change
+    add_column :job_families, :checked, :boolean, default: false
+    add_column :job_families, :updated_by, :integer, default: 1
+  end
+end

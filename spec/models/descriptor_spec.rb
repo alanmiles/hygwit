@@ -10,6 +10,7 @@
 #  updated_by :integer          default(1)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  checked    :boolean          default(FALSE)
 #
 
 require 'spec_helper'
@@ -29,6 +30,7 @@ describe Descriptor do
   it { should respond_to(:reviewed) }
   it { should respond_to(:quality_id) }
   it { should respond_to(:updated_by) }
+  it { should respond_to(:checked) }
   it { should be_valid }
   
   describe "when 'quality_id' is missing" do

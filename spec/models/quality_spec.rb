@@ -8,6 +8,8 @@
 #  created_by :integer          default(1)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  checked    :boolean          default(FALSE)
+#  updated_by :integer          default(1)
 #
 
 require 'spec_helper'
@@ -24,6 +26,9 @@ describe Quality do
   it { should respond_to(:approved) }
   it { should respond_to(:created_by) }
   it { should respond_to(:descriptors) }
+  it { should respond_to(:checked) }
+  it { should respond_to(:created_at) }
+  
   it { should be_valid }
   
   describe "when quality is not present" do

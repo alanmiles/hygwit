@@ -7,6 +7,8 @@
 #  created_by :integer          default(1)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  checked    :boolean          default(FALSE)
+#  updated_by :integer          default(1)
 #
 
 require 'spec_helper'
@@ -20,6 +22,9 @@ describe GrievanceType do
   subject { @grievance_type }
 
   it { should respond_to(:grievance) }
+  it { should respond_to(:updated_by) }
+  it { should respond_to(:checked) }
+  it { should respond_to(:created_by) }
   it { should be_valid }
   
   describe "when grievance is not present" do
@@ -34,6 +39,11 @@ describe GrievanceType do
   
   describe "when grievance is too long" do
     before { @grievance_type.grievance = "a" * 51 }
+    it { should_not be_valid }
+  end
+  
+  describe "when 'created_by' is missing" do
+    before { @grievance_type.created_by = nil }
     it { should_not be_valid }
   end
   

@@ -6,11 +6,17 @@ class LeavingReasonsController < ApplicationController
   
   def index
     @leaving_reasons = LeavingReason.all
+    @recent_adds = LeavingReason.all_recent
+    @recent_updates = LeavingReason.all_updated
+    @recent_add_checks = LeavingReason.added_require_checks
+    @recent_update_checks = LeavingReason.updated_require_checks
   end
 
   def new
     @leaving_reason = LeavingReason.new
     @leaving_reason.created_by = current_user.id
+    @leaving_reason.updated_by = current_user.id
+    @leaving_reason.checked = true if current_user.superuser?
   end
   
   def create
@@ -20,20 +26,25 @@ class LeavingReasonsController < ApplicationController
       redirect_to leaving_reasons_path
     else
       @leaving_reason.created_by = current_user.id
+      @leaving_reason.updated_by = current_user.id
+      @leaving_reason.checked = true if current_user.superuser?
       render 'new'
     end
   end
 
   def edit
    @leaving_reason = LeavingReason.find(params[:id])
+   @leaving_reason.updated_by = current_user.id unless current_user.superuser? 
   end
   
   def update
     @leaving_reason = LeavingReason.find(params[:id])
     if @leaving_reason.update_attributes(params[:leaving_reason])
+      @leaving_reason.update_attributes(checked: false) unless current_user.superuser?
       flash[:success] = "'#{@leaving_reason.reason}' updated"
       redirect_to leaving_reasons_path
     else
+      @leaving_reason.updated_by = current_user.id unless current_user.superuser? 
       render "edit"
     end
   end

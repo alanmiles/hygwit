@@ -253,8 +253,8 @@ describe "CountryPages" do
       
         before do  
           @example= FactoryGirl.create(:nationality, nationality: 'French', created_by: 999999)
-          @example_1 = Nationality.create(nationality: 'British', created_by: @admin.id)     #created by this user but linked to country
-          @example_2 = Nationality.create(nationality: 'Algerian', created_by: 999999)    #not created by this user
+          @example_1 = Nationality.create(nationality: 'British', created_by: @admin.id)     #updated by this user but linked to country
+          @example_2 = Nationality.create(nationality: 'Algerian', created_by: 999999)    #not updated by this user
           @example_3 = Nationality.create(nationality: 'Chinese', created_by: @admin.id)
           @currency_1 = Currency.create(currency: 'Pounds', code: 'GBP')
           @country_1 = Country.create(country: 'UK', nationality_id: @example_1.id, currency_id: @currency_1.id)
@@ -273,9 +273,9 @@ describe "CountryPages" do
         describe "list " do
       
           it { should have_link('change', href: edit_nationality_path(@example)) }
-          it { should_not have_link('delete', href: nationality_path(@example)) }    #because not created by current user
+          it { should_not have_link('delete', href: nationality_path(@example)) }    #because not updated by current user
           it { should_not have_link('delete', href: nationality_path(@example_1)) }  #because already linked to country
-          it { should have_link('delete', href: nationality_path(@example_3)) }  	   #because created by current user
+          it { should have_link('delete', href: nationality_path(@example_3)) }  	   #because updated by current user
           it { should have_link('Add', href: new_nationality_path) }
           it { should have_selector('ul.itemlist li:nth-child(4)', text: 'French') }
         
@@ -293,6 +293,8 @@ describe "CountryPages" do
         it { should have_selector('title', text: 'New Nationality') }
         it { should have_selector('h1',    text: 'New Nationality') }
         it { should have_link('Back', href: nationalities_path) }
+        it { should_not have_selector('input#nationality_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
     
         describe "creating a new nationality" do
       
@@ -372,13 +374,13 @@ describe "CountryPages" do
           specify { response.should redirect_to root_path }      
         end
           
-        describe "non-deletion of nationalities not created by current_user admin" do
+        describe "non-deletion of nationalities not updated by current_user admin" do
           pending("strength test to make sure record can't be deleted from URL")
           #before { delete nationality_path(@nationality_4) }
           #specify { response.should redirect_to(nationalities_path) }  
         end
         
-        describe "deletion of nationalities created by current_user admin" do
+        describe "deletion of nationalities updated by current_user admin" do
           pending("strength test to make sure owned record can be deleted")
           #before { delete nationality_path(@nationality_5) }
           #specify { response.should redirect_to(nationalities_path) }  
@@ -406,7 +408,7 @@ describe "CountryPages" do
         describe "list " do
       
           it { should have_link('change', href: edit_currency_path(@currency)) }
-          it { should_not have_link('delete', href: currency_path(@currency_1)) }  #because created by a different user
+          it { should_not have_link('delete', href: currency_path(@currency_1)) }  #because updated by a different user
           it { should_not have_link('delete', href: currency_path(@currency_2)) }  #because already in use
           it { should have_link('delete', href: currency_path(@currency_3)) } 
           it { should have_link('Add', href: new_currency_path) }
@@ -815,9 +817,9 @@ describe "CountryPages" do
         it { should have_selector('#recent-update-checks') }
         it { should_not have_selector('.recent', text: "+") }  #all records already checked
         it { should_not have_selector('.recent', text: "*") }
-        it { should have_link('delete', href: nationality_path(@example)) }    #although not created by current user
+        it { should have_link('delete', href: nationality_path(@example)) }    #although not updated by current user
         it { should_not have_link('delete', href: nationality_path(@example_1)) }  #because already linked to country
-        it { should have_link('delete', href: nationality_path(@example_3)) }  #when created by current user
+        it { should have_link('delete', href: nationality_path(@example_3)) }  #when updated by current user
          
         describe "entering a new nationality" do
         
@@ -891,7 +893,7 @@ describe "CountryPages" do
         it { should have_selector('#recent-update-checks') }
         it { should_not have_selector('.recent', text: "+") }  #all records already checked
         it { should_not have_selector('.recent', text: "*") }
-        it { should have_link('delete', href: currency_path(@currency_1)) }  #although created by a different user
+        it { should have_link('delete', href: currency_path(@currency_1)) }  #although updated by a different user
         it { should_not have_link('delete', href: currency_path(@currency_2)) }  #because already in use
         it { should have_link('delete', href: currency_path(@currency_3)) } 
       
@@ -984,7 +986,7 @@ describe "CountryPages" do
         describe "entering a new country" do
         
           before { visit new_country_path }
-          it { should_not have_selector('input#currency_checked', value: 1) } #country can only be created by superuser
+          it { should_not have_selector('input#currency_checked', value: 1) } #country can only be updated by superuser
           
           describe "successful entry" do
           

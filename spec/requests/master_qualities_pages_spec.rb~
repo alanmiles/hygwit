@@ -5,7 +5,7 @@ describe "MasterQualitiesPages" do
   subject { page }
   
   before do
-    @quality = Quality.create(quality: 'Punctuality', created_by: 1)
+    @quality = Quality.create(quality: 'Punctuality', updated_by: 1)
   end
   
   describe "when not logged in" do
@@ -102,7 +102,7 @@ describe "MasterQualitiesPages" do
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Achievement-flavored HR')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
         end
       end
       
@@ -141,20 +141,21 @@ describe "MasterQualitiesPages" do
       describe "index" do
       
         before do  
-          @quality = Quality.create(quality: 'Care for the workplace', created_by: @admin.id)
-          @quality_2 = Quality.create(quality: 'Teamwork', created_by: 999999)
-          @quality_3 = Quality.create(quality: 'Attendance', created_by: 999999)
+          @quality = Quality.create(quality: 'Care for the workplace', updated_by: @admin.id)
+          @quality_2 = Quality.create(quality: 'Teamwork', updated_by: 999999)
+          @quality_3 = Quality.create(quality: 'Attendance', updated_by: 999999)
           visit qualities_path
         end
       
         it { should have_selector('title', text: 'Personal Qualities') }
         it { should have_selector('h1', text: 'Personal Qualities') }
-        it { should have_selector('#recent-adds', text: "needing approval") }
+        it { should have_selector('#recent-adds', text: "additions in past 7 days") }
         it { should have_selector('.recent', text: "*") }
         it { should have_selector('#recent-updates', text: "No recent updates") }
         it { should have_selector('#recent-updates-2', text: "No recent updates") }
         it { should have_selector('#unedited', text: "to be written") }
-        it { should have_selector('.updates', text: ">") }
+        #it { should have_selector('.updates', text: "*") }
+        it { should have_selector('.updates', text: "~") }
         
         describe "list " do
       
@@ -187,7 +188,7 @@ describe "MasterQualitiesPages" do
       describe "the 'show' page" do
       
         before do  
-          @quality = Quality.create(quality: 'Leadership', created_by: 1)
+          @quality = Quality.create(quality: 'Leadership', updated_by: 1)
           @descriptor = Descriptor.find_by_quality_id_and_grade(@quality.id, "A")
           visit quality_path(@quality)
         end
@@ -197,13 +198,13 @@ describe "MasterQualitiesPages" do
         it { should have_link('Edit', href: edit_quality_path(@quality)) }
         it { should have_link('Qualities list', href: qualities_path) }
         it { should have_link('change', href: edit_descriptor_path(@descriptor)) }
-        it { should have_selector('.updates', text: ">") }
+        it { should have_selector('.updates', text: "~") }
       end
       
       describe "editing a descriptor" do
       
         before do  
-          @quality = Quality.create(quality: 'Initiative', created_by: 1)
+          @quality = Quality.create(quality: 'Initiative', updated_by: 1)
           @descriptor = Descriptor.find_by_quality_id_and_grade(@quality.id, "A")
           visit edit_descriptor_path(@descriptor)
         end
@@ -275,7 +276,7 @@ describe "MasterQualitiesPages" do
       describe "edit" do
     
         before do
-          @quality_3 = Quality.create(quality: 'Leadership', created_by: 1)
+          @quality_3 = Quality.create(quality: 'Leadership', updated_by: 1)
           visit edit_quality_path(@quality_3)
         end
     
@@ -326,18 +327,19 @@ describe "MasterQualitiesPages" do
       describe "index" do
       
         before do  
-          @quality = Quality.create(quality: 'Care for the workplace', created_by: @superuser.id)
-          @quality_2 = Quality.create(quality: 'Teamwork', created_by: 999999)
-          @quality_3 = Quality.create(quality: 'Attendance', created_by: 999999)
+          @quality = Quality.create(quality: 'Care for the workplace', updated_by: @superuser.id)
+          @quality_2 = Quality.create(quality: 'Teamwork', updated_by: 999999)
+          @quality_3 = Quality.create(quality: 'Attendance', updated_by: 999999)
           visit qualities_path  
         end
         
-        it { should have_selector('#recent-adds', text: "needing approval") }
-        it { should have_selector('.recent', text: "*") }
-        it { should have_selector('#recent-updates', text: "No recent updates") }
-        it { should have_selector('#recent-updates-2', text: "No recent updates") }
+        it { should have_selector('#recent-add-checks', text: "to be checked") }
+        it { should have_selector('.recent', text: "+") }
+        it { should have_selector('#recent-update-checks', text: "No updates to be checked") }
+        it { should have_selector('#recent-updates-2') }
         it { should have_selector('#unedited', text: "to be written") }
-        it { should have_selector('.updates', text: ">") }
+        it { should have_selector('.recent', text: "+") }
+        it { should have_selector('.updates', text: "~") }
         it { should have_link('delete', href: quality_path(@quality)) }
         it { should have_link('delete', href: quality_path(@quality_2)) }
       
@@ -347,7 +349,7 @@ describe "MasterQualitiesPages" do
     
         before { visit new_quality_path }
       
-        it { should have_selector('#approving', value: '1', input_checked: 'checked') }
+        it { should have_selector('#quality_checked', value: '1', input_checked: 'checked') }
     
         describe "creating a new quality" do
       
@@ -364,22 +366,22 @@ describe "MasterQualitiesPages" do
       describe "edit" do
     
         before do
-          @quality_3 = Quality.create(quality: 'Leadership', created_by: 1)
+          @quality_3 = Quality.create(quality: 'Leadership', updated_by: 1)
           visit edit_quality_path(@quality_3)
         end
  
-        it { should have_selector('#approving', type: 'checkbox') }
+        it { should have_selector('#quality_checked', type: 'checkbox') }
       end
       
       describe "the 'show' page" do
       
         before do  
-          @quality = Quality.create(quality: 'Leadership', created_by: 1)
+          @quality = Quality.create(quality: 'Leadership', updated_by: 1)
           @descriptor = Descriptor.find_by_quality_id_and_grade(@quality.id, "A")
           visit quality_path(@quality)
         end
     
-        it { should have_selector('.updates', text: ">") }
+        it { should have_selector('.updates', text: "~") }
       end
     end
   end

@@ -9,8 +9,11 @@
 #  maximum_days_year      :integer
 #  documentation_required :boolean          default(TRUE)
 #  notes                  :string(255)
+#  created_by             :integer          default(1)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  checked                :boolean          default(FALSE)
+#  updated_by             :integer          default(1)
 #
 
 require 'spec_helper'
@@ -29,6 +32,9 @@ describe AbsenceType do
   it { should respond_to(:maximum_days_year) }
   it { should respond_to(:documentation_required) }
   it { should respond_to(:notes) }
+  it { should respond_to(:checked) }
+  it { should respond_to(:updated_by) }
+  
   
   it { should be_valid }
   
@@ -111,8 +117,18 @@ describe AbsenceType do
     it { should be_valid }
   end
   
+  describe "when notes is nil" do
+    before { @absence.notes = nil }
+    it { should be_valid }
+  end
+  
   describe "when notes is too long" do
     before { @absence.notes = "a" * 141 }
+    it { should_not be_valid }
+  end
+  
+  describe "when 'updated' is missing" do
+    before { @absence.updated_by = nil }
     it { should_not be_valid }
   end
 end

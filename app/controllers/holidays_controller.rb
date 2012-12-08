@@ -18,6 +18,7 @@ class HolidaysController < ApplicationController
     @country = Country.find(params[:country_id])
     country_admin_access
     @holiday = @country.holidays.new
+    @holiday.created_by = current_user.id
     @holiday.updated_by = current_user.id
     @holiday.checked = true if current_user.superuser?
   end
@@ -30,6 +31,7 @@ class HolidaysController < ApplicationController
         flash[:success] = "Holiday starting on #{@holiday.start_date} has been added for #{@country.country}."
         redirect_to country_holidays_path(@country)
       else
+        @holiday.created_by = current_user.id
         @holiday.updated_by = current_user.id
         @holiday.checked = true if current_user.superuser?
         render 'new'

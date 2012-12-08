@@ -22,7 +22,7 @@
   	<%= f.label :decimal_places, "Decimal places to display" %>
   </div>
   <div id="decimals-note" class="help-inline"><%= currency_decimals_help %></div>
-  <div style="clear:both; margin-top: 15px"><%= f.text_field :decimal_places, class: "span2" %></div>
+  <div style="clear:both; margin-top: 15px"><%= f.text_field :decimal_places, class: "span2 number-field" %></div>
 </div>
 
 <%= render "shared/superuser_check", {f: f, object: f.object} %>

@@ -7,6 +7,8 @@
 #  created_by :integer          default(1)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  checked    :boolean          default(FALSE)
+#  updated_by :integer          default(1)
 #
 
 require 'spec_helper'
@@ -20,6 +22,8 @@ describe DisciplinaryCategory do
   subject { @disciplinary_cat }
 
   it { should respond_to(:category) }
+  it { should respond_to(:updated_by) }
+  it { should respond_to(:checked) }
   it { should be_valid }
   
   describe "when category is not present" do

@@ -1,7 +1,5 @@
 class CountryAbsencesController < ApplicationController
   
-  include RecentChange
-  
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :create, :destroy]
   before_filter :illegal_action, only: [:update, :create, :destroy]
@@ -19,7 +17,7 @@ class CountryAbsencesController < ApplicationController
     @country = Country.find(params[:country_id])
     country_admin_access
     @absence = @country.country_absences.new
-    @absence.updated_by = current_user.id
+    @absence.created_by = current_user.id
     @absence.checked = true if current_user.superuser?
   end
   
@@ -31,7 +29,7 @@ class CountryAbsencesController < ApplicationController
         flash[:success] = "Absence code '#{@absence.absence_code}' has been added for #{@country.country}."
         redirect_to country_country_absences_path(@country)
       else
-        @absence.updated_by = current_user.id
+        @absence.created_by = current_user.id
         @absence.checked = true if current_user.superuser?
         render 'new'
       end

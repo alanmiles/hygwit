@@ -11,6 +11,7 @@
 #  cancelled      :date
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  created_by     :integer          default(1)
 #
 
 require 'spec_helper'
@@ -33,6 +34,7 @@ describe InsuranceCode do
   it { should respond_to(:checked) }
   it { should respond_to(:updated_by) }
   it { should respond_to(:cancelled) }
+  it { should respond_to(:created_by) }
   
   it { should be_valid }
   
@@ -83,13 +85,13 @@ describe InsuranceCode do
     it { should_not be_valid }
   end
   
-  describe "when updated_by is nil" do
-    before { @code.updated_by = nil }
+  describe "when created_by is nil" do
+    before { @code.created_by = nil }
     it { should_not be_valid }
   end
   
-  describe "when updated_by is not a number" do
-    before { @code.updated_by = "Alan" }
+  describe "when created_by is not a number" do
+    before { @code.created_by = "Alan" }
     it { should_not be_valid }
   end
   

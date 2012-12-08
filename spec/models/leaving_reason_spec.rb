@@ -8,6 +8,8 @@
 #  created_by    :integer          default(1)
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  checked       :boolean          default(FALSE)
+#  updated_by    :integer          default(1)
 #
 
 require 'spec_helper'
@@ -22,6 +24,9 @@ describe LeavingReason do
 
   it { should respond_to(:reason) }
   it { should respond_to(:full_benefits) }
+  it { should respond_to(:updated_by) }
+  it { should respond_to(:checked) }
+  
   it { should be_valid }
   
   describe "when reason is not present" do

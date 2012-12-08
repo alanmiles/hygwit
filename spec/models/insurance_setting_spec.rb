@@ -15,6 +15,7 @@
 #  cancellation_date :date
 #  checked           :boolean          default(FALSE)
 #  updated_by        :integer          default(1)
+#  created_by        :integer          default(1)
 #
 
 require 'spec_helper'
@@ -43,6 +44,7 @@ describe InsuranceSetting do
   it { should respond_to(:cancellation_date) }
   it { should respond_to(:checked) }
   it { should respond_to(:updated_by) }
+  it { should respond_to(:created_by) }
   
   it { should be_valid }
   
@@ -168,6 +170,11 @@ describe InsuranceSetting do
   
   describe "when cancellation date <= effective date" do
     before { @setting.cancellation_date = Date.today - 60.days }
+    it { should_not be_valid }
+  end
+  
+  describe "when 'created_by' is missing" do
+    before { @setting.created_by = nil }
     it { should_not be_valid }
   end
       

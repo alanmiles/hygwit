@@ -19,37 +19,46 @@ module QualitiesHelper
      before going live." 
   end
   
-  def recent_qualities
-    @recent = Quality.total_recent  #created within last 7 days
-    if @recent > 0
-      return "#{pluralize(@recent, 'addition')} (*) needing approval."
-    else
-      return "No additions needing approval" 
-    end
-  end
+  #def recent_qualities
+  #  @recent = Quality.total_recent  #created within last 7 days
+  #  if @recent > 0
+  #    return "#{pluralize(@recent, 'addition')} (*) needing approval."
+  #  else
+  #    return "No additions needing approval" 
+  #  end
+  #end
   
-  def updated_qualities
-    @updates = Quality.total_updated  #updated within last 7 days
-    if @updates > 0
-      return "#{pluralize(@updates, 'update')} (*) in past 7 days."
-    else
-      return "No recent updates" 
-    end
-  end
+  #def updated_qualities
+  #  @updates = Quality.total_updated  #updated within last 7 days
+  #  if @updates > 0
+  #    return "#{pluralize(@updates, 'update')} (*) in past 7 days."
+  #  else
+  #    return "No recent updates" 
+  #  end
+  #end
   
   def updated_descriptors
-    @need_changes = Descriptor.all_updated
-    if @need_changes > 0
-      return "#{pluralize(@updates, 'update')} (#) in past 7 days."
+    if current_user.superuser?
+      if Descriptor.requires_checking?
+        @updates = Descriptor.total_unchecked
+        return "#{pluralize(@updates, 'descriptor')} to check (&)."
+      else
+        "All updates have been checked"
+      end
     else
-      return "No recent updates" 
+      if Descriptor.includes_updates?
+        @updates = Descriptor.count_updates
+        return "#{pluralize(@updates, 'update')} in past 7 days (&)."
+      else
+        return "No recent updates" 
+      end
     end
   end
   
   def incomplete_descriptors
+    if Descriptor.requires_writing?
     @unchanged = Descriptor.total_unwritten
-    if @unchanged > 0
-      "#{@unchanged} (>) still to be written"
+      "#{@unchanged} still to be written (~)."
     else
       return "All have been written" 
     end

@@ -17,3 +17,7 @@
   <%= f.label :resignation_percentage, "Percentage of monthly salary to play if employee resigns:" %>
   <%= f.text_field :resignation_percentage, class: "span3 number-field" %> %
 </div>
+
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>

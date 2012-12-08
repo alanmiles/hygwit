@@ -149,12 +149,13 @@ describe "MasterQualitiesPages" do
       
         it { should have_selector('title', text: 'Personal Qualities') }
         it { should have_selector('h1', text: 'Personal Qualities') }
-        it { should have_selector('#recent-adds', text: "needing approval") }
+        it { should have_selector('#recent-adds', text: "additions in past 7 days") }
         it { should have_selector('.recent', text: "*") }
         it { should have_selector('#recent-updates', text: "No recent updates") }
         it { should have_selector('#recent-updates-2', text: "No recent updates") }
         it { should have_selector('#unedited', text: "to be written") }
-        it { should have_selector('.updates', text: ">") }
+        #it { should have_selector('.updates', text: "*") }
+        it { should have_selector('.updates', text: "~") }
         
         describe "list " do
       
@@ -197,7 +198,7 @@ describe "MasterQualitiesPages" do
         it { should have_link('Edit', href: edit_quality_path(@quality)) }
         it { should have_link('Qualities list', href: qualities_path) }
         it { should have_link('change', href: edit_descriptor_path(@descriptor)) }
-        it { should have_selector('.updates', text: ">") }
+        it { should have_selector('.updates', text: "~") }
       end
       
       describe "editing a descriptor" do
@@ -332,12 +333,13 @@ describe "MasterQualitiesPages" do
           visit qualities_path  
         end
         
-        it { should have_selector('#recent-adds', text: "needing approval") }
-        it { should have_selector('.recent', text: "*") }
-        it { should have_selector('#recent-updates', text: "No recent updates") }
-        it { should have_selector('#recent-updates-2', text: "No recent updates") }
+        it { should have_selector('#recent-add-checks', text: "to be checked") }
+        it { should have_selector('.recent', text: "+") }
+        it { should have_selector('#recent-update-checks', text: "No updates to be checked") }
+        it { should have_selector('#recent-updates-2') }
         it { should have_selector('#unedited', text: "to be written") }
-        it { should have_selector('.updates', text: ">") }
+        it { should have_selector('.recent', text: "+") }
+        it { should have_selector('.updates', text: "~") }
         it { should have_link('delete', href: quality_path(@quality)) }
         it { should have_link('delete', href: quality_path(@quality_2)) }
       
@@ -347,7 +349,7 @@ describe "MasterQualitiesPages" do
     
         before { visit new_quality_path }
       
-        it { should have_selector('#approving', value: '1', input_checked: 'checked') }
+        it { should have_selector('#quality_checked', value: '1', input_checked: 'checked') }
     
         describe "creating a new quality" do
       
@@ -368,7 +370,7 @@ describe "MasterQualitiesPages" do
           visit edit_quality_path(@quality_3)
         end
  
-        it { should have_selector('#approving', type: 'checkbox') }
+        it { should have_selector('#quality_checked', type: 'checkbox') }
       end
       
       describe "the 'show' page" do
@@ -379,7 +381,7 @@ describe "MasterQualitiesPages" do
           visit quality_path(@quality)
         end
     
-        it { should have_selector('.updates', text: ">") }
+        it { should have_selector('.updates', text: "~") }
       end
     end
   end

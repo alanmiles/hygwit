@@ -1,12 +1,6 @@
 <% provide(:title, 'Contract Types') %>
-<div class="row">
   <aside class="span4">
-    <section>
-      <%= render 'shared/user_sidebar' %>
-    </section>
-    <section>
-      <%= render "stats" %>
-    </section>
+    <%= render "shared/admin_sidebar" %>
   </aside>
   
   <div class="span8">

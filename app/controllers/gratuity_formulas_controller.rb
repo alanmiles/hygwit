@@ -19,6 +19,7 @@ class GratuityFormulasController < ApplicationController
     country_admin_access
     check_permitted
     @formula = @country.gratuity_formulas.new
+    @formula.created_by = current_user.id
     @formula.updated_by = current_user.id
     @formula.checked = true if current_user.superuser?
   end
@@ -32,6 +33,7 @@ class GratuityFormulasController < ApplicationController
         flash[:success] = "Gratuity table for #{@country.country} has been updated."
         redirect_to country_gratuity_formulas_path(@country)
       else
+        @formula.created_by = current_user.id
         @formula.updated_by = current_user.id
         @formula.checked = true if current_user.superuser?
         render 'new'

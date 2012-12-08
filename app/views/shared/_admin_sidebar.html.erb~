@@ -5,7 +5,5 @@
       <%= render "instructions" %>
     </section>
     <section>
-      <% if current_user.superuser? %>
-        <%= render "stats" %>
-      <% end %>
+      <%= render "stats" %>
     </section>

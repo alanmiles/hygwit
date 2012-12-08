@@ -17,6 +17,7 @@ class CountryAbsencesController < ApplicationController
     @country = Country.find(params[:country_id])
     country_admin_access
     @absence = @country.country_absences.new
+    @absence.created_by = current_user.id
     @absence.updated_by = current_user.id
     @absence.checked = true if current_user.superuser?
   end
@@ -29,6 +30,7 @@ class CountryAbsencesController < ApplicationController
         flash[:success] = "Absence code '#{@absence.absence_code}' has been added for #{@country.country}."
         redirect_to country_country_absences_path(@country)
       else
+        @absence.created_by = current_user.id
         @absence.updated_by = current_user.id
         @absence.checked = true if current_user.superuser?
         render 'new'

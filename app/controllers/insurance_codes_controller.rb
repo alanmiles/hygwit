@@ -20,6 +20,7 @@ class InsuranceCodesController < ApplicationController
     country_admin_access
     check_permitted
     @code = @country.insurance_codes.new
+    @code.created_by = current_user.id
     @code.updated_by = current_user.id
     @code.checked = true if current_user.superuser?
     @edit = false
@@ -34,6 +35,7 @@ class InsuranceCodesController < ApplicationController
         flash[:success] = "Insurance codes for #{@country.country} have been updated with '#{@code.insurance_code}'."
         redirect_to country_insurance_codes_path(@country)
       else
+        @code.created_by = current_user.id
         @code.updated_by = current_user.id
         @code.checked = true if current_user.superuser?
         @edit = false

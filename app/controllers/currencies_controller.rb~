@@ -6,11 +6,16 @@ class CurrenciesController < ApplicationController
   
   def index
     @currencies = Currency.all
+    @recent_adds = Currency.all_recent
+    @recent_updates = Currency.all_updated
+    @recent_add_checks = Currency.added_require_checks
+    @recent_update_checks = Currency.updated_require_checks 
   end
 
   def new
     @currency = Currency.new
     @currency.created_by = current_user.id
+    @currency.checked = true if current_user.superuser?
   end
   
   def create
@@ -20,20 +25,24 @@ class CurrenciesController < ApplicationController
       redirect_to currencies_path
     else
       @currency.created_by = current_user.id
+      @currency.checked = true if current_user.superuser?
       render 'new'
     end
   end
 
   def edit
    @currency = Currency.find(params[:id])
+   @currency.updated_by = current_user.id unless current_user.superuser? 
   end
   
   def update
     @currency = Currency.find(params[:id])
     if @currency.update_attributes(params[:currency])
+      @currency.update_attributes(checked: false) unless current_user.superuser?
       flash[:success] = "'#{@currency.code}' updated"
       redirect_to currencies_path
     else
+      @currency.updated_by = current_user.id unless current_user.superuser? 
       render "edit"
     end
   end

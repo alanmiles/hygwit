@@ -5,6 +5,10 @@ class QualitiesController < ApplicationController
   
   def index
     @qualities = Quality.all
+    @recent_adds = Quality.all_recent
+    @recent_updates = Quality.all_updated
+    @recent_add_checks = Quality.added_require_checks
+    @recent_update_checks = Quality.updated_require_checks
   end
   
   def show
@@ -15,7 +19,8 @@ class QualitiesController < ApplicationController
   def new
     @quality = Quality.new
     @quality.created_by = current_user.id
-    @quality.approved = true if current_user.superuser?
+    @quality.updated_by = current_user.id
+    @quality.checked = true if current_user.superuser?
   end
   
   def create
@@ -29,20 +34,25 @@ class QualitiesController < ApplicationController
       redirect_to @quality
     else
       @quality.created_by = current_user.id
+      @quality.updated_by = current_user.id
+      @quality.checked = true if current_user.superuser?
       render 'new'
     end
   end
 
   def edit
    @quality = Quality.find(params[:id])
+   @quality.updated_by = current_user.id unless current_user.superuser? 
   end
   
   def update
     @quality = Quality.find(params[:id])
     if @quality.update_attributes(params[:quality])
+      @quality.update_attributes(checked: false) unless current_user.superuser?
       flash[:success] = "'#{@quality.quality}' updated"
       redirect_to @quality
     else
+      @quality.updated_by = current_user.id unless current_user.superuser?
       render "edit"
     end
   end

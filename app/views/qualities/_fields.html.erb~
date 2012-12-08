@@ -1,9 +1,6 @@
 <%= f.label :quality %>
 <%= f.text_field :quality %>
 
-<div id="approving" class= "line-space">
-<span class="span3 r-float"><%= f.check_box :approved %></span>
-<%= f.label :approved %>
-</div>
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
 
-<%= f.hidden_field :created_by %>
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>

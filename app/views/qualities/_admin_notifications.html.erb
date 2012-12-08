@@ -1,4 +1,19 @@
-          <% if current_user.admin? %>
+          <% if current_user.superuser? %> 
+            <% if quality.add_check? %>
+              <span class="recent"> + </span>
+            <% end %>
+            <% if quality.update_check? %>
+              <span class="updates"> > </span>
+            <% end %>
+            <% if quality.descriptors.requires_checking? %>
+              <span class="updates"> & </span>
+            <% end %>
+            <% if quality.descriptors.requires_writing? %>
+              <span class="updates"> ~ </span>
+            <% end %>
+            
+          
+          <% elsif current_user.admin? %>
             <% if quality.recent? %>
               <span class="recent"> * </span>
             <% end %>
@@ -6,9 +21,9 @@
               <span class="updates"> ^ </span>
             <% end %>
             <% if quality.descriptors.includes_updates? %>
-              <span class="updates"> # </span>
+              <span class="updates"> & </span>
             <% end %>
-            <% if quality.descriptors.requires_edits? %>
-              <span class="updates"> > </span>
+            <% if quality.descriptors.requires_writing? %>
+              <span class="updates"> ~ </span>
             <% end %>
           <% end %>

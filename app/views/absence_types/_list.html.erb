@@ -11,7 +11,7 @@
       <% @absences.each do |absence| %>
         <li>
           <span class="span1">
-            <%= render "shared/superuser_notifications", model_name: absence %>
+            <%= render "shared/superuser_admin_notifications", model_name: absence %>
             <%= absence.absence_code %>
           </span>
           <span class="span1"><%= absence.paid %></span>

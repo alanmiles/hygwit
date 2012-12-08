@@ -12,6 +12,7 @@
 #  updated_at             :datetime         not null
 #  checked                :boolean          default(FALSE)
 #  updated_by             :integer          default(1)
+#  created_by             :integer          default(1)
 #
 
 require 'spec_helper'
@@ -38,6 +39,7 @@ describe GratuityFormula do
   it { should respond_to(:resignation_percentage) }
   it { should respond_to(:checked) }
   it { should respond_to(:updated_by) }
+  it { should respond_to(:created_by) }
   
   it { should be_valid }
   
@@ -165,6 +167,11 @@ describe GratuityFormula do
   describe "when service periods overlap" do
     before { @country.gratuity_formulas.create(service_years_from: 1, service_years_to: 4,
     												termination_percentage: 75, resignation_percentage: 25) }
+    it { should_not be_valid }
+  end
+  
+  describe "when 'created_by' is missing" do
+    before { @formula.created_by = nil }
     it { should_not be_valid }
   end
   

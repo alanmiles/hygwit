@@ -3,8 +3,6 @@
           <%= render "shared/superuser_notifications", model_name: grievance %>
           <%= grievance.grievance %>
           | <%= link_to "change", edit_grievance_type_path(grievance) %>
-          | <%= link_to "delete", grievance, method: :delete,
-                             data: { confirm: "Delete '#{grievance.grievance}'?  Sure?" } %>
-    
+          <%= render "shared/admin_deletes", model_name: grievance %>
         </li>
       <% end %>

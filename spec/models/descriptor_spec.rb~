@@ -10,6 +10,7 @@
 #  updated_by :integer          default(1)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  checked    :boolean          default(FALSE)
 #
 
 require 'spec_helper'
@@ -67,6 +68,35 @@ describe Descriptor do
       @descriptor_3 = Descriptor.find_by_quality_id_and_grade(@quality_3.id, "A")
     end
     subject { @descriptor_3 }
+    it { should be_valid }
+  end
+  
+  describe "when descriptor is not present" do
+    before { @descriptor.descriptor = " " }
     it { should_not be_valid }
+  end
+  
+  describe "when descriptor is nil" do
+    before { @descriptor.descriptor = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when descriptor is too long" do
+    before { @descriptor.descriptor = "a" * 251 }
+    it { should_not be_valid }
+  end
+  
+  describe "when descriptor is a duplicate (for same Quality)" do
+    before { @descriptor.descriptor = @descriptor_2.descriptor }
+    it { should_not be_valid }
+  end
+  
+  describe "when descriptor is a duplicate (for a different Quality)" do
+    before do
+      @quality_3 = Quality.create(quality: 'Attendance', created_by: 1)
+      @descriptor_3 = Descriptor.find_by_quality_id_and_descriptor(@quality_3.id, @descriptor.descriptor)
+    end
+    subject { @descriptor_3 }
+    it { should be_valid }
   end
 end

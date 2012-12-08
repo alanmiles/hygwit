@@ -1,6 +1,6 @@
      <% @sectors.each do |sector| %>
         <li>
-          <%= render "shared/superuser_notifications", :model_name => sector %>
+          <%= render "shared/superuser_admin_notifications", model_name: sector %>
           <%= sector.sector %>
           | <%= link_to "change", edit_sector_path(sector) %>
           <%= render "shared/admin_deletes", model_name: sector %>

@@ -13,21 +13,5 @@ module SectorsHelper
     before going live." 
   end
   
-  def recent_sectors
-    @recent = Sector.total_recent  #created within last 7 days
-    if @recent > 0
-      return "#{pluralize(@recent, 'addition')} (*) needing approval."
-    else
-      return "No additions needing approval" 
-    end
-  end
   
-  def updated_sectors
-    @updates = Sector.total_updated  #updated within last 7 days
-    if @updates > 0
-      return "#{pluralize(@updates, 'update')} (^) in past 7 days."
-    else
-      return "No recent updates" 
-    end
-  end
 end

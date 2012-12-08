@@ -2,7 +2,10 @@
 <%= f.text_field :reason %>
 
 <div id="terminating" class= "line-space">
-<span class="span3 r-float"><%= f.check_box :full_benefits %></span>
+<span class="span2 r-float"><%= f.check_box :full_benefits %></span>
 <%= f.label :full_benefits, "Check if leaver receives full leaving benefits" %>
 </div>
 
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>

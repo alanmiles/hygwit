@@ -22,6 +22,7 @@ class CountriesController < ApplicationController
     @country = Country.new
     @nationalities = Nationality.all
     @currencies = Currency.all
+    @country.created_by = current_user.id
     @country.updated_by = current_user.id
     @country.checked = true if current_user.superuser?
   end
@@ -34,6 +35,7 @@ class CountriesController < ApplicationController
     else
       @nationalities = Nationality.all
       @currencies = Currency.all
+      @country.created_by = current_user.id
       @country.updated_by = current_user.id
       @country.checked = true if current_user.superuser?
       render 'new'

@@ -14,6 +14,7 @@ class CurrenciesController < ApplicationController
 
   def new
     @currency = Currency.new
+    @currency.created_by = current_user.id
     @currency.updated_by = current_user.id
     @currency.checked = true if current_user.superuser?
   end
@@ -24,6 +25,7 @@ class CurrenciesController < ApplicationController
       flash[:success] = "'#{@currency.code}' added"
       redirect_to currencies_path
     else
+      @currency.created_by = current_user.id
       @currency.updated_by = current_user.id
       @currency.checked = true if current_user.superuser?
       render 'new'

@@ -11,6 +11,7 @@
 #  cancelled      :date
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  created_by     :integer          default(1)
 #
 
 require 'spec_helper'
@@ -32,6 +33,7 @@ describe InsuranceCode do
   it { should respond_to(:explanation) }
   it { should respond_to(:checked) }
   it { should respond_to(:updated_by) }
+  it { should respond_to(:cancelled) }
   
   it { should be_valid }
   

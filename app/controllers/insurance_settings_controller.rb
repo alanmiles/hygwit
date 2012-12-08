@@ -20,6 +20,7 @@ class InsuranceSettingsController < ApplicationController
     country_admin_access
     check_permitted
     @setting = @country.insurance_settings.new
+    @setting.created_by = current_user.id
     @setting.updated_by = current_user.id
     @setting.checked = true if current_user.superuser?
   end
@@ -44,6 +45,7 @@ class InsuranceSettingsController < ApplicationController
           redirect_to country_insurance_history_settings_path(@country)  
         end
       else
+        @setting.created_by = current_user.id
         @setting.updated_by = current_user.id
         @setting.checked = true if current_user.superuser?
         render 'new'

@@ -1,17 +1,7 @@
 <% provide(:title, 'Sectors') %>
 <div class="row">
   <aside class="span4">
-    <section>
-      <%= render 'shared/user_sidebar' %>
-    </section>
-    <section>
-      <%= render "instructions" %>
-    </section>
-    <section>
-      <% if current_user.superuser? %>
-        <%= render "stats" %>
-      <% end %>
-    </section> 
+    <%= render "shared/admin_sidebar" %>
   </aside>
   
   <div class="span8">

@@ -6,6 +6,6 @@
             | Full leaving benefits
           <% end %>
           | <%= link_to "change", edit_leaving_reason_path(reason) %>
-          <%= render "shared/admin_deletes", model_name: quality %>
+          <%= render "shared/admin_deletes", model_name: reason %>
         </li>
       <% end %>

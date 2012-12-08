@@ -1,0 +1,6 @@
+class AddCheckedToQualities < ActiveRecord::Migration
+  def change
+    add_column :qualities, :checked, :boolean
+    add_column :qualities, :updated_by, :integer
+  end
+end

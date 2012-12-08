@@ -1,0 +1,6 @@
+class AddCheckedToAbsenceTypes < ActiveRecord::Migration
+  def change
+    add_column :absence_types, :checked, :boolean
+    add_column :absence_types, :updated_by, :integer
+  end
+end

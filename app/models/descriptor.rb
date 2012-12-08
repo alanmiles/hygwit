@@ -10,10 +10,14 @@
 #  updated_by :integer          default(1)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  checked    :boolean          default(FALSE)
 #
 
 class Descriptor < ActiveRecord::Base
-  attr_accessible :descriptor, :grade, :reviewed, :updated_by
+
+  include UpdateCheck
+  
+  attr_accessible :descriptor, :grade, :reviewed, :updated_by, :checked
   
   belongs_to :quality
   
@@ -25,16 +29,18 @@ class Descriptor < ActiveRecord::Base
   
   default_scope order: 'descriptors.grade ASC'
   
-  def updated?
-    updated_at >= 7.days.ago && created_at < 7.days.ago
+  def recent_update?
+    unless not_written?
+      updated_at >= 7.days.ago
+    end
   end
   
-  def self.all_updated
-    Descriptor.where("updated_at >=? and created_at <=?", 7.days.ago, 7.days.ago).count
+  def self.count_updates
+    Descriptor.where("updated_at >=? and descriptor NOT LIKE ?", 7.days.ago, "%Descriptor for%").count
   end
   
   def self.includes_updates?
-    Descriptor.all_updated > 0
+    Descriptor.count_updates > 0
   end
   
   #def self.total_updated(quality)
@@ -49,8 +55,22 @@ class Descriptor < ActiveRecord::Base
     Descriptor.where("descriptor LIKE ?", "%Descriptor for%").count
   end
   
-  def self.requires_edits?
+  def self.requires_writing?
     Descriptor.total_unwritten > 0
+  end
+  
+  def still_unchecked?
+    unless not_written?
+      checked == false
+    end
+  end
+  
+  def self.total_unchecked
+    Descriptor.where("checked = ? and descriptor NOT LIKE ?", false, "%Descriptor for%").count
+  end
+  
+  def self.requires_checking?
+    Descriptor.total_unchecked > 0  
   end
  
 end

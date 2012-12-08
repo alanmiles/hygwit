@@ -11,13 +11,14 @@
 #  updated_at :datetime         not null
 #  checked    :boolean          default(FALSE)
 #  updated_by :integer          default(1)
+#  created_by :integer          default(1)
 #
 
 class Holiday < ActiveRecord::Base
 
   include UpdateCheck
   
-  attr_accessible :end_date, :name, :start_date, :checked, :updated_by
+  attr_accessible :end_date, :name, :start_date, :checked, :updated_by, :created_by
   
   belongs_to :country
   
@@ -25,6 +26,7 @@ class Holiday < ActiveRecord::Base
   validates :name,		  				presence: true, length: { maximum: 50 }
   validates :start_date, 				presence: true, uniqueness: { scope: :country_id }
   validates :end_date,					presence: true, uniqueness: { scope: :country_id }, false_end_date: true, one_week: true
+  validates :created_by,				presence: true
   validate  :create_overlapping, on: :create
   validate  :update_overlapping, on: :update
   

@@ -32,7 +32,7 @@
   </div>
 <% end %>
 
-<%= render "superuser_check", { f: f, object: f.object } %>
+<%= render "shared/superuser_check", { f: f, object: f.object } %>
 
 <div style="clear:both"><%= f.hidden_field :updated_by %></div>
 

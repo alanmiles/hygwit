@@ -217,7 +217,7 @@ describe "AbsencePages" do
           it { should_not have_link('del', href: absence_type_path(@absence_3)) }
           it { should have_link('Add', href: new_absence_type_path) }
           it { should have_selector('ul.itemlist li:nth-child(4)', text: 'UL') }  #allows for table header
-          it { should_not have_selector('.recent', text: "*") }
+          it { should have_selector('.recent', text: "*") }
         
           it "should delete absence_type" do
             expect { click_link('del') }.to change(AbsenceType, :count).by(-1)
@@ -497,8 +497,8 @@ describe "AbsencePages" do
           visit absence_types_path
         end
       
-        it { should have_selector('#recent-adds', text: "added in past 7 days") }
-        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-adds', text: "added in past 7 days") }
+        it { should_not have_selector('.recent', text: "*") }
         it { should have_link('del', href: absence_type_path(@absence_2)) }
         it { should have_link('del', href: absence_type_path(@absence_3)) }
         
