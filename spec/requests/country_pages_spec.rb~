@@ -1,3 +1,5 @@
+#deals with Nationalities, Currencies, Countries
+
 require 'spec_helper'
 
 describe "CountryPages" do
@@ -6,7 +8,7 @@ describe "CountryPages" do
   
   before do
     @absence_type = FactoryGirl.create(:absence_type, absence_code: "SF")
-    @example = FactoryGirl.create(:nationality, nationality: 'Omani', updated_by: 999999, checked: true)
+    @example = FactoryGirl.create(:nationality, nationality: 'Omani', created_by: 999999, checked: true)
     @currency = Currency.create(currency: 'Omani Riyals', code: 'OMR', checked: true)
     @country = Country.create(country: "Oman", currency_id: @currency.id, nationality_id: @example.id, rules: "Gulf", checked: true)
   end
@@ -252,10 +254,10 @@ describe "CountryPages" do
       describe "index" do
       
         before do  
-          @example= FactoryGirl.create(:nationality, nationality: 'French', updated_by: 999999)
-          @example_1 = Nationality.create(nationality: 'British', updated_by: @admin.id)     #updated by this user but linked to country
-          @example_2 = Nationality.create(nationality: 'Algerian', updated_by: 999999)    #not updated by this user
-          @example_3 = Nationality.create(nationality: 'Chinese', updated_by: @admin.id)
+          @example= FactoryGirl.create(:nationality, nationality: 'French', created_by: 999999)
+          @example_1 = Nationality.create(nationality: 'British', created_by: @admin.id)     #updated by this user but linked to country
+          @example_2 = Nationality.create(nationality: 'Algerian', created_by: 999999)    #not updated by this user
+          @example_3 = Nationality.create(nationality: 'Chinese', created_by: @admin.id)
           @currency_1 = Currency.create(currency: 'Pounds', code: 'GBP')
           @country_1 = Country.create(country: 'UK', nationality_id: @example_1.id, currency_id: @currency_1.id)
           visit nationalities_path
@@ -295,6 +297,8 @@ describe "CountryPages" do
         it { should have_link('Back', href: nationalities_path) }
         it { should_not have_selector('input#nationality_checked') }
         it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#nationality_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#nationality_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new nationality" do
       
@@ -321,7 +325,7 @@ describe "CountryPages" do
       describe "edit" do
     
         before do
-          @example_3 = FactoryGirl.create(:nationality, nationality: 'Albanian', checked: true)
+          @example_3 = FactoryGirl.create(:nationality, nationality: 'Albanian', checked: true, created_by: 999999)
           visit edit_nationality_path(@example_3)
         end
     
@@ -331,6 +335,8 @@ describe "CountryPages" do
         it { should have_link('Back', href: nationalities_path) }
         it { should_not have_selector('input#nationality_checked') }
         it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#nationality_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#nationality_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -362,9 +368,9 @@ describe "CountryPages" do
       describe "deletions" do
       
         before do  
-          @nationality_4 = Nationality.create(nationality: 'New Zealander', updated_by: 999999)
-          @nationality_2 = Nationality.create(nationality: 'Bahraini', updated_by: 999999)
-          @nationality_5 = Nationality.create(nationality: 'Nigerian', updated_by: @admin.id)
+          @nationality_4 = Nationality.create(nationality: 'New Zealander', created_by: 999999)
+          @nationality_2 = Nationality.create(nationality: 'Bahraini', created_by: 999999)
+          @nationality_5 = Nationality.create(nationality: 'Nigerian', created_by: @admin.id)
           @currency = Currency.create(currency: 'Bahraini Dinars', code: 'BHD')
           @country = Country.create(country: 'Bahrain', nationality_id: @nationality_2.id, currency_id: @currency.id)
         end 
@@ -394,9 +400,9 @@ describe "CountryPages" do
       describe "index" do
       
         before do  
-          @currency_1 = Currency.create(currency: 'Pounds Sterling', code: 'GBP', updated_by: 999999)
-          @currency_2 = Currency.create(currency: 'Bahrain Dinars', code: 'BHD', updated_by: @admin.id)
-          @currency_3 = Currency.create(currency: 'Afghani', code: 'AFN', updated_by: @admin.id)
+          @currency_1 = Currency.create(currency: 'Pounds Sterling', code: 'GBP', created_by: 999999)
+          @currency_2 = Currency.create(currency: 'Bahrain Dinars', code: 'BHD', created_by: @admin.id)
+          @currency_3 = Currency.create(currency: 'Afghani', code: 'AFN', created_by: @admin.id)
           @nationality = Nationality.create(nationality: 'Bahraini')
           @country = Country.create(country: 'Bahrain', nationality_id: @nationality.id, currency_id: @currency_2.id)
           visit currencies_path
@@ -442,6 +448,8 @@ describe "CountryPages" do
         it { should have_selector('title', text: 'New Currency') }
         it { should have_selector('h1',    text: 'New Currency') }
         it { should have_link('Back', href: currencies_path) }
+        it { should have_selector('#currency_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#currency_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new Currency" do
       
@@ -472,7 +480,7 @@ describe "CountryPages" do
       describe "edit" do
     
         before do
-          @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR', checked: true)
+          @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR', checked: true, created_by: 999999)
           visit edit_currency_path(@currency_3)
         end
     
@@ -482,6 +490,8 @@ describe "CountryPages" do
         it { should have_link('Back', href: currencies_path) }
         it { should_not have_selector('input#currency_checked') }
         it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#currency_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#currency_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -543,9 +553,9 @@ describe "CountryPages" do
         @nationality_1 = Nationality.create(nationality: 'British')
         @nationality_2 = Nationality.create(nationality: 'Bahraini')
         @country_1 = Country.create(country: 'United Kingdom', 
-           currency_id: @currency_1.id, nationality_id: @nationality_1.id, updated_by: 999999)
+           currency_id: @currency_1.id, nationality_id: @nationality_1.id, created_by: 999999)
         @country_2 = Country.create(country: 'Bahrain', 
-           currency_id: @currency_2.id, nationality_id: @nationality_2.id, updated_by: @admin.id, complete: true)
+           currency_id: @currency_2.id, nationality_id: @nationality_2.id, created_by: @admin.id, complete: true)
       end
       
       
@@ -703,7 +713,8 @@ describe "CountryPages" do
         before do
           @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR')
           @nationality_3 = Nationality.create(nationality: 'Saudi')
-          @country_3 = Country.create(country: 'Saudi Arabia', nationality_id: @nationality_3.id, currency_id: @currency_3.id)
+          @country_3 = Country.create(country: 'Saudi Arabia', nationality_id: @nationality_3.id, currency_id: @currency_3.id,
+                        created_by: 999999)
           
         end
         
@@ -728,10 +739,12 @@ describe "CountryPages" do
           before { visit edit_country_path(@country_3) }
           it { should have_selector('title', text: 'Edit Labor Law Regulations') }
           it { should have_selector('h1',    text: 'Edit Labor Law Regulations') }
+          it { should have_selector('#country_created_by', type: 'hidden', value: 999999) }
+          it { should have_selector('#country_updated_by', type: 'hidden', value: @admin.id) }
           
           pending ("check no country input field - next two tests are not working")
-          #it { should_not have_selector('input', value: @country_3.country) }
-          #it { should_not have_selector('input', value: @country_3.nationality_id) }
+          #it { should_not have_selector('#country_country', value: @country3.country) }
+          it { should_not have_selector('#country_nationality_id', value: @country_3.nationality_id) }
           it { should have_selector('input', value: @country_3.probation_days) }
           it { should have_link('List', href: countries_path) }
           it { should_not have_selector('#ramadan-day', text: "Ramadan") } 
@@ -803,9 +816,9 @@ describe "CountryPages" do
       
         before do  
           @example= FactoryGirl.create(:nationality, nationality: 'French', checked: true)
-          @example_1 = Nationality.create(nationality: 'British', updated_by: @superuser.id, checked: true)
-          @example_2 = Nationality.create(nationality: 'Algerian', updated_by: 999999, checked: true)
-          @example_3 = Nationality.create(nationality: 'Chinese', updated_by: @superuser.id, checked: true)
+          @example_1 = Nationality.create(nationality: 'British', created_by: @superuser.id, checked: true)
+          @example_2 = Nationality.create(nationality: 'Algerian', created_by: 999999, checked: true)
+          @example_3 = Nationality.create(nationality: 'Chinese', created_by: @superuser.id, checked: true)
           @currency_1 = Currency.create(currency: 'Pounds', code: 'GBP')
           @country_1 = Country.create(country: 'UK', nationality_id: @example_1.id, currency_id: @currency_1.id)
           visit nationalities_path
@@ -879,9 +892,9 @@ describe "CountryPages" do
       describe "index" do
       
         before do  
-          @currency_1 = Currency.create(currency: 'Pounds Sterling', code: 'GBP', updated_by: 999999, checked: true)
-          @currency_2 = Currency.create(currency: 'Bahrain Dinars', code: 'BHD', updated_by: @superuser.id, checked: true)
-          @currency_3 = Currency.create(currency: 'Australian Dollar', code: 'AUD', updated_by: @superuser.id, checked: true)
+          @currency_1 = Currency.create(currency: 'Pounds Sterling', code: 'GBP', created_by: 999999, checked: true)
+          @currency_2 = Currency.create(currency: 'Bahrain Dinars', code: 'BHD', created_by: @superuser.id, checked: true)
+          @currency_3 = Currency.create(currency: 'Australian Dollar', code: 'AUD', created_by: @superuser.id, checked: true)
           @nationality = Nationality.create(nationality: 'Bahraini')
           @country = Country.create(country: 'Bahrain', nationality_id: @nationality.id, currency_id: @currency_2.id)
           visit currencies_path
@@ -960,9 +973,9 @@ describe "CountryPages" do
         @nationality_1 = Nationality.create(nationality: 'British')
         @nationality_2 = Nationality.create(nationality: 'Bahraini')
         @country_1 = Country.create(country: 'UK', 
-           currency_id: @currency_1.id, nationality_id: @nationality_1.id, updated_by: 999999, checked: true)
+           currency_id: @currency_1.id, nationality_id: @nationality_1.id, created_by: 999999, checked: true)
         @country_2 = Country.create(country: 'Bahrain', 
-           currency_id: @currency_2.id, nationality_id: @nationality_2.id, updated_by: @superuser.id, checked: true, complete: true)
+           currency_id: @currency_2.id, nationality_id: @nationality_2.id, created_by: @superuser.id, checked: true, complete: true)
       end
       
       describe "index" do

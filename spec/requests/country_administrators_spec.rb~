@@ -1,3 +1,5 @@
+#deals with Holidays, GratuityFormulas
+
 require 'spec_helper'
 
 describe "CountryAdministrators" do
@@ -9,7 +11,8 @@ describe "CountryAdministrators" do
     @currency = FactoryGirl.create(:currency, currency: "Saudi Riyals", code: "SAR")
     @country = FactoryGirl.create(:country, country: "Saudi Arabia", nationality_id: @nationality.id, 
     																				currency_id: @currency.id, rules: "Gulf", gratuity_applies: true)
-    @holiday = @country.holidays.create(name: "Eid Al Adha", start_date: "2012-10-31", end_date: "2012-11-02", checked: true)
+    @holiday = @country.holidays.create(name: "Eid Al Adha", start_date: "2012-10-31", end_date: "2012-11-02", checked: true,
+                                          created_by: 999999)
     @gratuity_line = @country.gratuity_formulas.create(service_years_from: 0, service_years_to: 3,
     																			termination_percentage: 50, resignation_percentage: 0, checked: true)
   end
@@ -332,6 +335,8 @@ describe "CountryAdministrators" do
           it { should have_link("Country set-up page", href: country_path(@country)) }
           it { should_not have_selector('input#holiday_checked') }         #reserved for superuser
           it { should_not have_selector('#update-date', text: "Added") }
+          it { should have_selector('#holiday_created_by', type: 'hidden', value: @admin.id) }
+          it { should have_selector('#holiday_updated_by', type: 'hidden', value: @admin.id) }
       
           describe "with valid data" do
         
@@ -431,7 +436,7 @@ describe "CountryAdministrators" do
       
         describe "editing one of the country's holidays" do
       
-          let(:holiday) { @country.holidays.last }
+          let(:holiday) { @holiday }
           before { visit edit_holiday_path(holiday) }
         
           it { should have_selector('h1', text: @country.country) }
@@ -441,6 +446,8 @@ describe "CountryAdministrators" do
           it { should have_link('Country set-up page', href: country_path(@country)) } 
           it { should_not have_selector('input#holiday_checked') }			#reserved for superuser
           it { should_not have_selector('#update-date', text: "Added") }
+          it { should have_selector('#holiday_created_by', type: 'hidden', value: 999999) }
+          it { should have_selector('#holiday_updated_by', type: 'hidden', value: @admin.id) }
             
       
           describe "updating with valid data" do
@@ -611,7 +618,7 @@ describe "CountryAdministrators" do
               it { should have_selector('h1', text: 'Gratuity Table') }
               specify { formula.reload.resignation_percentage.should == 100}    
               specify { formula.reload.checked.should == false} 
-              specify { formula.reload.updated_by.should == admin.id}    
+              specify { formula.reload.updated_by.should == @admin.id}    
             end
         
             describe "updating with invalid data" do

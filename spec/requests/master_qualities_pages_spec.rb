@@ -213,6 +213,8 @@ describe "MasterQualitiesPages" do
         it { should have_selector('h1', text: @quality.quality) }
         it { should have_selector('h3', text: "Edit Descriptor A") }
         it { should have_link('Back', href: quality_path(@quality)) }
+        it { should_not have_selector('#descriptor_created_by') }
+        it { should have_selector('#descriptor_updated_by', type: 'hidden', value: @admin.id) }
         
         describe "with an incorrect entry" do
           
@@ -248,6 +250,8 @@ describe "MasterQualitiesPages" do
         it { should have_selector('h1',    text: 'New Quality') }
         it { should have_link('Back', href: qualities_path) }
         it { should_not have_selector('#approving', value: '1', input_checked: 'checked') }
+        it { should have_selector('#quality_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#quality_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new quality" do
       
@@ -285,6 +289,8 @@ describe "MasterQualitiesPages" do
         it { should have_selector('input', value: @quality_3.quality) }
         it { should_not have_selector('#approving', type: 'checkbox') }
         it { should have_link('Back', href: quality_path(@quality_3)) }
+        it { should have_selector('#quality_created_by', type: 'hidden', value: 1) }
+        it { should have_selector('#quality_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do

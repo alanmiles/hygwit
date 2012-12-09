@@ -1,3 +1,5 @@
+#deals with InsuranceCodes, InsuranceSettings
+
 require 'spec_helper'
 
 describe "InsurancePages" do
@@ -16,7 +18,8 @@ describe "InsurancePages" do
     @setting_new = @country.insurance_settings.create(shortcode: "AEL", name: "Another Earnings Limit", weekly_milestone: 110, 
     										monthly_milestone: 575, annual_milestone: 6900, effective_date: Date.today+60.days, checked: true)
     @setting_2 = @country.insurance_settings.create(shortcode: "UEL", name: "Upper Earnings Limit", weekly_milestone: 2000, 
-    										monthly_milestone: 8500, annual_milestone: 102000, effective_date: Date.today-130.days, checked: true) 
+    										monthly_milestone: 8500, annual_milestone: 102000, effective_date: Date.today-130.days, checked: true,
+    										created_by: 999999) 
     @setting_cancelled_past = @country.insurance_settings.create(shortcode: "NUP", name: "Not Used Past", weekly_milestone: 150, 
     										monthly_milestone: 625, annual_milestone: 7500, effective_date: Date.today-130.days, 
     										cancellation_date: Date.today-30.days, checked: true)
@@ -25,7 +28,7 @@ describe "InsurancePages" do
     										cancellation_date: Date.today + 30.days, checked: true)
     @code = @country.insurance_codes.create(insurance_code: "A", explanation: "Standard employee", checked: true)	
     @old_code	= @country.insurance_codes.create(insurance_code: "Z", explanation: "Cancelled code", 
-    										cancelled: Date.today - 30, checked: true)								    																				
+    										cancelled: Date.today - 30, checked: true, created_by: 999999)								    																				
   end
   
   describe "when not logged in" do
@@ -223,7 +226,7 @@ describe "InsurancePages" do
         @country.save
       end
       
-      describe "show adjusted insurance menu page" do
+      describe "show adjuscompilerted insurance menu page" do
         
         before { visit insurance_menu_country_path(@country) }
       
@@ -401,6 +404,8 @@ describe "InsurancePages" do
             it { should have_link("Main insurance menu", href: insurance_menu_country_path(@country)) }
             it { should_not have_selector('#insurance_setting_cancellation_date') }
             it { should have_selector('.line-space', text: "No blanks") }
+            it { should have_selector('#insurance_setting_created_by', type: 'hidden', value: @admin.id) } 
+            it { should have_selector('#insurance_setting_updated_by', type: 'hidden', value: @admin.id) }
       
             describe "with valid current data" do
         
@@ -557,6 +562,8 @@ describe "InsurancePages" do
             it { should have_link('Main insurance menu', href: insurance_menu_country_path(@country)) } 
             it { should have_selector('#insurance_setting_cancellation_date') }
             it { should_not have_selector('.line-space', text: "No blanks") }
+            it { should have_selector('#insurance_setting_created_by', type: 'hidden', value: 999999) }
+            it { should have_selector('#insurance_setting_updated_by', type: 'hidden', value: @admin.id) }
       
             describe "updating with valid data" do
           
@@ -770,6 +777,8 @@ describe "InsurancePages" do
             it { should have_link("Main insurance menu", href: insurance_menu_country_path(@country)) }
             it { should_not have_selector('#insurance_code_cancelled') }
             it { should_not have_selector('input#insurance_code_checked') }
+            it { should have_selector('#insurance_code_created_by', type: 'hidden', value: @admin.id) }
+            it { should have_selector('#insurance_code_updated_by', type: 'hidden', value: @admin.id) }
       
             describe "with valid data" do
         
@@ -842,6 +851,8 @@ describe "InsurancePages" do
             it { should have_selector('#insurance_code_cancelled') }
             it { should_not have_selector('#insurance_code_insurance_code') }  #code cannot be edited
             it { should_not have_selector('input#insurance_code_checked') }  #only for superusers
+            it { should have_selector('#insurance_code_created_by', type: 'hidden', value: 999999) }
+            it { should have_selector('#insurance_code_updated_by', type: 'hidden', value: @admin.id) }
       
             describe "updating with valid data" do
           

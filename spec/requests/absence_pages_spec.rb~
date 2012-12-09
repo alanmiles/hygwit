@@ -1,3 +1,5 @@
+#Deals with AbsenceTypes, CountryAbsences
+
 require 'spec_helper'
 
 describe "AbsencePages" do
@@ -139,12 +141,6 @@ describe "AbsencePages" do
     
     describe "CountryAbsences controller" do
     
-      #before do
-      #  @nationality = FactoryGirl.create(:nationality, nationality: "German")
-      #  @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
-      #  @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
-     # end 
-      
       let(:country_absence) { CountryAbsence.find_by_country_id_and_absence_code(@country.id, @absence.absence_code) }
       
       describe "accessing the 'new' page" do
@@ -208,7 +204,12 @@ describe "AbsencePages" do
       
         it { should have_selector('title', text: 'Absence Types') }
         it { should have_selector('h1', text: 'Absence Types') }
-        it { should_not have_selector('#recent-adds', text: "additions (*) in past 7 days") }
+        it { should have_selector('#recent-adds') }
+        it { should have_selector('#recent-updates') }
+        it { should_not have_selector('#recent-add-checks') }
+        it { should_not have_selector('#recent-update-checks') }
+        it { should_not have_selector('.recent', text: "+") } 
+        it { should have_selector('.recent', text: "*") }
         
         describe "list " do
       
@@ -217,7 +218,6 @@ describe "AbsencePages" do
           it { should_not have_link('del', href: absence_type_path(@absence_3)) }
           it { should have_link('Add', href: new_absence_type_path) }
           it { should have_selector('ul.itemlist li:nth-child(4)', text: 'UL') }  #allows for table header
-          it { should have_selector('.recent', text: "*") }
         
           it "should delete absence_type" do
             expect { click_link('del') }.to change(AbsenceType, :count).by(-1)
@@ -233,6 +233,8 @@ describe "AbsencePages" do
         it { should have_selector('title', text: 'New Absence Type') }
         it { should have_selector('h1',    text: 'New Absence Type') }
         it { should have_link('Absence-types list', href: absence_types_path) }
+        it { should have_selector('#absence_type_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#absence_type_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new absence type" do
       
@@ -265,7 +267,8 @@ describe "AbsencePages" do
       describe "edit" do
     
         before do
-          @absence_3 = AbsenceType.create(absence_code: "WL", maximum_days_year: 3, notes: "Wedding Leave - once in employment")
+          @absence_3 = AbsenceType.create(absence_code: "WL", maximum_days_year: 3, notes: "Wedding Leave - once in employment",
+          							created_by: 999999)
           visit edit_absence_type_path(@absence_3)
         end
     
@@ -273,6 +276,8 @@ describe "AbsencePages" do
         it { should have_selector('h1',    text: 'Edit Absence Type') }
         it { should have_selector('input', value: @absence_3.absence_code) }
         it { should have_link('Back', href: absence_types_path) }
+        it { should have_selector('#absence_type_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#absence_type_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -301,12 +306,6 @@ describe "AbsencePages" do
     end
     
     describe "CountryAbsences controller" do
-    
-      #before do
-      #  @nationality = FactoryGirl.create(:nationality, nationality: "German")
-     #   @currency = FactoryGirl.create(:currency, currency: "Mark", code: "DM")
-      #  @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
-     #end
       
       describe "when not the country administrator" do
       
@@ -334,7 +333,10 @@ describe "AbsencePages" do
           it { should have_link('Back to main settings page', href: country_path(@country)) }
           it { should_not have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
           it { should_not have_link('del', href: country_absence_path(@country.country_absences.first)) }
-          it { should_not have_selector('#recent-adds', text: "additions (*) in past 7 days") }
+          it { should_not have_selector('#recent-adds') }
+          it { should_not have_selector('#recent-updates') }
+          it { should_not have_selector('#recent-add-checks') }
+          it { should_not have_selector('#recent-update-checks') }
           it { should_not have_selector('.recent', text: "*") }
         end
     
@@ -367,6 +369,8 @@ describe "AbsencePages" do
           it { should have_selector('title', text: 'New Absence Type') }
           it { should have_selector('h1', text: 'New Absence Type') }
           it { should have_selector('h1', text: @country.country) }
+          it { should have_selector('#country_absence_created_by', type: 'hidden', value: @admin.id) }
+          it { should have_selector('#country_absence_updated_by', type: 'hidden', value: @admin.id) }
           it { should have_link('All absence types', href: country_country_absences_path(@country)) }
           it { should have_link('Set-up page', href: country_path(@country)) }
       
@@ -412,8 +416,10 @@ describe "AbsencePages" do
           it { should have_link('edit', href: edit_country_absence_path(@country.country_absences.first)) }
           it { should have_link('del', href: country_absence_path(@country.country_absences.first)) }
           it { should have_selector('#recent-adds') }
+          it { should have_selector('#recent-updates') }
           it { should have_selector('.recent', text: "*") }
           it { should_not have_selector('#recent-add-checks') }
+          it { should_not have_selector('#recent-update-checks') }
         	it { should_not have_selector('.recent', text: "+") }
         
           describe "editing an absence in the correct country" do
@@ -441,7 +447,9 @@ describe "AbsencePages" do
           it { should have_selector('title', text: "Edit Absence Type") }
           it { should have_selector('h1', text: 'Edit Absence Type') }
           it { should have_link('All absence types', href: country_country_absences_path(@country)) }
-          it { should have_link('Set-up page', href: country_path(@country)) }      
+          it { should have_link('Set-up page', href: country_path(@country)) }  
+          it { should have_selector('#country_absence_created_by', type: 'hidden', value: 1) }
+          it { should have_selector('#country_absence_updated_by', type: 'hidden', value: @admin.id) }    
       
           describe "updating with valid data" do
           
@@ -454,11 +462,9 @@ describe "AbsencePages" do
             it { should have_selector('h1', text: @country.country) }
             it { should have_selector('title', text: "Absence Types: #{@country.country}") }
             it { should have_selector('h1', text: 'Absence Types') }
-            #it { should have_selector('title', text: 'Edit Absence Type') }
-            #it { should have_content('error') }
             specify { country_absence.reload.absence_code.should == 'AB' }
             specify { country_absence.reload.checked.should == false } 
-            specify { country_absence.reload.created_by.should == @admin.id }       
+            specify { country_absence.reload.updated_by.should == @admin.id }       
                  
           end
         
@@ -491,16 +497,74 @@ describe "AbsencePages" do
       describe "index" do
       
         before do  
-          @absence_2 = AbsenceType.create(absence_code: "AB", paid: 0, notes: "Absence - no reason given", created_by: @superuser.id)
+          @absence_2 = AbsenceType.create(absence_code: "AB", paid: 0, notes: "Absence - no reason given", created_by: @superuser.id,
+          								checked: true)
           @absence_3 = AbsenceType.create(absence_code: "S50", paid: 50, sickness: true,
-          								maximum_days_year: 15, documentation_required: true, notes: "Sickness on half-pay", created_by: 999999)
+          								maximum_days_year: 15, documentation_required: true, notes: "Sickness on half-pay", created_by: 999999,
+          								checked: true)
           visit absence_types_path
         end
       
-        it { should_not have_selector('#recent-adds', text: "added in past 7 days") }
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
         it { should_not have_selector('.recent', text: "*") }
         it { should have_link('del', href: absence_type_path(@absence_2)) }
         it { should have_link('del', href: absence_type_path(@absence_3)) }
+      
+        describe "entering a new absence-type" do
+        
+          before { visit new_absence_type_path }
+          it { should have_selector('input#absence_type_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Absence code", with: "FOO"
+              fill_in "Notes", with: "Foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(AbsenceType, :count).by(1) 
+              page.should have_selector('h1', text: 'Absence Types')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @absence_2.toggle!(:checked)
+            visit edit_absence_type_path(@absence_2)
+          end
+          
+          it { should have_selector('input#absence_type_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit absence_types_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the absence-type" do
+        
+            before do
+              fill_in "Notes", with: "Barbuzz"
+              click_button "Save change"
+            end
+          
+            specify { @absence_2.reload.checked == true }
+            specify { @absence_2.reload.updated_by != @superuser.id }
+          end
+        end
         
       end
     end
@@ -570,7 +634,7 @@ describe "AbsencePages" do
           end
           
           specify { @country_absence.reload.checked == true }
-          specify { @country_absence.reload.created_by != @superuser.id }
+          specify { @country_absence.reload.updated_by != @superuser.id }
         end
       end
     end

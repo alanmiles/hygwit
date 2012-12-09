@@ -1,3 +1,5 @@
+#Deals with Sectors, Jobfamilies, LeavingReasons, DisciplinaryCategories, GrievanceTypes and Contracts
+
 require 'spec_helper'
 
 describe "AdminPages" do
@@ -506,6 +508,8 @@ describe "AdminPages" do
         it { should have_link('Back', href: sectors_path) }
         it { should_not have_selector('input#sector_checked') }
         it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#sector_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#sector_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new sector" do
       
@@ -532,7 +536,7 @@ describe "AdminPages" do
       describe "edit" do
     
         before do
-          @sector_3 = Sector.create(sector: 'Insurance', created_by: 1, checked: true)
+          @sector_3 = Sector.create(sector: 'Insurance', checked: true, created_by: 999999)
           visit edit_sector_path(@sector_3)
         end
     
@@ -542,6 +546,8 @@ describe "AdminPages" do
         it { should_not have_selector('input#nationality_checked') }
         it { should_not have_selector('#update-date', text: "Added") }
         it { should have_link('Back', href: sectors_path) }
+        it { should have_selector('#sector_created_by', type: 'hidden', value: '999999' }
+        it { should have_selector('#sector_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -566,7 +572,7 @@ describe "AdminPages" do
           it { should have_selector('div.alert.alert-success') }
           specify { @sector_3.reload.sector.should == new_sector }
           specify { @sector_3.reload.checked.should == false }
-          specify { @sector_3.reload.created_by.should == @admin.id }
+          specify { @sector_3.reload.updated_by.should == @admin.id }
         end
       end 
     end
@@ -619,6 +625,10 @@ describe "AdminPages" do
         it { should have_selector('h1',    text: 'New Job Family') }
         it { should have_link('Back', href: jobfamilies_path) }
         it { should_not have_selector('#jobfamily_checked', type: 'checkbox') }
+        it { should_not have_selector('input#jobfamily_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#jobfamily_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#jobfamily_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new job_family" do
       
@@ -645,7 +655,7 @@ describe "AdminPages" do
       describe "edit" do
     
         before do
-          @jobfamily_3 = Jobfamily.create(job_family: 'Doctor', created_by: 1)
+          @jobfamily_3 = Jobfamily.create(job_family: 'Doctor', created_by: 999999)
           visit edit_jobfamily_path(@jobfamily_3)
         end
     
@@ -654,6 +664,8 @@ describe "AdminPages" do
         it { should have_selector('input', value: @jobfamily_3.job_family) }
         it { should_not have_selector('#jobfamily_checked', type: 'checkbox') }
         it { should have_link('Back', href: jobfamilies_path) }
+        it { should have_selector('#jobfamily_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#jobfamily_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -678,7 +690,7 @@ describe "AdminPages" do
           it { should have_selector('div.alert.alert-success') }
           specify { @jobfamily_3.reload.job_family.should == new_family }
           specify { @jobfamily_3.reload.checked.should == false }
-          specify { @jobfamily_3.reload.created_by.should == @admin.id }
+          specify { @jobfamily_3.reload.updated_by.should == @admin.id }
         end
       end 
     end
@@ -727,6 +739,10 @@ describe "AdminPages" do
         it { should have_selector('h1',    text: 'New Leaving Reason') }
         it { should have_link('Back', href: leaving_reasons_path) }
         it { should have_selector('#terminating', value: '1') }
+        it { should_not have_selector('input#leaving_reason_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#leaving_reason_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#leaving_reason_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new leaving reason" do
       
@@ -756,7 +772,7 @@ describe "AdminPages" do
       describe "edit" do
     
         before do
-          @reason_3 = LeavingReason.create(reason: 'Fighting', full_benefits: true)
+          @reason_3 = LeavingReason.create(reason: 'Fighting', full_benefits: true, created_by: 999999)
           visit edit_leaving_reason_path(@reason_3)
         end
     
@@ -765,6 +781,8 @@ describe "AdminPages" do
         it { should have_selector('input', value: @reason_3.reason) }
         it { should have_selector('#terminating', type: 'checkbox') }
         it { should have_link('Back', href: leaving_reasons_path) }
+        it { should have_selector('#leaving_reason_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#leaving_reason_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -837,6 +855,10 @@ describe "AdminPages" do
         it { should have_selector('title', text: 'New Disciplinary Category') }
         it { should have_selector('h1',    text: 'New Disciplinary Category') }
         it { should have_link('Back', href: disciplinary_categories_path) }
+        it { should_not have_selector('input#disciplinary_category_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#disciplinary_category_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#disciplinary_category_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new disciplinary category" do
       
@@ -865,7 +887,7 @@ describe "AdminPages" do
       describe "edit" do
     
         before do
-          @dcat_3 = DisciplinaryCategory.create(category: 'Persistent lateness')
+          @dcat_3 = DisciplinaryCategory.create(category: 'Persistent lateness', created_by: 999999)
           visit edit_disciplinary_category_path(@dcat_3)
         end
     
@@ -873,6 +895,8 @@ describe "AdminPages" do
         it { should have_selector('h1',    text: 'Edit Disciplinary Category') }
         it { should have_selector('input', value: @dcat_3.category) }
         it { should have_link('Back', href: disciplinary_categories_path) }
+        it { should have_selector('#disciplinary_category_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#disciplinary_category_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -943,6 +967,10 @@ describe "AdminPages" do
         it { should have_selector('title', text: 'New Grievance Type') }
         it { should have_selector('h1',    text: 'New Grievance Type') }
         it { should have_link('Back', href: grievance_types_path) }
+        it { should_not have_selector('input#grievance_type_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#grievance_type_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#grievance_type_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new grievance type" do
       
@@ -971,7 +999,7 @@ describe "AdminPages" do
       describe "edit" do
     
         before do
-          @gtype_3 = GrievanceType.create(grievance: 'Salary miscalculation')
+          @gtype_3 = GrievanceType.create(grievance: 'Salary miscalculation', created_by: 999999)
           visit edit_grievance_type_path(@gtype_3)
         end
     
@@ -979,6 +1007,8 @@ describe "AdminPages" do
         it { should have_selector('h1',    text: 'Edit Grievance Type') }
         it { should have_selector('input', value: @gtype_3.grievance) }
         it { should have_link('Back', href: grievance_types_path) }
+        it { should have_selector('#grievance_type_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#grievance_type_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -1048,6 +1078,10 @@ describe "AdminPages" do
         it { should have_selector('title', text: 'New Contract') }
         it { should have_selector('h1',    text: 'New Contract') }
         it { should have_link('Back', href: contracts_path) }
+        it { should_not have_selector('input#contract_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#contract_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#contract_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new contract" do
       
@@ -1076,7 +1110,7 @@ describe "AdminPages" do
       describe "edit" do
     
         before do
-          @contract_3 = Contract.create(contract: 'Intern')
+          @contract_3 = Contract.create(contract: 'Intern', created_by: 999999)
           visit edit_contract_path(@contract_3)
         end
     
@@ -1084,6 +1118,8 @@ describe "AdminPages" do
         it { should have_selector('h1',    text: 'Edit Contract') }
         it { should have_selector('input', value: @contract_3.contract) }
         it { should have_link('Back', href: contracts_path) }
+        it { should have_selector('#contract_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#contract_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -1131,6 +1167,7 @@ describe "AdminPages" do
         end
       
         it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
         it { should have_selector('#recent-add-checks') }
         it { should have_selector('#recent-update-checks') }
         it { should have_selector('.recent', text: "+") }  #all records already checked
@@ -1185,7 +1222,7 @@ describe "AdminPages" do
             end
           
             specify { @sector.reload.checked == true }
-            specify { @sector.reload.created_by != @superuser.id }
+            specify { @sector.reload.updated_by != @superuser.id }
           end
         end
       end
@@ -1196,16 +1233,71 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @jobfamily = Jobfamily.create(job_family: 'Banking', created_by: @superuser.id)
-          @jobfamily_2 = Jobfamily.create(job_family: 'Management', created_by: 999999)
-          @jobfamily_3 = Jobfamily.create(job_family: 'Audit', created_by: 999999)
+          @jobfamily = Jobfamily.create(job_family: 'Banking', created_by: @superuser.id, checked: true)
+          @jobfamily_2 = Jobfamily.create(job_family: 'Management', created_by: 999999, checked: true)
+          @jobfamily_3 = Jobfamily.create(job_family: 'Audit', created_by: 999999, checked: true)
           visit jobfamilies_path
         end
         
-        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-adds') } 
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") } 
         it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: jobfamily_path(@jobfamily)) }
         it { should have_link('delete', href: jobfamily_path(@jobfamily_2)) }
+      
+        describe "entering a new occupation" do
+        
+          before { visit new_jobfamily_path }
+          it { should have_selector('input#jobfamily_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Job family", with: "Foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(Jobfamily, :count) 
+              page.should have_selector('h1', text: 'Job Families')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @jobfamily.toggle!(:checked)
+            visit edit_jobfamily_path(@jobfamily)
+          end
+          
+          it { should have_selector('input#jobfamily_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit jobfamilies_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the code" do
+        
+            before do
+              fill_in "Job family", with: "Family"
+              click_button "Save change"
+            end
+          
+            specify { @jobfamily.reload.checked == true }
+            specify { @jobfamily.reload.updated_by != @superuser.id }
+          end
+        end
         
       end
     end
@@ -1215,16 +1307,72 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @reason = LeavingReason.create(reason: 'Retired', created_by: @superuser.id)
-          @reason_2 = LeavingReason.create(reason: 'Redundant', full_benefits: true, created_by: 999999)
-          @reason_3 = LeavingReason.create(reason: 'Disciplinary', full_benefits: true, created_by: 999999)
+          @reason = LeavingReason.create(reason: 'Retired', created_by: @superuser.id, checked: true)
+          @reason_2 = LeavingReason.create(reason: 'Redundant', full_benefits: true, created_by: 999999, checked: true)
+          @reason_3 = LeavingReason.create(reason: 'Disciplinary', full_benefits: true, created_by: 999999, checked: true)
           visit leaving_reasons_path
         end
       
-        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
         it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: leaving_reason_path(@reason)) }
         it { should have_link('delete', href: leaving_reason_path(@reason_2)) }
+      
+        describe "entering a new leaving reason" do
+        
+          before { visit new_leaving_reason_path }
+          it { should have_selector('input#leaving_reason_checked', value: 1) }
+          it { should have_selector('input#leaving_reason_full_benefits', type: 'checkbox') }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Reason", with: "If foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(LeavingReason, :count) 
+              page.should have_selector('h1', text: 'Leaving Reasons')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @reason.toggle!(:checked)
+            visit edit_leaving_reason_path(@reason)
+          end
+          
+          it { should have_selector('input#leaving_reason_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit leaving_reasons_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the reason" do
+        
+            before do
+              fill_in "Reason", with: "Foobar"
+              click_button "Save change"
+            end
+          
+            specify { @reason.reload.checked == true }
+            specify { @reason.reload.updated_by != @superuser.id }
+          end
+        end
       end
     end
     
@@ -1233,16 +1381,71 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @dcat = DisciplinaryCategory.create(category: 'Theft', created_by: @superuser.id)
-          @dcat_2 = DisciplinaryCategory.create(category: 'Disobeying instructions', created_by: 999999)
-          @dcat_3 = DisciplinaryCategory.create(category: 'Ignoring health & safety rules', created_by: 999999)
+          @dcat = DisciplinaryCategory.create(category: 'Theft', created_by: @superuser.id, checked: true)
+          @dcat_2 = DisciplinaryCategory.create(category: 'Disobeying instructions', created_by: 999999, checked: true)
+          @dcat_3 = DisciplinaryCategory.create(category: 'Ignoring health & safety rules', created_by: 999999, checked: true)
           visit disciplinary_categories_path
         end
       
-        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
         it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: disciplinary_category_path(@dcat)) }
         it { should have_link('delete', href: disciplinary_category_path(@dcat_2)) }
+      
+        describe "entering a new sector" do
+        
+          before { visit new_disciplinary_category_path }
+          it { should have_selector('input#disciplinary_category_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Category", with: "Foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(DisciplinaryCategory, :count) 
+              page.should have_selector('h1', text: 'Disciplinary Categories')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @dcat.toggle!(:checked)
+            visit edit_disciplinary_category_path(@dcat)
+          end
+          
+          it { should have_selector('input#disciplinary_category_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit disciplinary_categories_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the category" do
+        
+            before do
+              fill_in "Category", with: "foobar"
+              click_button "Save change"
+            end
+          
+            specify { @dcat.reload.checked == true }
+            specify { @dcat.reload.updated_by != @superuser.id }
+          end
+        end
         
       end
     end
@@ -1252,16 +1455,71 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @gtype = GrievanceType.create(grievance: 'Violence', created_by: @superuser.id)
-          @gtype_2 = GrievanceType.create(grievance: 'Sexual harrassment', created_by: 999999)
-          @gtype_3 = GrievanceType.create(grievance: 'No career advancement', created_by: 999999)
+          @gtype = GrievanceType.create(grievance: 'Violence', created_by: @superuser.id, checked: true)
+          @gtype_2 = GrievanceType.create(grievance: 'Sexual harrassment', created_by: 999999, checked: true)
+          @gtype_3 = GrievanceType.create(grievance: 'No career advancement', created_by: 999999, checked: true)
           visit grievance_types_path
         end
         
-        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
         it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: grievance_type_path(@gtype)) }
         it { should have_link('delete', href: grievance_type_path(@gtype_2)) }
+      
+        describe "entering a new grievance type" do
+        
+          before { visit new_grievance_type_path }
+          it { should have_selector('input#grievance_type_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Grievance", with: "Foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(GrievanceType, :count) 
+              page.should have_selector('h1', text: 'Grievance Types')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @gtype.toggle!(:checked)
+            visit edit_grievance_type_path(@gtype)
+          end
+          
+          it { should have_selector('input#grievance_type_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit grievance_types_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the grievance" do
+        
+            before do
+              fill_in "Grievance", with: "foobar"
+              click_button "Save change"
+            end
+          
+            specify { @gtype.reload.checked == true }
+            specify { @gtype.reload.updated_by != @superuser.id }
+          end
+        end
       end
     end
     
@@ -1270,15 +1528,70 @@ describe "AdminPages" do
       describe "index" do
       
         before do  
-          @contract_2 = Contract.create(contract: 'Volunteer', created_by: @superuser.id)
-          @contract_3 = Contract.create(contract: 'Full-time', created_by: 999999)
+          @contract_2 = Contract.create(contract: 'Volunteer', created_by: @superuser.id, checked: true)
+          @contract_3 = Contract.create(contract: 'Full-time', created_by: 999999, checked: true)
           visit contracts_path
         end
       
-        it { should_not have_selector('#recent-adds', text: "in past 7 days") }
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
         it { should_not have_selector('.recent', text: "*") }
         it { should have_link('delete', href: contract_path(@contract_2)) }
         it { should have_link('delete', href: contract_path(@contract_3)) }
+      
+        describe "entering a new contract" do
+        
+          before { visit new_contract_path }
+          it { should have_selector('input#contract_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Contract", with: "Foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(Contract, :count).by(1) 
+              page.should have_selector('h1', text: 'Contract Types')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @contract_2.toggle!(:checked)
+            visit edit_contract_path(@contract_2)
+          end
+          
+          it { should have_selector('input#contract_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit contracts_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the contract_type" do
+        
+            before do
+              fill_in "Contract", with: "Barbuzz"
+              click_button "Save change"
+            end
+          
+            specify { @contract_2.reload.checked == true }
+            specify { @contract_2.reload.updated_by != @superuser.id }
+          end
+        end
       end
     end
   end

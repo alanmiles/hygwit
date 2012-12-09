@@ -1,3 +1,5 @@
+#deals with Nationalities, Currencies, Countries
+
 require 'spec_helper'
 
 describe "CountryPages" do
@@ -295,6 +297,8 @@ describe "CountryPages" do
         it { should have_link('Back', href: nationalities_path) }
         it { should_not have_selector('input#nationality_checked') }
         it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#nationality_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#nationality_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new nationality" do
       
@@ -321,7 +325,7 @@ describe "CountryPages" do
       describe "edit" do
     
         before do
-          @example_3 = FactoryGirl.create(:nationality, nationality: 'Albanian', checked: true)
+          @example_3 = FactoryGirl.create(:nationality, nationality: 'Albanian', checked: true, created_by: 999999)
           visit edit_nationality_path(@example_3)
         end
     
@@ -331,6 +335,8 @@ describe "CountryPages" do
         it { should have_link('Back', href: nationalities_path) }
         it { should_not have_selector('input#nationality_checked') }
         it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#nationality_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#nationality_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -442,6 +448,8 @@ describe "CountryPages" do
         it { should have_selector('title', text: 'New Currency') }
         it { should have_selector('h1',    text: 'New Currency') }
         it { should have_link('Back', href: currencies_path) }
+        it { should have_selector('#currency_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#currency_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "creating a new Currency" do
       
@@ -472,7 +480,7 @@ describe "CountryPages" do
       describe "edit" do
     
         before do
-          @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR', checked: true)
+          @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR', checked: true, created_by: 999999)
           visit edit_currency_path(@currency_3)
         end
     
@@ -482,6 +490,8 @@ describe "CountryPages" do
         it { should have_link('Back', href: currencies_path) }
         it { should_not have_selector('input#currency_checked') }
         it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#currency_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#currency_updated_by', type: 'hidden', value: @admin.id) }
     
         describe "with invalid data" do
           before do
@@ -703,7 +713,8 @@ describe "CountryPages" do
         before do
           @currency_3 = Currency.create(currency: 'Saudi Riyals', code: 'SAR')
           @nationality_3 = Nationality.create(nationality: 'Saudi')
-          @country_3 = Country.create(country: 'Saudi Arabia', nationality_id: @nationality_3.id, currency_id: @currency_3.id)
+          @country_3 = Country.create(country: 'Saudi Arabia', nationality_id: @nationality_3.id, currency_id: @currency_3.id,
+                        created_by: 999999)
           
         end
         
@@ -728,10 +739,10 @@ describe "CountryPages" do
           before { visit edit_country_path(@country_3) }
           it { should have_selector('title', text: 'Edit Labor Law Regulations') }
           it { should have_selector('h1',    text: 'Edit Labor Law Regulations') }
-          
-          pending ("check no country input field - next two tests are not working")
-          #it { should_not have_selector('input', value: @country_3.country) }
-          #it { should_not have_selector('input', value: @country_3.nationality_id) }
+          it { should have_selector('#country_created_by', type: 'hidden', value: 999999) }
+          it { should have_selector('#country_updated_by', type: 'hidden', value: @admin.id) }
+          it { should_not have_selector('#country_country', value: @country_3.country) }
+          it { should_not have_selector('#country_nationality_id', value: @country_3.nationality_id) }
           it { should have_selector('input', value: @country_3.probation_days) }
           it { should have_link('List', href: countries_path) }
           it { should_not have_selector('#ramadan-day', text: "Ramadan") } 
