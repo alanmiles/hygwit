@@ -20,8 +20,6 @@
 
 class InsuranceSetting < ActiveRecord::Base
 
-  include UpdateCheck
-  
   attr_accessible :annual_milestone, :effective_date, :monthly_milestone, :name, :shortcode, :weekly_milestone, :cancellation_date,
       :checked, :updated_by, :created_by
   
@@ -40,38 +38,6 @@ class InsuranceSetting < ActiveRecord::Base
   validate  :duplicate_cancelled, on: :create
 
   #default_scope order: "insurance_settings.monthly_milestone"
-  
-  def recent?
-    created_at >= 7.days.ago
-  end
-  
-  def self.total_recent(country)
-    InsuranceSetting.where("country_id = ? and created_at >=?", country.id, 7.days.ago).count
-  end
-  
-  def updated?
-    updated_at >= 7.days.ago && created_at < 7.days.ago
-  end
-  
-  def self.total_updated(country)
-    InsuranceSetting.where("country_id = ? and updated_at >=? and created_at <?", country.id, 7.days.ago, 7.days.ago).count
-  end
-  
-  def add_check?
-    checked == false && (created_at + 1.day >= updated_at)
-  end
-  
-  def self.recent_add_checks(country)
-    self.where("country_id = ? AND checked = ? AND (updated_at - created_at) < INTERVAL '1 day'", country.id, false).count
-  end
-  
-  def update_check?
-    checked == false && (created_at + 1.day < updated_at)
-  end
-  
-  def self.recent_update_checks(country)
-    self.where("country_id = ? AND checked = ? AND (updated_at - created_at) >= INTERVAL '1 day'", country.id, false).count
-  end
   
   def self.future_settings?
     cnt = InsuranceSetting.where("effective_date >?", Date.today).count

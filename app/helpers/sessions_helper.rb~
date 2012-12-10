@@ -1,5 +1,7 @@
 module SessionsHelper
 
+  #include RecentCountryChange
+
   def sign_in(user)
     if params[:remember_me]
       cookies.permanent[:remember_token] = user.remember_token
@@ -64,6 +66,18 @@ module SessionsHelper
   def illegal_action
     unless signed_in?
       redirect_to root_path, notice: "Illegal action"
+    end
+  end
+  
+  def country_admin_access
+    if signed_in?
+      unless current_user.superuser?
+        admin_check = CountryAdmin.find_by_user_id_and_country_id(current_user.id, @country.id)
+        if admin_check.nil?
+          flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
+          redirect_to user_path(current_user)
+        end
+      end
     end
   end
   

@@ -1,6 +1,8 @@
 class HolidaysController < ApplicationController
  
- 
+  #include RecentChange 
+  #include RecentCountryChange
+  
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :create, :destroy]
   before_filter :illegal_action, only: [:update, :create, :destroy]
@@ -19,6 +21,7 @@ class HolidaysController < ApplicationController
     country_admin_access
     @holiday = @country.holidays.new
     @holiday.created_by = current_user.id
+    @holiday.updated_by = current_user.id
     @holiday.checked = true if current_user.superuser?
   end
   
@@ -31,6 +34,7 @@ class HolidaysController < ApplicationController
         redirect_to country_holidays_path(@country)
       else
         @holiday.created_by = current_user.id
+        @holiday.updated_by = current_user.id
         @holiday.checked = true if current_user.superuser?
         render 'new'
       end

@@ -15,7 +15,6 @@
 
 class Descriptor < ActiveRecord::Base
 
-  include UpdateCheck
   
   attr_accessible :descriptor, :grade, :reviewed, :updated_by, :checked
   

@@ -1,5 +1,6 @@
 module CountryAbsencesHelper
 
+  #include RecentCountryChange
   
   def absence_country_instruction_1
   

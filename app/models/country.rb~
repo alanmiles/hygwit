@@ -38,7 +38,8 @@
 
 class Country < ActiveRecord::Base
 
-  include UpdateCheck
+  #include UpdateCheck
+  #include RecentChange
   
   attr_accessible :country, :currency_id, :insurance, :max_hours_day, :max_hours_week, :max_loan_ded_salary, 
             :nationality_id, :nightwork_end, :nightwork_start, :probation_days, :retirement_age_f, :retirement_age_m, 
@@ -76,22 +77,6 @@ class Country < ActiveRecord::Base
     country
   end
   
-  def recent?
-    created_at >= 7.days.ago
-  end
-  
-  def self.all_recent
-    Country.where("created_at >=?", 7.days.ago).count
-  end
-  
-  def updated?
-    updated_at >= 7.days.ago && created_at < 7.days.ago
-  end
-  
-  def self.all_updated
-    Country.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
-  end
-  
   def incomplete?
     complete == false
   end
@@ -100,21 +85,6 @@ class Country < ActiveRecord::Base
     Country.where("complete =?", false).count
   end
   
-  def add_check?
-    checked == false && (created_at + 1.day >= updated_at)
-  end
-  
-  def self.added_require_checks
-    self.where("checked = ? AND (updated_at - created_at) < INTERVAL '1 day'", false).count
-  end
-  
-  def update_check?
-    checked == false && (created_at + 1.day < updated_at)
-  end
-  
-  def self.updated_require_checks
-    self.where("checked = ? AND (updated_at - created_at) >= INTERVAL '1 day'", false).count
-  end 
   
   private
   

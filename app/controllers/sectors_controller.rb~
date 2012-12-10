@@ -1,5 +1,7 @@
 class SectorsController < ApplicationController
   
+  #include RecentChange 
+  
   before_filter :signed_in_user, except: [:update, :destroy]
   before_filter :illegal_action, only: [:update, :destroy]
   before_filter :check_admin
@@ -15,6 +17,7 @@ class SectorsController < ApplicationController
   def new
     @sector = Sector.new
     @sector.created_by = current_user.id
+    @sector.updated_by = current_user.id
     @sector.checked = true if current_user.superuser?
   end
   
@@ -25,6 +28,7 @@ class SectorsController < ApplicationController
       redirect_to sectors_path
     else
       @sector.created_by = current_user.id
+      @sector.updated_by = current_user.id
       @sector.checked = true if current_user.superuser?
       render 'new'
     end

@@ -12,6 +12,10 @@
 #
 
 class Nationality < ActiveRecord::Base
+
+  #include UpdateCheck
+  #include RecentChange
+  
   attr_accessible :nationality, :created_by, :updated_by, :checked
   
   has_many :countries
@@ -33,17 +37,17 @@ class Nationality < ActiveRecord::Base
     country_links > 0
   end
   
-  def recent?
-    created_at >= 7.days.ago
-  end
+  #def recent?
+  #  created_at >= 7.days.ago
+  #end
   
-  def updated?
-    updated_at >= 7.days.ago && created_at < 7.days.ago
-  end
+  #def updated?
+  #  updated_at >= 7.days.ago && created_at < 7.days.ago
+  #end
   
-  def self.all_updated
-    Nationality.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
-  end
+  #def self.all_updated
+  #  Nationality.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
+  #end
   
   def self.total_unlinked
     cnt = 0
@@ -56,24 +60,24 @@ class Nationality < ActiveRecord::Base
     return cnt
   end
   
-  def self.all_recent
-    Nationality.where("created_at >=?", 7.days.ago).count
-  end
+  #def self.all_recent
+  #  Nationality.where("created_at >=?", 7.days.ago).count
+  #end
   
-  def add_check?
-    checked == false && (created_at + 1.day >= updated_at)
-  end
+  #def add_check?
+  #  checked == false && (created_at + 1.day >= updated_at)
+  #end
   
-  def self.added_require_checks
-    self.where("checked = ? AND (updated_at - created_at) < INTERVAL '1 day'", false).count
-  end
+  #def self.added_require_checks
+  #  self.where("checked = ? AND (updated_at - created_at) < INTERVAL '1 day'", false).count
+  #end
   
-  def update_check?
-    checked == false && (created_at + 1.day < updated_at)
-  end
+  #def update_check?
+  #  checked == false && (created_at + 1.day < updated_at)
+  #end
   
-  def self.updated_require_checks
-    self.where("checked = ? AND (updated_at - created_at) >= INTERVAL '1 day'", false).count
-  end 
+  #def self.updated_require_checks
+  #  self.where("checked = ? AND (updated_at - created_at) >= INTERVAL '1 day'", false).count
+  #end 
   
 end

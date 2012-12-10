@@ -1,5 +1,7 @@
 class GrievanceTypesController < ApplicationController
  
+  #include RecentChange 
+  
   before_filter :signed_in_user, except: [:update, :destroy]
   before_filter :illegal_action, only: [:update, :destroy]
   before_filter :check_admin
@@ -15,6 +17,7 @@ class GrievanceTypesController < ApplicationController
   def new
     @grievance_type = GrievanceType.new
     @grievance_type.created_by = current_user.id
+    @grievance_type.updated_by = current_user.id
     @grievance_type.checked = true if current_user.superuser?
   end
   
@@ -25,6 +28,7 @@ class GrievanceTypesController < ApplicationController
       redirect_to grievance_types_path
     else
       @grievance_type.created_by = current_user.id
+      @grievance_type.updated_by = current_user.id
       @grievance_type.checked = true if current_user.superuser?
       render 'new'
     end

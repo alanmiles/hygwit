@@ -1,5 +1,7 @@
 class NationalitiesController < ApplicationController
   
+  #include RecentChange 
+  
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :destroy]
   before_filter :illegal_action, only: [:update, :destroy]
@@ -15,6 +17,7 @@ class NationalitiesController < ApplicationController
   def new
     @nationality = Nationality.new
     @nationality.created_by = current_user.id
+    @nationality.updated_by = current_user.id
     @nationality.checked = true if current_user.superuser?
   end
   
@@ -25,6 +28,7 @@ class NationalitiesController < ApplicationController
       redirect_to nationalities_path
     else
       @nationality.created_by = current_user.id
+      @nationality.updated_by = current_user.id
       @nationality.checked = true if current_user.superuser?
       render 'new'
     end

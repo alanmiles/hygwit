@@ -1,5 +1,7 @@
 class CountriesController < ApplicationController
   
+  #include RecentChange 
+  
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :destroy]
   before_filter :illegal_action, only: [:update, :destroy]
@@ -23,6 +25,7 @@ class CountriesController < ApplicationController
     @nationalities = Nationality.all
     @currencies = Currency.all
     @country.created_by = current_user.id
+    @country.updated_by = current_user.id
     @country.checked = true if current_user.superuser?
   end
   
@@ -35,6 +38,7 @@ class CountriesController < ApplicationController
       @nationalities = Nationality.all
       @currencies = Currency.all
       @country.created_by = current_user.id
+      @country.updated_by = current_user.id
       @country.checked = true if current_user.superuser?
       render 'new'
     end

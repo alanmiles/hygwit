@@ -1,5 +1,8 @@
 class GratuityFormulasController < ApplicationController
   
+  #include RecentChange 
+  #include RecentCountryChange
+  
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :create, :destroy]
   before_filter :illegal_action, only: [:update, :create, :destroy]
@@ -20,6 +23,7 @@ class GratuityFormulasController < ApplicationController
     check_permitted
     @formula = @country.gratuity_formulas.new
     @formula.created_by = current_user.id
+    @formula.updated_by = current_user.id
     @formula.checked = true if current_user.superuser?
   end
   
@@ -33,6 +37,7 @@ class GratuityFormulasController < ApplicationController
         redirect_to country_gratuity_formulas_path(@country)
       else
         @formula.created_by = current_user.id
+        @formula.updated_by = current_user.id
         @formula.checked = true if current_user.superuser?
         render 'new'
       end

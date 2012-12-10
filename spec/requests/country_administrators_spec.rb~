@@ -14,7 +14,7 @@ describe "CountryAdministrators" do
     @holiday = @country.holidays.create(name: "Eid Al Adha", start_date: "2012-10-31", end_date: "2012-11-02", checked: true,
                                           created_by: 999999)
     @gratuity_line = @country.gratuity_formulas.create(service_years_from: 0, service_years_to: 3,
-    																			termination_percentage: 50, resignation_percentage: 0, checked: true)
+    																			termination_percentage: 50, resignation_percentage: 0, checked: true, created_by: 999999)
   end
   
   describe "when not logged in" do
@@ -526,6 +526,8 @@ describe "CountryAdministrators" do
             it { should have_selector('h1', text: @country.country) }
             it { should have_link('Full gratuity table', href: country_gratuity_formulas_path(@country)) }
             it { should have_link("Country set-up page", href: country_path(@country)) }
+            it { should have_selector('#gratuity_formula_created_by', type: 'hidden', value: @admin.id) }
+            it { should have_selector('#gratuity_formula_updated_by', type: 'hidden', value: @admin.id) }
       
             describe "with valid data" do
         
@@ -604,7 +606,9 @@ describe "CountryAdministrators" do
             it { should have_selector('title', text: "Edit Gratuity Rule") }
             it { should have_selector('h1', text: 'Edit Gratuity Rule') }
             it { should have_link('Full gratuity table', href: country_gratuity_formulas_path(@country)) }
-            it { should have_link('Country set-up page', href: country_path(@country)) }   
+            it { should have_link('Country set-up page', href: country_path(@country)) }
+            it { should have_selector('#gratuity_formula_created_by', type: 'hidden', value: 999999) }
+            it { should have_selector('#gratuity_formula_updated_by', type: 'hidden', value: @admin.id) }   
       
             describe "updating with valid data" do
           

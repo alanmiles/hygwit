@@ -1,5 +1,7 @@
 class AbsenceTypesController < ApplicationController
 
+  #include RecentChange  
+
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :destroy]
   before_filter :illegal_action, only: [:update, :destroy]
@@ -19,6 +21,7 @@ class AbsenceTypesController < ApplicationController
   def new
     @absence = AbsenceType.new
     @absence.created_by = current_user.id
+    @absence.updated_by = current_user.id
     @absence.checked = true if current_user.superuser?
   end
   
@@ -29,6 +32,7 @@ class AbsenceTypesController < ApplicationController
       redirect_to absence_types_path
     else
       @absence.created_by = current_user.id
+      @absence.updated_by = current_user.id
       @absence.checked = true if current_user.superuser?
       render 'new'
     end

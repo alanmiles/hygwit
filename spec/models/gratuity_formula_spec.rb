@@ -19,8 +19,6 @@ require 'spec_helper'
 
 describe GratuityFormula do
   
-  include UpdateCheck
-  
   before do
     @nationality = FactoryGirl.create(:nationality, nationality: "Bahraini")
     @currency = FactoryGirl.create(:currency, currency: "Bahraini Dinars", code: "BHD")

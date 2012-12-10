@@ -1,6 +1,6 @@
 module ApplicationHelper
 
-  include UpdateCheck
+  #include UpdateCheck
   #include RecentChange
   
   # Returns the full title on a per-page basis.

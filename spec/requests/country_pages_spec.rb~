@@ -741,9 +741,7 @@ describe "CountryPages" do
           it { should have_selector('h1',    text: 'Edit Labor Law Regulations') }
           it { should have_selector('#country_created_by', type: 'hidden', value: 999999) }
           it { should have_selector('#country_updated_by', type: 'hidden', value: @admin.id) }
-          
-          pending ("check no country input field - next two tests are not working")
-          #it { should_not have_selector('#country_country', value: @country3.country) }
+          it { should_not have_selector('#country_country', value: @country_3.country) }
           it { should_not have_selector('#country_nationality_id', value: @country_3.nationality_id) }
           it { should have_selector('input', value: @country_3.probation_days) }
           it { should have_link('List', href: countries_path) }
