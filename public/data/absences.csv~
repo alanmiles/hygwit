@@ -7,7 +7,7 @@ CN;100;false;;true;Conference;
 CT;100;false;;true;Court attendance
 D1;100;1false;3;true;Death – immediate family
 D2;100;false;1;true;Death – more distant relative
-EM;100;false;4;falseEmergency leave
+EM;100;false;4;false;Emergency leave
 EX;100;false;;true;Examination day
 FM;100;false;;true;Family reasons / care
 MG;100;false;3;true;Marriage

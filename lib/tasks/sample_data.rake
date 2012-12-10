@@ -92,10 +92,11 @@ def make_countries
     @country = values[0]
     @nat = values[1]
     @cur = values[2]
-    @rules = values[3]
+    @rules = values[6]
     @nationality = Nationality.find_by_nationality(@nat)
     @currency = Currency.find_by_code(@cur)
-    @attr =  { :country => @country, :nationality_id => @nationality.id, :currency_id => @currency.id, :rules => @rules }
+    @attr =  { :country => @country, :nationality_id => @nationality.id, :currency_id => @currency.id, :rules => @rules,
+               :checked => true, :created_by => 1, :updated_by => 1 }
     Country.create(@attr)
   end
 end
@@ -137,11 +138,11 @@ def update_descriptors
     values = line.strip.split(';')  
     @qlt = values[0]
     @grade = values[1]
-    @desc = values[2]
+    @desc = values[4]
     @quality = Quality.find_by_quality(@qlt)
     unless @quality == nil
       @descriptor = Descriptor.find_by_quality_id_and_grade(@quality.id, @grade)
-      @descriptor.update_attributes(descriptor: @desc, reviewed: true, updated_by: 1)
+      @descriptor.update_attributes(descriptor: @desc, checked: true, updated_by: 1)
     end
   end
 end

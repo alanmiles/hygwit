@@ -1,25 +1,25 @@
-absence_code;paid;sickness;maximum_days_year;documentation_required;notes
-AB;0;false;;false;Absent – no reason given
-AS;100;false;;true;Assignment outside office
-BT;100;false;;true;Business trip;
-CS;100;false;;true;Compensatory off-day
-CN;100;false;;true;Conference;
-CT;100;false;;true;Court attendance
-D1;100;1false;3;true;Death – immediate family
-D2;100;false;1;true;Death – more distant relative
-EM;100;false;4;false;Emergency leave
-EX;100;false;;true;Examination day
-FM;100;false;;true;Family reasons / care
-MG;100;false;3;true;Marriage
-MT;100;false;60;true;Maternity leave – paid
-MU;0;false;30;false;Maternity leave – unpaid
-AP;100;false;;true;Other approved – paid
-PT;100;false;1;true;Paternity leave
-SF;100;true;15;true;Sickness – full pay
-SH;50;true;15;true;Sickness – half pay
-SZ;0;true;15;true;Sickness – zero pay
-ST;100;false;;true;Study leave
-XS;0;false;;false;Suspension from work
-TR;100;false;;true;Training
-UL;0;false;;true;Unpaid leave (planned)
-WI;100;true;;true;Workplace injury
+absence_code;paid;sickness;maximum_days_year;documentation_required;notes;checked;updated_by;created_by
+AB;0;false;;false;Absent – no reason given;true;1;1
+AS;100;false;;true;Assignment outside office;true;1;1
+BT;100;false;;true;Business trip;true;1;1
+CS;100;false;;true;Compensatory off-day;true;1;1
+CN;100;false;;true;Conference;true;1;1
+CT;100;false;;true;Court attendance;true;1;1
+D1;100;1false;3;true;Death – immediate family;true;1;1
+D2;100;false;1;true;Death – more distant relative;true;1;1
+EM;100;false;4;false;Emergency leave;true;1;1
+EX;100;false;;true;Examination day;true;1;1
+FM;100;false;;true;Family reasons / care;true;1;1
+MG;100;false;3;true;Marriage;true;1;1
+MT;100;false;60;true;Maternity leave – paid;true;1;1
+MU;0;false;30;false;Maternity leave – unpaid;true;1;1
+AP;100;false;;true;Other approved – paid;true;1;1
+PT;100;false;1;true;Paternity leave;true;1;1
+SF;100;true;15;true;Sickness – full pay;true;1;1
+SH;50;true;15;true;Sickness – half pay;true;1;1
+SZ;0;true;15;true;Sickness – zero pay;true;1;1
+ST;100;false;;true;Study leave;true;1;1
+XS;0;false;;false;Suspension from work;true;1;1
+TR;100;false;;true;Training;true;1;1
+UL;0;false;;true;Unpaid leave (planned);true;1;1
+WI;100;true;;true;Workplace injury;true;1;1

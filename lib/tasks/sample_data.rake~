@@ -137,11 +137,11 @@ def update_descriptors
     values = line.strip.split(';')  
     @qlt = values[0]
     @grade = values[1]
-    @desc = values[2]
+    @desc = values[4]
     @quality = Quality.find_by_quality(@qlt)
     unless @quality == nil
       @descriptor = Descriptor.find_by_quality_id_and_grade(@quality.id, @grade)
-      @descriptor.update_attributes(descriptor: @desc, reviewed: true, updated_by: 1)
+      @descriptor.update_attributes(descriptor: @desc, checked: true, updated_by: 1, created_by: 1)
     end
   end
 end
@@ -189,7 +189,7 @@ def make_grievance_types
 end
 
 def make_disciplinary_categories
-  lines = File.new('public/data/discipinary_categories.csv').readlines
+  lines = File.new('public/data/disciplinary_categories.csv').readlines
   header = lines.shift.strip
   keys = header.split(';')
   lines.each do |line|

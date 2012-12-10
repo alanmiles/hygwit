@@ -1,5 +1,10 @@
-reason;terminated
-Retired;false
+reason;full_benefits
+Retired;true
 End of Contract;true
 Died;true
-
+Transferred;true
+Redundant; true
+Failed to report; false
+Resigned; false
+Terminated - performance; true
+Terminated - disciplinary; true

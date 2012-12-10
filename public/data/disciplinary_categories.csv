@@ -1,8 +1,8 @@
-category
-Attendance
-Punctuality
-Poor performance
-Bullying
-Inappropriate behavior
-Disregard for customers
-Dishonesty
+category;checked;created_by;updated_by
+Attendance;true;1;1
+Punctuality;true;1;1
+Poor performance;true;1;1
+Bullying;true;1;1
+Inappropriate behavior;true;1;1
+Disregard for customers;true;1;1
+Dishonesty;true;1;1
