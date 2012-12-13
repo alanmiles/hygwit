@@ -30,21 +30,36 @@
     <div class="line-space">
       <% if @country.rules =="Gulf" %>
         <div id="gratuity">Leavers' gratuity applies?<span class="r-float"><%= @country.gratuity_applies? ? "Yes" : "No" %></span></div>
-        <% if @country.gratuity_applies? %>
-          <%= render "gratuity_ceilings" %>
-        <% else %>
-          <% unless @country.gratuity_ceiling_value = nil %>
-            <%= render "gratuity_ceilings" %>
-          <% end %>
-        <% end %>
+        <%= render "gratuity_ceilings" if @country.gratuity_applies? %>
       <% end %>
     </div>
     <div class="line-space">
       <div>Maximum percentage of salary deducted for loans?<span class="r-float"><%= @country.max_loan_ded_salary %></span></div>
        <% if @country.rules =="Gulf" %>
-         <div id="sick-accrual">Sickness accruals may be accumulated?
+         <div id="sick-accrual">Can sickness accruals be accumulated for longer than one year?
             <span class="r-float"><%= @country.sickness_accruals? ? "Yes" : "No" %></span></div>
        <% end %>
+    </div>
+    <div class="line-space">
+      <div>Are businesses required to report on employee ethnicity?
+        <span class="r-float"><%= @country.ethnicity_reports? ? "Yes" : "No" %></span>
+      </div>
+      <% if @country.ethnicity_reports && @country.ethnicity_details? %>
+        <div id ="eth-details" class="faded inset-box"><%= @country.ethnicity_details %></div>
+      <% end %>
+    </div>
+    <div class="line-space">
+      <div>Are certain occupations reserved for nationals?
+        <span class="r-float"><%= @country.reserved_jobs? ? "Yes" : "No" %></span>
+      </div>
+    </div>
+    <div class="line-space">
+      <div>Are there laws requiring businesses to hire people with disabilities?
+        <span class="r-float"><%= @country.disability_rules? ? "Yes" : "No" %></span>
+      </div>
+      <% if @country.disability_rules && @country.disability_details? %>
+        <div id="disable-details" class="faded inset-box"><%= @country.disability_details %></div>
+      <% end %>
     </div>
     <% unless @country.notes.blank? %>
       <div class="line-space">

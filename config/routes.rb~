@@ -1,10 +1,10 @@
 Hygwit::Application.routes.draw do
 
-  get "insurance_codes/index"
+  get "ethnic_groups/index"
 
-  get "insurance_codes/new"
+  get "ethnic_groups/new"
 
-  get "insurance_codes/edit"
+  get "ethnic_groups/edit"
 
   resources :users
   resources :password_resets
@@ -17,6 +17,7 @@ Hygwit::Application.routes.draw do
     resources :insurance_settings, shallow: true
     resources :insurance_history_settings, only: :index
     resources :insurance_future_settings, only: :index 
+    resources :insurance_codes, shallow: true
     member do
       get 'insurance_menu'
     end

@@ -38,8 +38,7 @@
           <span class="span2"><%= link_to "Absence codes", country_country_absences_path(@country) %></span>
             <% if current_user.superuser? || current_user.administrator?(@country.country) %>
               <span id="recent-absences" class="normal-font offset1">
-                <%= recent_country_absences(@country) %>
-                <%= updated_country_absences(@country) %>
+                <%= render "shared/country_menu_change_stats", model_name: CountryAbsence %>
               </span>   
             <% end %> 
         </li>
@@ -47,19 +46,23 @@
           <span class="span2"><%= link_to "National holidays", country_holidays_path(@country) %></span>
             <% if current_user.superuser? || current_user.administrator?(@country.country) %>
               <span id="recent-holidays" class="normal-font offset1">
-                <%= recent_country_holidays(@country) %>
-                <%= updated_country_holidays(@country) %>
+                <%= render "shared/country_menu_change_stats", model_name: Holiday %>
               </span>   
             <% end %> 
         </li>
         <li>
-          <span class="span2"><%= link_to "Tax rules", "#" %></span>
+          <% if @country.taxation? %>
+            <span class="span2"><%= link_to "Tax rules", "#" %></span>
+          <% else %>
+            <span class="span2 faded">Tax rules</span>
+            <span id="no-tax" class="normal-font offset1">Taxation is not switched on.</span> 
+          <% end %>
         </li>
         <li>
           <% if @country.insurance? %>
             <span class="span2"><%= link_to "National insurance", insurance_menu_country_path(@country) %></span>
           <% else %>
-            <span class="span2 standout">National insurance</span>
+            <span class="span2 faded">National insurance</span>
             <span id="no-insurance" class="normal-font offset1">National insurance is not switched on.</span> 
           <% end %>
         </li>
@@ -69,15 +72,27 @@
               <span class="span2"><%= link_to "Gratuity rules", country_gratuity_formulas_path(@country) %></span>
               <% if current_user.superuser? || current_user.administrator?(@country.country) %>
                 <span id="recent-gratuities" class="normal-font offset1">
-                  <%= recent_country_gratuities(@country) %>
-                  <%= updated_country_gratuities(@country) %>
+                  <%= render "shared/country_menu_change_stats", model_name: GratuityFormula %>
                 </span>   
               <% end %> 
             <% else %>
-              <span class="span2 standout">Gratuity rules</span>
+              <span class="span2 faded">Gratuity rules</span>
               <span id="no-gratuity" class="normal-font offset1">'Gratuity applies' is not switched on.</span> 
             <% end %>
           <% end %>
+        </li>
+        <li>
+          <% if @country.ethnicity_reports? %>
+            <span class="span2"><%= link_to "Ethnic groups", country_ethnic_groups_path(@country) %></span>
+            <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+              <span id="recent-ethnic-groups" class="normal-font offset1">
+                <%= render "shared/country_menu_change_stats", model_name: EthnicGroup %>
+              </span>   
+            <% end %>
+          <% else %>
+            <span class="span2 faded">Ethnic groups</span>
+            <span id="no-ethnicity" class="normal-font offset1">Ethnicity reports are not required.</span>
+          <% end %>  
         </li>
       </ul>  
     </div>

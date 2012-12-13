@@ -107,7 +107,7 @@ module CountriesHelper
   def gratuity_explanation
     "In other words, the amounts paid to employees - usually only to expatriates - at leaving, based on their length of service.  
     If you set gratuity to 'On' with this switch, 2 further questions will appear, asking about the ceilings (i.e. the 
-    maximum payments) allowed by law.  Save your current changes and then re-open this form to see the new questions."
+    maximum payments) allowed by law."
   end
   
   def insurance_guide_1

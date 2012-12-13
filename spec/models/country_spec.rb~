@@ -34,6 +34,11 @@
 #  gratuity_ceiling_value   :integer
 #  checked                  :boolean          default(FALSE)
 #  updated_by               :integer          default(1)
+#  ethnicity_reports        :boolean          default(FALSE)
+#  ethnicity_details        :text
+#  reserved_jobs            :boolean          default(FALSE)
+#  disability_rules         :boolean          default(FALSE)
+#  disability_details       :text
 #
 
 require 'spec_helper'
@@ -62,6 +67,13 @@ describe Country do
   it { should respond_to(:gratuity_formulas) }
   it { should respond_to(:insurance_settings) }
   it { should respond_to(:insurance_codes) }
+  it { should respond_to(:updated_by) }
+  it { should respond_to(:checked) }
+  it { should respond_to(:ethnicity_reports) }
+  it { should respond_to(:ethnicity_details) }
+  it { should respond_to(:reserved_jobs) }
+  it { should respond_to(:disability_rules) }
+  it { should respond_to(:disability_details) }
   
   it { should be_valid }
   

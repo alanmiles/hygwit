@@ -611,7 +611,7 @@ describe "CountryPages" do
       end
       
       
-      describe "show" do
+      describe "'show' when not a country administrator" do
       
         before { visit country_path(@country) }
         
@@ -621,7 +621,7 @@ describe "CountryPages" do
         it { should have_link('All countries', href: countries_path) } 
         it { should have_selector('#ramadan-day', text: 'Ramadan') } 
         it { should have_selector('#ramadan-week', text: 'Ramadan') }
-        it { should have_selector('#sick-accrual', text: 'Sickness accruals') }
+        it { should have_selector('#sick-accrual', text: 'sickness accruals') }
         it { should have_selector('#gratuity', text: "Leavers' gratuity applies?") }
         it { should have_selector('h3',		 text: 'Local Labor Law Regulations') } 
         it { should have_selector("#completion", text: "SETTINGS") }
@@ -638,6 +638,11 @@ describe "CountryPages" do
         it { should have_selector('#no-gratuity', text: "is not switched on") }
         it { should_not have_selector('#recent-gratuities') }
         it { should_not have_selector('#ceilings', text: "No ceiling") }  #unless gratuity_applies is on    
+        it { should_not have_link('Ethnic groups', href: country_ethnic_groups_path(@country)) }
+        it { should have_selector('#no-ethnicity', text: "Ethnicity reports are not required") }
+        it { should_not have_selector('#recent-ethnic-groups') }
+        it { should_not have_selector('#eth-details') }
+        it { should_not have_selector('#disable-details') }
         
         describe "when indemnity ceilings are set" do
           
@@ -675,6 +680,32 @@ describe "CountryPages" do
           
           it { should_not have_link('National insurance', href: insurance_menu_country_path(@country)) }
           it { should have_selector('#no-insurance', text: "is not switched on") }  
+        end
+        
+        describe "when ethnicity reports are switched on" do
+          
+          before do
+            @country.ethnicity_reports = true
+            @country.ethnicity_details = "It must have"  #Field will not appear if empty
+            @country.save
+            visit country_path(@country)
+          end
+          
+          it { should have_selector("#eth-details") }
+          it { should have_link('Ethnic groups', href: country_ethnic_groups_path(@country)) }
+          it { should_not have_selector('#no-ethnicity', text: "Ethnicity reports are not required") }          
+        end
+        
+        describe "when disabled rules are switched on" do
+          
+          before do
+            @country.disability_rules = true
+            @country.disability_details = "There should be"  #Field will not appear if empty
+            @country.save
+            visit country_path(@country)
+          end
+          
+          it { should have_selector("#disable-details") }
         end  
       end
       
@@ -751,7 +782,9 @@ describe "CountryPages" do
           it { should_not have_selector("#completion", text: "Are all settings complete?") }
           it { should_not have_selector('#country_gratuity_ceiling_months') }
           it { should_not have_selector('input#country_checked') }
-          it { should_not have_selector('#update-date', text: "Added") }          
+          it { should_not have_selector('#update-date', text: "Added") }
+          it { should_not have_selector('#country_ethnicity_details') }
+          it { should_not have_selector('#country_disability_details') }          
         
           describe "for countries with 'Gulf' rules" do
             
@@ -760,7 +793,7 @@ describe "CountryPages" do
             it { should have_selector('#ramadan-day', text: "Ramadan") } 
             it { should have_selector('#ramadan-week', text: "Ramadan") }
             it { should have_selector('#sick-accrual', text: "sickness accrual") } 
-            it { should_not have_selector('#country_gratuity_ceiling_months') }   
+            it { should have_selector('#country_gratuity_ceiling_months') }   
           
           end 
           
@@ -773,7 +806,21 @@ describe "CountryPages" do
             
             it { should have_selector('#country_gratuity_ceiling_months') } 
             it { should have_selector('#country_gratuity_ceiling_value') }     
-          end   
+          end
+          
+          describe "with ethnicity_reports and disability_rules switched on" do
+            
+            before do
+              @country_3.ethnicity_reports = true
+              @country_3.disability_rules = true
+              @country_3.save
+              visit edit_country_path(@country_3)
+            end
+            
+            it { should have_selector('#country_ethnicity_details') }
+            it { should have_selector('#country_disability_details') }    
+          
+          end
                 
         end
       end 

@@ -34,12 +34,14 @@
 #  gratuity_ceiling_value   :integer
 #  checked                  :boolean          default(FALSE)
 #  updated_by               :integer          default(1)
+#  ethnicity_reports        :boolean          default(FALSE)
+#  ethnicity_details        :text
+#  reserved_jobs            :boolean          default(FALSE)
+#  disability_rules         :boolean          default(FALSE)
+#  disability_details       :text
 #
 
 class Country < ActiveRecord::Base
-
-  #include UpdateCheck
-  #include RecentChange
   
   attr_accessible :country, :currency_id, :insurance, :max_hours_day, :max_hours_week, :max_loan_ded_salary, 
             :nationality_id, :nightwork_end, :nightwork_start, :probation_days, :retirement_age_f, :retirement_age_m, 
@@ -55,6 +57,7 @@ class Country < ActiveRecord::Base
   has_many	 :gratuity_formulas, dependent: :destroy
   has_many   :insurance_settings, dependent: :destroy
   has_many 	 :insurance_codes, dependent: :destroy
+  has_many   :ethnic_groups, dependent: :destroy
   
   
   after_create :add_absence_codes

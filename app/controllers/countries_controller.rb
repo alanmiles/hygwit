@@ -56,7 +56,7 @@ class CountriesController < ApplicationController
       params[:country].parse_time_select! :nightwork_start
       params[:country].parse_time_select! :nightwork_end
       if @country.update_attributes(params[:country])
-        @nationality.update_attributes(checked: false) unless current_user.superuser?
+        @country.update_attributes(checked: false) unless current_user.superuser?
         flash[:success] = "'#{@country.country}' updated"
         redirect_to @country
       else

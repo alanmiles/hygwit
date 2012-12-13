@@ -116,13 +116,20 @@
 
 <% if @country.rules =="Gulf" %>
   <div id="gratuity" style="clear:both" class= "line-space"> 
-    <span class="span3 r-float"><%= f.check_box :gratuity_applies %></span>
+    <span id="gratuity-click" class="span3 r-float"><%= f.check_box :gratuity_applies %></span>
     <i class ="icon-question-sign" id="gratuity-on-click" style="float:right"></i>
     <span class="vert-down">Leavers' gratuity applies?</span>
     <div id="gratuity-on" class="help-inline"><%= gratuity_explanation %></div>
   </div>
   
-  <% if @country.gratuity_applies || !@country.gratuity_applies && (!@country.gratuity_ceiling_value.nil? || !@country.gratuity_ceiling_months.nil?) %>
+  
+  
+  <% if @country.gratuity_applies? %>
+    <div id="gratuity_display" class="line-space" style="clear:both">
+  <% else %>
+    <div id="gratuity_display" class="line-space" style="clear:both; display:none">
+  <% end %>
+  
     <div style ="clear:both" class= "line-space">
       <span class="span3 r-float"><%= f.text_field :gratuity_ceiling_value, class: "number-field" %></span>
       <i class ="icon-question-sign" id="val-click" style="float:right"></i>
@@ -136,7 +143,7 @@
       <%= f.label :gratuity_ceiling_months, "Gratuity ceiling - service months", class: "vert-down" %>
       <div id="c-month" class="help-inline"><%= ceiling_month %></div>
     </div>
-  <% end %>
+  </div>
   
 <% end %> 
 
@@ -156,8 +163,42 @@
   <div id="loan-ded" class="help-inline"><%= loan_percent %></div>
 </div>
 
+<div style ="clear:both" class= "line-space">
+  <span id="eth-click" class="span3 r-float"><%= f.check_box :ethnicity_reports %></span>
+  <span class="vert-down">Are businesses required to submit reports on employee ethnicity?</span>
+</div>
+
+<% if @country.ethnicity_reports? %>
+  <div id="ethnic" class="line-space" style="clear:both">
+<% else %>
+  <div id="ethnic" class="line-space" style="clear:both; display:none">
+<% end %>
+    <%= f.label :ethnicity_details, "Explain the rules about ethnicity reporting" %>
+    <%= f.text_area :ethnicity_details, rows: "3" %>
+  </div>
+
+
+<div style ="clear:both" class= "line-space">
+  <span class="span3 r-float"><%= f.check_box :reserved_jobs %></span>
+  <span class="vert-down">Are some occupations reserved for nationals by law?</span>
+</div>
+
+<div style ="clear:both" class= "line-space">
+  <span id="disabled-click" class="span3 r-float"><%= f.check_box :disability_rules %></span>
+  <span class="vert-down">Are there laws requiring businesses to hire people with disabilities?</span>
+</div>
+
+<% if @country.disability_rules? %>
+  <div id="disabled" class="line-space" style="clear:both">
+<% else %>
+  <div id="disabled" class="line-space" style="clear:both; display:none">
+<% end %>
+    <%= f.label :disability_details, "Explain the rules about hiring people with disabilities" %>
+    <%= f.text_area :disability_details, rows: "3" %>
+  </div>
+
 <div class="line-space" style="clear:both">
-  <%= f.label :notes %>
+  <%= f.label :notes, "Other notes" %>
   <%= f.text_area :notes, rows: "5" %>
 </div>
 
@@ -171,5 +212,6 @@
 <%= render "shared/superuser_check", {f: f, object: f.object} %>
 
 <div style="clear:both"><%= f.hidden_field :updated_by %></div>
+<%= f.hidden_field :created_by %>
 
 

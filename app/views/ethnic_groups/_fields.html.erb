@@ -1,0 +1,14 @@
+<div class= "line-space">
+  <%= f.label :ethnic_group %>
+  <%= f.text_field :ethnic_group %>
+</div>
+<% if @edit == true %>
+  <div class="line-space">
+    <%= f.label :cancellation_date %>
+    <%= f.text_field :cancellation_date %>
+  </div>
+<% end %>
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>
+<%= f.hidden_field :created_by %>

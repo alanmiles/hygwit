@@ -16,14 +16,14 @@
       <% elsif current_user.superuser? %>
         <div id="recent-add-checks">
           <% if @recent_add_checks > 0 %>
-            <%= pluralize(@recent_add_checks, 'addition') %> (A) to be checked.
+            <%= pluralize(@recent_add_checks, 'addition') %> (+) to be checked.
           <% else %>
             No additions to be checked.
           <% end %>
         </div>
         <div id="recent-update-checks">
           <% if @recent_update_checks > 0 %>
-            <%= pluralize(@recent_update_checks, 'update') %> (U) to be checked.
+            <%= pluralize(@recent_update_checks, 'update') %> (>) to be checked.
           <% else %>
             No updates to be checked.
           <% end %>

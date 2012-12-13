@@ -1,0 +1,18 @@
+      <% @egroups.each do |egroup| %>
+        <li>
+          <%= render "shared/superuser_countryadmin_notifications", model_name: egroup %>
+          <%= egroup.ethnic_group %>
+          <% if egroup.cancellation_date? %>
+            <span class="standout">| CANCELLED from <%= date_display(egroup.cancellation_date) %></span>
+          <% end %>
+          <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+            <span class="r-float">
+          
+              <%= link_to "edit", edit_ethnic_group_path(egroup) %>
+              | <%= link_to "del", egroup, method: :delete,
+                             data: { confirm: "Delete '#{egroup.ethnic_group}' from the ethnic groups list?  Sure?" } %>
+          
+            </span>
+          <% end %>
+        </li>
+      <% end %>

@@ -196,7 +196,7 @@ select {
 }
 
 .double-line-space {
-  margin-bottom: 30px;
+  padding-bottom: 30px;
 }
 
 .vert-down {

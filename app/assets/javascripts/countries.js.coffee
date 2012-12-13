@@ -2,6 +2,10 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+jQuery ->
+	$('#ethnic_group_cancellation_date').datepicker
+		dateFormat: 'yy-mm-dd'
+
 $(document).ready ->
   $('#val-click').click ->
     $('#c-val').toggle "fast", ->
@@ -33,3 +37,17 @@ $(document).ready ->
 $(document).ready ->
   $('#gratuity-on-click').click ->
     $('#gratuity-on').toggle "fast", ->
+    
+$(document).ready ->
+  $('#eth-click').click ->
+    $('#ethnic').toggle "fast", ->
+    
+$(document).ready ->
+  $('#disabled-click').click ->
+    $('#disabled').toggle "fast", ->
+    
+$(document).ready ->
+  $('#gratuity-click').click ->
+    $('#gratuity-display').toggle "fast", ->
+    
+

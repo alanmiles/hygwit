@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121208143028) do
+ActiveRecord::Schema.define(:version => 20121212230329) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -68,6 +68,11 @@ ActiveRecord::Schema.define(:version => 20121208143028) do
     t.decimal  "gratuity_ceiling_value",   :precision => 7, :scale => 0
     t.boolean  "checked",                                                :default => false
     t.integer  "updated_by",                                             :default => 1
+    t.boolean  "ethnicity_reports",                                      :default => false
+    t.text     "ethnicity_details"
+    t.boolean  "reserved_jobs",                                          :default => false
+    t.boolean  "disability_rules",                                       :default => false
+    t.text     "disability_details"
   end
 
   create_table "country_absences", :force => true do |t|
@@ -123,6 +128,17 @@ ActiveRecord::Schema.define(:version => 20121208143028) do
     t.datetime "updated_at",                    :null => false
     t.boolean  "checked",    :default => false
     t.integer  "updated_by", :default => 1
+  end
+
+  create_table "ethnic_groups", :force => true do |t|
+    t.integer  "country_id"
+    t.string   "ethnic_group"
+    t.boolean  "checked",           :default => false
+    t.integer  "created_by",        :default => 1
+    t.integer  "updated_by",        :default => 1
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.date     "cancellation_date"
   end
 
   create_table "gratuity_formulas", :force => true do |t|

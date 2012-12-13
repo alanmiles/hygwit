@@ -1,4 +1,4 @@
-#deals with Holidays, GratuityFormulas
+#deals with Holidays, GratuityFormulas, EthnicGroups
 
 require 'spec_helper'
 
@@ -10,11 +10,13 @@ describe "CountryAdministrators" do
     @nationality = FactoryGirl.create(:nationality, nationality: "Saudi")
     @currency = FactoryGirl.create(:currency, currency: "Saudi Riyals", code: "SAR")
     @country = FactoryGirl.create(:country, country: "Saudi Arabia", nationality_id: @nationality.id, 
-    																				currency_id: @currency.id, rules: "Gulf", gratuity_applies: true)
+    																				currency_id: @currency.id, rules: "Gulf", gratuity_applies: true,
+    																				ethnicity_reports: true)
     @holiday = @country.holidays.create(name: "Eid Al Adha", start_date: "2012-10-31", end_date: "2012-11-02", checked: true,
                                           created_by: 999999)
     @gratuity_line = @country.gratuity_formulas.create(service_years_from: 0, service_years_to: 3,
     																			termination_percentage: 50, resignation_percentage: 0, checked: true, created_by: 999999)
+    @group = @country.ethnic_groups.create(ethnic_group: "Caucasian", checked: true, created_by: 999999)
   end
   
   describe "when not logged in" do
@@ -88,6 +90,43 @@ describe "CountryAdministrators" do
       
         describe "with a DELETE request" do
           before { delete gratuity_formula_path(@gratuity_line) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
+    end 
+    
+    describe "EthnicGroups controller" do
+    
+      describe "when trying to enter a new ethnic group" do 
+      
+        before { visit new_country_ethnic_group_path(@country) }
+      
+        it "should render the home page" do
+          page.should have_selector('.alert', text: 'Please sign in')
+          page.should have_selector('h1', text: 'Sign in') 
+        end
+   
+      end
+       
+      describe "when trying to access the index" do
+    
+        before { visit country_ethnic_groups_path(@country) }
+      
+        it "should render the sign-in path" do
+          page.should have_selector('.alert', text: 'sign in')
+          page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the ethnic_group data" do
+      
+        describe "with a PUT request" do
+          before { put ethnic_group_path(@group) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete ethnic_group_path(@group) }
           specify { response.should redirect_to(root_path) }        
         end
       end
@@ -174,6 +213,44 @@ describe "CountryAdministrators" do
     
       describe "submitting a PUT request to the GratuityFormula#update action" do
         before { put gratuity_formula_path(@gratuity_line) }
+        specify { response.should redirect_to(root_path) }
+      end
+    end
+    
+    describe "Ethnic Groups controller" do
+    
+      describe "accessing the 'new' page" do
+    
+        before { visit new_country_ethnic_group_path(@country) }
+      
+        it { should_not have_selector('title', text: 'New Ethnic Group') }
+        it "should render the root_path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+      end
+    
+      describe "when trying to access the index" do
+    
+        before { visit country_ethnic_groups_path(@country) }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+      end
+    
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the EthnicGroup#destroy action" do
+          before { delete ethnic_group_path(@group) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the EthnicGroup#update action" do
+        before { put ethnic_group_path(@group) }
         specify { response.should redirect_to(root_path) }
       end
     end
@@ -316,6 +393,63 @@ describe "CountryAdministrators" do
       
       end
       
+      describe "Ethnic Groups controller" do
+      
+        describe "index for country" do
+      
+          before { visit country_ethnic_groups_path(@country) }
+        
+          it { should have_selector('h1', text: @country.country) }
+          it { should have_selector('title', text: "Ethnic Groups - #{@country.country}") }
+          it { should have_selector('h1', text: 'Ethnic Groups required for reports') }
+          it { should_not have_link('Add a new group', href: new_country_ethnic_group_path(@country)) }
+          it { should have_link('Back to main settings page', href: country_path(@country)) }
+          it { should_not have_link('edit', href: edit_ethnic_group_path(@group)) }
+          it { should_not have_link('delete', href: ethnic_group_path(@group)) }
+          it { should_not have_selector('#recent-adds') }
+          it { should_not have_selector('.recent', text: "*") }
+          it { should have_selector('.instruction', text: "required for the official reports") }
+ 
+        end
+      
+        describe "when trying to access the 'new' page" do
+    
+          before { visit new_country_ethnic_group_path(@country) }
+      
+          it { should_not have_selector('title', text: 'New Ethnic Group') }
+          it "should render the admin home page" do
+            page.should have_selector('.alert', text: 'You must be a registered administrator')
+            page.should have_selector('h1', text: 'Administrator Menu')
+          end
+        end
+        
+        describe "when trying to access the 'edit' page" do
+    
+          before { visit edit_ethnic_group_path(@group) }
+      
+          it { should_not have_selector('title', text: 'Edit Ethnic Group') }
+          it "should render the admin home page" do
+            page.should have_selector('.alert', text: 'You must be a registered administrator')
+            page.should have_selector('h1', text: 'Administrator Menu')
+          end
+        end
+      
+        describe "when trying to delete" do
+    
+          describe "submitting a DELETE request to the EthnicGroup#destroy action" do
+     
+            before { delete ethnic_group_path(@group) }
+            specify { response.should redirect_to(user_path(@admin)) }        
+          end
+    
+        end
+    
+        describe "submitting a PUT request to the gratuity_formulas#update action" do
+       
+          before { put ethnic_group_path(@group) }
+          specify { response.should redirect_to(user_path(@admin)) }
+        end
+      end
     end
     
     describe "and a country administrator" do
@@ -640,6 +774,177 @@ describe "CountryAdministrators" do
           end
         end
       end
+      
+      describe "EthnicGroups controller" do
+       
+        describe "when ethnicity is switched off" do
+          
+          before do
+            @country.ethnicity_reports = false
+            @country.save
+          end
+        
+          describe "when trying to access the 'new' page" do
+    
+            before { visit new_country_ethnic_group_path(@country) }
+      
+            it { should_not have_selector('title', text: 'New Ethnic Group') }
+            it "should render the admin home page" do
+              page.should have_selector('.alert', text: 'Reports on employee ethnicity are not required in this country')
+              page.should have_selector('h1', text: 'Administrator Menu')
+            end
+          end
+          
+          describe "when trying to access the index page" do
+          
+            before { visit country_ethnic_groups_path(@country) }
+      
+            it { should_not have_selector('title', text: 'Ethnic Groups') }
+            it "should render the admin home-page" do
+              page.should have_selector('.alert', text: 'Reports on employee ethnicity are not required in this country')
+              page.should have_selector('h1', text: 'Administrator Menu')
+            end
+          
+          end
+        
+        end
+        
+        describe "when ethnicity is switched on" do
+        
+          describe "add a new ethnic group for the country" do
+      
+            before { visit new_country_ethnic_group_path(@country.id) }
+        
+            it { should have_selector('title', text: 'New Ethnic Group') }
+            it { should have_selector('h1', text: 'New Ethnic Group') }
+            it { should have_selector('h1', text: @country.country) }
+            it { should have_link('All ethnic groups', href: country_ethnic_groups_path(@country)) }
+            it { should have_link("Country set-up page", href: country_path(@country)) }
+            it { should_not have_selector('#ethnic_group_cancellation_date') }
+            it { should have_selector('#ethnic_group_created_by', type: 'hidden', value: @admin.id) }
+            it { should have_selector('#ethnic_group_updated_by', type: 'hidden', value: @admin.id) }
+      
+            describe "with valid data" do
+        
+              before do        
+                fill_in "Ethnic group", with: "Black American"
+              end
+          
+              it "should create a new ethnic group for the country" do
+                expect { click_button "Create" }.to change(@country.ethnic_groups, :count).by(1)
+                page.should have_selector('h1', text: 'Ethnic Groups')
+                page.should have_selector('h1', text: @country.country)
+                page.should have_selector('title', text: "Ethnic Groups - #{@country.country}")
+              end 
+            end
+        
+            describe "with invalid data" do
+           
+              before do
+                fill_in "Ethnic group", with: "  "
+              end
+          
+              it "should not create a new ethnic group for the country" do
+                expect { click_button "Create" }.not_to change(@country.ethnic_groups, :count)
+                page.should have_selector('h1', text: 'New Ethnic Group')
+                page.should have_selector('h1', text: @country.country)
+                page.should have_content('error')    
+              end
+            end
+          end
+        
+          describe "Ethnic Groups index for country" do
+      
+            before { visit country_ethnic_groups_path(@country) }
+        
+            it { should have_selector('h1', text: @country.country) }
+            it { should have_selector('title', text: "Ethnic Groups - #{@country.country}") }
+            it { should have_selector('h1', text: 'Ethnic Groups required for reports') }
+            it { should have_link('Add a new group', href: new_country_ethnic_group_path(@country)) }
+            it { should have_link('Back to main settings page', href: country_path(@country)) }
+            it { should have_link('edit', href: edit_ethnic_group_path(@group)) }
+            it { should have_link('del', href: ethnic_group_path(@group)) } 
+            it { should have_selector('#recent-adds') }
+            it { should have_selector('.recent', text: "*") }
+            it { should have_selector('.instruction', text: "ETHNIC GROUPS") }
+            it { should have_selector('.instruction', text: "Add the ethnic groups") } 
+            it { should_not have_selector('.instruction', text: "required for the official reports") }
+            it { should_not have_selector('#recent-add-checks') }
+        		it { should_not have_selector('.recent', text: "+") }
+        
+            describe "moving to the ethnic_group edit link in the correct country" do
+              before { click_link 'edit' }
+          
+              it { should have_selector('title', text: "Edit Ethnic Group") }
+              it { should have_selector('h1', text: @country.country) }
+        
+            end
+        
+            describe "deleting the record" do
+        
+              it "should be from the correct model" do
+                expect { click_link('del') }.to change(@country.ethnic_groups, :count).by(-1)            
+              end
+            end
+          end
+        
+          describe "editing an ethic group" do
+      
+            before { visit edit_ethnic_group_path(@group) }
+        
+            it { should have_selector('h1', text: @country.country) }
+            it { should have_selector('title', text: "Edit Ethnic Group") }
+            it { should have_selector('h1', text: 'Edit Ethnic Group') }
+            it { should have_link('All ethnic groups', href: country_ethnic_groups_path(@country)) }
+            it { should have_link('Country set-up page', href: country_path(@country)) }
+            it { should have_selector('#ethnic_group_created_by', type: 'hidden', value: 999999) }
+            it { should have_selector('#ethnic_group_updated_by', type: 'hidden', value: @admin.id) }   
+            it { should have_selector('#ethnic_group_cancellation_date') }
+            it { should_not have_selector('#ethnic_group_checked') } 
+            it { should_not have_selector('#update-date', text: "Added") }        
+      
+            describe "updating with valid data" do
+          
+              before do
+                fill_in "Ethnic group", with: "Black African"
+                click_button "Save changes"
+              end
+          
+              it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('title', text: "Ethnic Groups - #{@country.country}") }
+              it { should have_selector('h1', text: 'Ethnic Groups') }
+              specify { @group.reload.ethnic_group.should == "Black African" }    
+              specify { @group.reload.checked.should == false} 
+              specify { @group.reload.updated_by.should == @admin.id}    
+            end
+        
+            describe "updating with invalid data" do
+        
+              before do
+                fill_in "Ethnic group", with: " "
+                click_button "Save changes"
+              end
+          
+              it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('title', text: 'Edit Ethnic Group') }
+              it { should have_content('error') }
+              specify { @group.reload.ethnic_group == @group.ethnic_group }
+            end
+            
+            describe "when cancelling an ethnic group" do
+              
+              before do
+                fill_in "Cancellation date", with: (Date.today + 20.days)
+                click_button "Save changes"
+              end
+              
+              it { should have_selector('h1', text: 'Ethnic Groups') }
+              it { should have_selector('.standout', text: 'CANCELLED from') }
+            end   
+          end
+        end
+      end
+      
     end
   end
   
@@ -791,6 +1096,73 @@ describe "CountryAdministrators" do
         	end
       	end
       end
+      
+      describe "Ethnic Groups controller" do
+      
+        describe "adding a new ethnic group" do
+        
+          before { visit new_country_ethnic_group_path(@country) }
+          it { should have_selector('input#ethnic_group_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Ethnic group", with: "Asian"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(@country.ethnic_groups, :count) 
+              page.should have_selector('h1', text: 'Ethnic Groups')
+              page.should have_selector('h1', text: @country.country)
+              page.should_not have_selector('.recent', text: "+") 
+            end
+        	end
+      	end
+      
+      	describe "checking a new entry via Edit" do
+         
+        	before do 
+        	  @group.toggle!(:checked)
+        	  visit edit_ethnic_group_path(@group)
+        	end
+          
+        	it { should have_selector('input#ethnic_group_checked') }
+        	it { should have_selector('#update-date', text: "Added") }
+          
+        	describe "checking the new entry in the index" do
+      
+        		before { visit country_ethnic_groups_path(@country) }
+        
+        	  it { should have_selector('h1', text: @country.country) }
+        		it { should have_selector('title', text: "Ethnic Groups") }
+        		it { should have_link('edit', href: edit_ethnic_group_path(@group)) }
+        		it { should have_link('del', href: ethnic_group_path(@group)) }
+        		it { should_not have_selector('#recent-adds') }
+        		it { should_not have_selector('.recent', text: "*") }
+        		it { should have_selector('#recent-add-checks') }
+        		it { should have_selector('.recent', text: "+") }
+        
+        	  describe "deleting a gratuity formula" do
+        
+        	    it "should be from the correct model" do
+        	      expect { click_link('del') }.to change(@country.ethnic_groups, :count).by(-1)            
+        	    end
+        	  end
+        	end
+        
+        	describe "not changing updated and checked status when superuser edits the ethnic group" do
+        
+        	  before do
+        	    fill_in "Ethnic group", with: "South Asian"
+        	    click_button "Save changes"
+        	  end
+          
+        	  specify { @group.reload.checked == true }
+        	  specify { @group.reload.updated_by != @superuser.id }
+        	end
+      	end
+      end
+      
     end
   end
   

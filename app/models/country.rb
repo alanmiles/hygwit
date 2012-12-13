@@ -34,6 +34,11 @@
 #  gratuity_ceiling_value   :integer
 #  checked                  :boolean          default(FALSE)
 #  updated_by               :integer          default(1)
+#  ethnicity_reports        :boolean          default(FALSE)
+#  ethnicity_details        :text
+#  reserved_jobs            :boolean          default(FALSE)
+#  disability_rules         :boolean          default(FALSE)
+#  disability_details       :text
 #
 
 class Country < ActiveRecord::Base
@@ -42,7 +47,8 @@ class Country < ActiveRecord::Base
             :nationality_id, :nightwork_end, :nightwork_start, :probation_days, :retirement_age_f, :retirement_age_m, 
             :sickness_accruals, :taxation, :max_hours_day_ramadan, :max_hours_week_ramadan, :OT_rate_standard,
             :OT_rate_special, :notes, :rules, :gratuity_applies, :minimum_vacation_days, :vacation_by_working_days, :created_by, 
-            :gratuity_ceiling_months, :gratuity_ceiling_value, :complete, :checked, :updated_by
+            :gratuity_ceiling_months, :gratuity_ceiling_value, :complete, :checked, :updated_by, :ethnicity_reports, 
+            :ethnicity_details, :reserved_jobs, :disability_rules, :disability_details
             
   belongs_to :currency
   belongs_to :nationality
@@ -52,6 +58,7 @@ class Country < ActiveRecord::Base
   has_many	 :gratuity_formulas, dependent: :destroy
   has_many   :insurance_settings, dependent: :destroy
   has_many 	 :insurance_codes, dependent: :destroy
+  has_many   :ethnic_groups, dependent: :destroy
   
   
   after_create :add_absence_codes
