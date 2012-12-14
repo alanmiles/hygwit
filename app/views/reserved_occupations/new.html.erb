@@ -1,0 +1,25 @@
+<% provide(:title, 'New Reserved Occupation') %>
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @country.country %>
+      </h1>
+      <div class="instruction">
+        <div>
+          <%= render "instructions" %>
+        </div> 
+      </div>
+    </section>
+  </aside>
+  <div class="span6 offset0">
+    <h1>New Reserved Occupation</h1>
+    <%= form_for([@country, @occupation]) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "All reserved occupations", country_reserved_occupations_path(@country), class: "btn" %>
+      <%= link_to "Country set-up page", @country, class: "btn" %>
+    <% end %>
+  </div>
+</div>

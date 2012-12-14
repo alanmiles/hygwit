@@ -16,6 +16,8 @@ class Jobfamily < ActiveRecord::Base
 
   attr_accessible :approved, :created_by, :job_family, :checked, :updated_by
   
+  has_many :reserved_occupations, dependent: :destroy
+  
   validates :job_family, presence: true, length: { maximum: 50 },
                      uniqueness: { case_sensitive: false }
   validates :created_by, presence: true
@@ -26,5 +28,20 @@ class Jobfamily < ActiveRecord::Base
     job_family
   end
   
+  def self.non_reserved_jobs(country)
+    @country = Country.find(country.id)
+    if @country.reserved_occupations.count == 0
+      @records = self.all
+    else
+      ids_to_exclude = []
+      @occupations = @country.reserved_occupations
+      @occupations.each do |occupation|
+        ids_to_exclude << occupation.jobfamily_id
+      end
+      jf_table = Arel::Table.new(:jobfamilies)
+      @records = self.where(jf_table[:id].not_in ids_to_exclude)
+    end
+    return @records
+  end
   
 end

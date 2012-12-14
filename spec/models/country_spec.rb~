@@ -74,6 +74,8 @@ describe Country do
   it { should respond_to(:reserved_jobs) }
   it { should respond_to(:disability_rules) }
   it { should respond_to(:disability_details) }
+  it { should respond_to(:ethnic_groups) }
+  it { should respond_to(:reserved_occupations) }
   
   it { should be_valid }
   

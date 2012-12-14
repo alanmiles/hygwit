@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121212230329) do
+ActiveRecord::Schema.define(:version => 20121213075621) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -254,6 +254,16 @@ ActiveRecord::Schema.define(:version => 20121212230329) do
     t.datetime "updated_at",                    :null => false
     t.boolean  "checked",    :default => false
     t.integer  "updated_by", :default => 1
+  end
+
+  create_table "reserved_occupations", :force => true do |t|
+    t.integer  "country_id"
+    t.integer  "jobfamily_id"
+    t.boolean  "checked",      :default => false
+    t.integer  "created_by",   :default => 1
+    t.integer  "updated_by",   :default => 1
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "sectors", :force => true do |t|

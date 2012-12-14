@@ -1,0 +1,21 @@
+<% if @edit == true %>
+  <div class= "line-space">
+    <h4>Occupation: <%= @occupation.jobfamily.job_family %></h4>
+  </div>
+  <%= render "shared/superuser_check", {f: f, object: f.object} %>
+<% else %>
+  <div class= "span3 line-space">
+    <%= f.label :jobfamily_id, "Reserved occupation" %>
+    <%= collection_select(:reserved_occupation, :jobfamily_id, 
+          @available_jobs, :id, :job_family, prompt: 'Please select')  %>
+  </div>
+  <% if current_user.superuser? %>
+    <div style="clear:both" class="line-space">
+      <span class="span5 r-float"><%= f.check_box :checked %></span>
+      <span><%= f.label :checked %></span>
+    </div>
+  <% end %>
+<% end %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>
+<%= f.hidden_field :created_by %>

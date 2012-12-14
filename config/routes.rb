@@ -13,6 +13,7 @@ Hygwit::Application.routes.draw do
     resources :insurance_future_settings, only: :index 
     resources :insurance_codes, shallow: true
     resources :ethnic_groups, shallow: true
+    resources :reserved_occupations, shallow: true
     member do
       get 'insurance_menu'
     end

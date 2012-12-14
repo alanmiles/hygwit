@@ -14,10 +14,9 @@
 
 class Jobfamily < ActiveRecord::Base
 
- # include UpdateCheck
-  #include RecentChange
-
   attr_accessible :approved, :created_by, :job_family, :checked, :updated_by
+  
+  has_many :reserved_occupations, dependent: :destroy
   
   validates :job_family, presence: true, length: { maximum: 50 },
                      uniqueness: { case_sensitive: false }
@@ -29,35 +28,20 @@ class Jobfamily < ActiveRecord::Base
     job_family
   end
   
-  #def recent?
-  #  created_at >= 7.days.ago
-  #end
+  def self.non_reserved_jobs(country)
+    @country = Country.find(country.id)
+    if @country.reserved_occupations.count == 0
+      @records = self.all
+    else
+      ids_to_exclude = []
+      @occupations = @country.reserved_occupations
+      @occupations.each do |occupation|
+        ids_to_exclude << occupation.id
+      end
+      jf_table = Arel::Table.new(:jobfamilies)
+      @records = self.where(jf_table[:id].not_in ids_to_exclude)
+    end
+    return @records
+  end
   
-  #def self.all_recent
-  #  self.where("created_at >=?", 7.days.ago).count
-  #end
-  
-  #def updated?
-  #  updated_at >= 7.days.ago && created_at < 7.days.ago
-  #end
-  
-  #def self.all_updated
-  #  self.where("updated_at >=? and created_at <?", 7.days.ago, 7.days.ago).count
-  #end
-  
-  #def add_check?
-  #  checked == false && (created_at + 1.day >= updated_at)
-  #end
-  
-  #def self.added_require_checks
-  #  self.where("checked = ? AND (updated_at - created_at) < INTERVAL '1 day'", false).count
-  #end
-  
-  #def update_check?
-  #  checked == false && (created_at + 1.day < updated_at)
-  #end
-  
-  #def self.updated_require_checks
-  #  self.where("checked = ? AND (updated_at - created_at) >= INTERVAL '1 day'", false).count
-  #end 
 end

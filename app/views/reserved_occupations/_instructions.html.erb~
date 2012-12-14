@@ -1,0 +1,10 @@
+    <% if current_user.superuser? || current_user.administrator?(@country.country) %>   
+      <div class="line-space">
+        <%= occupations_country_instruction_1 %>
+      </div>
+      <div class="line-space">
+        <%= occupations_country_instruction_2 %>
+      </div>    
+    <% else %>
+      <%= occupations_country_guidance %>
+    <% end %>

@@ -94,6 +94,19 @@
             <span id="no-ethnicity" class="normal-font offset1">Ethnicity reports are not required.</span>
           <% end %>  
         </li>
+        <li>
+          <% if @country.reserved_jobs? %>
+            <span class="span2"><%= link_to "Reserved jobs", country_reserved_occupations_path(@country) %></span>
+            <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+              <span id="recent-reserved-occupations" class="normal-font offset1">
+                <%= render "shared/country_menu_change_stats", model_name: ReservedOccupation %>
+              </span>   
+            <% end %>
+          <% else %>
+            <span class="span2 faded">Reserved jobs</span>
+            <span id="no-reserved-jobs" class="normal-font offset1">No jobs are reserved for nationals in this country.</span>
+          <% end %>  
+        </li>
       </ul>  
     </div>
   </div>

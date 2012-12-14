@@ -59,6 +59,7 @@ class Country < ActiveRecord::Base
   has_many   :insurance_settings, dependent: :destroy
   has_many 	 :insurance_codes, dependent: :destroy
   has_many   :ethnic_groups, dependent: :destroy
+  has_many   :reserved_occupations, dependent: :destroy
   
   
   after_create :add_absence_codes
@@ -88,8 +89,7 @@ class Country < ActiveRecord::Base
   def self.total_incomplete
     Country.where("complete =?", false).count
   end
-  
-  
+   
   private
   
     def add_absence_codes
