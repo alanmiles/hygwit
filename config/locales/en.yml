@@ -4,8 +4,13 @@
 en:
   activerecord:
     errors:
+      models:
+        jobfamily: "Occupation"
       messages:
         inclusion: "has a value outside the permitted range"
+        taken: "is a duplicate"
     attributes:
       user:
         password_digest: "Password"
+      jobfamily:
+        job_family: "Occupation"

@@ -588,8 +588,8 @@ describe "AdminPages" do
           visit jobfamilies_path
         end
       
-        it { should have_selector('title', text: 'Job Families') }
-        it { should have_selector('h1', text: 'Job Families') }
+        it { should have_selector('title', text: 'Occupations') }
+        it { should have_selector('h1', text: 'Occupations') }
         it { should_not have_selector('#recent-adds', text: "needing approval") }
         it { should have_selector('.recent', text: "*") }
       
@@ -621,8 +621,8 @@ describe "AdminPages" do
     
         before { visit new_jobfamily_path }
       
-        it { should have_selector('title', text: 'New Job Family') }
-        it { should have_selector('h1',    text: 'New Job Family') }
+        it { should have_selector('title', text: 'New Occupation') }
+        it { should have_selector('h1',    text: 'New Occupation') }
         it { should have_link('Back', href: jobfamilies_path) }
         it { should_not have_selector('#jobfamily_checked', type: 'checkbox') }
         it { should_not have_selector('input#jobfamily_checked') }
@@ -632,7 +632,7 @@ describe "AdminPages" do
     
         describe "creating a new job_family" do
       
-          before { fill_in "Job family",  with: "Merchandizing" }
+          before { fill_in "Occupation",  with: "Merchandizing" }
         
           it "should create a job_family" do
             expect { click_button "Create" }.to change(Jobfamily, :count).by(1)
@@ -641,11 +641,11 @@ describe "AdminPages" do
       
         describe "creating a record that fails validation" do
       
-          before { fill_in "Job family",  with: "" }
+          before { fill_in "Occupation",  with: "" }
         
           it "should not create a job_family" do
             expect { click_button "Create" }.not_to change(Jobfamily, :count)
-            page.should have_selector('h1', text: 'New Job Family')
+            page.should have_selector('h1', text: 'New Occupation')
             page.should have_content('error')
           end  
       
@@ -659,8 +659,8 @@ describe "AdminPages" do
           visit edit_jobfamily_path(@jobfamily_3)
         end
     
-        it { should have_selector('title', text: 'Edit Job Family') }
-        it { should have_selector('h1',    text: 'Edit Job Family') }
+        it { should have_selector('title', text: 'Edit Occupation') }
+        it { should have_selector('h1',    text: 'Edit Occupation') }
         it { should have_selector('input', value: @jobfamily_3.job_family) }
         it { should_not have_selector('#jobfamily_checked', type: 'checkbox') }
         it { should have_link('Back', href: jobfamilies_path) }
@@ -669,11 +669,11 @@ describe "AdminPages" do
     
         describe "with invalid data" do
           before do
-            fill_in 'Job family', with: " "
+            fill_in 'Occupation', with: " "
             click_button "Save change"
           end
         
-          it { should have_selector('title', text: 'Edit Job Family') }
+          it { should have_selector('title', text: 'Edit Occupation') }
           it { should have_content('error') }
           specify { @jobfamily_3.reload.job_family.should == 'Doctor' }
         end
@@ -682,11 +682,11 @@ describe "AdminPages" do
       
           let(:new_family) { "Medical Staff" }
           before do
-            fill_in 'Job family', with: new_family
+            fill_in 'Occupation', with: new_family
             click_button "Save change"
           end
       
-          it { should have_selector('title', text: 'Job Families') }
+          it { should have_selector('title', text: 'Occupations') }
           it { should have_selector('div.alert.alert-success') }
           specify { @jobfamily_3.reload.job_family.should == new_family }
           specify { @jobfamily_3.reload.checked.should == false }
@@ -1255,13 +1255,13 @@ describe "AdminPages" do
           
           describe "automatic checking of record entered by superuser" do
             before do
-              fill_in "Job family", with: "Foobar"
+              fill_in "Occupation", with: "Foobar"
             end
             
             it "should create the new record" do
             
               expect { click_button "Create" }.to change(Jobfamily, :count) 
-              page.should have_selector('h1', text: 'Job Families')
+              page.should have_selector('h1', text: 'Occupations')
               page.should have_selector('.recent', text: "+") 
             end
           end
@@ -1290,7 +1290,7 @@ describe "AdminPages" do
           describe "not changing updated and checked status when superuser edits the code" do
         
             before do
-              fill_in "Job family", with: "Family"
+              fill_in "Occupation", with: "Family"
               click_button "Save change"
             end
           

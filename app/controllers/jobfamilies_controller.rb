@@ -61,7 +61,7 @@ class JobfamiliesController < ApplicationController
         flash[:success]= "'#{@jobfamily.job_family}' destroyed"
         redirect_to jobfamilies_path
       else
-        flash[:notice] = "Illegal action.  You can only remove job families you have created."
+        flash[:notice] = "Illegal action.  You can only remove occupations you have created."
         redirect_to jobfamilies_path
       end
     end

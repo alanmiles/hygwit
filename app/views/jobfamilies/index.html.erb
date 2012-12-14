@@ -1,21 +1,21 @@
-<% provide(:title, 'Job Families') %>
+<% provide(:title, 'Occupations') %>
 <div class="row">
   <aside class="span4">
     <%= render "shared/admin_sidebar" %>
   </aside>
   
   <div class="span8">
-    <h1 class="align-left">Job Families</h1>
+    <h1 class="align-left">Occupations</h1>
 
     <div style="padding-bottom: 10px">
-      <%= link_to "Add a job family", new_jobfamily_path, class: "btn" %>
+      <%= link_to "Add an occupation", new_jobfamily_path, class: "btn" %>
     </div>
     <ul class="itemlist">
       <%= render "list" %>
     </ul>
     <% if Jobfamily.count > 10 %>
       <div style="padding-top: 10px">
-        <%= link_to "Add a job family", new_jobfamily_path, class: "btn" %>
+        <%= link_to "Add an occupation", new_jobfamily_path, class: "btn" %>
       </div>
     <% end %>
   </div>

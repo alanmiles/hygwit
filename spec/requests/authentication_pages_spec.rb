@@ -59,7 +59,7 @@ describe "AuthenticationPages" do
       it { should have_link('Currencies', href: currencies_path) }
       it { should have_link('Countries', href: countries_path) }
       it { should have_link('Sectors', href: sectors_path) }
-      it { should have_link('Job Families', href: jobfamilies_path) }
+      it { should have_link('Occupations', href: jobfamilies_path) }
       it { should have_link('Personal Qualities', href: qualities_path) }
       it { should have_link('Leaving Reasons', href: leaving_reasons_path) }
       it { should have_link('Absence Types', href: absence_types_path) }
