@@ -19,6 +19,8 @@ class Currency < ActiveRecord::Base
   
   has_many :countries
   
+  before_save	:upcase_code
+  
   validates :currency, presence: true, length: { maximum: 50 }
   validates :code, presence: true, length: { maximum: 3 },
   												uniqueness: { case_sensitive: false }
@@ -52,4 +54,10 @@ class Currency < ActiveRecord::Base
     end
     return cnt
   end
+  
+  private
+  
+    def upcase_code
+      code.upcase!
+    end
 end

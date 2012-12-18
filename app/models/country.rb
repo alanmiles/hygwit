@@ -58,6 +58,7 @@ class Country < ActiveRecord::Base
   has_many	 :gratuity_formulas, dependent: :destroy
   has_many   :insurance_settings, dependent: :destroy
   has_many 	 :insurance_codes, dependent: :destroy
+  has_many   :insurance_rates, dependent: :destroy
   has_many   :ethnic_groups, dependent: :destroy
   has_many   :reserved_occupations, dependent: :destroy
   
@@ -88,6 +89,33 @@ class Country < ActiveRecord::Base
   
   def self.total_incomplete
     Country.where("complete =?", false).count
+  end
+  
+  def insurance_empty?
+    self.insurance_codes.count == 0 || self.insurance_settings.count == 0
+  end
+  
+  def recalculate_ni_rates(e_date, user)
+    @codes = self.insurance_codes.where("cancelled IS NULL or date(cancelled) > ?", e_date) 
+    @settings = self.insurance_settings.snapshot_list(e_date)
+    @codes.each do |code|
+      @seq = 1
+      @settings.each do |setting|
+        unless setting == @settings.last
+          @next_setting = @settings.fetch(@seq)
+          self.insurance_rates.create(insurance_code_id: code, threshold_id: setting.id, ceiling_id: @next_setting.id,
+                   contribution: 10, created_by: user, updated_by: user, effective: e_date)
+          self.insurance_rates.create(insurance_code_id: code, threshold_id: setting.id, ceiling_id: @next_setting.id,
+                   contribution: 10, source_employee: false, created_by: user, updated_by: user, effective: e_date)
+        else
+          self.insurance_rates.create(insurance_code_id: code, threshold_id: setting.id,
+                   contribution: 10, created_by: user, updated_by: user, effective: e_date)
+          self.insurance_rates.create(insurance_code_id: code, threshold_id: setting.id,
+                   contribution: 10, source_employee: false, created_by: user, updated_by: user, effective: e_date)
+        end
+        @seq = @seq + 1
+      end
+    end
   end
    
   private

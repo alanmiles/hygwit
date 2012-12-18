@@ -1,0 +1,43 @@
+<% provide(:title, "Current Insurance Rates - Employees") %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= @country.country %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <%= render "instructions" %>  
+      </div>
+    </section>
+    <section>
+      <%= render "shared/change_stats" %>
+      <% if current_user.administrator?(@country.country) || current_user.superuser? %>
+        <span id="change-note"><em>Changes are best seen in the history table</em></span>
+      <% end %>
+    </section>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Current Insurance Rates - Employees</h1>
+
+    <div style="padding-bottom: 10px">
+      <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+        <%= link_to "Add a new set of rates", "#", class: "btn" %>
+        <%= link_to "Add a single rate", new_country_insurance_rate_path(@country), class: "btn" %>
+      <% end %>
+      <%= link_to "Back to main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
+    </div>
+    <%= render "warning" %>
+    <div class="line-space">
+      Listed below are the <u>current</u> rates for employees. 
+      <%= link_to "View full history", "#", class: "btn" %>
+      <%= link_to "View future rates", 
+         country_insurance_future_rates_path(@country), class: "btn" if @country.insurance_rates.future_rates? %>
+    </div>
+    <ul class="itemlist">
+      <%= render "list" %>
+    </ul>
+  </div>
+</div>

@@ -19,11 +19,29 @@ class InsuranceCode < ActiveRecord::Base
   attr_accessible :explanation, :checked, :insurance_code, :updated_by, :cancelled, :created_by
   
   belongs_to :country
+  has_many :insurance_rates, dependent: :destroy
+  
+  before_save	:upcase_icode
   
   validates :country_id,								presence: true
   validates :insurance_code,            presence: true, length: { maximum: 5 }, uniqueness: { case_sensitive: false, scope: :country_id }
   validates :explanation,								presence: true, length: { maximum: 50 }, uniqueness: { case_sensitive: false, scope: :country_id }
   validates :created_by,								presence: true, numericality: { integer: true }
 
+  default_scope order: "insurance_codes.insurance_code"
   
+  def self.on_current_list
+    self.where("cancelled IS NULL or cancelled > ?", Date.today)  
+  end
+  
+  def full_details
+    @details = "#{insurance_code} - #{explanation}"
+  end
+  
+  private
+  
+    def upcase_icode
+      insurance_code.upcase!
+    end
+    
 end

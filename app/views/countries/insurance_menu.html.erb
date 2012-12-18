@@ -46,9 +46,14 @@
         </li> 
         <li>
           <div class="line-space" style= "font-size: .85em">
-            Rubric
+            <%= insurance_rates_country_instruction_1 %>
           </div>
-          <%= link_to "Settings", country_insurance_settings_path(@country) %>
+          <% if @country.insurance_empty? %>
+            <span class="faded">Go to Insurance Rates</span>
+            <span class ="standout"> - set up Salary Thresholds and Insurance Codes first.<span>
+          <% else %>
+            Go to <%= link_to "Insurance Rates", country_insurance_rates_path(@country) %>
+          <% end %>
         </li> 
       </ul>
     <% else %>

@@ -11,17 +11,17 @@ module InsuranceSettingsHelper
      and employees for National Insurance in #{@country.country}."
   end
   
-  def insurance_settings_country_instruction_2
-    "If there's a single flat rate for insurance, regardless of salary, then you'll only need one line in the Salary Thresholds Table: 
-     'Standard Rate' (code 'ST') with all the milestones set to 0 - in other words, as soon as an employee earns any salary at all,
-     insurance deductions are applicable."
-  end
+  #def insurance_settings_country_instruction_2
+  #  "If there's a single flat rate for insurance, regardless of salary, then you'll only need one line in the Salary Thresholds Table: 
+  #   'Standard Rate' (code 'ST') with all the milestones set to 0 - in other words, as soon as an employee earns any salary at all,
+  #   insurance deductions are applicable."
+  #end
   
-  def insurance_settings_country_instruction_3 
-    "Usually though, insurance deductions are salary-indexed, and the government issues a list of the salary threshold levels, which
-    might change annually.  You need to include the government labels and figures, setting the values for weekly-paid, monthly-paid or
-    annually-paid employees."
-  end
+  #def insurance_settings_country_instruction_3 
+  #  "Usually though, insurance deductions are salary-indexed, and the government issues a list of the salary threshold levels, which
+  #  might change annually.  You need to include the government labels and figures, setting the values for weekly-paid, monthly-paid or
+  #  annually-paid employees."
+  #end
   
   def recent_country_insurance_settings(country)
     @recent = InsuranceSetting.total_recent(country)  #created within last 7 days

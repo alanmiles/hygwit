@@ -20,15 +20,15 @@
 
 class InsuranceSetting < ActiveRecord::Base
 
-  #include UpdateCheck
-  #include RecentChange
-  #include RecentCountryChange
-  
   attr_accessible :annual_milestone, :effective_date, :monthly_milestone, :name, :shortcode, :weekly_milestone, :cancellation_date,
       :checked, :updated_by, :created_by
   
   belongs_to :country
+  has_many :thresholds, class_name: InsuranceRate, foreign_key: :threshold_id
+  has_many :ceilings, class_name: InsuranceRate, foreign_key: :ceiling_id
   
+  before_save	:upcase_shortcode
+    
   validates :country_id,					presence: true
   validates :shortcode,						presence: true, length: { maximum: 5 }, uniqueness: { scope: [:country_id, :effective_date] }
   validates :name,								presence: true, length: { maximum: 30 }, uniqueness: { scope: [:country_id, :effective_date] }
@@ -42,38 +42,6 @@ class InsuranceSetting < ActiveRecord::Base
   validate  :duplicate_cancelled, on: :create
 
   #default_scope order: "insurance_settings.monthly_milestone"
-  
-  #def recent?
-  #  created_at >= 7.days.ago
-  #end
-  
-  #def self.total_recent(country)
-  #  InsuranceSetting.where("country_id = ? and created_at >=?", country.id, 7.days.ago).count
-  #end
-  
-  #def updated?
-  #  updated_at >= 7.days.ago && created_at < 7.days.ago
-  #end
-  
-  #def self.total_updated(country)
-  #  InsuranceSetting.where("country_id = ? and updated_at >=? and created_at <?", country.id, 7.days.ago, 7.days.ago).count
-  #end
-  
-  #def add_check?
-  #  checked == false && (created_at + 1.day >= updated_at)
-  #end
-  
-  #def self.recent_add_checks(country)
-  #  self.where("country_id = ? AND checked = ? AND (updated_at - created_at) < INTERVAL '1 day'", country.id, false).count
-  #end
-  
-  #def update_check?
-  #  checked == false && (created_at + 1.day < updated_at)
- # end
-  
-  #def self.recent_update_checks(country)
-  #  self.where("country_id = ? AND checked = ? AND (updated_at - created_at) >= INTERVAL '1 day'", country.id, false).count
-  #end
   
   def self.future_settings?
     cnt = InsuranceSetting.where("effective_date >?", Date.today).count
@@ -105,6 +73,14 @@ class InsuranceSetting < ActiveRecord::Base
     return @settings
   end
   
+  def self.current_and_future_list
+    @list = self.current_list
+    self.future_list.each do |r|
+      @list << r
+    end
+    @list.sort_by(&:monthly_milestone)   
+  end
+  
   def in_current_list
     @country = Country.find(self.country_id)
     @recs = @country.insurance_settings.current_list
@@ -123,7 +99,23 @@ class InsuranceSetting < ActiveRecord::Base
     return result   
   end
   
+  def threshold_details
+    @country = Country.find(country_id)
+    @details = "#{shortcode} ( >#{@country.currency.code} #{sprintf("%.0d", monthly_milestone)}, effective #{effective_date.strftime("%d-%b-%y")} )"
+  end
+  
+  def ceiling_details
+    @country = Country.find(country_id)
+    @details = "#{shortcode} ( #{@country.currency.code} #{sprintf("%.0d", monthly_milestone)}, effective #{effective_date.strftime("%d-%b-%y")} )"
+  end
+  
+  
+  
   private
+  
+    def upcase_shortcode
+      shortcode.upcase!
+    end
   
     def early_cancellation_date
       unless effective_date.nil? || cancellation_date.nil?

@@ -27,7 +27,7 @@
           
               <%= link_to "edit", edit_insurance_setting_path(setting) %>
               | <%= link_to "del", setting, method: :delete,
-                             data: { confirm: "Delete '#{setting.shortcode}' with effective date #{setting.effective_date}from the insurance settings table for #{@country.country}?  Sure?" } %>
+                             data: { confirm: "Delete '#{setting.shortcode}' with effective date #{setting.effective_date.strftime('%d %b %Y')} from the insurance settings table for #{@country.country}?  Sure?" } %>
           
             </span>
           <% end %>

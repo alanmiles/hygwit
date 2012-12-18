@@ -24,7 +24,11 @@ class InsuranceSetting < ActiveRecord::Base
       :checked, :updated_by, :created_by
   
   belongs_to :country
+  has_many :thresholds, class_name: InsuranceRate, foreign_key: :threshold_id
+  has_many :ceilings, class_name: InsuranceRate, foreign_key: :ceiling_id
   
+  before_save	:upcase_shortcode
+    
   validates :country_id,					presence: true
   validates :shortcode,						presence: true, length: { maximum: 5 }, uniqueness: { scope: [:country_id, :effective_date] }
   validates :name,								presence: true, length: { maximum: 30 }, uniqueness: { scope: [:country_id, :effective_date] }
@@ -57,6 +61,19 @@ class InsuranceSetting < ActiveRecord::Base
     return @settings
   end
   
+   def self.snapshot_list(stated_date)
+    rows = InsuranceSetting.where("date(effective_date) <=? AND 
+       (cancellation_date IS NULL OR date(cancellation_date) >?)", stated_date, stated_date)
+       .select("shortcode, max(effective_date) AS effective_date, sum(monthly_milestone) AS monthly_milestone")
+       .group("shortcode")
+       .order("3 ASC")
+    @settings = []
+    rows.each do |r|
+      @settings << InsuranceSetting.find_by_shortcode_and_effective_date(r.shortcode, r.effective_date)
+    end
+    return @settings
+  end
+  
   def self.future_list
     rows = InsuranceSetting.where("effective_date >?", Date.today)
        .select("shortcode, max(effective_date) AS effective_date, sum(monthly_milestone) AS monthly_milestone")
@@ -67,6 +84,14 @@ class InsuranceSetting < ActiveRecord::Base
       @settings << InsuranceSetting.find_by_shortcode_and_effective_date(r.shortcode, r.effective_date)
     end
     return @settings
+  end
+  
+  def self.current_and_future_list
+    @list = self.current_list
+    self.future_list.each do |r|
+      @list << r
+    end
+    @list.sort_by(&:monthly_milestone)   
   end
   
   def in_current_list
@@ -87,7 +112,23 @@ class InsuranceSetting < ActiveRecord::Base
     return result   
   end
   
+  def threshold_details
+    @country = Country.find(country_id)
+    @details = "#{shortcode} ( >#{@country.currency.code} #{sprintf("%.0d", monthly_milestone)}, effective #{effective_date.strftime("%d-%b-%y")} )"
+  end
+  
+  def ceiling_details
+    @country = Country.find(country_id)
+    @details = "#{shortcode} ( #{@country.currency.code} #{sprintf("%.0d", monthly_milestone)}, effective #{effective_date.strftime("%d-%b-%y")} )"
+  end
+  
+  
+  
   private
+  
+    def upcase_shortcode
+      shortcode.upcase!
+    end
   
     def early_cancellation_date
       unless effective_date.nil? || cancellation_date.nil?

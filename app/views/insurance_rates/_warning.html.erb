@@ -1,0 +1,8 @@
+     <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+        <div class="standout line-space">
+          WARNING: Do not delete last year's rates when the government announces changes.
+          The historical settings are important in case back-dated contribution adjustments are needed.  
+          So simply add a new line, with a new effective date.  If you accidentally delete one of the old rates, re-enter it
+          with the original effective date.  
+        </div>
+      <% end %>

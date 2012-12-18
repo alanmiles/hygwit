@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121213075621) do
+ActiveRecord::Schema.define(:version => 20121214063907) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -197,6 +197,24 @@ ActiveRecord::Schema.define(:version => 20121213075621) do
     t.decimal  "employee_contribution_expat", :precision => 5, :scale => 2, :default => 0.0
     t.datetime "created_at",                                                                 :null => false
     t.datetime "updated_at",                                                                 :null => false
+  end
+
+  create_table "insurance_rates", :force => true do |t|
+    t.integer  "country_id"
+    t.integer  "insurance_code_id"
+    t.boolean  "source_employee",   :default => true
+    t.integer  "threshold_id"
+    t.integer  "ceiling_id"
+    t.decimal  "contribution"
+    t.boolean  "percent",           :default => true
+    t.boolean  "rebate",            :default => false
+    t.integer  "created_by",        :default => 1
+    t.integer  "updated_by",        :default => 1
+    t.boolean  "checked",           :default => false
+    t.date     "effective"
+    t.date     "cancellation"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
   end
 
   create_table "insurance_settings", :force => true do |t|

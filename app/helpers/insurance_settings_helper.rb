@@ -11,35 +11,23 @@ module InsuranceSettingsHelper
      and employees for National Insurance in #{@country.country}."
   end
   
-  #def insurance_settings_country_instruction_2
-  #  "If there's a single flat rate for insurance, regardless of salary, then you'll only need one line in the Salary Thresholds Table: 
-  #   'Standard Rate' (code 'ST') with all the milestones set to 0 - in other words, as soon as an employee earns any salary at all,
-  #   insurance deductions are applicable."
+  #def recent_country_insurance_settings(country)
+  #  @recent = InsuranceSetting.total_recent(country)  #created within last 7 days
+  #  if @recent > 0
+  #    return "#{pluralize(@recent, 'addition')} (*) in past 7 days."
+  #  else
+   #   return "No recent additions." 
+  #  end
   #end
   
-  #def insurance_settings_country_instruction_3 
-  #  "Usually though, insurance deductions are salary-indexed, and the government issues a list of the salary threshold levels, which
-  #  might change annually.  You need to include the government labels and figures, setting the values for weekly-paid, monthly-paid or
-  #  annually-paid employees."
+  #def updated_country_insurance_settings(country)
+  #  @updates = InsuranceSetting.total_updated(country)  #updated within last 7 days
+  #  if @updates > 0
+  #    return "#{pluralize(@updates, 'update')} (^) in past 7 days."
+  #  else
+  #    return "No recent updates." 
+  #  end
   #end
-  
-  def recent_country_insurance_settings(country)
-    @recent = InsuranceSetting.total_recent(country)  #created within last 7 days
-    if @recent > 0
-      return "#{pluralize(@recent, 'addition')} (*) in past 7 days."
-    else
-      return "No recent additions." 
-    end
-  end
-  
-  def updated_country_insurance_settings(country)
-    @updates = InsuranceSetting.total_updated(country)  #updated within last 7 days
-    if @updates > 0
-      return "#{pluralize(@updates, 'update')} (^) in past 7 days."
-    else
-      return "No recent updates." 
-    end
-  end
   
   def code_note
     "Enter a short-code for this setting, not more than 5 characters long.  If there's an official short-code used by your government, use

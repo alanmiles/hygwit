@@ -10,4 +10,4 @@ class CreateReservedOccupations < ActiveRecord::Migration
       t.timestamps
     end
   end
-endnnot
+end

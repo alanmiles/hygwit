@@ -11,11 +11,27 @@ module ApplicationHelper
   end
   
   def date_display(record)
-    record.strftime('%d %b %Y')
+    if record.nil?
+      return "-"
+    else
+      return record.strftime('%d %b %y')
+    end
   end
   
   def format_number(record)
     number_with_precision(record, :strip_insignificant_zeros => true)
+  end
+  
+  def dec_place_number(record, dec)
+    if dec == 2
+      sprintf("%.2f", record)
+    elsif dec == 3
+      sprintf("%.3f", record)
+    elsif dec == 1
+      sprintf("%.1f", record)
+    else
+      sprintf("%.0f", record)
+    end
   end
   
   def not_country_admin

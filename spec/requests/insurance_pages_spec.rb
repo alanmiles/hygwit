@@ -332,7 +332,7 @@ describe "InsurancePages" do
           it { should have_selector('.instruction', text: "You're not registered as an administrator") }
           it { should have_selector('.itemlist', text: @code.insurance_code) }
           it { should have_selector('.itemlist', text: @code.explanation) }
-          it { should have_selector('.itemlist', text: @old_code.cancelled.strftime('%d %b %Y')) }
+          it { should have_selector('.itemlist', text: @old_code.cancelled.strftime('%d %b %y')) }
         end
         
         describe "when trying to access the 'new' page" do

@@ -404,6 +404,8 @@ describe "InsurancePages" do
             it { should have_link("Main insurance menu", href: insurance_menu_country_path(@country)) }
             it { should_not have_selector('#insurance_setting_cancellation_date') }
             it { should have_selector('.line-space', text: "No blanks") }
+            it { should have_selector('#insurance_setting_created_by', type: 'hidden', value: @admin.id) } 
+            it { should have_selector('#insurance_setting_updated_by', type: 'hidden', value: @admin.id) }
       
             describe "with valid current data" do
         
@@ -560,6 +562,8 @@ describe "InsurancePages" do
             it { should have_link('Main insurance menu', href: insurance_menu_country_path(@country)) } 
             it { should have_selector('#insurance_setting_cancellation_date') }
             it { should_not have_selector('.line-space', text: "No blanks") }
+            it { should have_selector('#insurance_setting_created_by', type: 'hidden', value: 999999) }
+            it { should have_selector('#insurance_setting_updated_by', type: 'hidden', value: @admin.id) }
       
             describe "updating with valid data" do
           
