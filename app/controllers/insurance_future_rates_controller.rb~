@@ -6,7 +6,12 @@ class InsuranceFutureRatesController < ApplicationController
   def index
     @country = Country.find(params[:country_id])
     check_permitted
-    @rates = InsuranceRate.future_list(@country)
+    @selection = @country.insurance_rates.where("source_employee = ?", true)
+    @rates = @country.insurance_rates.future_list(@selection)
+    @page_title = "Future Insurance Rates - Employees"
+    @list_type = "are planned future rates for employees"
+    @focus = "employee"
+    @status = "future"
     @recent_adds = InsuranceSetting.total_recent(@country)
     @recent_updates = InsuranceSetting.total_updated(@country)
     @recent_add_checks = InsuranceSetting.recent_add_checks(@country)

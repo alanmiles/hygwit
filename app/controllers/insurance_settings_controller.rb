@@ -17,8 +17,11 @@ class InsuranceSettingsController < ApplicationController
   
   def new
     @country = Country.find(params[:country_id]) 
-    country_admin_access
-    check_permitted
+    if current_user.administrator?(@country.country)
+      check_permitted
+    else
+      country_admin_access 
+    end
     @setting = @country.insurance_settings.new
     @setting.created_by = current_user.id
     @setting.updated_by = current_user.id
@@ -59,8 +62,11 @@ class InsuranceSettingsController < ApplicationController
   def edit
     @setting = InsuranceSetting.find(params[:id])
     @country = Country.find(@setting.country_id)
-    country_admin_access
-    check_permitted
+    if current_user.administrator?(@country.country)
+      check_permitted
+    else
+      country_admin_access 
+    end
     set_insset_cancellation_status
     @setting.updated_by = current_user.id unless current_user.superuser?  #superuser check doesn't change inputter reference
   end

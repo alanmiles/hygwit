@@ -226,7 +226,7 @@ describe "InsurancePages" do
         @country.save
       end
       
-      describe "show adjuscompilerted insurance menu page" do
+      describe "show adjusted insurance menu page" do
         
         before { visit insurance_menu_country_path(@country) }
       
@@ -251,130 +251,242 @@ describe "InsurancePages" do
       
       describe "Insurance Settings controller" do
       
-        describe "insurance settings index (Salary Thresholds table)" do
-      
-          before { visit country_insurance_settings_path(@country) }
+        describe "when insurance is switched off" do
         
-          it { should_not have_selector('.standout', text: "WARNING") }
-          it { should have_selector('h1', text: @country.country) }
-          it { should have_selector('title', text: "Insurance: Current Salary Thresholds") }
-          it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
-          it { should_not have_link('edit', href: edit_insurance_setting_path(@country.insurance_settings.first)) }
-          it { should_not have_link('del', href: insurance_setting_path(@country.insurance_settings.first)) }
-          it { should_not have_selector('#recent-adds') }
-          it { should_not have_selector('.recent', text: "*") }
-          it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
-          it { should_not have_selector('.instruction', text: "in our video tutorial") } 
-          it { should have_selector('.instruction', text: "You're not registered as an administrator") }
-          it { should have_selector('.itemlist', text: "464") }
-          it { should have_selector('.itemlist', text: "8500") }
-          it { should_not have_selector('.itemlist', text: "425") }  #historical threshold @setting_old
-          it { should_not have_selector('.itemlist', text: "575") }  #future threshold @setting_new 
-          it { should_not have_selector('.itemlist', text: "Not Used Past") }
-          it { should have_selector('.itemlist', text: "Not Used Future") }
-        end
-        
-        describe "when trying to access the 'new' page" do
-    
-          before { visit new_country_insurance_setting_path(@country) }
+          before do
+            @country.insurance = false
+            @country.save
+          end
+          
+          describe "attempting to open index page" do
+            
+            before { visit country_insurance_settings_path(@country) }
+            
+            it { should_not have_selector('h1', text: @country.country) }
+            it { should_not have_selector('title', text: "Insurance: Current Salary Thresholds") }
+            it { should have_selector('h1', text: 'Administrator Menu') }
+            it { should have_selector('.alert', text: 'National Insurance is switched off') }
+          end
+          
+          describe "attempting to open new page" do
+          
+            before { visit new_country_insurance_setting_path(@country) }  #reverts -default for non-country admin - same for edit, update
       
-          it { should_not have_selector('title', text: 'New Salary Threshold') }
-          it "should render the admin home page" do
-            page.should have_selector('.alert', text: 'You must be a registered administrator')
-            page.should have_selector('h1', text: 'Administrator Menu')
+            it { should_not have_selector('title', text: 'New Salary Threshold') }
+            it "should render the admin home page" do
+              page.should have_selector('.alert', text: 'You must be a registered administrator')
+              page.should have_selector('h1', text: 'Administrator Menu')
+            end
           end
         end
         
-        describe "when trying to access the 'edit' page" do
-    
-          before { visit edit_insurance_setting_path(@setting) }
+        describe "when insurance is switched on" do
+        
+          describe "current settings" do
+          
+            describe "insurance settings index (Salary Thresholds table)" do
       
-          it { should_not have_selector('title', text: 'Edit Salary Threshold') }
-          it "should render the admin home page" do
-            page.should have_selector('.alert', text: 'You must be a registered administrator')
-            page.should have_selector('h1', text: 'Administrator Menu')
-          end
-        end
-      
-        describe "when trying to delete" do
+              before { visit country_insurance_settings_path(@country) }
+        
+              it { should_not have_selector('.standout', text: "WARNING") }
+              it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('title', text: "Insurance: Current Salary Thresholds") }
+              it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
+              it { should_not have_link('edit', href: edit_insurance_setting_path(@setting)) }
+              it { should_not have_link('del', href: insurance_setting_path(@setting)) }
+              it { should_not have_selector('#recent-adds') }
+              it { should_not have_selector('.recent', text: "*") }
+              it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
+              it { should_not have_selector('.instruction', text: "in our video tutorial") } 
+              it { should have_selector('.instruction', text: "You're not registered as an administrator") }
+              it { should have_selector('.itemlist', text: "464") }
+              it { should have_selector('.itemlist', text: "8500") }
+              it { should_not have_selector('.itemlist', text: "425") }  #historical threshold @setting_old
+              it { should_not have_selector('.itemlist', text: "575") }  #future threshold @setting_new 
+              it { should_not have_selector('.itemlist', text: "Not Used Past") }
+              it { should have_selector('.itemlist', text: "Not Used Future") }
+            end
+        
+            describe "when trying to access the 'new' page" do
     
-          describe "submitting a DELETE request to the InsuranceSettings#destroy action" do
+              before { visit new_country_insurance_setting_path(@country) }
+      
+              it { should_not have_selector('title', text: 'New Salary Threshold') }
+              it "should render the admin home page" do
+                page.should have_selector('.alert', text: 'You must be a registered administrator')
+                page.should have_selector('h1', text: 'Administrator Menu')
+              end
+            end
+        
+            describe "when trying to access the 'edit' page" do
+    
+              before { visit edit_insurance_setting_path(@setting) }
+      
+              it { should_not have_selector('title', text: 'Edit Salary Threshold') }
+              it "should render the admin home page" do
+                page.should have_selector('.alert', text: 'You must be a registered administrator')
+                page.should have_selector('h1', text: 'Administrator Menu')
+              end
+            end
+      
+            describe "when trying to delete" do
+    
+              describe "submitting a DELETE request to the InsuranceSettings#destroy action" do
      
-            before { delete insurance_setting_path(@setting) }
-            specify { response.should redirect_to(user_path(@admin)) }        
-          end
+                before { delete insurance_setting_path(@setting) }
+                specify { response.should redirect_to(user_path(@admin)) }        
+              end
     
-        end
+            end
     
-        describe "submitting a PUT request to the InsuranceSettings#update action" do
+            describe "submitting a PUT request to the InsuranceSettings#update action" do
        
-          before { put insurance_setting_path(@setting) }
-          specify { response.should redirect_to(user_path(@admin)) }
+              before { put insurance_setting_path(@setting) }
+              specify { response.should redirect_to(user_path(@admin)) }
+            end
+          end
+          
+          describe "future settings" do
+          
+            describe "index page" do
+      
+              before { visit country_insurance_future_settings_path(@country) }
+        
+              it { should_not have_selector('.standout', text: "WARNING") }
+              it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('title', text: "Insurance: Future Salary Thresholds") }
+              it { should have_selector('h1', text: 'Insurance: Future Salary Thresholds') }
+              it { should_not have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
+              it { should_not have_link('del', href: insurance_setting_path(@setting_new)) }
+              it { should_not have_selector('#recent-adds') }
+              it { should_not have_selector('.recent', text: "*") }
+              it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
+              it { should_not have_selector('.instruction', text: "in our video tutorial") } 
+              it { should have_selector('.instruction', text: "You're not registered as an administrator") }
+              it { should have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
+              it { should_not have_selector('.itemlist', text: @setting.effective_date.strftime('%d %b %y')) }
+              it { should_not have_selector('.itemlist', text: @setting_old.effective_date.strftime('%d %b %y')) } 
+            end           
+          
+          end
+          
+          describe "historic settings" do
+          
+            describe "index page" do
+      
+              before { visit country_insurance_history_settings_path(@country) }
+        
+              it { should_not have_selector('.standout', text: "WARNING") }
+              it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('title', text: "Insurance: Salary Threshold History") }
+              it { should have_selector('h1', text: 'Insurance: Salary Threshold History') }
+              it { should_not have_link('edit', href: edit_insurance_setting_path(@setting)) }
+              it { should_not have_link('del', href: insurance_setting_path(@setting)) }
+              it { should_not have_selector('#recent-adds') }
+              it { should_not have_selector('.recent', text: "*") }
+              it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
+              it { should_not have_selector('.instruction', text: "in our video tutorial") } 
+              it { should have_selector('.instruction', text: "You're not registered as an administrator") }
+              it { should have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
+              it { should have_selector('.itemlist', text: @setting.effective_date.strftime('%d %b %y')) }
+              it { should have_selector('.itemlist', text: @setting_old.effective_date.strftime('%d %b %y')) } 
+            end
+          end
         end
-    
       end
       
       describe "Insurance Codes controller" do
       
-        describe "insurance codes index (Salary Codes table)" do
-      
-          before { visit country_insurance_codes_path(@country) }
+        describe "when insurance is switched off" do
         
-          it { should have_selector('h1', text: @country.country) }
-          it { should have_selector('title', text: "Insurance Codes") }
-          it { should have_selector('h1', text: 'Insurance Codes') }
-          it { should_not have_link('edit', href: edit_insurance_setting_path(@code)) }
-          it { should_not have_link('del', href: insurance_setting_path(@code)) }
-          it { should_not have_selector('#recent-adds') }
-          it { should_not have_selector('.recent', text: "*") }
-          it { should have_selector('.instruction', text: "INSURANCE CODES") }
-          it { should_not have_selector('.instruction', text: "in our video tutorial") } 
-          it { should have_selector('.instruction', text: "You're not registered as an administrator") }
-          it { should have_selector('.itemlist', text: @code.insurance_code) }
-          it { should have_selector('.itemlist', text: @code.explanation) }
-          it { should have_selector('.itemlist', text: @old_code.cancelled.strftime('%d %b %Y')) }
-        end
-        
-        describe "when trying to access the 'new' page" do
-    
-          before { visit new_country_insurance_code_path(@country) }
-      
-          it { should_not have_selector('title', text: 'New Insurance Code') }
-          it "should render the admin home page" do
-            page.should have_selector('.alert', text: 'You must be a registered administrator')
-            page.should have_selector('h1', text: 'Administrator Menu')
+          before do
+            @country.insurance = false
+            @country.save
           end
+          
+          describe "attempting to open index page" do
+            
+            before { visit country_insurance_codes_path(@country) }
+            
+            it { should_not have_selector('h1', text: @country.country) }
+            it { should_not have_selector('title', text: "Insurance Codes") }
+            it { should have_selector('h1', text: 'Administrator Menu') }
+            it { should have_selector('.alert', text: 'National Insurance is switched off') }
+          end
+          
+          describe "attempting to open new page" do
+          
+            before { visit new_country_insurance_code_path(@country) }  #reverts -default for non-country admin - same for edit, update
+      
+            it { should_not have_selector('title', text: 'New Insurance Code') }
+            it "should render the admin home page" do
+              page.should have_selector('.alert', text: 'You must be a registered administrator')
+              page.should have_selector('h1', text: 'Administrator Menu')
+            end
+          end
+        
         end
         
-        describe "when trying to access the 'edit' page" do
-    
-          before { visit edit_insurance_code_path(@code) }
+        describe "when insurance is switched on" do
+        
+          describe "insurance codes index (Salary Codes table)" do
       
-          it { should_not have_selector('title', text: 'Edit Insurance Code') }
-          it "should render the admin home page" do
-            page.should have_selector('.alert', text: 'You must be a registered administrator')
-            page.should have_selector('h1', text: 'Administrator Menu')
+            before { visit country_insurance_codes_path(@country) }
+        
+            it { should have_selector('h1', text: @country.country) }
+            it { should have_selector('title', text: "Insurance Codes") }
+            it { should have_selector('h1', text: 'Insurance Codes') }
+            it { should_not have_link('edit', href: edit_insurance_setting_path(@code)) }
+            it { should_not have_link('del', href: insurance_setting_path(@code)) }
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('.instruction', text: "INSURANCE CODES") }
+            it { should_not have_selector('.instruction', text: "in our video tutorial") } 
+            it { should have_selector('.instruction', text: "You're not registered as an administrator") }
+            it { should have_selector('.itemlist', text: @code.insurance_code) }
+            it { should have_selector('.itemlist', text: @code.explanation) }
+            it { should have_selector('.itemlist', text: @old_code.cancelled.strftime('%d %b %y')) }
           end
-        end
-      
-        describe "when trying to delete" do
+        
+          describe "when trying to access the 'new' page" do
     
-          describe "submitting a DELETE request to the InsuranceCode#destroy action" do
+            before { visit new_country_insurance_code_path(@country) }
+      
+            it { should_not have_selector('title', text: 'New Insurance Code') }
+            it "should render the admin home page" do
+              page.should have_selector('.alert', text: 'You must be a registered administrator')
+              page.should have_selector('h1', text: 'Administrator Menu')
+            end
+          end
+        
+          describe "when trying to access the 'edit' page" do
+    
+            before { visit edit_insurance_code_path(@code) }
+      
+            it { should_not have_selector('title', text: 'Edit Insurance Code') }
+            it "should render the admin home page" do
+              page.should have_selector('.alert', text: 'You must be a registered administrator')
+              page.should have_selector('h1', text: 'Administrator Menu')
+            end
+          end
+      
+          describe "when trying to delete" do
+    
+            describe "submitting a DELETE request to the InsuranceCode#destroy action" do
      
-            before { delete insurance_code_path(@code) }
-            specify { response.should redirect_to(user_path(@admin)) }        
+              before { delete insurance_code_path(@code) }
+              specify { response.should redirect_to(user_path(@admin)) }        
+            end
+    
           end
     
-        end
-    
-        describe "submitting a PUT request to the InsuranceCode#update action" do
+          describe "submitting a PUT request to the InsuranceCode#update action" do
        
-          before { put insurance_code_path(@code) }
-          specify { response.should redirect_to(user_path(@admin)) }
+            before { put insurance_code_path(@code) }
+            specify { response.should redirect_to(user_path(@admin)) }
+          end
         end
-    
       end
-    
     end
     
     describe "when user is a country admin" do
@@ -389,8 +501,7 @@ describe "InsurancePages" do
         
             before { visit insurance_menu_country_path(@country) }
             it { should have_selector('.instruction', text: "Set up the insurance rules") }
-            
-        
+           
           end
         
           describe "add a new salary threshold line for the country" do
@@ -519,8 +630,8 @@ describe "InsurancePages" do
             it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
             it { should have_link('Add a line to the table', href: new_country_insurance_setting_path(@country)) }
             it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
-            it { should have_link('edit', href: edit_insurance_setting_path(@country.insurance_settings.first)) }
-            it { should have_link('del', href: insurance_setting_path(@country.insurance_settings.first)) }
+            it { should have_link('edit', href: edit_insurance_setting_path(@setting)) }
+            it { should have_link('del', href: insurance_setting_path(@setting)) }
             it { should have_selector('#recent-adds') }
             it { should have_selector('.recent', text: "*") }
             it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
@@ -533,6 +644,9 @@ describe "InsurancePages" do
             it { should_not have_selector('#recent-add-checks') }
             it { should_not have_selector('.recent', text: "+") }
             it { should have_selector('#change-note', text: "Changes are best seen") }
+            it { should_not have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
+            it { should have_selector('.itemlist', text: @setting.effective_date.strftime('%d %b %y')) }
+            it { should_not have_selector('.itemlist', text: @setting_old.effective_date.strftime('%d %b %y')) } 
         
             describe "moving to the insurance settings edit link in the correct country" do
               before { click_link 'edit' }
@@ -693,6 +807,65 @@ describe "InsurancePages" do
             it { should have_link('Main insurance menu', href: insurance_menu_country_path(@country)) } 
             it { should_not have_selector('#insurance_setting_cancellation_date') }
           
+          end
+          
+          describe "dealing with future settings" do
+          
+            describe "index page" do
+            
+              before { visit country_insurance_future_settings_path(@country) }
+        
+              it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('title', text: "Insurance: Future Salary Thresholds") }
+              it { should have_selector('h1', text: 'Insurance: Future Salary Thresholds') }
+              it { should have_link('Add a line to the table', href: new_country_insurance_setting_path(@country)) }
+              it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
+              it { should have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
+              it { should have_link('del', href: insurance_setting_path(@setting_new)) }
+              it { should have_selector('#recent-adds') }
+              it { should have_selector('.recent', text: "*") }
+              it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
+              it { should have_selector('.instruction', text: "in our video tutorial") } 
+              it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
+              it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
+              it { should have_selector('.standout', text: "WARNING") }
+              it { should_not have_selector('#recent-add-checks') }
+              it { should_not have_selector('.recent', text: "+") }
+              it { should have_selector('#change-note', text: "Changes are best seen") }
+              it { should have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
+              it { should_not have_selector('.itemlist', text: @setting.effective_date.strftime('%d %b %y')) }
+              it { should_not have_selector('.itemlist', text: @setting_old.effective_date.strftime('%d %b %y')) } 
+           
+            end
+          end
+          
+          describe "dealing with settings history" do
+          
+            describe "index page" do
+            
+              before { visit country_insurance_history_settings_path(@country) }
+            
+              it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('title', text: "Salary Threshold History") }
+              it { should have_selector('h1', text: 'Salary Threshold History') }
+              it { should have_link('Add a line to the table', href: new_country_insurance_setting_path(@country)) }
+              it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
+              it { should have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
+              it { should have_link('del', href: insurance_setting_path(@setting_old)) }
+              it { should have_selector('#recent-adds') }
+              it { should have_selector('.recent', text: "*") }
+              it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
+              it { should have_selector('.instruction', text: "in our video tutorial") } 
+              it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
+              it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
+              it { should have_selector('.standout', text: "WARNING") }
+              it { should_not have_selector('#recent-add-checks') }
+              it { should_not have_selector('.recent', text: "+") }
+              it { should have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
+              it { should have_selector('.itemlist', text: @setting.effective_date.strftime('%d %b %y')) }
+              it { should have_selector('.itemlist', text: @setting_old.effective_date.strftime('%d %b %y')) } 
+            
+            end
           end
         end
         

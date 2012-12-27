@@ -1,17 +1,17 @@
-class InsuranceFutureRatesController < ApplicationController
-  
+class InsuranceEmployerHistoryRatesController < ApplicationController
+ 
   before_filter :check_admin
   before_filter :signed_in_user
   
   def index
     @country = Country.find(params[:country_id])
     check_permitted
-    @selection = @country.insurance_rates.where("source_employee = ?", true)
-    @rates = @country.insurance_rates.future_list(@selection)
-    @page_title = "Future Insurance Rates - Employees"
-    @list_type = "are planned future rates for employees"
-    @focus = "employee"
-    @status = "future"
+    @selection = @country.insurance_rates.where("source_employee = ?", false)
+    @rates = @country.insurance_rates.history_list(@selection)
+    @page_title = "Insurance Rate History - Employers"
+    @list_type = "is the historical list of rates for employers"
+    @focus = "employer"
+    @status = "past" 
     @recent_adds = InsuranceRate.total_recent(@country)
     @recent_updates = InsuranceRate.total_updated(@country)
     @recent_add_checks = InsuranceRate.recent_add_checks(@country)

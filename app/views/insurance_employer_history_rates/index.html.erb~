@@ -1,4 +1,4 @@
-<% provide(:title, "Employee Insurance Rates - History") %>
+<% provide(:title, "Employer Insurance Rates - History") %>
 <div class="row">
   <aside class="span4">
     <section>
@@ -17,7 +17,7 @@
   </aside>
   
   <div class="span8">
-    <h1 class="align-left">Employee Insurance Rates - History</h1>
+    <h1 class="align-left">Employer Insurance Rates - History</h1>
 
     <div style="padding-bottom: 10px">
       <% if current_user.superuser? || current_user.administrator?(@country.country) %>
@@ -29,7 +29,7 @@
     <%= render "insurance_settings/warning" %>
     <div class="line-space">
       Listed below is the <u>full history</u> of National Insurance rates. <%= link_to "View current rates instead", 
-        country_insurance_rates_path(@country), class: "btn" %>
+        country_insurance_employer_ rates_path(@country), class: "btn" %>
     </div>
     <ul class="itemlist">
       <%= render "insurance_rates/list" %>

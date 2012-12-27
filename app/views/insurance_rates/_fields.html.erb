@@ -55,16 +55,18 @@
   </span>
   <div id="edates" class="help-inline"><%= edate_explain %></div>
 </div>
-<div class="line-space top-line-space" style="clear:both">
-  <span class="span2" style="margin: 0"><%= f.label :cancellation, "Cancellation date" %></span>
-    <i class ="icon-question-sign" id="cancellation-click" style="float:right"></i>
-  <span class="span3">  
-    <%= f.text_field :cancellation %>
-  </span>
-  <div id="cancellations" class="help-inline"><%= cancellation_explain %></div>
-</div>
+<% if @edit == true %>
+  <div class="line-space top-line-space" style="clear:both">
+    <span class="span2" style="margin: 0"><%= f.label :cancellation, "Cancellation date" %></span>
+      <i class ="icon-question-sign" id="cancellation-click" style="float:right"></i>
+    <span class="span3">  
+      <%= f.text_field :cancellation %>
+    </span>
+    <div id="cancellations" class="help-inline"><%= cancellation_explain %></div>
+  </div>
+<% end %>
 <%= render "shared/superuser_check", { f: f, object: f.object } %>
 
 <div style="clear:both"><%= f.hidden_field :updated_by %></div>
-<%= f.hidden_field :created_by %>
+<div class="line-space"><%= f.hidden_field :created_by %></div>
 

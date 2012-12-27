@@ -6,11 +6,16 @@ class InsuranceHistoryRatesController < ApplicationController
   def index
     @country = Country.find(params[:country_id])
     check_permitted
-    @rates = @country.insurance_rates.history_list
-    @recent_adds = InsuranceSetting.total_recent(@country)
-    @recent_updates = InsuranceSetting.total_updated(@country)
-    @recent_add_checks = InsuranceSetting.recent_add_checks(@country)
-    @recent_update_checks = InsuranceSetting.recent_update_checks(@country)
+    @selection = @country.insurance_rates.where("source_employee = ?", true)
+    @rates = @country.insurance_rates.history_list(@selection)
+    @page_title = "Insurance Rate History - Employees"
+    @list_type = "is the historical list of rates for employees"
+    @focus = "employee"
+    @status = "past"
+    @recent_adds = InsuranceRate.total_recent(@country)
+    @recent_updates = InsuranceRate.total_updated(@country)
+    @recent_add_checks = InsuranceRate.recent_add_checks(@country)
+    @recent_update_checks = InsuranceRate.recent_update_checks(@country)
   end
   
   private

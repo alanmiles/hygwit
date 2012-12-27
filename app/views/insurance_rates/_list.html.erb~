@@ -10,7 +10,7 @@
         </strong>
       </li>
       <% @rates.each do |rate| %>
-        <li>
+        <li id = "<%= rate.id %>">
           <span class="span1 pagination-centered">
             <%= render "shared/superuser_countryadmin_notifications", :model_name => rate %>
             <%= rate.insurance_code.insurance_code %>
@@ -20,10 +20,11 @@
             <% unless rate.ceiling_id.nil? %>
               <%= rate.ceiling.shortcode %>
             <% else %>
-              ->
+              none
             <% end %>
           </span>
           <span class="span1 pagination-centered">
+            <% if rate.rebate? %>( <% end %>
             <% unless rate.percent? %><%= @country.currency.code %><% end %> 
             <% if rate.percent %>
               <%= format_number(rate.contribution) %>
@@ -31,6 +32,7 @@
               <%= dec_place_number(rate.contribution, @country.currency.decimal_places) %>
             <% end %>
             <% if rate.percent? %> % <% end %>
+            <% if rate.rebate? %> )<% end %>
           </span>
           <span class="span1 pagination-centered"><%= rate.rebate? ? "Yes" : "-" %></span>
           <span class="span2 pagination-centered"><%= date_display(rate.effective) %></span>

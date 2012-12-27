@@ -74,6 +74,27 @@ class InsuranceSetting < ActiveRecord::Base
     return @settings
   end
   
+  def self.auto_ceiling(date, threshold)
+    @ceiling = nil
+    @threshold = self.find(threshold)
+    unless @threshold.nil?
+      @country = Country.find(@threshold.country_id)
+      @settings = @country.insurance_settings.snapshot_list(date)
+      @shortcodes = []
+      @settings.each do |setting|
+        @shortcodes << setting.shortcode
+      end
+      total = @shortcodes.count
+      @threshold_index = @shortcodes.index(@threshold.shortcode)
+      if @threshold_index == total - 1
+        @ceiling = nil
+      else
+        @ceiling = @settings.fetch(@threshold_index + 1).id
+      end
+    end
+    return @ceiling
+  end
+  
   def self.future_list
     rows = InsuranceSetting.where("effective_date >?", Date.today)
        .select("shortcode, max(effective_date) AS effective_date, sum(monthly_milestone) AS monthly_milestone")

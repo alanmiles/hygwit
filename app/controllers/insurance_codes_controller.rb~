@@ -1,8 +1,5 @@
 class InsuranceCodesController < ApplicationController
  
-  #include RecentChange 
-  #include RecentCountryChange
-  
   before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :create, :destroy]
   before_filter :illegal_action, only: [:update, :create, :destroy]
@@ -20,7 +17,7 @@ class InsuranceCodesController < ApplicationController
   def new
     @country = Country.find(params[:country_id]) 
     country_admin_access
-    check_permitted
+    check_permitted unless current_user.administrator?(@country.country)
     @code = @country.insurance_codes.new
     @code.created_by = current_user.id
     @code.updated_by = current_user.id
@@ -52,8 +49,11 @@ class InsuranceCodesController < ApplicationController
   def edit
     @code = InsuranceCode.find(params[:id])
     @country = Country.find(@code.country_id)
-    check_permitted
-    country_admin_access
+    if current_user.administrator?(@country.country)
+      check_permitted
+    else
+      country_admin_access 
+    end
     @code.updated_by = current_user.id unless current_user.superuser?  #superuser check doesn't change inputter reference
     @edit = true
   end

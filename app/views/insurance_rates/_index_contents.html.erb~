@@ -1,4 +1,4 @@
-<% provide(:title, "Employee Insurance Rates - History") %>
+<% provide(:title, @page_title) %>
 <div class="row">
   <aside class="span4">
     <section>
@@ -13,12 +13,24 @@
     </section>
     <section>
       <%= render "shared/change_stats" %>
+      <% unless @status == "past" %>
+        <% if current_user.administrator?(@country.country) || current_user.superuser? %>
+          <span id="change-note"><em>Stats include changes for both employee and employer rates.
+           The history lists show them all.</em></span>
+        <% end %>
+      <% end %>
     </section>
   </aside>
   
   <div class="span8">
-    <h1 class="align-left">Employee Insurance Rates - History</h1>
-
+    <h1 class="align-left"><%= @page_title %></h1>
+    <div class="line-space">
+      <% if @focus == "employee" %>
+        <%= link_to "Switch to rates for EMPLOYERS", country_insurance_employer_rates_path(@country) %>
+      <% else %>    
+        <%= link_to "Switch to rates for EMPLOYEES", country_insurance_rates_path(@country) %>
+      <% end %>
+    </div>
     <div style="padding-bottom: 10px">
       <% if current_user.superuser? || current_user.administrator?(@country.country) %>
         <%= link_to "Add a new set of rates", "#", class: "btn" %>
@@ -26,10 +38,10 @@
       <% end %>
       <%= link_to "Back to main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
     </div>
-    <%= render "insurance_settings/warning" %>
+    <%= render "insurance_rates/warning" %>
     <div class="line-space">
-      Listed below is the <u>full history</u> of National Insurance rates. <%= link_to "View current rates instead", 
-        country_insurance_rates_path(@country), class: "btn" %>
+      Listed here <%= @list_type %>
+      <%= render "insurance_rates/button_display" %>
     </div>
     <ul class="itemlist">
       <%= render "insurance_rates/list" %>

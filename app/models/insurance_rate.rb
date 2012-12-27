@@ -47,35 +47,52 @@ class InsuranceRate < ActiveRecord::Base
   end
   
   def self.future_rates?
-    cnt = InsuranceRate.where("effective >?", Date.today).count
+    cnt = InsuranceRate.where("effective >? and source_employee = ?", Date.today, true).count
     cnt > 0
   end
   
-  def self.current_list(country)
+  def self.future_rates_employer?
+    cnt = InsuranceRate.where("effective >? and source_employee = ?", Date.today, false).count
+    cnt > 0
+  end
+  
+  def self.current_list(country, selection)
     @irates = []
     @cntry = Country.find(country)
     @icodes = @cntry.insurance_codes.on_current_list
     @isettings = @cntry.insurance_settings.current_list
     @icodes.each do |icode|
       @isettings.each do |isetting|
-        #r = InsuranceRate.find_by_insurance_code_id_and_threshold_id(icode.id, isetting.id)
-        r = InsuranceRate.find_by_insurance_code_id_and_threshold_id(icode.id, isetting.id)
-        @irates << r unless r.nil? || r.effective > Date.today
-        rebate = InsuranceRate.find_by_insurance_code_id_and_threshold_id_and_rebate(icode.id, isetting.id, true)
-        @irates << rebate unless rebate.nil? || rebate.effective > Date.today
+        @rows = selection.where("insurance_code_id =? and threshold_id =? and date(effective) <=?", icode.id, isetting.id, Date.today)
+           .select("insurance_code_id, threshold_id, rebate, max(effective) AS effective")
+           .group("insurance_code_id, threshold_id, rebate")
+        @rows.each do |r|
+          @irates << selection.find_by_insurance_code_id_and_threshold_id_and_effective(r.insurance_code_id, r.threshold_id, r.effective)
+        end
       end
     end  
     return @irates  
+  end
+  
+  
+  def in_active_list
+    @country = Country.find(self.country_id)
+    @recs = InsuranceRate.current_list(@country, @country.insurance_rates)
+    @found = false
+    @recs.each do |r|
+      @found = true if r.id == id
+    end
+    return @found
   end  
     
-  def self.future_list
-    @irates = self.includes(:insurance_code, :threshold)
+  def self.future_list(selection)
+    @irates = selection.includes(:insurance_code, :threshold)
       .where("effective >= ?", Date.today)
       .order("insurance_codes.insurance_code ASC, insurance_settings.monthly_milestone ASC")
   end
   
-  def self.history_list
-    @irates = self.includes(:insurance_code, :threshold)
+  def self.history_list(selection)
+    @irates = selection.includes(:insurance_code, :threshold)
       .order("insurance_codes.insurance_code ASC, insurance_settings.monthly_milestone ASC, insurance_rates.effective ASC")
   end
   
