@@ -28,9 +28,14 @@ class InsuranceCode < ActiveRecord::Base
   validates :explanation,								presence: true, length: { maximum: 50 }, uniqueness: { case_sensitive: false, scope: :country_id }
   validates :created_by,								presence: true, numericality: { integer: true }
 
+  default_scope order: "insurance_codes.insurance_code"
   
   def self.on_current_list
-    self.where("cancelled IS NULL or cancelled > ?", Date.today)  
+    self.where("cancelled IS NULL or cancelled > ?", Date.today.to_s)  
+  end
+  
+  def self.on_active_list(cancellation_date)
+    self.where("cancelled IS NULL or cancelled > ?", cancellation_date.to_s)
   end
   
   def full_details

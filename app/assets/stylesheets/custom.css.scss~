@@ -211,6 +211,23 @@ select {
   color: $grayLight;
 }
 
+.invisible {
+  display: none;
+}
+
+.hide-form {
+  display: none;
+}
+
+.placer-field {
+  padding-left: 15px;
+  font-style: italic;
+}
+
+.inset-box {
+  padding: 10px;
+}
+
 .normal-font {
   font-size: 12px;
 }
@@ -245,6 +262,10 @@ select {
   border-radius: 5px; 
   display: none;
   @include box_sizing;
+}
+
+.help-button {
+  display: none;
 }
 
 .menulist {
@@ -324,6 +345,16 @@ footer {
       border-bottom: 1px solid $grayLighter;
     }
   }
+}
+
+.list-header {
+  background-color: #6699CC;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+li.alt {
+  background-color: #EEEEEE;
 }
 
 /* microposts */

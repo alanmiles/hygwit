@@ -11,7 +11,7 @@
           <%= labor_law_instructions %>
         </div>
         <div>
-          <%= extra_help %>
+          <span class="help-button"><%= extra_help %> <i class ="icon-question-sign"></i></span>
         </div> 
       </div>
     </section>

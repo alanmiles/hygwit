@@ -1,4 +1,4 @@
-      <li>
+      <li class="list-header">
         <strong>
         <span class="span1">Code</span>
         <span class="span1">Paid (%)</span>
@@ -11,7 +11,7 @@
       <% @absences.each do |absence| %>
         <li>
           <span class="span1">
-            <%= render "shared/superuser_notifications", :model_name => absence %>
+            <%= render "shared/superuser_countryadmin_notifications", :model_name => absence %>
             <%= absence.absence_code %>
           </span>
           <span class="span1"><%= absence.paid %></span>

@@ -11,7 +11,11 @@ module ApplicationHelper
   end
   
   def date_display(record)
-    record.strftime('%d %b %y')
+    if record.nil?
+      return "-"
+    else
+      return record.strftime('%d %b %y')
+    end
   end
   
   def format_number(record)

@@ -88,6 +88,8 @@ class InsuranceSetting < ActiveRecord::Base
       @threshold_index = @shortcodes.index(@threshold.shortcode)
       if @threshold_index == total - 1
         @ceiling = nil
+      elsif @threshold_index.nil?
+        @ceiling = nil
       else
         @ceiling = @settings.fetch(@threshold_index + 1).id
       end

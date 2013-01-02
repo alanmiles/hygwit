@@ -16,7 +16,7 @@
           <span class="span2 pagination-centered"><%= format_number(formula.termination_percentage) %></span>
           <span class="span2 pagination-centered"><%= format_number(formula.resignation_percentage) %></span>
           <% if current_user.superuser? || current_user.administrator?(@country.country) %>
-            <span class="offset1">
+            <span class="r-float">
           
               <%= link_to "edit", edit_gratuity_formula_path(formula) %>
               | <%= link_to "del", formula, method: :delete,

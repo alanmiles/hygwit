@@ -1,4 +1,4 @@
-      <li>
+      <li class="list-header">
         <strong>
         <span class="span1">Code</span>
         <span class="span1">Paid (%)</span>
@@ -20,7 +20,7 @@
           <span class="span1"><%= absence.documentation_required? ? 'Yes' : 'No' %></span>
           <span class="span2"><%= absence.notes %></span>
           | <%= link_to "edit", edit_absence_type_path(absence) %>
-          <%= render "shared/admin_deletes", model_name: absence %>
+          <%= render "admin_deletes", absence: absence %>
     
         </li>
       <% end %>

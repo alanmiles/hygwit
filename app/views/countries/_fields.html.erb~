@@ -30,7 +30,7 @@
 <% if @country.rules =="Gulf" %>
   <div id="ramadan-day" style="clear:both" class="line-space"> 
     <span class="span3 r-float"><%= f.text_field :max_hours_day_ramadan, class: "number-field" %></span>
-    <i class ="icon-question-sign" id="ram-click" style="float:right"></i>
+    <i class ="icon-question-sign help-button" id="ram-click" style="float:right"></i>
     <%= f.label :max_hours_day_ramadan, "Max hours per day - Ramadan", class: "vert-down" %>
     <div id="ram-hours" class="help-inline"><%= ramadan_hours %></div>
   </div>
@@ -49,7 +49,7 @@
      :time_separator => "",
      :start_hour => 0,
      :end_hour => 23 %></span>
-  <i class ="icon-question-sign" id="nw-click" style="float:right"></i>
+  <i class ="icon-question-sign help-button" id="nw-click" style="float:right"></i>
   <%= f.label :nightwork_start, "Night-work begins at", class: "vert-down" %>
   <div id="nw-hours" class="help-inline"><%= night_work %></div>
 </div>
@@ -117,7 +117,7 @@
 <% if @country.rules =="Gulf" %>
   <div id="gratuity" style="clear:both" class= "line-space"> 
     <span id="gratuity-click" class="span3 r-float"><%= f.check_box :gratuity_applies %></span>
-    <i class ="icon-question-sign" id="gratuity-on-click" style="float:right"></i>
+    <i class ="icon-question-sign help-button" id="gratuity-on-click" style="float:right"></i>
     <span class="vert-down">Leavers' gratuity applies?</span>
     <div id="gratuity-on" class="help-inline"><%= gratuity_explanation %></div>
   </div>
@@ -125,21 +125,21 @@
   
   
   <% if @country.gratuity_applies? %>
-    <div id="gratuity_display" class="line-space" style="clear:both">
+    <div id="gratuity-display" class="line-space" style="clear:both">
   <% else %>
-    <div id="gratuity_display" class="line-space" style="clear:both; display:none">
+    <div id="gratuity-display" class="line-space" style="clear:both; display:none">
   <% end %>
   
     <div style ="clear:both" class= "line-space">
       <span class="span3 r-float"><%= f.text_field :gratuity_ceiling_value, class: "number-field" %></span>
-      <i class ="icon-question-sign" id="val-click" style="float:right"></i>
+      <i class ="icon-question-sign help-button" id="val-click" style="float:right"></i>
       <%= f.label :gratuity_ceiling_value, "Gratuity ceiling - total value", class: "vert-down" %>
       <div id="c-val" class="help-inline"><%= ceiling_value %></div>
     </div>
   
     <div style ="clear:both" class= "line-space">
       <span class="span3 r-float"><%= f.text_field :gratuity_ceiling_months, class: "number-field" %></span>
-      <i class ="icon-question-sign" id="month-click" style="float:right"></i>
+      <i class ="icon-question-sign help-button" id="month-click" style="float:right"></i>
       <%= f.label :gratuity_ceiling_months, "Gratuity ceiling - service months", class: "vert-down" %>
       <div id="c-month" class="help-inline"><%= ceiling_month %></div>
     </div>
@@ -150,7 +150,7 @@
 <% if @country.rules =="Gulf" %>
   <div id="sick-accrual" style ="clear:both" class= "line-space">
     <span class="span3 r-float"><%= f.check_box :sickness_accruals %></span>
-    <i class ="icon-question-sign" id="sick-click" style="float:right"></i>
+    <i class ="icon-question-sign help-button" id="sick-click" style="float:right"></i>
     <span class="vert-down">Annual sickness accrual applies?</span>
     <div id="sick-acc" class="help-inline"><%= sickness_accrual %></div>
   </div>
@@ -158,7 +158,7 @@
 
 <div style="clear:both" class="line-space"> 
   <span class="span3 r-float vert-down"><%= f.text_field :max_loan_ded_salary, class: "number-field" %></span>
-  <i class ="icon-question-sign" id="loan-click" style="float:right"></i>
+  <i class ="icon-question-sign help-button" id="loan-click" style="float:right"></i>
   <%= f.label :max_loan_ded_salary, "Maximum percentage of salary deducted for loan repayments" %>
   <div id="loan-ded" class="help-inline"><%= loan_percent %></div>
 </div>

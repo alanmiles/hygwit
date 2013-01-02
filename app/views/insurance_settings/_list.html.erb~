@@ -1,12 +1,12 @@
 
-      <li>
+      <li class = "list-header">
         <strong>
           <span class="span1 pagination-centered">Code</span>
           <span class="span2 pagination-centered">Description</span>
           <span class="span1 pagination-centered">Weekly milestone</span>
           <span class="span1 pagination-centered">Monthly milestone</span>
           <span class="span1 pagination-centered">Annual milestone</span>
-          <span class="span1 pagination-centered">Effective date</span>
+          <span class="span1 pagination-centered">From</span>
         </strong>
       </li>
       <% @settings.each do |setting| %>

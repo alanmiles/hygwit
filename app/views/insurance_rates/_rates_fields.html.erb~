@@ -1,0 +1,80 @@
+<div class="line-space">
+  <span class="span2" style="margin-left: 0"><%= f.label :source_employee_true, "For Employees?" %></span>
+  <span class="span1"><%= f.radio_button :source_employee, "true" %></span>
+  <span class="span2"><%= f.label :source_employee_false, "or for Employers?" %></span>
+  <span class="span1"><%= f.radio_button :source_employee, "false" %></span>
+</div>
+
+
+<div class= "line-space top-line-space" style="clear:both">
+  <%= f.label :insurance_code_id %>
+  <%= f.collection_select(:insurance_code_id, 
+          @codes, :id, :full_details, prompt: 'Please select')  %>
+</div>
+
+<div class="line-space">
+  <i class ="icon-question-sign help-button" id="threshold-click" style="float:right"></i>
+  <%= f.label :threshold_id, "Salary threshold" %>
+  <% if @settings.count == 0 %>
+    <div class="placer-field">No salary threshold settings have been entered for the effective date.  To add some, return
+        to the main Insurance menu, then go to Salary Thresholds.</div>
+  <% else %>
+    <%= f.collection_select(:threshold_id, 
+          @settings, :id, :threshold_details, prompt: 'Please select')  %>
+  <% end %>
+  <div id="thresholds" class="help-inline"><%= threshold_explain %></div>
+</div>
+
+<div id = "ceiling-js" class="line-space invisible">
+  <i class ="icon-question-sign help-button" id="ceiling-click" style="float:right"></i>
+  <%= f.label :ceiling_id, "Salary ceiling" %>
+  <%= f.collection_select(:ceiling_id, 
+          @settings, :id, :ceiling_details, prompt: 'Please select')  %>
+  <span id="ceiling-definition" class="placer-field">Not set</span>
+  <div id="ceilings" class="help-inline"><%= ceiling_explain %></div>
+</div>
+<div id = "ceiling-html" class="line-space">
+  <div>Salary ceiling</div> 
+  <div class="placer-field">Will be set automatically when you create the new rate - either to the salary setting immediately higher 
+     than threshold, or to 'unlimited' if threshold is maximum salary setting.</div>
+</div>
+
+<div class="line-space" style="clear:both">
+  <span class="span1" style="margin-left: 0"><%= f.label :contribution %></span>
+  <span class="span1"><%= f.text_field :contribution, class: "number-field" %></span>
+  <span class="span1"><%= f.label :percent_true, "Percentage" %></span>
+  <span class="span1"><%= f.radio_button :percent, "true" %></span>
+  <span class="span1"><%= f.label :percent_false, "or Value (#{@country.currency.code})" %></span>
+  <span class="span1">
+    <i class ="icon-question-sign help-button" id="contribution-click" style="float:right"></i>
+    <%= f.radio_button :percent, "false" %>
+  </span>
+  <div id="contributions" class="help-inline"><%= contribution_explain %></div>
+</div>
+
+<div class="line-space" style="clear:both">
+  <span class="span2" style="margin-left: 0"><%= f.label :rebate_false, "Standard contribution" %></span>
+  <span class="span1"><%= f.radio_button :rebate, "false" %></span>
+  <span class="span2"><%= f.label :rebate_true, "or Rebate" %></span>
+  <span class="span1">
+    <i class ="icon-question-sign help-button" id="rebate-click" style="float:right"></i>
+    <%= f.radio_button :rebate, "true" %>
+  </span>
+  <div id="rebates" class="help-inline"><%= rebate_explain %></div>
+</div>
+
+<% if @edit == true %>
+  <div class="line-space top-line-space" style="clear:both">
+    <span class="span2" style="margin: 0"><%= f.label :cancellation, "Cancellation date" %></span>
+      <i class ="icon-question-sign help-button" id="cancellation-click" style="float:right"></i>
+    <span class="span3">  
+      <%= f.text_field :cancellation %>
+    </span>
+    <div id="cancellations" class="help-inline"><%= cancellation_explain %></div>
+  </div>
+<% end %>
+
+<%= render "shared/superuser_check", { f: f, object: f.object } %>
+
+
+

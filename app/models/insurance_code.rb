@@ -34,6 +34,10 @@ class InsuranceCode < ActiveRecord::Base
     self.where("cancelled IS NULL or cancelled > ?", Date.today)  
   end
   
+  def self.on_active_list(cancellation_date)
+    self.where("cancelled IS NULL or cancelled > ?", cancellation_date)
+  end
+  
   def full_details
     @details = "#{insurance_code} - #{explanation}"
   end

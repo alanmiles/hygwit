@@ -18,6 +18,14 @@ module ApplicationHelper
     end
   end
   
+  def date_display_long(record)
+    if record.nil?
+      return "-"
+    else
+      return record.strftime('%d %b %Y')
+    end
+  end
+  
   def format_number(record)
     number_with_precision(record, :strip_insignificant_zeros => true)
   end

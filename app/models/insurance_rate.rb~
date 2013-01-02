@@ -47,7 +47,12 @@ class InsuranceRate < ActiveRecord::Base
   end
   
   def self.future_rates?
-    cnt = InsuranceRate.where("effective >?", Date.today).count
+    cnt = InsuranceRate.where("effective >? and source_employee = ?", Date.today, true).count
+    cnt > 0
+  end
+  
+  def self.future_rates_employer?
+    cnt = InsuranceRate.where("effective >? and source_employee = ?", Date.today, false).count
     cnt > 0
   end
   

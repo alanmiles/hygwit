@@ -1,11 +1,9 @@
       <%= will_paginate @holidays %>
       
-      <li>
-        <strong>
-          <span class="span3">Holiday name</span>
-          <span class="span1.5">Start-date</span>
-          <span class="span2" style="padding-left: 15px">End-date</span>
-        </strong>
+      <li class="list-header">
+        <span class="span3">Holiday name</span>
+        <span class="span1.5">Start-date</span>
+        <span class="span2" style="padding-left: 15px">End-date</span>
       </li>
       <% @holidays.each do |holiday| %>
         <li>

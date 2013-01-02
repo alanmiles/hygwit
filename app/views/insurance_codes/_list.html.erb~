@@ -1,4 +1,4 @@
-     <li>
+     <li class="list-header">
         <strong>
           <span class="span2 pagination-centered">Code</span>
           <span class="span3">Explanation</span>
@@ -6,7 +6,11 @@
         </strong>
       </li>
       <% @codes.each do |code| %>
-        <li style="color:red">
+        <% if code.cancelled %>
+          <li class="faded">
+        <% else %>
+          <li>
+        <% end %>
           <span class="span2 pagination-centered">
             <%= render "shared/superuser_countryadmin_notifications", :model_name => code %>
             <%= code.insurance_code %>

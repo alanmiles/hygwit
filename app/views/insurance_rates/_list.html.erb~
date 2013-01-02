@@ -1,21 +1,26 @@
 
-      <li>
-        <strong>
-          <span class="span1 pagination-centered">Code</span>
-          <span class="span1 pagination-centered">Threshold</span>
-          <span class="span1 pagination-centered">Ceiling</span>
-          <span class="span1 pagination-centered">Contribution</span>
-          <span class="span1 pagination-centered">Rebate</span>
-          <span class="span2 pagination-centered">Effective date</span>
-        </strong>
+      <li class="list-header">
+        <span class="span1 pagination-centered">Code</span>
+        <span class="span1 pagination-centered">Threshold</span>
+        <span class="span1 pagination-centered">Ceiling</span>
+        <span class="span1 pagination-centered">Contribution</span>
+        <span class="span1 pagination-centered">Rebate</span>
+        <span class="span2 pagination-centered">Effective date</span>
       </li>
       <% @rates.each do |rate| %>
         <li id = "<%= rate.id %>">
-          <span class="span1 pagination-centered">
+          <div class="span1 pagination-centered">
             <%= render "shared/superuser_countryadmin_notifications", :model_name => rate %>
             <%= rate.insurance_code.insurance_code %>
-          </span>
-          <span class="span1 pagination-centered"><%= rate.threshold.shortcode %></span>
+            <% if rate.insurance_code.cancelled? %>
+              <div class="standout reduced">X-<%= date_display(rate.insurance_code.cancelled) %></div>
+            <% end %>
+          </div>
+          <div class="span1 pagination-centered"><%= rate.threshold.shortcode %>
+            <% if rate.threshold.cancellation_date? %>
+              <div class="standout reduced">X-<%= date_display(rate.threshold.cancellation_date) %></div>
+            <% end %>
+          </div>
           <span class="span1 pagination-centered">
             <% unless rate.ceiling_id.nil? %>
               <%= rate.ceiling.shortcode %>
@@ -23,7 +28,7 @@
               none
             <% end %>
           </span>
-          <span class="span1 pagination-centered">
+          <span id="contribution" class="span1 pagination-centered">
             <% if rate.rebate? %>( <% end %>
             <% unless rate.percent? %><%= @country.currency.code %><% end %> 
             <% if rate.percent %>

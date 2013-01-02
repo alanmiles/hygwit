@@ -17,8 +17,8 @@
     <%= form_for(@setting) do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
       <div class="line-space">
-        DON'T EDIT an existing record when the government advises changes for a new financial year.  Instead, enter a NEW line 
-        in the Salary Thresholds table.
+        <em>DON'T EDIT an existing record when the government advises changes for a new financial year.  Instead, enter a NEW line 
+        in the Salary Thresholds table.</em>
       </div>
       <%= render 'fields', f: f %>
       <% if @setting.in_current_list == true || @setting.previous_cancellation == true %>

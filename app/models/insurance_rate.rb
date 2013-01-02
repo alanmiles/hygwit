@@ -87,7 +87,7 @@ class InsuranceRate < ActiveRecord::Base
     
   def self.future_list(selection)
     @irates = selection.includes(:insurance_code, :threshold)
-      .where("effective >= ?", Date.today)
+      .where("effective >= ? AND (insurance_codes.cancelled IS NULL OR insurance_codes.cancelled > effective)", Date.today)
       .order("insurance_codes.insurance_code ASC, insurance_settings.monthly_milestone ASC")
   end
   
