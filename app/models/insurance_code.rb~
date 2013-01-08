@@ -31,11 +31,11 @@ class InsuranceCode < ActiveRecord::Base
   default_scope order: "insurance_codes.insurance_code"
   
   def self.on_current_list
-    self.where("cancelled IS NULL or cancelled > ?", Date.today.to_s)  
+    self.where("cancelled IS NULL or cancelled > ?", Date.today)  
   end
   
   def self.on_active_list(cancellation_date)
-    self.where("cancelled IS NULL or cancelled > ?", cancellation_date.to_s)
+    self.where("cancelled IS NULL or cancelled > ?", cancellation_date)
   end
   
   def full_details

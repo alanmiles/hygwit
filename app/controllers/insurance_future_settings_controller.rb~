@@ -9,6 +9,8 @@ class InsuranceFutureSettingsController < ApplicationController
     @settings = @country.insurance_settings.future_list
     @recent_adds = InsuranceSetting.total_recent(@country)
     @recent_updates = InsuranceSetting.total_updated(@country)
+    @recent_add_checks = InsuranceSetting.recent_add_checks(@country)
+    @recent_update_checks = InsuranceSetting.recent_update_checks(@country)
   end
   
   private

@@ -1,0 +1,7 @@
+     <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+        <div class="standout line-space">
+          When new threshold settings are announced, we don't delete the old ones in case backdated adjustments
+          are needed later.  The easiest way to add a new set of thresholds is to click on the
+          'Update all' button. 
+        </div>
+      <% end %>

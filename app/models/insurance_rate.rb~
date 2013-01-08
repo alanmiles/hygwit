@@ -56,28 +56,45 @@ class InsuranceRate < ActiveRecord::Base
     cnt > 0
   end
   
-  def self.current_list(country, selection)
+  def self.current_list(country, selection, date)
     @irates = []
     @cntry = Country.find(country)
     @icodes = @cntry.insurance_codes.on_current_list
     @isettings = @cntry.insurance_settings.current_list
     @icodes.each do |icode|
       @isettings.each do |isetting|
-        @rows = selection.where("insurance_code_id =? and threshold_id =? and date(effective) <=?", icode.id, isetting.id, Date.today)
-           .select("insurance_code_id, threshold_id, rebate, max(effective) AS effective")
-           .group("insurance_code_id, threshold_id, rebate")
+        @rows = selection.where("insurance_code_id =? and threshold_id =? and effective <=?", icode.id, isetting.id, date)
+           .select("insurance_code_id, source_employee, threshold_id, rebate, max(effective) AS effective")
+           .group("insurance_code_id, source_employee, threshold_id, rebate")
         @rows.each do |r|
-          @irates << selection.find_by_insurance_code_id_and_threshold_id_and_effective(r.insurance_code_id, r.threshold_id, r.effective)
+          @irates << selection.find_by_insurance_code_id_and_source_employee_and_threshold_id_and_rebate_and_effective(r.insurance_code_id,
+              r.source_employee, r.threshold_id, r.rebate, r.effective)
+          #@irates << InsuranceRate.find(r.id)
         end
       end
     end  
     return @irates  
   end
   
+  def self.list_rebates(country, selection, date)
+    @rebates = []
+    @current_records = self.current_list(country, selection, date)
+    @current_records.each do |record|
+      if record.rebate?
+        @rebates << record
+      end
+    end
+    return @rebates
+  end
   
-  def in_active_list
+  def self.has_rebates?(country, selection, date)
+    @recs = self.list_rebates(country, selection, date).count
+    @recs > 0
+  end
+  
+  def in_active_list(date)
     @country = Country.find(self.country_id)
-    @recs = InsuranceRate.current_list(@country, @country.insurance_rates)
+    @recs = InsuranceRate.current_list(@country, @country.insurance_rates, date)
     @found = false
     @recs.each do |r|
       @found = true if r.id == id
@@ -87,14 +104,31 @@ class InsuranceRate < ActiveRecord::Base
     
   def self.future_list(selection)
     @irates = selection.includes(:insurance_code, :threshold)
-      .where("effective >= ?", Date.today)
+      .where("effective >= ? AND (insurance_codes.cancelled IS NULL OR insurance_codes.cancelled > effective)", Date.today)
       .order("insurance_codes.insurance_code ASC, insurance_settings.monthly_milestone ASC")
   end
   
   def self.history_list(selection)
     @irates = selection.includes(:insurance_code, :threshold)
-      .order("insurance_codes.insurance_code ASC, insurance_settings.monthly_milestone ASC, insurance_rates.effective ASC")
+      .order("insurance_rates.effective ASC, insurance_codes.insurance_code ASC, insurance_settings.monthly_milestone ASC")
   end
+  
+  def self.duplicate_exists?(code, threshold, source, rebate, date)
+    @record_count = self.where("insurance_code_id = ? AND threshold_id =? AND source_employee =? AND rebate =? AND effective =?",
+       code, threshold, source, rebate, date).count
+    @record_count > 0
+  end
+  
+  def code_band
+    "#{insurance_code.insurance_code}-#{threshold.shortcode}"    
+  end
+  
+  def code_band_identifier
+    if rebate?
+      "'#{insurance_code.insurance_code}-#{threshold.shortcode} (Rebate)' dated #{effective.to_date.strftime('%d %b %Y')}"
+    else
+    	"'#{insurance_code.insurance_code}-#{threshold.shortcode}' dated #{effective.to_date.strftime('%d %b %Y')}"
+    end
   
   private
   

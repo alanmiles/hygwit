@@ -11,15 +11,38 @@ module InsuranceRatesHelper
     backdated adjustments are required later."
   end
   
+  def insurance_rates_edit_instruction_1
+    "You can adjust the insurance rate data below the line on this form.  In other words, you can change the rate or value of 
+    the contribution, and, if this particular Code/Salary Band combination is withdrawn, you can set a cancellation date.  
+    If you need to make some other change, delete the record (from the Rates listing) and create a new record entirely 
+    ('Add a single rate')."
+  end
+  
+  def insurance_rates_edit_instruction_2
+    "But if deletion is not permitted (this would happen if businesses start using it for calculations before you correct it) 
+     let the HROomph team know, and we'll tidy up for you."
+  end
+  
+  def insurance_rates_new_instruction_1
+    "Use this form to add insurance rates one at a time.  But if you want to reset ALL insurance rates (for example, for an
+    annual update), you'll find it quicker and easier to use 'Add a new set of rates' from the Current Rates page."
+  end
+  
+  def insurance_rates_new_instruction_2
+    "First enter the effective date for the new rate and click on 'Create'.  You'll then see the rest of the entry form.  Use the
+    help (?) buttons for guidance."
+  end
+  
   def rebate_explain
     "Occasionally, the insurance rules state that as well as a contribution, there should be a rebate for certain insurance
      codes.  For example, in the UK, there are rebates for those who opt out of the goverment scheme and contribute to a 
-     private pension.  Check 'Rebate' if this is the case for this entry."
+     private pension.  Check 'Rebate' if this is the case for this entry.  Enter a positive number in 'Contribution', NOT A NEGATIVE
+     NUMBER."
   end
   
   def contribution_explain
-    "Normally, the insurance contribution calculation will be a percentage of the employee's gross salary.  But sometimes it
-      can be a fixed value, taking no account of salary.  If this is the case, check the 'Value' button."
+    "Normally, the insurance contribution calculation will be a percentage of the employee's gross salary.  If however the contribution
+     is a fixed payment, not a percentage of salary, enter the amount in 'Contribution' and then check the 'Value' button."
   end
   
   def edate_explain
@@ -42,8 +65,9 @@ module InsuranceRatesHelper
   end
   
   def cancellation_explain
-    "If the government announces that this rate will no longer be used, enter the date from when it will no longer apply.  
-     The rate will remain in the history, but will no longer appear in the list of current rates after the cancellation date.  
-     Remove the cancellation date if you need to restore the rate to the current list."
+    "If a new rate has been announced for this Code/Salary Band combination, there's no need to enter a cancellation date.
+    Just enter the new rate with its effective date, and the old rate will automatically pass to history.  The only time you need to 
+    enter a cancellation date is if an insurance code or a salary band setting has been removed altogether ... so the Code/Salary
+    Band combination is no longer applicable.  The combination will then be removed from calculations from the cancellation date."
   end
 end

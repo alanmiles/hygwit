@@ -7,11 +7,11 @@ class InsuranceEmployerRatesController < ApplicationController
     @country = Country.find(params[:country_id])
     check_permitted
     @selection = @country.insurance_rates.where("source_employee = ?", false)
-    @rates = InsuranceRate.current_list(@country, @selection)
+    @rates = InsuranceRate.current_list(@country, @selection, Date.today)
     @page_title = "Current Insurance Rates - Employers"
     @list_type = "are the current rates for employers" 
-    @focus = "employer"
-    @status = "current"
+    session[:group_focus] = "employer"
+    session[:time_focus] = "current"
     
     @recent_adds = InsuranceRate.total_recent(@country)
     @recent_updates = InsuranceRate.total_updated(@country)

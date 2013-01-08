@@ -13,10 +13,11 @@
     </section>
     <section>
       <%= render "shared/change_stats" %>
-      <% unless @status == "past" %>
+      <% unless session[:time_focus] == "past" %>
         <% if current_user.administrator?(@country.country) || current_user.superuser? %>
           <span id="change-note" class="top-line-space"><em>Stats include changes for both employee and employer rates.
-           The history lists show them all.</em></span>
+           View all the changes in the history lists - for <%= link_to "employees", country_insurance_history_rates_path(@country) %>
+           and <%= link_to "employers", country_insurance_employer_history_rates_path(@country) %>.</em></span>
         <% end %>
       <% end %>
     </section>
@@ -25,16 +26,12 @@
   <div class="span8">
     <h1 class="align-left"><%= @page_title %></h1>
     <div class="line-space">
-      <% if @focus == "employee" %>
-        <%= link_to "Switch to rates for EMPLOYERS", country_insurance_employer_rates_path(@country) %>
-      <% else %>    
-        <%= link_to "Switch to rates for EMPLOYEES", country_insurance_rates_path(@country) %>
-      <% end %>
+      <%= render "insurance_rates/focus_switch" %>
     </div>
     <div style="padding-bottom: 10px">
       <% if current_user.superuser? || current_user.administrator?(@country.country) %>
-        <%= link_to "Add a new set of rates", "#", class: "btn" %>
         <%= link_to "Add a single rate", new_country_insurance_rate_path(@country), class: "btn" %>
+        <%= link_to "Add a new set of rates", new_country_insurance_set_path(@country), class: "btn" %>
       <% end %>
       <%= link_to "Back to main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
     </div>

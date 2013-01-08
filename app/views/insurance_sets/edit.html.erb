@@ -1,0 +1,25 @@
+<% provide(:title, "Edit New Insurance Rate") %> 
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @country.country %>
+      </h1>
+      <div class="instruction">
+        <div>
+          <%= insurance_sets_edit_instruction_1 %>
+        </div> 
+      </div>
+    </section>
+  </aside>
+  <div class="span6 offset0">
+    <h1>Edit New Insurance Rate</h1>
+    <%= form_for(@rate, url: insurance_set_path(@rate)) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'edit_fields', f: f %>
+      <%= f.submit "Save changes", class: "btn btn-primary" %>
+      <%= link_to "All new rates", country_insurance_sets_path(@country), class: "btn" %>
+      <%= link_to "Main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
+    <% end %>
+  </div>
+</div>

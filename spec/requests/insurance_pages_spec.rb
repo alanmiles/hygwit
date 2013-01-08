@@ -288,7 +288,7 @@ describe "InsurancePages" do
       
               before { visit country_insurance_settings_path(@country) }
         
-              it { should_not have_selector('.standout', text: "WARNING") }
+              it { should_not have_selector('.standout', text: "don't delete or edit") }
               it { should have_selector('h1', text: @country.country) }
               it { should have_selector('title', text: "Insurance: Current Salary Thresholds") }
               it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
@@ -352,7 +352,7 @@ describe "InsurancePages" do
       
               before { visit country_insurance_future_settings_path(@country) }
         
-              it { should_not have_selector('.standout', text: "WARNING") }
+              it { should_not have_selector('.standout', text: "don't delete or edit") }
               it { should have_selector('h1', text: @country.country) }
               it { should have_selector('title', text: "Insurance: Future Salary Thresholds") }
               it { should have_selector('h1', text: 'Insurance: Future Salary Thresholds') }
@@ -376,7 +376,7 @@ describe "InsurancePages" do
       
               before { visit country_insurance_history_settings_path(@country) }
         
-              it { should_not have_selector('.standout', text: "WARNING") }
+              it { should_not have_selector('.standout', text: "don't delete or edit") }
               it { should have_selector('h1', text: @country.country) }
               it { should have_selector('title', text: "Insurance: Salary Threshold History") }
               it { should have_selector('h1', text: 'Insurance: Salary Threshold History') }
@@ -523,9 +523,9 @@ describe "InsurancePages" do
               before do        
                 fill_in "Code", with: "ST"
                 fill_in "Description", with: "Secondary Threshold"
-                fill_in "Weekly milestone", with: 144
-                fill_in "Monthly milestone", with: 624
-                fill_in "Annual milestone", with: 7488
+                fill_in "Weekly threshold", with: 144
+                fill_in "Monthly threshold", with: 624
+                fill_in "Annual threshold", with: 7488
                 fill_in "Effective date", with: Date.today - 60.days
               end
           
@@ -542,9 +542,9 @@ describe "InsurancePages" do
               before do        
                 fill_in "Code", with: "ST"
                 fill_in "Description", with: "Secondary Threshold"
-                fill_in "Weekly milestone", with: 144
-                fill_in "Monthly milestone", with: 624
-                fill_in "Annual milestone", with: 7488
+                fill_in "Weekly threshold", with: 144
+                fill_in "Monthly threshold", with: 624
+                fill_in "Annual threshold", with: 7488
                 fill_in "Effective date", with: Date.today + 60.days
               end
           
@@ -567,9 +567,9 @@ describe "InsurancePages" do
               before do        
                 fill_in "Code", with: "UEL"   #UEL record already exists formed today - 130 days
                 fill_in "Description", with: "Upper Earnings Limit"
-                fill_in "Weekly milestone", with: 1900
-                fill_in "Monthly milestone", with: 7800
-                fill_in "Annual milestone", with: 93600
+                fill_in "Weekly threshold", with: 1900
+                fill_in "Monthly threshold", with: 7800
+                fill_in "Annual threshold", with: 93600
                 fill_in "Effective date", with: Date.today - 500.days
               end
           
@@ -606,9 +606,9 @@ describe "InsurancePages" do
               before do        
                 fill_in "Code", with: "NUP"   #already cancelled
                 fill_in "Description", with: "Not Used Past"
-                fill_in "Weekly milestone", with: 160
-                fill_in "Monthly milestone", with: 660
-                fill_in "Annual milestone", with: 7920
+                fill_in "Weekly threshold", with: 160
+                fill_in "Monthly threshold", with: 660
+                fill_in "Annual threshold", with: 7920
                 fill_in "Effective date", with: Date.today
               end
               
@@ -628,7 +628,7 @@ describe "InsurancePages" do
             it { should have_selector('h1', text: @country.country) }
             it { should have_selector('title', text: "Insurance: Current Salary Thresholds") }
             it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
-            it { should have_link('Add a line to the table', href: new_country_insurance_setting_path(@country)) }
+            it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
             it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
             it { should have_link('edit', href: edit_insurance_setting_path(@setting)) }
             it { should have_link('del', href: insurance_setting_path(@setting)) }
@@ -638,7 +638,7 @@ describe "InsurancePages" do
             it { should have_selector('.instruction', text: "in our video tutorial") } 
             it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
             it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
-            it { should have_selector('.standout', text: "WARNING") }
+            it { should have_selector('.standout', text: "don't delete or edit") }
             it { should_not have_selector('.itemlist', text: "Not Used Past") }
             it { should have_selector('.itemlist', text: "Not Used Future") }
             it { should_not have_selector('#recent-add-checks') }
@@ -683,9 +683,9 @@ describe "InsurancePages" do
           
               before do
                 fill_in "Description", with: 'Upper Accrual Limit'
-                fill_in "Weekly milestone", with: 1080
-                fill_in "Monthly milestone", with: 4000
-                fill_in "Annual milestone", with: 48000
+                fill_in "Weekly threshold", with: 1080
+                fill_in "Monthly threshold", with: 4000
+                fill_in "Annual threshold", with: 48000
                 click_button "Save changes"
               end
           
@@ -818,7 +818,7 @@ describe "InsurancePages" do
               it { should have_selector('h1', text: @country.country) }
               it { should have_selector('title', text: "Insurance: Future Salary Thresholds") }
               it { should have_selector('h1', text: 'Insurance: Future Salary Thresholds') }
-              it { should have_link('Add a line to the table', href: new_country_insurance_setting_path(@country)) }
+              it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
               it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
               it { should have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
               it { should have_link('del', href: insurance_setting_path(@setting_new)) }
@@ -828,7 +828,7 @@ describe "InsurancePages" do
               it { should have_selector('.instruction', text: "in our video tutorial") } 
               it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
-              it { should have_selector('.standout', text: "WARNING") }
+              it { should have_selector('.standout', text: "don't delete or edit") }
               it { should_not have_selector('#recent-add-checks') }
               it { should_not have_selector('.recent', text: "+") }
               it { should have_selector('#change-note', text: "Changes are best seen") }
@@ -848,7 +848,7 @@ describe "InsurancePages" do
               it { should have_selector('h1', text: @country.country) }
               it { should have_selector('title', text: "Salary Threshold History") }
               it { should have_selector('h1', text: 'Salary Threshold History') }
-              it { should have_link('Add a line to the table', href: new_country_insurance_setting_path(@country)) }
+              it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
               it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
               it { should have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
               it { should have_link('del', href: insurance_setting_path(@setting_old)) }
@@ -858,7 +858,7 @@ describe "InsurancePages" do
               it { should have_selector('.instruction', text: "in our video tutorial") } 
               it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
-              it { should have_selector('.standout', text: "WARNING") }
+              it { should have_selector('.standout', text: "don't delete or edit") }
               it { should_not have_selector('#recent-add-checks') }
               it { should_not have_selector('.recent', text: "+") }
               it { should have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
@@ -1152,9 +1152,9 @@ describe "InsurancePages" do
             before do
               fill_in "Code", with: "XYZ"   #UEL record already exists formed today - 130 days
               fill_in "Description", with: "XYZ Descriptor"
-              fill_in "Weekly milestone", with: 900
-              fill_in "Monthly milestone", with: 3600
-              fill_in "Annual milestone", with: 44000
+              fill_in "Weekly threshold", with: 900
+              fill_in "Monthly threshold", with: 3600
+              fill_in "Annual threshold", with: 44000
               fill_in "Effective date", with: Date.today
             end
             

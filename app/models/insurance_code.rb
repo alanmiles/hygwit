@@ -34,6 +34,10 @@ class InsuranceCode < ActiveRecord::Base
     self.where("cancelled IS NULL or cancelled > ?", Date.today)  
   end
   
+  def self.first_on_current_list
+    self.on_current_list.first
+  end
+  
   def self.on_active_list(cancellation_date)
     self.where("cancelled IS NULL or cancelled > ?", cancellation_date)
   end

@@ -10,13 +10,13 @@ class InsuranceEmployerFutureRatesController < ApplicationController
     @rates = @country.insurance_rates.future_list(@selection)
     @page_title = "Future Insurance Rates - Employers"
     @list_type = "are planned future rates for employers"
-    @focus = "employer"
-    @status = "future"
+    session[:group_status] = "employer"
+    session[:time_status] = "future"
   
-    @recent_adds = InsuranceSetting.total_recent(@country)
-    @recent_updates = InsuranceSetting.total_updated(@country)
-    @recent_add_checks = InsuranceSetting.recent_add_checks(@country)
-    @recent_update_checks = InsuranceSetting.recent_update_checks(@country)
+    @recent_adds = InsuranceRate.total_recent(@country)
+    @recent_updates = InsuranceRate.total_updated(@country)
+    @recent_add_checks = InsuranceRate.recent_add_checks(@country)
+    @recent_update_checks = InsuranceRate.recent_update_checks(@country)
   end
   
   private

@@ -91,6 +91,9 @@ class CountriesController < ApplicationController
   
   def insurance_menu
     @country = Country.find(params[:id])
+    session[:group_focus] = nil
+    session[:time_focus] = nil
+    session[:insurance_date] = nil
   end
   
   private

@@ -1,0 +1,49 @@
+<% provide(:title, @page_title) %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= @country.country %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <div class="line-space">
+          <%= insurance_sets_listing_1 %>  
+        </div>
+        <div class="line-space">
+          <% if session[:group_focus] == "employee" %>
+            <%= insurance_sets_employees %>
+          <% else %>
+            <%= insurance_sets_employers %>
+          <% end %>
+        </div>
+  			<div class>
+          <%= insurance_sets_listing_2 %>  
+        </div>
+      </div>
+    </section>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left"><%= @page_title %></h1>
+    <div class="line-space">
+      <% if session[:group_focus] == "employee" %>
+        <%= link_to "Switch to rates for EMPLOYERS", country_insurance_employer_sets_path(@country) %>
+      <% else %>    
+        <%= link_to "Switch to rates for EMPLOYEES", country_insurance_sets_path(@country) %>
+      <% end %>
+    </div>
+    <div style="padding-bottom: 10px">
+      <% if session[:group_focus] == "employee" %>
+        <%= link_to "Back to current rates", country_insurance_rates_path(@country), class: "btn" %>
+      <% else %>
+        <%= link_to "Back to current rates", country_insurance_employer_rates_path(@country), class: "btn" %>
+      <% end %>
+      <%= link_to "Back to main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <%= render "insurance_sets/list" %>
+    </ul>
+  </div>
+</div>

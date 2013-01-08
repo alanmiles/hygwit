@@ -1,15 +1,5 @@
 Hygwit::Application.routes.draw do
 
-  get "insurance_employer_history_rates/index"
-
-  get "insurance_employer_future_rates/index"
-
-  get "insurance_employer_rates/index"
-
-  get "insurance_future_rates/index"
-
-  get "insurance_history_rates/index"
-
   resources :users
   resources :password_resets
   resources :nationalities
@@ -28,6 +18,9 @@ Hygwit::Application.routes.draw do
     resources :insurance_employer_history_rates, only: :index
     resources :insurance_employer_future_rates, only: :index
     resources :insurance_codes, shallow: true
+    resources :insurance_sets, shallow: true
+    resources :insurance_thresholds, shallow: true
+    resources :insurance_employer_sets, only: :index
     resources :ethnic_groups, shallow: true
     resources :reserved_occupations, shallow: true
     member do

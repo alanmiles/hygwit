@@ -1,25 +1,25 @@
-    <% if @focus == "employee" && @status == "current" %> 
+    <% if session[:group_focus] == "employee" && session[:time_focus] == "current" %> 
       <%= link_to "View full history", 
         country_insurance_history_rates_path(@country), class: "btn" %>
       <%= link_to "View future rates", 
          country_insurance_future_rates_path(@country), class: "btn" if @country.insurance_rates.future_rates? %>
-    <% elsif @focus == "employee" && @status == "future" %>
+    <% elsif session[:group_focus] == "employee" && session[:time_focus] == "future" %>
       <%= link_to "View current rates instead", country_insurance_rates_path(@country), class: "btn" %>
       <%= link_to "View rates history", 
          country_insurance_history_rates_path(@country), class: "btn" %>      
-    <% elsif @focus == "employee" && @status == "past" %>
+    <% elsif session[:group_focus] == "employee" && session[:time_focus] == "past" %>
       <%= link_to "View current rates instead", 
         country_insurance_rates_path(@country), class: "btn" %>
-    <% elsif @focus == "employer" && @status == "current" %>
+    <% elsif session[:group_focus] == "employer" && session[:time_focus] == "current" %>
       <%= link_to "View full history", 
         country_insurance_employer_history_rates_path(@country), class: "btn" %>
       <%= link_to "View future rates", 
          country_insurance_employer_future_rates_path(@country), class: "btn" if @country.insurance_rates.future_rates_employer? %>
-    <% elsif @focus == "employer" && @status == "future" %>
+    <% elsif session[:group_focus] == "employer" && session[:time_focus] == "future" %>
       <%= link_to "View current rates instead", country_insurance_employer_rates_path(@country), class: "btn" %>
       <%= link_to "View rates history", 
          country_insurance_employer_history_rates_path(@country), class: "btn" %>  
-    <% elsif @focus == "employer" && @status == "past" %>
+    <% elsif session[:group_focus] == "employer" && session[:time_focus] == "past" %>
       <%= link_to "View current rates instead", 
         country_insurance_employer_rates_path(@country), class: "btn" %>
     <% end %>

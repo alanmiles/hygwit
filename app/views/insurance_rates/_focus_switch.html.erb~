@@ -1,0 +1,5 @@
+      <% if session[:group_focus] == "employee" %>
+        <%= link_to "Switch to rates for EMPLOYERS", country_insurance_employer_sets_path(@country) %>
+      <% else %>    
+        <%= link_to "Switch to rates for EMPLOYEES", country_insurance_sets_path(@country) %>
+      <% end %>

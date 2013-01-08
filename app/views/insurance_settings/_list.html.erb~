@@ -1,13 +1,11 @@
 
       <li class = "list-header">
-        <strong>
-          <span class="span1 pagination-centered">Code</span>
-          <span class="span2 pagination-centered">Description</span>
-          <span class="span1 pagination-centered">Weekly milestone</span>
-          <span class="span1 pagination-centered">Monthly milestone</span>
-          <span class="span1 pagination-centered">Annual milestone</span>
-          <span class="span1 pagination-centered">From</span>
-        </strong>
+        <span class="span1 pagination-centered">Code</span>
+        <span class="span2 pagination-centered">Description</span>
+        <span class="span1 pagination-centered">Weekly milestone</span>
+        <span class="span1 pagination-centered">Monthly milestone</span>
+        <span class="span1 pagination-centered">Annual milestone</span>
+        <span class="span1 pagination-centered">From</span>
       </li>
       <% @settings.each do |setting| %>
         <li>
@@ -15,7 +13,7 @@
             <%= render "shared/superuser_countryadmin_notifications", :model_name => setting %>
             <%= setting.shortcode %>
           </span>
-          <span class="span2 pagination-centered"><%= setting.name %>
+          <span class="span2"><%= setting.name %>
             <span class="standout"><%= cancellation_detail(setting) if setting.cancellation_date? %></span>
           </span>
           <span class="span1 pagination-centered"><%= format_number(setting.weekly_milestone) %></span>

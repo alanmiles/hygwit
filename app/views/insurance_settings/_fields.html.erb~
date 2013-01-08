@@ -1,14 +1,20 @@
+<div class="field line-space" style="clear:both">
+  <span class="span3 r-float"><%= f.text_field :effective_date %></span>
+  <i class ="icon-question-sign help-button" id="date-click" style="float:right"></i>
+  <%= f.label :effective_date %>
+   <div id="date-help" class="help-inline"><%= date_note %></div>
+</div>
 
 <div class="field line-space">
   <span class="span3 r-float"><%= f.text_field :shortcode %></span>
-  <i class ="icon-question-sign" id="code-click" style="float:right"></i>
+  <i class ="icon-question-sign help-button" id="code-click" style="float:right"></i>
   <%= f.label :shortcode, "Code" %>
   <div id="code-help" class="help-inline"><%= code_note %></div>
 </div>
 
 <div class="field line-space" style="clear:both">
   <span class="span3 r-float"><%= f.text_field :name %></span>
-  <i class ="icon-question-sign" id="name-click" style="float:right"></i>
+  <i class ="icon-question-sign help-button" id="name-click" style="float:right"></i>
   <%= f.label :name, "Description" %>
   <div id="name-help" class="help-inline"><%= name_note %></div>
 </div>
@@ -17,7 +23,7 @@
   <span class="span3 r-float">
     <%= f.text_field :weekly_milestone, class: "number-field" %>
   </span>
-  <i class ="icon-question-sign" id="weekly-click" style="float:right"></i>
+  <i class ="icon-question-sign help-button" id="weekly-click" style="float:right"></i>
   <%= f.label :weekly_milestone %>
   <div id="weekly-help" class="help-inline"><%= weekly_note %></div>
 </div>
@@ -30,7 +36,7 @@
   <% end %>
     <%= f.text_field :monthly_milestone, class: "number-field" %>
   </span>
-  <i class ="icon-question-sign" id="monthly-click" style="float:right"></i>
+  <i class ="icon-question-sign help-button" id="monthly-click" style="float:right"></i>
   <%= f.label :monthly_milestone %>
   <div id="monthly-help" class="help-inline"><%= monthly_note %></div>
 </div>
@@ -39,16 +45,9 @@
   <span class="span3 r-float">
      <%= f.text_field :annual_milestone, class: "number-field" %>
   </span>
-  <i class ="icon-question-sign" id="annual-click" style="float:right"></i>
+  <i class ="icon-question-sign help-button" id="annual-click" style="float:right"></i>
   <%= f.label :annual_milestone %>
   <div id="annual-help" class="help-inline"><%= annual_note %></div>
-</div>
-
-<div class="field line-space" style="clear:both">
-  <span class="span3 r-float"><%= f.text_field :effective_date %></span>
-  <i class ="icon-question-sign" id="date-click" style="float:right"></i>
-  <%= f.label :effective_date %>
-   <div id="date-help" class="help-inline"><%= date_note %></div>
 </div>
 
 <%= render "shared/superuser_check", {f: f, object: f.object} %>

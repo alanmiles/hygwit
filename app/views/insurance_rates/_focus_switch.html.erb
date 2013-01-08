@@ -1,0 +1,17 @@
+      <% if session[:group_focus] == "employee" %>
+        <% if session[:time_focus] == "current" %>
+          <%= link_to "Switch to rates for EMPLOYERS", country_insurance_employer_rates_path(@country) %>
+        <% elsif session[:time_focus] == "future" %>
+          <%= link_to "Switch to rates for EMPLOYERS", country_insurance_employer_future_rates_path(@country) %>
+        <% else %>
+          <%= link_to "Switch to rates for EMPLOYERS", country_insurance_employer_history_rates_path(@country) %>
+        <% end %>
+      <% else %>    
+        <% if session[:time_focus] == "current" %>
+          <%= link_to "Switch to rates for EMPLOYEES", country_insurance_rates_path(@country) %>
+        <% elsif session[:time_focus] == "future" %>
+          <%= link_to "Switch to rates for EMPLOYEES", country_insurance_future_rates_path(@country) %>
+        <% else %>
+          <%= link_to "Switch to rates for EMPLOYEES", country_insurance_history_rates_path(@country) %>
+        <% end %>       
+      <% end %>

@@ -61,7 +61,16 @@ class InsuranceSetting < ActiveRecord::Base
     return @settings
   end
   
-   def self.snapshot_list(stated_date)
+  def self.records_exist?
+    @nmbr = self.current_list.count
+    @nmbr > 0
+  end
+  
+  def self.first_on_current_list
+    self.current_list.first
+  end
+  
+  def self.snapshot_list(stated_date)
     rows = InsuranceSetting.where("date(effective_date) <=? AND 
        (cancellation_date IS NULL OR date(cancellation_date) >?)", stated_date, stated_date)
        .select("shortcode, max(effective_date) AS effective_date, sum(monthly_milestone) AS monthly_milestone")
@@ -145,7 +154,10 @@ class InsuranceSetting < ActiveRecord::Base
     @details = "#{shortcode} ( #{@country.currency.code} #{sprintf("%.0d", monthly_milestone)}, effective #{effective_date.strftime("%d-%b-%y")} )"
   end
   
-  
+  def self.duplicate_exists?(code, date)
+    @record_count = self.where("shortcode = ? AND effective_date =?", code, date).count
+    @record_count > 0
+  end
   
   private
   

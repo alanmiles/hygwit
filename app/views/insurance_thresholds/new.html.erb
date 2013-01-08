@@ -1,0 +1,25 @@
+<% provide(:title, 'Refresh Salary Thresholds') %>
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @country.country %>
+      </h1>
+      <div class="instruction">
+        <div>
+          <%= insurance_settings_country_guidance %>
+        </div> 
+      </div>
+    </section>
+  </aside>
+  <div class="span6 offset0">
+    <h1>Refresh All Salary Threshold Settings</h1>
+    <%= form_for([@country, @setting], url: country_insurance_thresholds_path(@country)) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "Back to current salary thresholds", country_insurance_settings_path(@country), class: "btn" %>
+      <%= link_to "Main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
+    <% end %>
+  </div>
+</div>

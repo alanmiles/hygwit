@@ -628,7 +628,7 @@ describe "InsurancePages" do
             it { should have_selector('h1', text: @country.country) }
             it { should have_selector('title', text: "Insurance: Current Salary Thresholds") }
             it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
-            it { should have_link('Add a line to the table', href: new_country_insurance_setting_path(@country)) }
+            it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
             it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
             it { should have_link('edit', href: edit_insurance_setting_path(@setting)) }
             it { should have_link('del', href: insurance_setting_path(@setting)) }
@@ -818,7 +818,7 @@ describe "InsurancePages" do
               it { should have_selector('h1', text: @country.country) }
               it { should have_selector('title', text: "Insurance: Future Salary Thresholds") }
               it { should have_selector('h1', text: 'Insurance: Future Salary Thresholds') }
-              it { should have_link('Add a line to the table', href: new_country_insurance_setting_path(@country)) }
+              it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
               it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
               it { should have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
               it { should have_link('del', href: insurance_setting_path(@setting_new)) }
@@ -848,7 +848,7 @@ describe "InsurancePages" do
               it { should have_selector('h1', text: @country.country) }
               it { should have_selector('title', text: "Salary Threshold History") }
               it { should have_selector('h1', text: 'Salary Threshold History') }
-              it { should have_link('Add a line to the table', href: new_country_insurance_setting_path(@country)) }
+              it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
               it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
               it { should have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
               it { should have_link('del', href: insurance_setting_path(@setting_old)) }

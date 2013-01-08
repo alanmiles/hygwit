@@ -8,6 +8,7 @@ class InsuranceSettingsController < ApplicationController
     @country = Country.find(params[:country_id])
     check_permitted
     @settings = @country.insurance_settings.current_list
+    session[:time_focus] = "current"
     @recent_adds = InsuranceSetting.total_recent(@country)
     @recent_updates = InsuranceSetting.total_updated(@country)
     @recent_add_checks = InsuranceSetting.recent_add_checks(@country)
@@ -135,8 +136,15 @@ class InsuranceSettingsController < ApplicationController
         redirect_to user_path(current_user)
       else
         @setting.destroy
-        flash[:success] = "The '#{@setting.shortcode}' line for #{@country.country} with effective date #{@setting.effective_date.strftime('%d %b %Y')} has been destroyed."
-        redirect_to country_insurance_settings_path(@country)
+        flash[:success] = "The '#{@setting.shortcode}' line for #{@country.country} with effective 
+           date #{@setting.effective_date.strftime('%d %b %Y')} has been destroyed."
+        if session[:time_focus] == "future"
+          redirect_to country_insurance_future_settings_path(@country)
+        elsif session[:time_focus] == "current"
+          redirect_to country_insurance_settings_path(@country)
+        else
+          redirect_to country_insurance_history_settings_path(@country)
+        end
       end
     else
       flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."

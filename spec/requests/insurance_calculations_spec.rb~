@@ -18,7 +18,11 @@ describe "InsuranceCalculations" do
     @setting_2 = @country.insurance_settings.create(shortcode: "PT", name: "Primary Threshold", weekly_milestone: 200, 
     										monthly_milestone: 800, annual_milestone: 9600, effective_date: Date.today - 60.days)
     @setting_3 = @country.insurance_settings.create(shortcode: "ST", name: "Secondary Threshold", weekly_milestone: 500, 
-    										monthly_milestone: 2000, annual_milestone: 24000, effective_date: Date.today - 60.days)										
+    										monthly_milestone: 2000, annual_milestone: 24000, effective_date: Date.today - 60.days)	
+    @setting_1_old = @country.insurance_settings.create(shortcode: "LEL", name: "Lower Earnings Limit", weekly_milestone: 75, 
+    										monthly_milestone: 300, annual_milestone: 3600, effective_date: Date.today - 550.days)	
+    @setting_2_old = @country.insurance_settings.create(shortcode: "PT", name: "Primary Threshold", weekly_milestone: 150, 
+    										monthly_milestone: 600, annual_milestone: 7200, effective_date: Date.today - 550.days)
     @rate = @country.insurance_rates.create(insurance_code_id: @code_1.id, threshold_id: @setting_1.id, 
     										ceiling_id: @setting_2.id, contribution: 10.18, created_by: 999999, updated_by: 999999,
     										effective: Date.today - 60.days, checked: true, source_employee: true)	
@@ -409,8 +413,8 @@ describe "InsuranceCalculations" do
               it { should_not have_selector('.instruction', text: "in our video tutorial") } 
               it { should have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should have_selector('.itemlist', text: @rate.insurance_code.insurance_code) }
-              it { should have_selector('.itemlist', text: @rate.threshold.shortcode) }
-              it { should have_selector('.itemlist', text: @rate.ceiling.shortcode) }
+              it { should have_selector('.itemlist', value: @rate.threshold.monthly_milestone) }
+              it { should have_selector('.itemlist', value: @rate.ceiling.monthly_milestone) }
               it { should have_selector('#contribution', text: @rate.contribution.to_s) }
               it { should have_selector('.itemlist', text: "%") }
               it { should have_selector("li##{@rate.id}") }
@@ -455,8 +459,8 @@ describe "InsuranceCalculations" do
               it { should_not have_selector('.instruction', text: "in our video tutorial") } 
               it { should have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should have_selector('.itemlist', text: @future_rate.insurance_code.insurance_code) }
-              it { should have_selector('.itemlist', text: @future_rate.threshold.shortcode) }
-              it { should have_selector('.itemlist', text: @future_rate.ceiling.shortcode) }
+              it { should have_selector('.itemlist', value: @future_rate.threshold.montly_milestone) }
+              it { should have_selector('.itemlist', value: @future_rate.ceiling.monthly_milestone) }
               it { should have_selector("li##{@future_rate.id}") }
               it { should_not have_selector("li##{@employer_future_rate.id}") }
               it { should have_selector('.itemlist', text: "%") }
@@ -488,8 +492,8 @@ describe "InsuranceCalculations" do
               it { should_not have_selector('.instruction', text: "in our video tutorial") } 
               it { should have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should have_selector('.itemlist', text: @future_rate.insurance_code.insurance_code) }
-              it { should have_selector('.itemlist', text: @future_rate.threshold.shortcode) }
-              it { should have_selector('.itemlist', text: @future_rate.ceiling.shortcode) }
+              it { should have_selector('.itemlist', value: @future_rate.threshold.monthly_milestone) }
+              it { should have_selector('.itemlist', value: @future_rate.ceiling.monthly_milestone) }
               it { should_not have_selector('.itemlist', text: @employer_rate.contribution.to_s) }
               it { should have_selector('.itemlist', text: "%") }
               it { should have_selector("li##{@rate.id}") }
@@ -598,8 +602,8 @@ describe "InsuranceCalculations" do
               it { should have_selector('.instruction', text: "in our video tutorial") } 
               it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should have_selector('.itemlist', text: @rate.insurance_code.insurance_code) }
-              it { should have_selector('.itemlist', text: @rate.threshold.shortcode) }
-              it { should have_selector('.itemlist', text: @rate.ceiling.shortcode) }
+              it { should have_selector('.itemlist', value: @rate.threshold.monthly_milestone) }
+              it { should have_selector('.itemlist', value: @rate.ceiling.monthly_milestone) }
               it { should have_selector('.itemlist', value: @rate.contribution) }
               it { should have_selector('.itemlist', text: "%") }
               it { should_not have_selector('.itemlist', text: @country.currency.code) }
@@ -636,17 +640,18 @@ describe "InsuranceCalculations" do
       
               describe "with a new current rate" do
         
-                before do        
+                before do
+                  fill_in "Effective date", with: Date.today - 60.days
+                  click_button "Create"
                   select "A - Default employee", from: "Insurance code"
                   select "PT ( >GBP 800, effective", from: "Salary threshold"
-                  #select "ST ( GBP 2000, effective", from: "Salary ceiling"
                   fill_in "Contribution", with: 10.75
-                  fill_in "Effective date", with: Date.today - 60.days
                 end
-          
+                
                 it "should create a new insurance rate for the country" do
                   expect { click_button "Create" }.to change(@country.insurance_rates, :count).by(1)
                   page.should have_selector('h1', text: 'Current Insurance Rates - Employees')
+                  page.should have_selector('h1', text: 'Insurance Rate')
                   page.should have_selector('h1', text: @country.country)
                   page.should have_selector('.itemlist', value: 10.75)
                 end 
@@ -654,30 +659,31 @@ describe "InsuranceCalculations" do
               
               describe "with a replacement rate in current records" do
               
-                before do        
+                before do 
+                  fill_in "Effective date", with: Date.today - 2.days
+                  click_button "Create"       
                   select "A - Default employee", from: "Insurance code"
                   select "LEL ( >GBP 400, effective", from: "Salary threshold"
-                  #select "PT ( GBP 800, effective", from: "Salary ceiling"
                   fill_in "Contribution", with: 10.699
-                  fill_in "Effective date", with: Date.today - 2.days
-                  click_button "Create"
-                  visit country_insurance_rates_path(@country)
                 end
                 
-                it { should have_selector('.itemlist', value: 10.699) }
-                it { should_not have_selector("li##{@rate.id}") }   #cf line 469 - old value is replaced
-    
+                it "should replace the old insurance rate for the country" do
+                  expect { click_button "Create" }.to change(@country.insurance_rates, :count).by(1)
+                  page.should have_selector('h1', text: 'Current Insurance Rates - Employees')
+                  page.should have_selector('.itemlist', value: 10.699)
+                  page.should_not have_selector("li##{@rate.id}")   #cf line 469 - old value is replaced
+                end
               end
               
               describe "when entering a rate for employers" do
                 
-                before do        
+                before do
+                  fill_in "Effective date", with: Date.today - 60.days 
+                  click_button "Create"           
                   choose "or for Employers?"
                   select "A - Default employee", from: "Insurance code"
                   select "PT ( >GBP 800, effective", from: "Salary threshold"
-                  #select "ST ( GBP 2000, effective", from: "Salary ceiling"
                   fill_in "Contribution", with: 5.35
-                  fill_in "Effective date", with: Date.today - 60.days
                 end
           
                 it "should create a new employer insurance rate for the country" do
@@ -689,13 +695,14 @@ describe "InsuranceCalculations" do
               end
               
               describe "when entering a fixed rate instead of a percentage" do
-                before do        
+                
+                before do 
+                  fill_in "Effective date", with: Date.today - 60.days
+                  click_button "Create"            
                   select "A - Default employee", from: "Insurance code"
                   select "PT ( >GBP 800, effective", from: "Salary threshold"
-                  #select "ST ( GBP 2000, effective", from: "Salary ceiling"
                   fill_in "Contribution", with: 100
-                  choose "or Value"
-                  fill_in "Effective date", with: Date.today - 60.days
+                  choose "or Value"   
                 end
           
                 it "should drop the percentage sign and add the local currency" do
@@ -707,13 +714,14 @@ describe "InsuranceCalculations" do
               end
               
               describe "when entering a rebate" do
-                before do        
+                before do
+                  fill_in "Effective date", with: Date.today - 60.days
+                  click_button "Create"           
                   select "A - Default employee", from: "Insurance code"
                   select "PT ( >GBP 800, effective", from: "Salary threshold"
                   #select "ST ( GBP 2000, effective", from: "Salary ceiling"
                   fill_in "Contribution", with: 1
-                  choose "or Rebate"
-                  fill_in "Effective date", with: Date.today - 60.days
+                  choose "or Rebate"  
                 end
           
                 it "should drop the percentage sign and add the local currency" do
@@ -727,12 +735,12 @@ describe "InsuranceCalculations" do
             
               describe "with valid future data" do
             
-                before do        
+                before do   
+                  fill_in "Effective date", with: Date.today + 60.days
+                  click_button "Create"        
                   select "A - Default employee", from: "Insurance code"
                   select "PT ( >GBP 800, effective", from: "Salary threshold"
-                  #select "ST ( GBP 2000, effective", from: "Salary ceiling"
                   fill_in "Contribution", with: 11.75
-                  fill_in "Effective date", with: Date.today + 60.days
                 end
           
                 it "should create a new insurance rate for the country but redirect to Future" do
@@ -749,12 +757,13 @@ describe "InsuranceCalculations" do
             
               describe "with valid historic data" do
             
-                before do        
+                before do
+                  fill_in "Effective date", with: Date.today - 500.days 
+                  click_button "Create"   
                   select "A - Default employee", from: "Insurance code"
-                  select "LEL ( >GBP 400, effective", from: "Salary threshold"
+                  select "LEL ( >GBP 300, effective", from: "Salary threshold"
                   #select "PT ( GBP 800, effective", from: "Salary ceiling"
-                  fill_in "Contribution", with: 9.5
-                  fill_in "Effective date", with: Date.today - 500.days
+                  fill_in "Contribution", with: 9.5 
                 end
           
                 it "should create a new insurance rate for the country but redirect to History" do
@@ -772,15 +781,16 @@ describe "InsuranceCalculations" do
               describe "with invalid data" do
            
                 before do
+                  fill_in "Effective date", with: Date.today - 500.days
+                  click_button "Create"   
                   select "A - Default employee", from: "Insurance code"
                   #select "LEL ( >GBP 400, effective", from: "Salary threshold"
                   #select "PT ( GBP 800, effective", from: "Salary ceiling"
                   fill_in "Contribution", with: 9.5
-                  fill_in "Effective date", with: Date.today - 500.days
                 end
           
                 it "should not create a new insurance rate for the country" do
-                  #expect { click_button "Create" }.not_to change(@country.insurance_rates, :count) # not working, no error because
+                  expect { click_button "Create" }.not_to change(@country.insurance_rates, :count) # not working, no error because
                                                                #missing contribution new
                   page.should have_selector('h1', text: 'New Insurance Rate')
                   page.should have_selector('h1', text: @country.country)
@@ -806,8 +816,8 @@ describe "InsuranceCalculations" do
               it { should have_selector('.instruction', text: "in our video tutorial") } 
               it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should have_selector('.itemlist', text: @future_rate.insurance_code.insurance_code) }
-              it { should have_selector('.itemlist', text: @future_rate.threshold.shortcode) }
-              it { should have_selector('.itemlist', text: @future_rate.ceiling.shortcode) }
+              it { should have_selector('.itemlist', value: @future_rate.threshold.monthly_milestone) }
+              it { should have_selector('.itemlist', value: @future_rate.ceiling.monthly_milestone) }
               it { should have_selector('.itemlist', value: @future_rate.contribution) }
               it { should have_selector('.itemlist', text: "%") }
               it { should_not have_selector('.itemlist', text: @country.currency.code) }
@@ -834,8 +844,8 @@ describe "InsuranceCalculations" do
               it { should have_selector('.instruction', text: "in our video tutorial") } 
               it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should have_selector('.itemlist', text: @future_rate.insurance_code.insurance_code) }
-              it { should have_selector('.itemlist', text: @future_rate.threshold.shortcode) }
-              it { should have_selector('.itemlist', text: @future_rate.ceiling.shortcode) }
+              it { should have_selector('.itemlist', value: @future_rate.threshold.monthly_milestone) }
+              it { should have_selector('.itemlist', value: @future_rate.ceiling.monthly_milestone) }
               it { should have_selector('.itemlist', value: @future_rate.contribution) }
               it { should have_selector('.itemlist', text: "%") }
               it { should_not have_selector('.itemlist', text: @country.currency.code) }
@@ -1012,18 +1022,17 @@ describe "InsuranceCalculations" do
             it { should have_selector('input#insurance_rate_checked', value: 1) }
           
             describe "automatic checking of record entered by superuser" do
-              before do        
+              before do
+                fill_in "Effective date", with: Date.today - 2.days
+                click_button "Create"        
                 select "A - Default employee", from: "Insurance code"
                 select "LEL ( >GBP 400, effective", from: "Salary threshold"
-                select "PT ( GBP 800, effective", from: "Salary ceiling"
+                #select "PT ( GBP 800, effective", from: "Salary ceiling"
                 fill_in "Contribution", with: 10.699
-                fill_in "Effective date", with: Date.today - 2.days
-                click_button "Create"
-                visit country_insurance_rates_path(@country)
               end
                 
               it "should create the new record and push code it replaces into history" do
-            
+                expect { click_button "Create" }.to change(@country.insurance_rates, :count).by(1)
                 page.should have_selector('.itemlist', value: 10.699)
                 page.should_not have_selector("li##{@rate.id}")
                 page.should have_selector('h1', text: 'Current Insurance Rates - Employees')

@@ -1,6 +1,6 @@
 
       <li class="list-header">
-        <span class="span1 pagination-centered">Code</span>
+        <span class="span1 pagination-centered">Code-Band</span>
         <span class="span1 pagination-centered">Threshold</span>
         <span class="span1 pagination-centered">Ceiling</span>
         <span class="span1 pagination-centered">Contribution</span>
@@ -11,24 +11,24 @@
         <li id = "<%= rate.id %>">
           <div class="span1 pagination-centered">
             <%= render "shared/superuser_countryadmin_notifications", :model_name => rate %>
-            <%= rate.insurance_code.insurance_code %>
+            <%= rate.code_band %>
             <% if rate.insurance_code.cancelled? %>
               <div class="standout reduced">X-<%= date_display(rate.insurance_code.cancelled) %></div>
             <% end %>
           </div>
-          <div class="span1 pagination-centered"><%= rate.threshold.shortcode %>
+          <div class="span1 pagination-centered">> <%= format_number(rate.threshold.monthly_milestone) %>
             <% if rate.threshold.cancellation_date? %>
               <div class="standout reduced">X-<%= date_display(rate.threshold.cancellation_date) %></div>
             <% end %>
           </div>
           <div class="span1 pagination-centered">
             <% unless rate.ceiling_id.nil? %>
-              <%= rate.ceiling.shortcode %>
+              <%= format_number(rate.ceiling.monthly_milestone) %>
               <% if rate.ceiling.cancellation_date? %>
                 <div class="standout reduced">X-<%= date_display(rate.ceiling.cancellation_date) %></div>
               <% end %>
             <% else %>
-              none
+              ->
             <% end %>
           </div>
           <span id="contribution" class="span1 pagination-centered">
@@ -49,7 +49,7 @@
           
               <%= link_to "edit", edit_insurance_rate_path(rate) %>
               | <%= link_to "del", rate, method: :delete,
-                             data: { confirm: "Delete the 'Code #{rate.insurance_code.insurance_code}/Threshold #{rate.threshold.shortcode}' listing from the insurance rates table?  Sure?" } %>
+                             data: { confirm: "Delete Code-Band #{rate.code_band_identifier}.  Sure?" } %>
           
             </span>
           <% end %>

@@ -1,0 +1,48 @@
+
+      <li class="list-header">
+        <span class="span1 pagination-centered">Code-Band</span>
+        <span class="span1 pagination-centered">Threshold</span>
+        <span class="span1 pagination-centered">Ceiling</span>
+        <span class="span1 pagination-centered">Contribution</span>
+        <span class="span1 pagination-centered">Rebate</span>
+        <span class="span2 pagination-centered">Effective date</span>
+      </li>
+      <% @rates.each do |rate| %>
+        <li id = "<%= rate.id %>">
+          <div class="span1 pagination-centered">
+            <%= rate.code_band %>
+          </div>
+          <div class="span1 pagination-centered">
+            > <%= format_number(rate.threshold.monthly_milestone) %>
+          </div>
+          <div class="span1 pagination-centered">
+            <% unless rate.ceiling_id.nil? %>
+              <%= format_number(rate.ceiling.monthly_milestone) %>
+            <% else %>
+              ->
+            <% end %>
+          </div>
+          <span id="contribution" class="span1 pagination-centered">
+            <% if rate.rebate? %>( <% end %>
+            <% unless rate.percent? %><%= @country.currency.code %><% end %> 
+            <% if rate.percent %>
+              <%= format_number(rate.contribution) %>
+            <% else %>
+              <%= dec_place_number(rate.contribution, @country.currency.decimal_places) %>
+            <% end %>
+            <% if rate.percent? %> % <% end %>
+            <% if rate.rebate? %> )<% end %>
+          </span>
+          <span class="span1 pagination-centered"><%= rate.rebate? ? "Yes" : "-" %></span>
+          <span class="span2 pagination-centered"><%= date_display(rate.effective) %></span>
+          <% if current_user.superuser? || current_user.administrator?(@country.country) %>
+            <span class="r-float">
+          
+              <%= link_to "edit", edit_insurance_set_path(rate) %>
+              | <%= link_to "del", insurance_set_path(rate), method: :delete,
+                             data: { confirm: "Delete Code-Band '#{rate.insurance_code.insurance_code}-#{rate.threshold.shortcode}' dated #{rate.effective.to_date.strftime('%d %b %Y')}.  Sure?" } %>
+          
+            </span>
+          <% end %>
+        </li>
+      <% end %>

@@ -6,9 +6,12 @@
         <%= @country.country %>
       </h1>
       <div class="instruction">
+        <div class="line-space">
+          <%= insurance_rates_edit_instruction_1 %>
+        </div>
         <div>
-          <%= insurance_rates_country_instruction_1 %>
-        </div> 
+          <%= insurance_rates_edit_instruction_2 %>
+        </div>  
       </div>
     </section>
   </aside>
@@ -16,7 +19,7 @@
     <h1>Edit Insurance Rate</h1>
     <%= form_for(@rate) do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
-      <%= render 'fields', f: f %>
+      <%= render 'edit_fields', f: f %>
       <%= f.submit "Save changes", class: "btn btn-primary" %>
       <%= link_to "All rates", country_insurance_rates_path(@country), class: "btn" %>
       <%= link_to "Main insurance menu", insurance_menu_country_path(@country), class: "btn" %>

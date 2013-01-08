@@ -4,7 +4,7 @@
       <%= link_to "View future rates", 
          country_insurance_future_rates_path(@country), class: "btn" if @country.insurance_rates.future_rates? %>
     <% elsif @focus == "employee" && @status == "future" %>
-      <%= link_to "View current rates", country_insurance_rates_path(@country), class: "btn" %>
+      <%= link_to "View current rates instead", country_insurance_rates_path(@country), class: "btn" %>
       <%= link_to "View rates history", 
          country_insurance_history_rates_path(@country), class: "btn" %>      
     <% elsif @focus == "employee" && @status == "past" %>
