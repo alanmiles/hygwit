@@ -21,8 +21,8 @@ def sign_in(user)
   cookies[:remember_token] = user.remember_token
 end
 
-def country_setup
-  @nationality = FactoryGirl.create(:nationality)
-  @currency = FactoryGirl.create(:currency)
-  @country = FactoryGirl.create(:country, nationality_id: @nationality.id, currency_id: @currency.id)
+def sign_out(user)
+  cookies[:remember_token] = nil
+  #visit signin_path
 end
+

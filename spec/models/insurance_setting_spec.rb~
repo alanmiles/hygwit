@@ -2,20 +2,21 @@
 #
 # Table name: insurance_settings
 #
-#  id                :integer          not null, primary key
-#  country_id        :integer
-#  shortcode         :string(255)
-#  name              :string(255)
-#  weekly_milestone  :decimal(, )
-#  monthly_milestone :decimal(, )
-#  annual_milestone  :decimal(, )
-#  effective_date    :date
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  cancellation_date :date
-#  checked           :boolean          default(FALSE)
-#  updated_by        :integer          default(1)
-#  created_by        :integer          default(1)
+#  id                  :integer          not null, primary key
+#  country_id          :integer
+#  shortcode           :string(255)
+#  name                :string(255)
+#  weekly_milestone    :decimal(, )
+#  monthly_milestone   :decimal(, )
+#  annual_milestone    :decimal(, )
+#  effective_date      :date
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  cancellation_date   :date
+#  checked             :boolean          default(FALSE)
+#  updated_by          :integer          default(1)
+#  created_by          :integer          default(1)
+#  cancellation_change :boolean          default(FALSE)
 #
 
 require 'spec_helper'
@@ -44,6 +45,7 @@ describe InsuranceSetting do
   it { should respond_to(:cancellation_date) }
   it { should respond_to(:checked) }
   it { should respond_to(:updated_by) }
+  it { should respond_to(:created_by) }
   
   it { should be_valid }
   
@@ -169,6 +171,11 @@ describe InsuranceSetting do
   
   describe "when cancellation date <= effective date" do
     before { @setting.cancellation_date = Date.today - 60.days }
+    it { should_not be_valid }
+  end
+  
+  describe "when 'created_by' is missing" do
+    before { @setting.created_by = nil }
     it { should_not be_valid }
   end
       

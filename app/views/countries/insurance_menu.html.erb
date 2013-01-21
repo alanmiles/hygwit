@@ -32,19 +32,21 @@
     </div>
     <% if @country.insurance? %>
       <ul class="menulist">
-        <li>
-          <div class="line-space" style= "font-size: .85em">
-            <%= insurance_settings_country_guidance %>
-          </div>
-          Go to <%= link_to "Salary Thresholds", country_insurance_settings_path(@country) %>
-        </li>          
-        <li>
+        <li class="divider">
           <div class="line-space" style= "font-size: .85em">
             <%= insurance_codes_country_guidance %>
           </div>
           Go to <%= link_to "Insurance Codes", country_insurance_codes_path(@country) %>
         </li> 
-        <li>
+        
+        <li class="divider">
+          <div class="line-space" style= "font-size: .85em">
+            <%= insurance_settings_country_guidance %>
+          </div>
+          Go to <%= link_to "Salary Thresholds", country_insurance_settings_path(@country) %>
+        </li>          
+        
+        <li class="divider">
           <div class="line-space" style= "font-size: .85em">
             <%= insurance_rates_country_instruction_1 %>
           </div>

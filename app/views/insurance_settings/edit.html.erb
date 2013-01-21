@@ -1,4 +1,4 @@
-<% provide(:title, "Edit Salary Thresholds") %> 
+<% provide(:title, @header) %> 
 <div class="row">
   <aside class="span3">
     <section>
@@ -7,36 +7,49 @@
       </h1>
       <div class="instruction">
         <div>
-          <%= insurance_settings_country_guidance %>
+          <% if @setting.checked? %>
+            <% if @setting.cancellation_date? %>
+              <%= render "instructions_restore" %>
+            <% else %>
+              <%= render "instructions_cancel" %>
+            <% end %>
+          <% else %>  
+            <%= render "instructions_edit" %>
+          <% end %>
         </div> 
       </div>
     </section>
   </aside>
   <div class="span6 offset0">
-    <h1>Edit Salary Thresholds</h1>
+    <h1><%= @header %></h1>
     <%= form_for(@setting) do |f| %>
       <%= render 'shared/error_messages', object: f.object %>
-      <div class="line-space">
-        <em>DON'T EDIT an existing record when the government advises changes for a new financial year.  Instead, enter a NEW line 
-        in the Salary Thresholds table.</em>
-      </div>
-      <%= render 'fields', f: f %>
-      <% if @setting.in_current_list == true || @setting.previous_cancellation == true %>
-        <div class="field line-space" style="clear:both">
-          <% if @setting.cancellation_date? %>
-            <span class="span3 r-float">
-          <% else %>
-            <span class="span3 r-float" id="cancel-warning">
+      <% if @setting.checked? %>
+        <%= render 'checked_fields', f: f %>
+      <% else %>
+        <%= render 'fields', f: f %>
+      <% end %>
+      <% if @setting.checked? %>
+        <% if @setting.in_current_list == true || @setting.previous_cancellation == true %>
+          <div class="field line-space" style="clear:both">
+            <span class="span3 r-float"><%= f.text_field :cancellation_date %></span>
+            <i class ="icon-question-sign help-button" id="cancellation-click" style="float:right"></i>
+            <%= f.label :cancellation_date %>
+            <div id="cancellation-help" class="help-inline"><%= cancellation_note %></div>
+          </div>
+        <% end %>
+        <% if current_user.superuser? %>
+          <% if @setting.cancellation_change? %>
+            <div class="field line-space" style="clear:both">
+              <span class="span3 r-float"><%= f.check_box :cancellation_change %></span>
+              <%= f.label :cancellation_change, "NOTIFICATION: Cancellation change" %>
+              <div><em>(Clear the check to approve the change)</em></div>
+            </div>
           <% end %>
-              <%= f.text_field :cancellation_date %>
-            </span>
-          <i class ="icon-question-sign help-button" id="cancellation-click" style="float:right"></i>
-          <%= f.label :cancellation_date %>
-          <div id="cancellation-help" class="help-inline"><%= cancellation_note %></div>
-        </div>
+        <% end %>
       <% end %>
       <%= f.submit "Save changes", class: "btn btn-primary" %>
-      <%= link_to "Salary thresholds table", country_insurance_settings_path(@country), class: "btn" %>
+      <%= link_to "Current thresholds list", country_insurance_settings_path(@country), class: "btn" %>
       <%= link_to "Main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
     <% end %>
   </div>

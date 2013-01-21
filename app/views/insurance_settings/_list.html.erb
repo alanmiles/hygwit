@@ -8,25 +8,47 @@
         <span class="span1 pagination-centered">From</span>
       </li>
       <% @settings.each do |setting| %>
-        <li>
+        <li id="<%= setting.id %>">
           <span class="span1 pagination-centered">
             <%= render "shared/superuser_countryadmin_notifications", :model_name => setting %>
+            <% if current_user.superuser? %>
+              <% unless setting.update_check? %>
+                <% if setting.cancellation_change? %>
+                  <span class="updates"> > </span>
+                <% end %>
+              <% end %>
+            <% end %>
             <%= setting.shortcode %>
           </span>
           <span class="span2"><%= setting.name %>
-            <span class="standout"><%= cancellation_detail(setting) if setting.cancellation_date? %></span>
+            <span class="standout">
+              <%= cancellation_detail(setting) if (setting.cancellation_date? && setting.last_cancelled == true) %>
+            </span>
           </span>
           <span class="span1 pagination-centered"><%= format_number(setting.weekly_milestone) %></span>
           <span class="span1 pagination-centered"><%= format_number(setting.monthly_milestone) %></span>
           <span class="span1 pagination-centered"><%= format_number(setting.annual_milestone) %></span>
           <span class="span1 pagination-centered"><%= date_display(setting.effective_date) %></span>
           <% if current_user.superuser? || current_user.administrator?(@country.country) %>
-            <span class="r-float">
-          
-              <%= link_to "edit", edit_insurance_setting_path(setting) %>
-              | <%= link_to "del", setting, method: :delete,
-                             data: { confirm: "Delete '#{setting.shortcode}' with effective date #{setting.effective_date.strftime('%d %b %Y')} from the insurance settings table for #{@country.country}?  Sure?" } %>
-          
+            <span class="r-float">  
+              <% unless setting.checked? %>
+                <%= link_to "edit", edit_insurance_setting_path(setting) %>
+                | <%= link_to "del", setting, method: :delete,
+                    data: { confirm: "Delete '#{setting.shortcode}' with effective date #{setting.effective_date.strftime('%d %b %Y')} from the insurance settings table for #{@country.country}?  Sure?" } %>
+              <% else %>
+                <% if setting.in_current_list == true %>
+                  <% if setting.cancellation_date? %>
+                    <%= link_to "restore", edit_insurance_setting_path(setting) %>
+                  <% else %>
+                    <%= link_to "cancel", edit_insurance_setting_path(setting) %>
+                  <% end %>
+                <% elsif setting.in_future_list == true %>
+                  <%= link_to "del", setting, method: :delete,
+                    data: { confirm: "Delete '#{setting.shortcode}' with effective date #{setting.effective_date.strftime('%d %b %Y')} from the insurance settings table for #{@country.country}?  Sure?" } %>
+                <% else %>
+                  <%= link_to "restore", edit_insurance_setting_path(setting) if setting.last_cancelled == true %>
+                <% end %>
+              <% end %>               
             </span>
           <% end %>
         </li>

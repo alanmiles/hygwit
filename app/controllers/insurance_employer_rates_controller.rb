@@ -6,8 +6,8 @@ class InsuranceEmployerRatesController < ApplicationController
   def index
     @country = Country.find(params[:country_id])
     check_permitted
-    @selection = @country.insurance_rates.where("source_employee = ?", false)
-    @rates = InsuranceRate.current_list(@country, @selection, Date.today)
+    #@selection = @country.insurance_rates.where("source_employee = ?", false)
+    @rates = InsuranceRate.current_list(@country, false)
     @page_title = "Current Insurance Rates - Employers"
     @list_type = "are the current rates for employers" 
     session[:group_focus] = "employer"

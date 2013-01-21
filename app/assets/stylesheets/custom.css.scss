@@ -292,6 +292,10 @@ select {
   }
 }
 
+.menulist li.divider {
+  border-bottom: 1px solid #CCC;
+}
+
 .r-float {
   float: right;
 }

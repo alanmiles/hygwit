@@ -6,8 +6,8 @@ class InsuranceHistoryRatesController < ApplicationController
   def index
     @country = Country.find(params[:country_id])
     check_permitted
-    @selection = @country.insurance_rates.where("source_employee = ?", true)
-    @rates = @country.insurance_rates.history_list(@selection)
+    #@selection = @country.insurance_rates.where("source_employee = ?", true)
+    @rates = @country.insurance_rates.history_list(true)
     @page_title = "Insurance Rate History - Employees"
     @list_type = "is the historical list of rates for employees"
     session[:group_focus] = "employee"

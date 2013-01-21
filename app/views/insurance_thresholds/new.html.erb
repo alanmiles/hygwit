@@ -7,7 +7,7 @@
       </h1>
       <div class="instruction">
         <div>
-          <%= insurance_settings_country_guidance %>
+          <%= render "instructions_new_thresholds" %>
         </div> 
       </div>
     </section>
@@ -21,5 +21,9 @@
       <%= link_to "Back to current salary thresholds", country_insurance_settings_path(@country), class: "btn" %>
       <%= link_to "Main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
     <% end %>
+    <div class="top-line-space standout">
+      After adding new salary thresholds, you need to update your list of National Insurance rates.  Create a new
+      set of rates with the same effective date, to make sure all the new threshold settings are included.
+    </div>
   </div>
 </div>

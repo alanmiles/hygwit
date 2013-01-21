@@ -26,6 +26,14 @@ module ApplicationHelper
     end
   end
   
+  def string_to_date(record)
+    if record.nil
+      return nil
+    else 
+      return record.to_date.strftime('%d %b %Y')
+    end
+  end
+    
   def format_number(record)
     number_with_precision(record, :strip_insignificant_zeros => true)
   end

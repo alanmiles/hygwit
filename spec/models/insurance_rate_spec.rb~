@@ -104,7 +104,8 @@ describe InsuranceRate do
   describe "when insurance_code_id, country_id, rebate, source_employee, effective are duplicates but not threshold_id" do
     before { @country.insurance_rates.create(insurance_code_id: @code_1.id, threshold_id: @setting_2.id, 
     										ceiling_id: @setting_3.id, contribution: 20, effective: Date.today - 60.days) }
-  
+    it { should be_valid }
+  end
   
   describe "when threshold_id is nil" do
     before { @rate.threshold_id = nil }
@@ -173,5 +174,25 @@ describe InsuranceRate do
     	it { should be_valid }
     
     end
+  end
+  
+  describe "when the threshold_id is deleted in insurance_settings" do  
+    
+    before do
+      @id = @setting_1.id
+      @setting_1.destroy
+    end
+    @records = InsuranceRate.where("threshold_id =?", @id).count
+    @records.should == 0
+  end
+  
+  describe "when the ceiling_id is deleted in insurance_settings" do  
+    
+    before do
+      @id = @setting_2.id
+      @setting_2.destroy
+    end 
+    @records = InsuranceRate.where("ceiling_id =?", @id).count
+    @records.should == 0
   end
 end

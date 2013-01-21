@@ -6,7 +6,7 @@ class InsuranceHistorySettingsController < ApplicationController
   def index
     @country = Country.find(params[:country_id])
     check_permitted
-    @settings = @country.insurance_settings.order("insurance_settings.shortcode, insurance_settings.effective_date DESC")
+    @settings = @country.insurance_settings.order("insurance_settings.effective_date DESC, insurance_settings.shortcode")
     session[:time_focus] = "history"
     @recent_adds = InsuranceSetting.total_recent(@country)
     @recent_updates = InsuranceSetting.total_updated(@country)

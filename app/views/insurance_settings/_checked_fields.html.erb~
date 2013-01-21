@@ -1,0 +1,44 @@
+<div class="field line-space" style="clear:both">
+  <span class="span3 r-float"><%= date_display_long(@setting.effective_date) %></span>
+  <%= f.label :effective_date %>
+</div>
+
+<div class="field line-space">
+  <span class="span3 r-float"><%= @setting.shortcode %></span>
+  <%= f.label :shortcode, "Code" %>
+</div>
+
+<div class="field line-space" style="clear:both">
+  <span class="span3 r-float"><%= @setting.name %></span>
+  <%= f.label :name, "Description" %>
+</div>
+
+<div class="field line-space" style="clear:both">
+  <span class="span3 r-float">
+    <%= format_number(@setting.weekly_milestone) %>
+  </span>
+  <%= f.label :weekly_milestone, "Weekly threshold" %>
+</div>
+
+<div class="field line-space" style="clear:both">
+  <% if @setting.monthly_milestone? && @setting.effective_date <= Date.today %>
+    <span class="span3 r-float" id="m-mile">
+  <% else %>
+    <span class="span3 r-float">
+  <% end %>
+    <%= format_number(@setting.monthly_milestone) %>
+  </span>
+  <%= f.label :monthly_milestone, "Monthly threshold" %>
+</div>
+
+<div class="field line-space" style="clear:both">
+  <span class="span3 r-float">
+     <%= format_number(@setting.annual_milestone) %>
+  </span>
+  <%= f.label :annual_milestone, "Annual threshold" %>
+</div>
+
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>
+<%= f.hidden_field :created_by %>

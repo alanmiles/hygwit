@@ -91,6 +91,10 @@ class Country < ActiveRecord::Base
     Country.where("complete =?", false).count
   end
   
+  def home_currency
+    currency.code
+  end
+  
   def insurance_empty?
     self.insurance_codes.count == 0 || self.insurance_settings.count == 0
   end

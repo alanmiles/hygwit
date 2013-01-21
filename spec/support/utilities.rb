@@ -21,4 +21,8 @@ def sign_in(user)
   cookies[:remember_token] = user.remember_token
 end
 
+def sign_out(user)
+  cookies[:remember_token] = nil
+  #visit signin_path
+end
 

@@ -45,6 +45,3 @@ $ ->
   $('#m-mile').click ->
     alert("You should only change the milestones if you've made an entry error.  If the government has announced new milestones, add a new line to the Salary Thresholds table instead, with a new effective date.")
     
-$ ->
-  $('#cancel-warning').click ->
-    alert("You should only set a cancellation date if the government has announced that this code will no longer be used.  If the code stays in use but the salary milestones are changing, add a new line to the Salary Thresholds table instead, with a new effective date.")  

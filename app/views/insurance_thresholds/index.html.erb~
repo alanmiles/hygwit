@@ -17,7 +17,7 @@
     <h1 class="align-left">New Salary Thresholds: National Insurance</h1>
 
     <div style="padding-bottom: 10px">
-      <%= link_to "Back to current salary threshold", country_insurance_settings_path(@country), class: "btn" %>
+      <%= link_to "Back to current salary thresholds", country_insurance_settings_path(@country), class: "btn" %>
       <%= link_to "Back to main insurance menu", insurance_menu_country_path(@country), class: "btn" %>
     </div>
     <ul class="itemlist">

@@ -20,12 +20,6 @@ describe "InsurancePages" do
     @setting_2 = @country.insurance_settings.create(shortcode: "UEL", name: "Upper Earnings Limit", weekly_milestone: 2000, 
     										monthly_milestone: 8500, annual_milestone: 102000, effective_date: Date.today-130.days, checked: true,
     										created_by: 999999) 
-    @setting_cancelled_past = @country.insurance_settings.create(shortcode: "NUP", name: "Not Used Past", weekly_milestone: 150, 
-    										monthly_milestone: 625, annual_milestone: 7500, effective_date: Date.today-130.days, 
-    										cancellation_date: Date.today-30.days, checked: true)
-    @setting_cancelled_future = @country.insurance_settings.create(shortcode: "NUF", name: "Not Used Future", weekly_milestone: 250, 
-    										monthly_milestone: 1025, annual_milestone: 12300, effective_date: Date.today-130.days, 
-    										cancellation_date: Date.today + 30.days, checked: true)
     @code = @country.insurance_codes.create(insurance_code: "A", explanation: "Standard employee", checked: true)	
     @old_code	= @country.insurance_codes.create(insurance_code: "Z", explanation: "Cancelled code", 
     										cancelled: Date.today - 30, checked: true, created_by: 999999)								    																				
@@ -288,23 +282,39 @@ describe "InsurancePages" do
       
               before { visit country_insurance_settings_path(@country) }
         
-              it { should_not have_selector('.standout', text: "don't delete or edit") }
-              it { should have_selector('h1', text: @country.country) }
-              it { should have_selector('title', text: "Insurance: Current Salary Thresholds") }
-              it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
-              it { should_not have_link('edit', href: edit_insurance_setting_path(@setting)) }
-              it { should_not have_link('del', href: insurance_setting_path(@setting)) }
-              it { should_not have_selector('#recent-adds') }
-              it { should_not have_selector('.recent', text: "*") }
-              it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
-              it { should_not have_selector('.instruction', text: "in our video tutorial") } 
-              it { should have_selector('.instruction', text: "You're not registered as an administrator") }
-              it { should have_selector('.itemlist', text: "464") }
-              it { should have_selector('.itemlist', text: "8500") }
-              it { should_not have_selector('.itemlist', text: "425") }  #historical threshold @setting_old
-              it { should_not have_selector('.itemlist', text: "575") }  #future threshold @setting_new 
-              it { should_not have_selector('.itemlist', text: "Not Used Past") }
-              it { should have_selector('.itemlist', text: "Not Used Future") }
+              describe "display standard settings" do
+                it { should have_selector('h1', text: @country.country) }
+                it { should have_selector('title', text: "Insurance: Current Salary Thresholds") }
+                it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
+                it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
+                it { should have_selector("li##{@setting.id}", text: @setting.shortcode) }
+                it { should have_selector("li##{@setting.id}", value: @setting.weekly_milestone) }
+                it { should have_selector("li##{@setting.id}", value: @setting.monthly_milestone) }
+                it { should have_selector("li##{@setting.id}", value: @setting.annual_milestone) }
+                it { should have_selector("li##{@setting.id}", value: @setting.effective_date) }
+                it { should_not have_selector("li##{@setting_old.id}", value: @setting_old.weekly_milestone) }
+                it { should_not have_selector("li##{@setting_new.id}", value: @setting_new.weekly_milestone) }
+                it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
+                it { should have_link('View full history instead', href: country_insurance_history_settings_path(@country)) }
+                it { should have_link('View future settings', href: country_insurance_future_settings_path(@country)) }
+              end
+              
+              describe "display settings for this user/context" do
+              
+                it { should_not have_selector('.standout', text: "don't delete or edit") }
+                it { should_not have_link('edit', href: edit_insurance_setting_path(@setting)) }
+                it { should_not have_link('del', href: insurance_setting_path(@setting)) }
+                it { should_not have_selector('#recent-adds') }
+                it { should_not have_selector('#recent-add-checks') }
+                it { should_not have_selector('#recent-update-checks') }
+                it { should_not have_selector('.recent', text: "*") }
+                it { should_not have_selector('.instruction', text: "in our video tutorial") } 
+                it { should have_selector('.instruction', text: "You're not registered as an administrator") }         
+                it { should_not have_selector('.itemlist', text: "Not Used Past") }
+                pending("should have_selector('.itemlist', text: 'Not Used Future') }")
+                it { should_not have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
+                it { should_not have_link('Update all current settings', href: new_country_insurance_threshold_path(@country)) }
+              end
             end
         
             describe "when trying to access the 'new' page" do
@@ -356,6 +366,10 @@ describe "InsurancePages" do
               it { should have_selector('h1', text: @country.country) }
               it { should have_selector('title', text: "Insurance: Future Salary Thresholds") }
               it { should have_selector('h1', text: 'Insurance: Future Salary Thresholds') }
+              it { should have_selector("li##{@setting_new.id}", text: @setting_new.shortcode) }
+              it { should_not have_selector("li##{@setting.id}", value: @setting.weekly_milestone) }
+              it { should_not have_selector("li##{@setting_old.id}", value: @setting_old.weekly_milestone) }
+              it { should have_selector("li##{@setting_new.id}", value: @setting_new.weekly_milestone) }
               it { should_not have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
               it { should_not have_link('del', href: insurance_setting_path(@setting_new)) }
               it { should_not have_selector('#recent-adds') }
@@ -363,9 +377,12 @@ describe "InsurancePages" do
               it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
               it { should_not have_selector('.instruction', text: "in our video tutorial") } 
               it { should have_selector('.instruction', text: "You're not registered as an administrator") }
-              it { should have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
-              it { should_not have_selector('.itemlist', text: @setting.effective_date.strftime('%d %b %y')) }
-              it { should_not have_selector('.itemlist', text: @setting_old.effective_date.strftime('%d %b %y')) } 
+              it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
+              it { should have_link('View settings history', href: country_insurance_history_settings_path(@country)) }
+              it { should have_link('View current settings instead', href: country_insurance_settings_path(@country)) }
+              it { should_not have_link('View future settings', href: country_insurance_future_settings_path(@country)) }
+              it { should_not have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
+              it { should_not have_link('Update all current settings', href: new_country_insurance_threshold_path(@country)) }
             end           
           
           end
@@ -387,9 +404,15 @@ describe "InsurancePages" do
               it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
               it { should_not have_selector('.instruction', text: "in our video tutorial") } 
               it { should have_selector('.instruction', text: "You're not registered as an administrator") }
-              it { should have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
-              it { should have_selector('.itemlist', text: @setting.effective_date.strftime('%d %b %y')) }
-              it { should have_selector('.itemlist', text: @setting_old.effective_date.strftime('%d %b %y')) } 
+              it { should have_selector("li##{@setting_new.id}", text: @setting_new.effective_date.strftime('%d %b %y')) }
+              it { should have_selector("li##{@setting.id}", text: @setting.effective_date.strftime('%d %b %y')) }
+              it { should have_selector("li##{@setting_old.id}", text: @setting_old.effective_date.strftime('%d %b %y')) } 
+              it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
+              it { should_not have_link('View settings history', href: country_insurance_history_settings_path(@country)) }
+              it { should have_link('View current settings instead', href: country_insurance_settings_path(@country)) }
+              it { should_not have_link('View future settings', href: country_insurance_future_settings_path(@country)) }
+              it { should_not have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
+              it { should_not have_link('Update all current settings', href: new_country_insurance_threshold_path(@country)) }
             end
           end
         end
@@ -491,7 +514,12 @@ describe "InsurancePages" do
     
     describe "when user is a country admin" do
     
-      before { CountryAdmin.create(user_id: @admin.id, country_id: @country.id) }
+      before do
+        CountryAdmin.create(user_id: @admin.id, country_id: @country.id)
+        @setting_cancelled_past = @country.insurance_settings.create(shortcode: "NUP", name: "Not Used Past", weekly_milestone: 150, 
+    										monthly_milestone: 625, annual_milestone: 7500, effective_date: Date.today-130.days, 
+    										cancellation_date: Date.today-30.days, checked: true)
+      end
       
       describe "Insurance Settings controller" do
     
@@ -511,9 +539,11 @@ describe "InsurancePages" do
             it { should have_selector('title', text: 'New Salary Threshold') }
             it { should have_selector('h1', text: 'New Salary Threshold') }
             it { should have_selector('h1', text: @country.country) }
-            it { should have_link('Salary thresholds table', href: country_insurance_settings_path(@country)) }
+            it { should have_link('Current thresholds list', href: country_insurance_settings_path(@country)) }
             it { should have_link("Main insurance menu", href: insurance_menu_country_path(@country)) }
             it { should_not have_selector('#insurance_setting_cancellation_date') }
+            it { should_not have_selector('#update-date', text: "Added") }
+            it { should_not have_selector('input#insurance_setting_checked', value: 1) }
             it { should have_selector('.line-space', text: "No blanks") }
             it { should have_selector('#insurance_setting_created_by', type: 'hidden', value: @admin.id) } 
             it { should have_selector('#insurance_setting_updated_by', type: 'hidden', value: @admin.id) }
@@ -621,63 +651,82 @@ describe "InsurancePages" do
             end
           end
           
-          describe "Insurance Settings table (index - salary thresholds) for country" do
+          describe "current Insurance Settings table (index - salary thresholds) for country" do
       
-            before { visit country_insurance_settings_path(@country) }
+            describe "all settings checked" do
+            
+              before { visit country_insurance_settings_path(@country) }
         
-            it { should have_selector('h1', text: @country.country) }
-            it { should have_selector('title', text: "Insurance: Current Salary Thresholds") }
-            it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
-            it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
-            it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
-            it { should have_link('edit', href: edit_insurance_setting_path(@setting)) }
-            it { should have_link('del', href: insurance_setting_path(@setting)) }
-            it { should have_selector('#recent-adds') }
-            it { should have_selector('.recent', text: "*") }
-            it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
-            it { should have_selector('.instruction', text: "in our video tutorial") } 
-            it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
-            it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
-            it { should have_selector('.standout', text: "don't delete or edit") }
-            it { should_not have_selector('.itemlist', text: "Not Used Past") }
-            it { should have_selector('.itemlist', text: "Not Used Future") }
-            it { should_not have_selector('#recent-add-checks') }
-            it { should_not have_selector('.recent', text: "+") }
-            it { should have_selector('#change-note', text: "Changes are best seen") }
-            it { should_not have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
-            it { should have_selector('.itemlist', text: @setting.effective_date.strftime('%d %b %y')) }
-            it { should_not have_selector('.itemlist', text: @setting_old.effective_date.strftime('%d %b %y')) } 
-        
-            describe "moving to the insurance settings edit link in the correct country" do
-              before { click_link 'edit' }
-          
-              it { should have_selector('title', text: "Edit Salary Threshold") }
               it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('title', text: "Insurance: Current Salary Thresholds") }
+              it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
+              it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
+              it { should have_link('cancel', href: edit_insurance_setting_path(@setting)) }
+              it { should_not have_link('del', href: insurance_setting_path(@setting)) }
+              it { should have_selector('#recent-adds') }
+              it { should have_selector('.recent', text: "*") }
+              it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
+              it { should have_selector('.instruction', text: "in our video tutorial") } 
+              it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
+              it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
+              it { should_not have_selector('.itemlist', text: "Not Used Past") }
+              pending("it { should have_selector('.itemlist', text: 'Not Used Future') }")
+              it { should_not have_selector('#recent-add-checks') }
+              it { should_not have_selector('.recent', text: "+") }
+              it { should have_selector('#change-note', text: "Changes are best seen") }
+              it { should_not have_selector("li##{@setting_new.id}", text: @setting_new.effective_date.strftime('%d %b %y')) }
+              it { should have_selector("li##{@setting.id}", text: @setting.effective_date.strftime('%d %b %y')) }
+              it { should_not have_selector("li##{@setting_old.id}", text: @setting_old.effective_date.strftime('%d %b %y')) } 
+              it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
+              it { should have_link('Update all current settings', href: new_country_insurance_threshold_path(@country)) }
         
+              describe "moving to the insurance settings 'cancel' link in the correct country" do
+                before { click_link 'cancel' }
+          
+                it { should have_selector('title', text: "Cancel Salary Threshold Code") }
+                it { should have_selector('h1', text: @country.country) }
+        
+              end
             end
+            
+            describe "with an unchecked setting" do 
+            
+              before do
+                @setting.toggle!(:checked)
+                visit country_insurance_settings_path(@country)
+              end
+              
+              it { should have_link('edit', href: edit_insurance_setting_path(@setting)) }
+              it { should have_link('del', href: insurance_setting_path(@setting)) }
+              
+              describe "using the delete button" do
         
-            describe "deleting a salary thresholds line" do
-        
-              it "should be from the correct model" do
-                expect { click_link('del') }.to change(InsuranceSetting, :count).by(-1)            
+                it "should remove the record" do
+                  expect { click_link('del') }.to change(InsuranceSetting, :count).by(-1)            
+                end
               end
             end
           end
           
-          describe "editing a salary thresholds line" do
+          describe "editing a salary thresholds line (unchecked records only)" do
           
-            let(:setting) { @setting_2 }
-            before { visit edit_insurance_setting_path(setting) }
+            before do
+              @setting_2.toggle!(:checked)
+              visit edit_insurance_setting_path(@setting_2)
+            end
         
             it { should have_selector('h1', text: @country.country) }
-            it { should have_selector('title', text: "Edit Salary Threshold") }
-            it { should have_selector('h1', text: 'Edit Salary Threshold') }
-            it { should have_link('Salary thresholds table', href: country_insurance_settings_path(@country)) }
+            it { should have_selector('title', text: "Edit Salary Thresholds") }
+            it { should have_selector('h1', text: 'Edit Salary Thresholds') }
+            it { should have_link('Current thresholds list', href: country_insurance_settings_path(@country)) }
             it { should have_link('Main insurance menu', href: insurance_menu_country_path(@country)) } 
-            it { should have_selector('#insurance_setting_cancellation_date') }
-            it { should_not have_selector('.line-space', text: "No blanks") }
+            it { should have_selector('#insurance_setting_shortcode') }
+            it { should have_selector('#insurance_setting_name') }
+            it { should have_selector('#insurance_setting_weekly_milestone') }
+            it { should_not have_selector('#insurance_setting_cancellation_date') }
             it { should have_selector('#insurance_setting_created_by', type: 'hidden', value: 999999) }
             it { should have_selector('#insurance_setting_updated_by', type: 'hidden', value: @admin.id) }
+            it { should_not have_selector('#update-date', text: "Added") }
       
             describe "updating with valid data" do
           
@@ -693,66 +742,147 @@ describe "InsurancePages" do
               it { should have_selector('title', text: "Insurance: Current Salary Thresholds") }
               it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
               it { have_selector('#change-note', "Changes are best seen") }
-              pending("next test not working because created_at date makes this a new record.  Fine in practice")
+              pending("next lines don't work because only recently entered - * takes precedence over ^")
               #it { should have_selector('.updates', text: "^") }
-              it { should_not have_selector('.updates', text: "<") }
-              specify { setting.reload.name.should == "Upper Accrual Limit" }    
-              specify { setting.reload.checked.should == false } 
-              specify { setting.reload.updated_by.should == @admin.id }    
+              #it { should_not have_selector('.updates', text: "<") }
+              specify { @setting_2.reload.name.should == "Upper Accrual Limit" }    
+              specify { @setting_2.reload.checked.should == false } 
+              specify { @setting_2.reload.updated_by.should == @admin.id }    
             end
             
-            describe "cancelling a salary threshold category" do
-            
-              describe "cancellation date has already passed" do
-              
-                before do
-                  fill_in "Cancellation date", with: (Date.today - 1.day)
-                  click_button "Save changes"
-                end
-                
-                it { should have_selector('h1', text: @country.country) }
-                it { should have_selector('h1', text: 'Insurance: Salary Threshold History') }
-                it { should have_selector('div.alert.alert-success', text: "It will still be displayed in the History list") }
-                it { should have_selector('.itemlist', text: "CANCELLED #{date_display(Date.today - 1.day)}") }
-              end
-              
-              describe "cancellation date is in the future" do
-                
-                before do
-                  fill_in "Cancellation date", with: (Date.today + 10.days)
-                  click_button "Save changes"
-                end
-                
-                it { should have_selector('h1', text: @country.country) }
-                it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
-                it { should have_selector('div.alert.alert-success', text: "but for a date in the future") }
-                it { should have_selector('.itemlist', text: "CANCELLED from #{date_display(Date.today + 10.days)}") }
-              end
-            
-            end
-        
             describe "updating with invalid data" do
-        
+            
               before do
-                fill_in "Code", with: " "
+                fill_in "Monthly threshold", with: nil
                 click_button "Save changes"
               end
+              
+              it { should have_selector('title', text: "Edit Salary Thresholds") } 
+              specify { @setting_2.reload.name.should == "Upper Earnings Limit" }
+              specify { @setting_2.reload.monthly_milestone.should == 8500 } 
+            end
           
+          end
+          
+          describe "cancelling a salary thresholds line (checked records only)" do
+            
+            before { visit edit_insurance_setting_path(@setting) }
+            
+            it { should have_selector('h1', text: @country.country) }
+            it { should have_selector('title', text: "Cancel Salary Threshold Code") }
+            it { should have_selector('h1', text: 'Cancel Salary Threshold Code') }
+            it { should have_link('Current thresholds list', href: country_insurance_settings_path(@country)) }
+            it { should have_link('Main insurance menu', href: insurance_menu_country_path(@country)) } 
+            it { should_not have_selector('#insurance_setting_shortcode') }
+            it { should_not have_selector('#insurance_setting_name') }
+            it { should_not have_selector('#insurance_setting_weekly_milestone') }
+            it { should have_selector('#insurance_setting_cancellation_date') }
+            it { should have_selector('#insurance_setting_updated_by', type: 'hidden', value: @admin.id) }
+            it { should_not have_selector("insurance_setting_cancellation_change") }
+            it { should_not have_selector('#update-date', text: "Added") }
+              
+            describe "cancellation date has already passed" do
+              
+              before do
+                fill_in "Cancellation date", with: (Date.today - 1.day)
+                click_button "Save changes"
+              end
+                
               it { should have_selector('h1', text: @country.country) }
-              it { should have_selector('title', text: 'Edit Salary Threshold') }
-              it { should have_content('error') }
-              specify { setting.reload.name.should_not == 0 }
-            end   
+              it { should have_selector('h1', text: 'Insurance: Salary Threshold History') }
+              it { should have_selector('div.alert.alert-success', text: "It will still be displayed in the History list") }
+              it { should have_selector("li##{@setting.id}", text: "Cancelled #{date_display(Date.today - 1.day)}") }
+              it { should_not have_selector("li##{@setting_old.id}", text: "Cancelled #{date_display(Date.today - 1.day)}") }
+              it { should have_selector("div.alert.alert-success", text: "Don't forget to reset National Insurance Rates") }
+              it { should have_selector("div.alert.alert-success", text: "'#{@setting.shortcode}' category") }
+              it { should have_selector("div.alert.alert-success", text: "from #{(Date.today - 1.day).strftime('%d %b %Y')}") }
+              it { should have_link("restore", href: edit_insurance_setting_path(@setting)) }
+              it { should_not have_link("restore", href: edit_insurance_setting_path(@setting_old)) }
+              specify { @setting_old.reload.cancellation_date.should == Date.today - 1.day }
+              #cancellation change for @setting_old is marked, but only most recent cancellation is shown in history.  
+              
+              
+              describe "removal of cancelled setting from current list" do  
+              
+                before { visit country_insurance_settings_path(@country) }
+                it { should_not have_selector("li##{@setting.id}", text: @setting.effective_date.strftime('%d %b %y')) }
+              end
+    
+              describe "superuser is alerted of cancellation change" do
+              
+                before do
+                  #sign_out @admin
+                  @superuser = FactoryGirl.create(:superuser, name: "S User", email: "suser@example.com")
+                  sign_in @superuser
+                  visit country_insurance_history_settings_path(@country)
+                end
+              
+                it { should have_selector("li##{@setting.id}", text: ">") }
+              end
+              
+              describe "restoring a cancelled setting" do
+              
+                before do
+                  @setting.update_attributes(cancellation_date: Date.today - 1)
+                  @setting_old.update_attributes(cancellation_date: Date.today - 1)
+                  
+                end
+                
+                describe "Edit Form display" do
+                
+                  before { visit edit_insurance_setting_path(@setting) }
+                 
+                  it { should have_selector('h1', text: "Restore Salary Threshold Code") }
+                  it { should have_selector('.instruction', text: "Looks like someone's made a mistake.") }
+                  it { should_not have_selector("insurance_setting_cancellation_change") }
+                 
+                  describe "cancelling the cancellation" do
+                  
+                    before do
+                      fill_in "Cancellation date", with: nil
+                      click_button "Save changes"
+                    end
+                    
+                    it { should have_selector('h1', text: @country.country) }
+                    it { should have_selector('h1', text: 'Insurance: Salary Threshold History') }
+                    it { should have_selector('div.alert.alert-success', text: "You've just re-activated") }
+                    it { should_not have_selector("li##{@setting.id}", text: "Cancelled #{date_display(Date.today - 1.day)}") }
+                    it { should_not have_selector("li##{@setting_old.id}", text: "Cancelled #{date_display(Date.today - 1.day)}") }
+                    it { should have_selector("div.alert.alert-success", text: "the setting for '#{@setting.shortcode}'") }
+                    it { should have_selector("div.alert.alert-success", text: "of #{@setting.effective_date.to_date.strftime('%d %b %Y')}") }
+                    it { should have_link("cancel", href: edit_insurance_setting_path(@setting)) }
+                    it { should_not have_link("cancel", href: edit_insurance_setting_path(@setting_old)) }
+                    specify { @setting_old.reload.cancellation_date.should == nil } 
+                    
+                  end
+                end
+              end
+            end
+              
+            describe "cancellation date is in the future" do
+                
+              before do
+                fill_in "Cancellation date", with: (Date.today + 10.days)
+                click_button "Save changes"
+              end
+                
+              it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
+              it { should have_selector('div.alert.alert-success', text: "but for a date in the future") }
+              it { should have_selector('div.alert.alert-success', text: "Don't forget to reset National Insurance Rates") }
+              it { should have_selector('.itemlist', text: "Cancelled from #{date_display(Date.today + 10.days)}") }
+            end  
+            
           end
           
           describe "editing a threshold setting that has already been cancelled" do
-        
+            
             let(:setting) { @setting_cancelled_past }
             before { visit edit_insurance_setting_path(setting) }
             
             it { should have_link('Main insurance menu', href: insurance_menu_country_path(@country)) } 
             it { should have_selector('#insurance_setting_cancellation_date') }
-            it { should_not have_selector('.line-space', text: "No blanks") }
+            it { should_not have_selector("insurance_setting_cancellation_change") }
         
             describe "cancel the cancellation date" do        
               
@@ -762,9 +892,24 @@ describe "InsurancePages" do
               end
                 
               it { should have_selector('h1', text: @country.country) }
-              it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
+              it { should have_selector('h1', text: 'Insurance: Salary Threshold History') }
               it { should have_selector('.itemlist', text: setting.shortcode) }
-              it { should_not have_selector('.itemlist', text: "CANCELLED #{date_display(Date.today - 30.days)}") }
+              it { should_not have_selector('.itemlist', text: "Cancelled #{date_display(Date.today - 30.days)}") }
+            end
+          
+            describe "changing the cancellation date after the cancellation has already been accepted" do
+          
+              before do
+                fill_in "Cancellation date", with: Date.today + 2.days
+                click_button "Save changes"
+              end
+              
+              it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
+              it { should have_selector("li##{@setting_cancelled_past.id}", text: setting.shortcode) }
+              it { should have_selector("li##{@setting_cancelled_past.id}", text: "Cancelled from #{date_display(Date.today + 2.days)}") }
+              it { should_not have_link("edit", href: edit_insurance_setting_path(@setting_cancelled_past)) }
+              it { should have_link("restore", href: edit_insurance_setting_path(@setting_cancelled_past)) }
             end
           end
           
@@ -772,7 +917,8 @@ describe "InsurancePages" do
           
             before do
               @setting_new_insert = @country.insurance_settings.create(shortcode: "AEL", name: "Another Earnings Limit", 
-                    weekly_milestone: 100, monthly_milestone: 450, annual_milestone: 5400, effective_date: Date.today-60.days)
+                    weekly_milestone: 100, monthly_milestone: 450, annual_milestone: 5400, effective_date: Date.today-60.days,
+                    checked: true)
               visit edit_insurance_setting_path(@setting_new_insert)
             end
           
@@ -783,8 +929,9 @@ describe "InsurancePages" do
                 click_button "Save changes"
               end
               
+              #user is required to remove the future setting first - deliberately not automated.
               it { should have_selector('h1', text: @country.country) }
-              it { should have_selector('title', text: 'Edit Salary Threshold') }
+              it { should have_selector('title', text: 'Edit Salary Thresholds') }
               it { should have_content('error') }
             end
           end
@@ -820,7 +967,7 @@ describe "InsurancePages" do
               it { should have_selector('h1', text: 'Insurance: Future Salary Thresholds') }
               it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
               it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
-              it { should have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
+              it { should_not have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
               it { should have_link('del', href: insurance_setting_path(@setting_new)) }
               it { should have_selector('#recent-adds') }
               it { should have_selector('.recent', text: "*") }
@@ -828,14 +975,15 @@ describe "InsurancePages" do
               it { should have_selector('.instruction', text: "in our video tutorial") } 
               it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
-              it { should have_selector('.standout', text: "don't delete or edit") }
+              
               it { should_not have_selector('#recent-add-checks') }
               it { should_not have_selector('.recent', text: "+") }
               it { should have_selector('#change-note', text: "Changes are best seen") }
-              it { should have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
-              it { should_not have_selector('.itemlist', text: @setting.effective_date.strftime('%d %b %y')) }
-              it { should_not have_selector('.itemlist', text: @setting_old.effective_date.strftime('%d %b %y')) } 
-           
+              it { should have_selector("li##{@setting_new.id}", text: @setting_new.effective_date.strftime('%d %b %y')) }
+              it { should_not have_selector("li##{@setting.id}", text: @setting.effective_date.strftime('%d %b %y')) }
+              it { should_not have_selector("li##{@setting_old.id}", text: @setting_old.effective_date.strftime('%d %b %y')) } 
+              it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
+              it { should have_link('Update all current settings', href: new_country_insurance_threshold_path(@country)) }
             end
           end
           
@@ -850,21 +998,22 @@ describe "InsurancePages" do
               it { should have_selector('h1', text: 'Salary Threshold History') }
               it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
               it { should have_link('Back to main insurance menu', href: insurance_menu_country_path(@country)) }
-              it { should have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
-              it { should have_link('del', href: insurance_setting_path(@setting_old)) }
+              it { should_not have_link('edit', href: edit_insurance_setting_path(@setting_new)) }
+              it { should_not have_link('del', href: insurance_setting_path(@setting_old)) }
               it { should have_selector('#recent-adds') }
               it { should have_selector('.recent', text: "*") }
               it { should have_selector('.instruction', text: "SALARY THRESHOLDS") }
               it { should have_selector('.instruction', text: "in our video tutorial") } 
               it { should_not have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should_not have_selector('.instruction', text: "We're still looking for administrators") }
-              it { should have_selector('.standout', text: "don't delete or edit") }
+              
               it { should_not have_selector('#recent-add-checks') }
               it { should_not have_selector('.recent', text: "+") }
-              it { should have_selector('.itemlist', text: @setting_new.effective_date.strftime('%d %b %y')) }
-              it { should have_selector('.itemlist', text: @setting.effective_date.strftime('%d %b %y')) }
-              it { should have_selector('.itemlist', text: @setting_old.effective_date.strftime('%d %b %y')) } 
-            
+              it { should have_selector("li##{@setting_new.id}", text: @setting_new.effective_date.strftime('%d %b %y')) }
+              it { should have_selector("li##{@setting.id}", text: @setting.effective_date.strftime('%d %b %y')) }
+              it { should have_selector("li##{@setting_old.id}", text: @setting_old.effective_date.strftime('%d %b %y')) } 
+              it { should have_link('Add a new salary threshold', href: new_country_insurance_setting_path(@country)) }
+              it { should have_link('Update all current settings', href: new_country_insurance_threshold_path(@country)) }
             end
           end
         end
@@ -933,8 +1082,7 @@ describe "InsurancePages" do
           
         end
       end
-      
-      
+       
       describe "Insurance Codes controller" do
     
         describe "when the country's Insurance control is switched on" do 
@@ -1127,6 +1275,14 @@ describe "InsurancePages" do
   describe "when logged in as superuser" do
   
     before do
+      @setting_2.update_attributes(cancellation_date: Date.today, cancellation_change: true)
+      @cancelled_setting = @country.insurance_settings.create(shortcode: "ST", name: "Secondary Threshold", weekly_milestone: 150, 
+    				monthly_milestone: 600, annual_milestone: 7200, effective_date: Date.today-130.days, checked: true,
+    				created_by: 999999, cancellation_date: Date.today - 1.day, cancellation_change: true) 
+      @restored_setting = @country.insurance_settings.create(shortcode: "RST", name: "Restored Setting", weekly_milestone: 250, 
+    				monthly_milestone: 1000, annual_milestone: 12000, effective_date: Date.today-130.days, checked: true,
+    				created_by: 999999, cancellation_date: nil, cancellation_change: true) 
+      
       @superuser = FactoryGirl.create(:superuser, name: "S User", email: "suser@example.com")
       sign_in @superuser 
     end
@@ -1143,10 +1299,33 @@ describe "InsurancePages" do
       
       describe "Insurance Settings controller" do
         
-        describe "entering a new setting" do
+        describe "viewing the index page" do
         
+          before { visit country_insurance_settings_path(@country) }
+         
+          it { should_not have_selector("li##{@setting_2.id}") }
+          it { should_not have_selector("li##{@cancelled_setting.id}") }
+          it { should have_selector("li##{@restored_setting.id}") }
+        end
+        
+        describe "viewing the index history" do
+        
+          before { visit country_insurance_history_settings_path(@country) }
+        
+          it { should have_selector("li##{@setting_2.id}", text: ">") }
+          it { should have_selector("li##{@setting_2.id}", text: "Cancelled") }
+          it { should have_selector("li##{@cancelled_setting.id}", text: ">") } 
+          it { should have_selector("li##{@cancelled_setting.id}", text: "Cancelled") }
+          it { should have_selector("li##{@restored_setting.id}", text: ">") }  #superuser has already dealt with this
+          it { should_not have_selector("li##{@restored_setting.id}", text: "Cancelled") }
+        end
+        
+        describe "entering a new setting" do
+   
           before { visit new_country_insurance_setting_path(@country) }
           it { should have_selector('input#insurance_setting_checked', value: 1) }
+          it { should_not have_selector('#insurance_setting_cancellation_date') }
+          it { should_not have_selector('#update-date', text: "Added") }
           
           describe "automatic checking of record entered by superuser" do
             before do
@@ -1167,7 +1346,7 @@ describe "InsurancePages" do
             end
           end
         end
-        
+       
         describe "checking a new entry via Edit" do
          
           before do 
@@ -1177,6 +1356,7 @@ describe "InsurancePages" do
           
           it { should have_selector('input#insurance_setting_checked') }
           it { should have_selector('#update-date', text: "Added") }
+          it { should_not have_selector('#insurance_setting_cancellation_change') }
           
           describe "checking the new entry in the index" do
            
@@ -1199,6 +1379,24 @@ describe "InsurancePages" do
             specify { @setting.reload.updated_by != @superuser.id }
           end
         end
+      end
+      
+      describe "checking a new entry when cancellation status has changed" do
+        
+        describe "when setting has just been cancelled" do
+        
+          before { visit edit_insurance_setting_path(@cancelled_setting) }
+          
+          it { should have_selector("#insurance_setting_cancellation_change") }
+        end
+        
+        describe "when setting has just been restored" do
+        
+          before { visit edit_insurance_setting_path(@restored_setting) }
+          
+          it { should have_selector("#insurance_setting_cancellation_change") }
+        end
+        
       end
       
       describe "Insurance Codes controller" do

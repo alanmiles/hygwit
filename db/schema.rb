@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121214063907) do
+ActiveRecord::Schema.define(:version => 20130114115744) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -225,12 +225,13 @@ ActiveRecord::Schema.define(:version => 20121214063907) do
     t.decimal  "monthly_milestone"
     t.decimal  "annual_milestone"
     t.date     "effective_date"
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.date     "cancellation_date"
-    t.boolean  "checked",           :default => false
-    t.integer  "updated_by",        :default => 1
-    t.integer  "created_by",        :default => 1
+    t.boolean  "checked",             :default => false
+    t.integer  "updated_by",          :default => 1
+    t.integer  "created_by",          :default => 1
+    t.boolean  "cancellation_change", :default => false
   end
 
   create_table "jobfamilies", :force => true do |t|

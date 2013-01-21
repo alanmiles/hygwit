@@ -8,7 +8,7 @@ class InsuranceThresholdsController < ApplicationController
     else
       @apply_date = session[:insurance_date] 
     end
-    @settings = @country.insurance_settings.snapshot_list(@apply_date)
+    @settings = @country.insurance_settings.where("effective_date =?", @apply_date)
   end
   
   def new
@@ -59,8 +59,9 @@ class InsuranceThresholdsController < ApplicationController
         end
       end   
         
-      flash[:success] = "This is a list of the new salary thresholds for insurance 
-         starting #{@eff_date.to_date.strftime("%d %b %Y")}. Complete the update by adjusting the threshold values."
+      flash[:success] = "A new set of National Insurance salary thresholds has been successfully created -  
+         starting #{@eff_date.to_date.strftime("%d %b %Y")}. But you now need to update each of the threshold settings to
+         their new values."
       redirect_to country_insurance_thresholds_path(@country)         
     end
   end

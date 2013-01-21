@@ -10,8 +10,8 @@ class InsuranceEmployerHistoryRatesController < ApplicationController
     @rates = @country.insurance_rates.history_list(@selection)
     @page_title = "Insurance Rate History - Employers"
     @list_type = "is the historical list of rates for employers"
-    session[:group_status] = "employer"
-    session[:time_status] = "past" 
+    session[:group_focus] = "employer"
+    session[:time_focus] = "past" 
     @recent_adds = InsuranceRate.total_recent(@country)
     @recent_updates = InsuranceRate.total_updated(@country)
     @recent_add_checks = InsuranceRate.recent_add_checks(@country)

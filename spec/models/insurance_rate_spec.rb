@@ -175,4 +175,24 @@ describe InsuranceRate do
     
     end
   end
+  
+  describe "rate should be auto-deleted when the threshold_id is deleted in insurance_settings" do  
+    
+    before do
+      @id = @setting_1.id
+      @setting_1.destroy
+    end
+    @records = InsuranceRate.where("threshold_id =?", @id).count
+    @records.should == 0
+  end
+  
+  describe "rate should be auto-deleted when the ceiling_id is deleted in insurance_settings" do  
+    
+    before do
+      @id = @setting_2.id
+      @setting_2.destroy
+    end 
+    @records = InsuranceRate.where("ceiling_id =?", @id).count
+    @records.should == 0
+  end
 end

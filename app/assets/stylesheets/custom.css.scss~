@@ -207,6 +207,10 @@ select {
   color: #CC0000;
 }
 
+.reduced {
+  font-size: 75%;
+}
+
 .faded {
   color: $grayLight;
 }

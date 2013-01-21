@@ -7,13 +7,13 @@ class InsuranceSetsController < ApplicationController
     @country = Country.find(params[:country_id])
     ##check_permitted
     session[:group_focus] = "employee"
-    #@selection = @country.insurance_rates.where("source_employee = ? and effective = ?", true, session[:insurance_date])
+    #@selection = @country.insurance_rates.where("source_employee = ?", true)
     if session[:insurance_date] == nil
       @apply_date = Date.today
     else
       @apply_date = session[:insurance_date] 
     end
-    @rates = @country.insurance_rates.where("source_employee =? and effective =?", true, @apply_date)
+    @rates = InsuranceRate.active_list(@country, true, @apply_date)
     @page_title = "New National Insurance Rates Set - Employees"
     @list_type = "are the new rates for employees"
     @focus = "employee"
@@ -49,6 +49,7 @@ class InsuranceSetsController < ApplicationController
       session[:insurance_date] = @eff_date
       @seq = 0
       @sources = [true, false]
+      @rebates = [false, true]
       #collect codes at effective date
       @codes = @country.insurance_codes.on_active_list(@eff_date)
       @codes.each do |code|
@@ -57,34 +58,38 @@ class InsuranceSetsController < ApplicationController
         @settings.each do |setting|
           @ceiling = @country.insurance_settings.auto_ceiling(@eff_date, setting.id)
           @sources.each do |source|
-            #don't overwrite any existing rates with the same date
-            unless @country.insurance_rates.duplicate_exists?(code.id, setting.id, source, false, @eff_date) 
-              @country.insurance_rates.create(insurance_code_id: code.id, source_employee: source, threshold_id: setting.id,
-        					ceiling_id: @ceiling, contribution: 3.33, created_by: current_user.id, updated_by: current_user.id,
-        					effective: @eff_date)
+            @rebates.each do |rebate|
+            #find the equivalent rate then the value in @old_rates
+              if InsuranceRate.previous_contribution(@country, code.insurance_code, setting.shortcode, source, rebate, @eff_date) == nil
+                @previous = nil
+              else
+                @previous = InsuranceRate.previous_contribution(@country, code.insurance_code, setting.shortcode, source, rebate, @eff_date)
+                @old_cont = @previous.contribution
+                @old_percent = @previous.percent
+              end
+              
+              #don't overwrite any existing rates with the same date
+              unless @country.insurance_rates.duplicate_exists?(code.id, setting.id, source, rebate, @eff_date) 
+                unless @previous == nil
+                  @country.insurance_rates.create(insurance_code_id: code.id, source_employee: source, threshold_id: setting.id,
+        					  ceiling_id: @ceiling, contribution: @old_cont, percent: @old_percent, created_by: current_user.id, 
+        					  updated_by: current_user.id, rebate: rebate, effective: @eff_date)
+        			  end
+        			end
             end
           end
         end
       end
-      #add rebates in current list
-      @selection = @country.insurance_rates
-      if InsuranceRate.has_rebates?(@country, @selection, Date.today)
-        @rbts = InsuranceRate.list_rebates(@country, @selection, Date.today)    
-        @rbts.each do |rbt|
-          #don't overwrite existing rebates with the same date
-          unless @country.insurance_rates.duplicate_exists?(rbt.insurance_code_id, 
-                   rbt.threshold_id, rbt.source_employee, true, @eff_date)
-            @country.insurance_rates.create(insurance_code_id: rbt.insurance_code_id, source_employee: rbt.source_employee, 
-                  threshold_id: rbt.threshold_id, ceiling_id: rbt.ceiling_id, contribution: 1.33, percent: rbt.percent, 
-                  created_by: current_user.id, updated_by: current_user.id, effective: @eff_date, rebate: true)      
-          end
-        end 
-      end
       
-      flash[:success] = "These is the National Insurance table for #{@eff_date.to_date.strftime("%d %b %Y")}.  
-         Now complete the table by updating the contribution rates, for both employees and employers"
-      redirect_to country_insurance_sets_path(@country)
-       
+      if InsuranceRate.active_list(@country, true, @eff_date).count == 0
+        flash[:notice] = "No new rates can be created for #{@eff_date.to_date.strftime("%d %b %Y")} - probably 
+          because no Insurance thresholds have been set for the date.  Please try again with a different date."
+        redirect_to new_country_insurance_set_path(@country)
+      else
+        flash[:success] = "This is the National Insurance table for #{@eff_date.to_date.strftime("%d %b %Y")}.  
+          Now complete the table by updating the contribution rates, if necessary, for both employees and employers"
+        redirect_to country_insurance_sets_path(@country)
+      end 
     end
   end
   
