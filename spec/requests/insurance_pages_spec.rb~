@@ -896,6 +896,21 @@ describe "InsurancePages" do
               it { should have_selector('.itemlist', text: setting.shortcode) }
               it { should_not have_selector('.itemlist', text: "Cancelled #{date_display(Date.today - 30.days)}") }
             end
+          
+            describe "changing the cancellation date after the cancellation has already been accepted" do
+          
+              before do
+                fill_in "Cancellation date", with: Date.today + 2.days
+                click_button "Save changes"
+              end
+              
+              it { should have_selector('h1', text: @country.country) }
+              it { should have_selector('h1', text: 'Insurance: Current Salary Thresholds') }
+              it { should have_selector("li##{@setting_cancelled_past.id}", text: setting.shortcode) }
+              it { should have_selector("li##{@setting_cancelled_past.id}", text: "Cancelled from #{date_display(Date.today + 2.days)}") }
+              it { should_not have_link("edit", href: edit_insurance_setting_path(@setting_cancelled_past)) }
+              it { should have_link("restore", href: edit_insurance_setting_path(@setting_cancelled_past)) }
+            end
           end
           
           describe "trying to set a cancellation date when a future setting for the code already exists" do

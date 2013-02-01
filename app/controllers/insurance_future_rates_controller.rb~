@@ -6,8 +6,8 @@ class InsuranceFutureRatesController < ApplicationController
   def index
     @country = Country.find(params[:country_id])
     check_permitted
-    @selection = @country.insurance_rates.where("source_employee = ?", true)
-    @rates = @country.insurance_rates.future_list(@selection)
+    #@selection = @country.insurance_rates.where("source_employee = ?", true)
+    @rates = @country.insurance_rates.future_list(true)
     @page_title = "Future Insurance Rates - Employees"
     @list_type = "are planned future rates for employees"
     session[:group_focus] = "employee"

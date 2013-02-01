@@ -6,96 +6,114 @@ class InsuranceSettingsController < ApplicationController
   
   def index
     @country = Country.find(params[:country_id])
-    check_permitted
-    @settings = @country.insurance_settings.current_list
-    session[:time_focus] = "current"
-    @recent_adds = InsuranceSetting.total_recent(@country)
-    @recent_updates = InsuranceSetting.total_updated(@country)
-    @recent_add_checks = InsuranceSetting.recent_add_checks(@country)
-    @recent_update_checks = InsuranceSetting.recent_update_checks(@country)
-    unset_insset_cancellation
+    unless @country.insurance?
+      flash[:notice] = "National Insurance is switched off for this country"
+      redirect_to user_path(current_user)
+    else
+      @settings = @country.insurance_settings.current_list
+      session[:time_focus] = "current"
+      @recent_adds = InsuranceSetting.total_recent(@country)
+      @recent_updates = InsuranceSetting.total_updated(@country)
+      @recent_add_checks = InsuranceSetting.recent_add_checks(@country)
+      @recent_update_checks = InsuranceSetting.recent_update_checks(@country)
+      unset_insset_cancellation
+    end
   end
   
   def new
     @country = Country.find(params[:country_id]) 
-    if current_user.administrator?(@country.country)
-      check_permitted
+    unless current_user.administrator?(@country.country) || current_user.superuser?
+      country_admin_access
     else
-      country_admin_access 
+      unless @country.insurance?
+        flash[:notice] = "National Insurance is switched off for this country"
+        redirect_to user_path(current_user)
+      else
+        @setting = @country.insurance_settings.new
+        @setting.created_by = current_user.id
+        @setting.updated_by = current_user.id
+        @setting.checked = true if current_user.superuser?
+      end
     end
-    @setting = @country.insurance_settings.new
-    @setting.created_by = current_user.id
-    @setting.updated_by = current_user.id
-    @setting.checked = true if current_user.superuser?
   end
   
   def create
     @country = Country.find(params[:country_id])
-    check_permitted
-    if current_user.superuser? || current_user.administrator?(@country.country)
-      @setting = @country.insurance_settings.new(params[:insurance_setting])
-      if @setting.save
-        if @setting.effective_date > Date.today
-          flash[:success] = "You've set new salary thresholds for the code '#{@setting.shortcode}' 
-            from #{@setting.effective_date.to_date.strftime("%d %b %Y")}.  They'll be activated by HR2.0 automatically when the date 
-            arrives. The list below shows all threshold settings you've already scheduled for future activation.  
-            When you've finished adding settings, go to National Insurance rates and reset the rates from the same effective date."
-          redirect_to country_insurance_future_settings_path(@country)
-        elsif @setting.in_current_list == true
-          flash[:success] = "New salary threshold settings have been created for the '#{@setting.shortcode}' code 
-            from #{@setting.effective_date.to_date.strftime("%d %b %Y")}.  When you've finished adding settings, 
-            go to National Insurance rates and reset the rates from the same effective date."
-          redirect_to country_insurance_settings_path(@country)
-        else
-          flash[:success] = "You've added an older '#{@setting.shortcode}' record in the Salary Thresholds list from 
-            #{@setting.effective_date.to_date.strftime("%d %b %Y")}.  You'll find it in this list which shows past, present and 
-            future settings.  When you've finished adding settings, go to National Insurance rates and set rates 
-            from the same effective date."
-          redirect_to country_insurance_history_settings_path(@country)  
-        end
-      else
-        @setting.created_by = current_user.id
-        @setting.updated_by = current_user.id
-        @setting.checked = true if current_user.superuser?
-        render 'new'
-      end
+    unless current_user.administrator?(@country.country) || current_user.superuser?
+      country_admin_access
     else
-      flash[:notice] = "You must be a registered administrator for #{@country.country}."
-      redirect_to user_path(current_user) 
+      unless @country.insurance?
+        flash[:notice] = "National Insurance is switched off for this country"
+        redirect_to user_path(current_user)
+      else
+        @setting = @country.insurance_settings.new(params[:insurance_setting])
+        if @setting.save
+          if @setting.effective_date > Date.today
+            flash[:success] = "You've set new salary thresholds for the code '#{@setting.shortcode}' 
+              from #{@setting.effective_date.to_date.strftime("%d %b %Y")}.  They'll be activated by HR2.0 automatically when the date 
+              arrives. The list below shows all threshold settings you've already scheduled for future activation.  
+              When you've finished adding settings, go to National Insurance rates and reset the rates from the same effective date."
+            redirect_to country_insurance_future_settings_path(@country)
+          elsif @setting.in_current_list == true
+            flash[:success] = "New salary threshold settings have been created for the '#{@setting.shortcode}' code 
+              from #{@setting.effective_date.to_date.strftime("%d %b %Y")}.  When you've finished adding settings, 
+              go to National Insurance rates and reset the rates from the same effective date."
+            redirect_to country_insurance_settings_path(@country)
+          else
+            flash[:success] = "You've added an older '#{@setting.shortcode}' record in the Salary Thresholds list from 
+              #{@setting.effective_date.to_date.strftime("%d %b %Y")}.  You'll find it in this list which shows past, present and 
+              future settings.  When you've finished adding settings, go to National Insurance rates and set rates 
+              from the same effective date."
+            redirect_to country_insurance_history_settings_path(@country)  
+          end
+        else
+          @setting.created_by = current_user.id
+          @setting.updated_by = current_user.id
+          @setting.checked = true if current_user.superuser?
+          render 'new'
+        end
+      end
     end
   end
 
   def edit
     @setting = InsuranceSetting.find(params[:id])
     @country = Country.find(@setting.country_id)
-    if current_user.administrator?(@country.country)
-      check_permitted
+    unless current_user.administrator?(@country.country) || current_user.superuser?
+      country_admin_access
     else
-      country_admin_access 
-    end
-    set_insset_cancellation_status
-    @setting.updated_by = current_user.id unless current_user.superuser?  #superuser check doesn't change inputter reference
-    if @setting.checked?
-      if @setting.cancellation_date?
-        @header = "Restore Salary Threshold Code"
+      unless @country.insurance?
+        flash[:notice] = "National Insurance is switched off for this country"
+        redirect_to user_path(current_user)
       else
-        @header = "Cancel Salary Threshold Code"
+        set_insset_cancellation_status
+        @setting.updated_by = current_user.id unless current_user.superuser?  #superuser check doesn't change inputter reference
+        if @setting.checked?
+          if @setting.cancellation_date?
+            @header = "Restore Salary Threshold Code"
+          else
+            @header = "Cancel Salary Threshold Code"
+          end
+        else
+          @header = "Edit Salary Thresholds"
+        end
       end
-    else
-      @header = "Edit Salary Thresholds"
     end
   end
   
   def update
     @setting = InsuranceSetting.find(params[:id])
+    @old_cancellation = @setting.cancellation_date
     @country = Country.find(@setting.country_id)
-    if current_user.superuser? || current_user.administrator?(@country.country)
+    unless current_user.administrator?(@country.country) || current_user.superuser?
+      country_admin_access
+    else
       unless @country.insurance?
         flash[:notice] = "National Insurance is switched off for this country"
         redirect_to user_path(current_user)
       else
         if @setting.update_attributes(params[:insurance_setting]) 
-          if insset_cancellation_status_changed?
+          if insset_cancellation_status_changed? || @old_cancellation != @setting.cancellation_date 
             @setting.update_attributes(cancellation_change: true) unless current_user.superuser?
             InsuranceSetting.cancel_status_all(@setting.id)
             if @setting.cancellation_date?
@@ -147,16 +165,15 @@ class InsuranceSettingsController < ApplicationController
           render 'edit'
         end
       end
-    else
-      flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
-      redirect_to user_path(current_user)
     end
   end
   
   def destroy
     @setting = InsuranceSetting.find(params[:id])
     @country = Country.find(@setting.country_id)
-    if current_user.superuser? || current_user.administrator?(@country.country)
+    unless current_user.administrator?(@country.country) || current_user.superuser?
+      country_admin_access
+    else
       unless @country.insurance?
         flash[:notice] = "National Insurance is switched off for this country"
         redirect_to user_path(current_user)
@@ -173,18 +190,15 @@ class InsuranceSettingsController < ApplicationController
           redirect_to country_insurance_history_settings_path(@country)
         end
       end
-    else
-      flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
-      redirect_to user_path(current_user)
     end
   end
   
   private
     
-    def check_permitted
-      unless @country.insurance?
-        flash[:notice] = "National Insurance is switched off for this country"
-        redirect_to user_path(current_user)
-      end
-    end
+    #def check_permitted
+    #  unless @country.insurance?
+    #    flash[:notice] = "National Insurance is switched off for this country"
+    #    redirect_to user_path(current_user)
+    #  end
+    #end
 end

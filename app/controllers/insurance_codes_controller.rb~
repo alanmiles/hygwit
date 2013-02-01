@@ -16,8 +16,11 @@ class InsuranceCodesController < ApplicationController
   
   def new
     @country = Country.find(params[:country_id]) 
-    country_admin_access
-    check_permitted unless current_user.administrator?(@country.country)
+    if current_user.administrator?(@country.country)
+      check_permitted
+    else
+      country_admin_access 
+    end
     @code = @country.insurance_codes.new
     @code.created_by = current_user.id
     @code.updated_by = current_user.id

@@ -7,6 +7,7 @@ class InsuranceFutureSettingsController < ApplicationController
     @country = Country.find(params[:country_id])
     check_permitted
     @settings = @country.insurance_settings.future_list
+    session[:time_focus] = "future"
     @recent_adds = InsuranceSetting.total_recent(@country)
     @recent_updates = InsuranceSetting.total_updated(@country)
     @recent_add_checks = InsuranceSetting.recent_add_checks(@country)

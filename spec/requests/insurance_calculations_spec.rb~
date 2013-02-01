@@ -459,7 +459,7 @@ describe "InsuranceCalculations" do
               it { should_not have_selector('.instruction', text: "in our video tutorial") } 
               it { should have_selector('.instruction', text: "You're not registered as an administrator") }
               it { should have_selector('.itemlist', text: @future_rate.insurance_code.insurance_code) }
-              it { should have_selector('.itemlist', value: @future_rate.threshold.montly_milestone) }
+              it { should have_selector('.itemlist', value: @future_rate.threshold.monthly_milestone) }
               it { should have_selector('.itemlist', value: @future_rate.ceiling.monthly_milestone) }
               it { should have_selector("li##{@future_rate.id}") }
               it { should_not have_selector("li##{@employer_future_rate.id}") }

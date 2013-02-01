@@ -164,7 +164,7 @@ class InsuranceRate < ActiveRecord::Base
   def self.history_list(source_employee)
     @irates = InsuranceRate.includes(:insurance_code, :threshold)
       .where("source_employee =?", source_employee)
-      .order("insurance_rates.effective ASC, insurance_codes.insurance_code ASC, insurance_settings.monthly_milestone ASC")
+      .order("insurance_rates.effective DESC, insurance_codes.insurance_code ASC, insurance_settings.monthly_milestone ASC")
   end
   
   
