@@ -1,8 +1,0 @@
-      <% if current_user.superuser? %>
-        <div id="recent-adds">
-          <%= recent_absence_types %>
-        </div>
-        <div id="recent-updates">
-          <%= updated_absence_types %>
-        </div>
-      <% end %>

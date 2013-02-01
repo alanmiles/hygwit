@@ -1,8 +1,0 @@
-      <% @contracts.each do |contract| %>
-        <li>
-          <%= render "shared/superuser_notifications", model_name: contract %>
-          <%= contract.contract %>
-          | <%= link_to "change", edit_contract_path(contract) %>
-          <%= render "shared/admin_deletes", model_name: contract %>
-        </li>
-      <% end %>

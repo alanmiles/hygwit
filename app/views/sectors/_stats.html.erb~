@@ -1,6 +1,0 @@
-        <div id="recent-adds">
-          <%= recent_sectors %>
-        </div>
-        <div id="recent-updates">
-          <%= updated_sectors %>
-        </div>

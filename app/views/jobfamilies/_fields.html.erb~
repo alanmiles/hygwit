@@ -1,7 +1,0 @@
-<%= f.label :job_family, "Occupation" %>
-<%= f.text_field :job_family %>
-
-<%= render "shared/superuser_check", {f: f, object: f.object} %>
-
-<div style="clear:both"><%= f.hidden_field :updated_by %></div>
-<%= f.hidden_field :created_by %>

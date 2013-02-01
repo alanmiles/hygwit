@@ -1,6 +1,0 @@
-class AddCheckedToContracts < ActiveRecord::Migration
-  def change
-    add_column :contracts, :checked, :boolean
-    add_column :contracts, :updated_by, :integer
-  end
-end

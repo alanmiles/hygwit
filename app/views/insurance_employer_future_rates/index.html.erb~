@@ -1,1 +1,0 @@
-<%= render "insurance_rates/index_contents" %>

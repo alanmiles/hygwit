@@ -1,9 +1,0 @@
-        <div id="statistics">    
-          <%= link_message %>
-        </div>
-        <div id="recent-adds">
-          <%= recent_nationalities %>
-        </div>
-        <div id="recent-updates">
-          <%= updated_nationalities %>
-        </div>

@@ -1,6 +1,0 @@
-<%= f.label :quality %>
-<%= f.text_field :quality %>
-
-<%= render "shared/superuser_check", {f: f, object: f.object} %>
-
-<div style="clear:both"><%= f.hidden_field :updated_by %></div>

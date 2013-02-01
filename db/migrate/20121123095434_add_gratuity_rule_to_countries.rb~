@@ -1,6 +1,0 @@
-class AddGratuityRuleToCountries < ActiveRecord::Migration
-  def change
-    add_column :countries, :gratuity_ceiling_months, :integer
-    add_column :countries, :gratuity_ceiling_value, :integer
-  end
-end

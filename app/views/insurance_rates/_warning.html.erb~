@@ -1,6 +1,0 @@
-     <% if current_user.superuser? || current_user.administrator?(@country.country) %>
-        <div class="standout line-space">
-          WARNING: Do not delete last year's rates when the government announces changes, in case back-dated contribution 
-          adjustments are needed later.  The button above makes it easy to add a new set of rates.   
-        </div>
-      <% end %>

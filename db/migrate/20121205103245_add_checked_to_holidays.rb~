@@ -1,6 +1,0 @@
-class AddCheckedToHolidays < ActiveRecord::Migration
-  def change
-    add_column :holidays, :checked, :boolean
-    add_column :holidays, :updated_by, :integer
-  end
-end

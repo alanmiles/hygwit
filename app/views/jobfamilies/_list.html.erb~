@@ -1,8 +1,0 @@
-      <% @jobfamilies.each do |jobfamily| %>
-        <li>
-          <%= render "shared/superuser_notifications", model_name: jobfamily %>
-          <%= jobfamily.job_family %>
-          | <%= link_to "change", edit_jobfamily_path(jobfamily) %>
-          <%= render "shared/admin_deletes", model_name: jobfamily %>
-        </li>
-      <% end %>

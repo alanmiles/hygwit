@@ -1,9 +1,0 @@
-     <% @qualities.each do |quality| %>
-        <li>
-          <%= render "admin_notifications", quality: quality %>
-          
-          <%= quality.quality %>
-          | <%= link_to "details / change", quality %>
-          <%= render "shared/admin_deletes", model_name: quality %>
-        </li>
-      <% end %>

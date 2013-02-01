@@ -1,6 +1,0 @@
-class AddCheckedToGratuityFormulas < ActiveRecord::Migration
-  def change
-    add_column :gratuity_formulas, :checked, :boolean
-    add_column :gratuity_formulas, :updated_by, :integer
-  end
-end
