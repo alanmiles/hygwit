@@ -17,7 +17,6 @@ namespace :db do
     make_ranks
     make_joiner_actions
     make_leaver_actions
-    make_pay_categories
   end
 end  
 
@@ -246,19 +245,5 @@ def make_leaver_actions
       params[key] = values[i]
     end
     LeaverAction.create!(params)
-  end
-end
-
-def make_pay_categories
-  lines = File.new('public/data/pay_categories.csv').readlines
-  header = lines.shift.strip
-  keys = header.split(';')
-  lines.each do |line|
-    params = {}
-    values = line.strip.split(';')
-    keys.each_with_index do |key, i|
-      params[key] = values[i]
-    end
-    PayCategory.create!(params)
   end
 end

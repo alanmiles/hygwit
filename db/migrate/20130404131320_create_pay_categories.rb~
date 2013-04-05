@@ -1,0 +1,14 @@
+class CreatePayCategories < ActiveRecord::Migration
+  def change
+    create_table :pay_categories do |t|
+      t.string :category
+      t.string :description
+      t.boolean :on_payslip
+      t.integer :created_by
+      t.boolean :checked
+      t.integer :updated_by
+
+      t.timestamps
+    end
+  end
+end

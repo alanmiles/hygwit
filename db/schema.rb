@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130114115744) do
+ActiveRecord::Schema.define(:version => 20130404131320) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -73,6 +73,11 @@ ActiveRecord::Schema.define(:version => 20130114115744) do
     t.boolean  "reserved_jobs",                                          :default => false
     t.boolean  "disability_rules",                                       :default => false
     t.text     "disability_details"
+    t.string   "test_code"
+    t.decimal  "test_salary"
+    t.date     "test_date"
+    t.decimal  "test_result"
+    t.decimal  "test_result_2"
   end
 
   create_table "country_absences", :force => true do |t|
@@ -244,6 +249,34 @@ ActiveRecord::Schema.define(:version => 20130114115744) do
     t.integer  "updated_by", :default => 1
   end
 
+  create_table "joiner_actions", :force => true do |t|
+    t.string   "action"
+    t.integer  "contract",       :default => 2
+    t.integer  "residence",      :default => 2
+    t.integer  "nationality",    :default => 2
+    t.integer  "marital_status", :default => 2
+    t.integer  "position"
+    t.integer  "created_by",     :default => 1
+    t.boolean  "checked",        :default => false
+    t.integer  "updated_by"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
+  create_table "leaver_actions", :force => true do |t|
+    t.string   "action"
+    t.integer  "contract",       :default => 2
+    t.integer  "residence",      :default => 2
+    t.integer  "nationality",    :default => 2
+    t.integer  "marital_status", :default => 2
+    t.integer  "position"
+    t.integer  "created_by",     :default => 1
+    t.boolean  "checked",        :default => false
+    t.integer  "updated_by"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
   create_table "leaving_reasons", :force => true do |t|
     t.string   "reason"
     t.boolean  "full_benefits", :default => false
@@ -265,6 +298,17 @@ ActiveRecord::Schema.define(:version => 20130114115744) do
 
   add_index "nationalities", ["nationality"], :name => "index_nationalities_on_nationality"
 
+  create_table "pay_categories", :force => true do |t|
+    t.string   "category"
+    t.string   "description"
+    t.boolean  "on_payslip",  :default => false
+    t.integer  "created_by",  :default => 1
+    t.boolean  "checked",     :default => false
+    t.integer  "updated_by"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
+
   create_table "qualities", :force => true do |t|
     t.string   "quality"
     t.boolean  "approved",   :default => false
@@ -273,6 +317,16 @@ ActiveRecord::Schema.define(:version => 20130114115744) do
     t.datetime "updated_at",                    :null => false
     t.boolean  "checked",    :default => false
     t.integer  "updated_by", :default => 1
+  end
+
+  create_table "ranks", :force => true do |t|
+    t.string   "rank"
+    t.integer  "position"
+    t.integer  "created_by", :default => 1
+    t.boolean  "checked",    :default => false
+    t.integer  "updated_by"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   create_table "reserved_occupations", :force => true do |t|

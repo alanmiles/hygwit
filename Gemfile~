@@ -10,7 +10,7 @@ gem 'bootstrap-will_paginate', '0.0.6'
 gem 'jquery-rails', '2.0.2'
 gem 'combined_time_select', '~> 0.0.1'
 gem 'thin'
-gem 'acts_as_list', '0.2.0'
+gem 'acts_as_list'
 
 group :development, :test do
   gem 'rspec-rails', '2.11.0'

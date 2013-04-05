@@ -1,0 +1,71 @@
+# == Schema Information
+#
+# Table name: joiner_actions
+#
+#  id             :integer          not null, primary key
+#  action         :string(255)
+#  contract       :integer          default(2)
+#  residence      :integer          default(2)
+#  nationality    :integer          default(2)
+#  marital_status :integer          default(2)
+#  position       :integer
+#  created_by     :integer          default(1)
+#  checked        :boolean          default(FALSE)
+#  updated_by     :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
+
+require 'spec_helper'
+
+describe JoinerAction do
+  before do
+    @action = JoinerAction.new(action: 'Hire Employee')
+  end
+  
+  subject { @action }
+
+  it { should respond_to(:action) }
+  it { should respond_to(:contract) }
+  it { should respond_to(:residence) }
+  it { should respond_to(:nationality) }
+  it { should respond_to(:marital_status) }
+  it { should respond_to(:created_by) }
+  it { should respond_to(:updated_by) }
+  it { should respond_to(:checked) }
+  it { should be_valid }
+  
+  describe "when 'action' is not present" do
+    before { @action.action = " " }
+    it { should_not be_valid }
+  end
+  
+  describe "when 'action' is nil" do
+    before { @action.action = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when 'action' is too long" do
+    before { @action.action = "a" * 51 }
+    it { should_not be_valid }
+  end
+  
+  describe "when 'action' is a duplicate" do
+    before do
+      @duplicate = @action.dup
+      @duplicate.action.upcase
+      @duplicate.save
+    end
+    it { should_not be_valid }
+  end
+  
+  describe "when created_by is missing" do
+    before { @action.created_by = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when created_by is not an integer" do
+    before { @action.created_by = "Alan" }
+    it { should_not be_valid }
+  end  
+end

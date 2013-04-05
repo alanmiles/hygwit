@@ -1,0 +1,12 @@
+action;contract;residence;nationality;marital_status;position;checked;created_by;updated_by
+Termination/EOC/resgnation letter;2;2;2;2;1;true;1;1
+Update database;2;2;2;2;2;true;1;1
+Inform visa officer;2;2;0;2;3;true;1;1
+Cancel social insurance;2;2;2;2;4;true;1;1
+Exit interview;2;2;2;2;5;true;1;1
+Make flight bookings;0;0;0;2;6;true;1;1
+Take back company property;2;2;2;2;7;true;1;1
+Check accommodation;0;0;0;2;8;true;1;1
+Deal with loans and advances;2;2;2;2;9;true;1;1
+Arrange final settlement;2;2;2;2;10;true;1;1
+Issue service certificate;2;2;2;2;11;true;1;1

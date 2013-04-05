@@ -39,6 +39,11 @@
 #  reserved_jobs            :boolean          default(FALSE)
 #  disability_rules         :boolean          default(FALSE)
 #  disability_details       :text
+#  test_code                :string(255)
+#  test_salary              :decimal(, )
+#  test_date                :date
+#  test_result              :decimal(, )
+#  test_result_2            :decimal(, )
 #
 
 class Country < ActiveRecord::Base

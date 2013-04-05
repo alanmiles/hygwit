@@ -1,0 +1,13 @@
+category;description;on_payslip;created_by;checked;updated_by
+Basic salary;Salary only - not increments;true;1;true;1
+Salary adjustments;Alterations to the salary for 1 month only - perhaps because full salary wasn't paid last month;true;1;true1
+Fixed benefits;Additional monthly payments to the employee, for transport, housing allowance etc, which usually don't vary;true;1;true;1
+Variable benefits;Monthly payments to the employee that are likely to vary from month to month ( - but not overtime);true;1;true;1
+Fixed deductions;Deductions from salary where the amount is the same for a series of months (including loan deductions but not insurance or tax);true;1;true;1
+Variable deductions;Salary deductions that are likely to vary from month to month (eg absence deductions);true;1;true;1
+Overtime;Overtime;true;1;true;1
+Bonuses;Annual or other bonuses paid with salary;true;1;true;1
+Personal tax;Tax and insurance deductions from the employee, shown on the payslip;true;1;true;1
+Accruals;Amounts set aside by the business to account for other employment costs - recruitment, company insurance contributions, termination benefits, etc;false;1;true;1
+3rd party payments - fixed;Amounts paid monthly, not directly to the employee but to a third party on the employee's behalf - eg rent;false;1;true;1
+3rd party payments - variable;Amounts paid irregularly or where the amount varies, not directly to the employee but to a third party on the employee's behalf - eg phone bills;false;1;true;1
