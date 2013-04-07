@@ -1,0 +1,9 @@
+            <% if current_user.superuser? %>
+              | <%= link_to "del", paycat, method: :delete,
+                             data: { confirm: "Delete '#{paycat.self_ref}'?  Sure?" } %>
+            <% elsif current_user.admin? %>
+              <% if paycat.created_by == current_user.id %>
+                | <%= link_to "del", paycat, method: :delete,
+                             data: { confirm: "Delete '#{paycat.self_ref}'?  Sure?" } %>
+              <% end %>
+            <% end %>

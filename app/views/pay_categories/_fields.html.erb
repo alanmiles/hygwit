@@ -1,0 +1,16 @@
+<%= f.label :category %>
+<%= f.text_field :category %>
+
+<div class= "line-space"> 
+  <%= f.label :description %>
+  <%= f.text_area :description, rows: "3" %>
+</div>
+<div class= "line-space"> 
+  <span class="span2 r-float"><%= f.check_box :on_payslip %></span>
+  <span class="vert-down">Check if these items are shown on the payslip</span>
+</div>
+
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>
+<%= f.hidden_field :created_by %>

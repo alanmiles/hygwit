@@ -1,0 +1,19 @@
+<% provide(:title, 'Job Ranks') %>
+
+<div class="row">  
+  <aside class="span4">
+    <%= render "shared/admin_sidebar" %>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Job Ranks</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a rank", new_rank_path, class: "btn" %>
+    </div>
+    <ul id="ranks" class="itemlist">
+      <%= render "list" %>
+    </ul>
+    
+  </div>
+</div>

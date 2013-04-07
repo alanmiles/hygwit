@@ -19,4 +19,10 @@ class Rank < ActiveRecord::Base
   validates :rank, presence: true, length: { maximum: 50 },
                      uniqueness: { case_sensitive: false }
   validates :created_by, presence: true, numericality: { only_integer: true }
+  
+  default_scope order: 'ranks.position ASC'
+  
+  def self_ref
+    rank
+  end
 end

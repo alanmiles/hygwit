@@ -1,0 +1,8 @@
+      <% if current_user.superuser? %>
+        <div id="recent-adds">
+          <%= recent_pay_categories %>
+        </div>
+        <div id="recent-updates">
+          <%= updated_pay_categories %>
+        </div>
+      <% end %>

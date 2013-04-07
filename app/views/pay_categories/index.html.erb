@@ -1,0 +1,19 @@
+<% provide(:title, 'Payroll Categories') %>
+
+<div class="row">  
+  <aside class="span4">
+    <%= render "shared/admin_sidebar" %>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Payroll Categories</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a category", new_pay_category_path, class: "btn" %>
+    </div>
+    <ul id="paycats" class="itemlist" data-update-url="<%= sort_pay_categories_url %>">
+      <%= render "list" %>
+    </ul>
+    
+  </div>
+</div>

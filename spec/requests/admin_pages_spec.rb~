@@ -1417,11 +1417,11 @@ describe "AdminPages" do
       
         describe "list " do
       
-          it { should have_link('edit', href: edit_pay_category_path(@paycat)) }
-          it { should have_link('del', href: pay_category_path(@paycat_2)) }
-          it { should_not have_link('del', href: pay_category_path(@paycat_3)) }
+          it { should have_link('change', href: edit_pay_category_path(@paycat)) }
+          it { should have_link('delete', href: pay_category_path(@paycat_2)) }
+          it { should_not have_link('delete', href: pay_category_path(@paycat_3)) }
           it { should have_link('Add', href: new_pay_category_path) }
-          
+          it { should have_selector('ul.itemlist li:nth-child(3)', text: 'Temporary deduction') }
         
           describe "pay category already in use" do
         
@@ -1429,7 +1429,7 @@ describe "AdminPages" do
           end
         
           it "should be able to delete a pay_category - if not already in use" do
-            expect { click_link('del') }.to change(PayCategory, :count).by(-1)
+            expect { click_link('delete') }.to change(PayCategory, :count).by(-1)
           end
           
         end
@@ -2049,8 +2049,8 @@ describe "AdminPages" do
         it { should have_selector('#recent-update-checks') }
         it { should have_selector('.recent', text: "+") }  #all records already checked
         it { should_not have_selector('.recent', text: "*") }
-        it { should have_link('del', href: pay_category_path(@paycat_2)) }
-        it { should have_link('del', href: pay_category_path(@paycat_3)) }
+        it { should have_link('delete', href: pay_category_path(@paycat_2)) }
+        it { should have_link('delete', href: pay_category_path(@paycat_3)) }
       
         describe "entering a new pay_category" do
         

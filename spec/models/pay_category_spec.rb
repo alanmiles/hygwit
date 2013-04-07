@@ -11,6 +11,7 @@
 #  updated_by  :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  position    :integer
 #
 
 require 'spec_helper'

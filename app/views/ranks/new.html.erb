@@ -1,0 +1,12 @@
+<% provide(:title, 'New Rank') %>
+<h1>New Rank</h1>
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@rank) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "Back", ranks_path, class: "btn" if current_user.admin? %>
+    <% end %>
+  </div>
+</div>

@@ -11,6 +11,7 @@
 #  updated_by  :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  position    :integer
 #
 
 class PayCategory < ActiveRecord::Base
@@ -18,7 +19,12 @@ class PayCategory < ActiveRecord::Base
   
   validates :category, 				presence: true, length: { maximum: 50 },
                      					uniqueness: { case_sensitive: false }
-  validates :description,			length: { maximum: 254 }
+  validates :description,			length: { maximum: 254, allow_nil: true }
   validates :created_by, 			presence: true, numericality: { only_integer: true }
   
+  default_scope order: 'pay_categories.position ASC'
+  
+  def self_ref
+    category
+  end
 end

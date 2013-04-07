@@ -1,5 +1,9 @@
 Hygwit::Application.routes.draw do
 
+  get "pay_categories/index"
+
+  get "pay_categories/new"
+
   resources :users
   resources :password_resets
   resources :nationalities

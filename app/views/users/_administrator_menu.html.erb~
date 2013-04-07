@@ -3,9 +3,10 @@
   <div class="r-float">
     <li><%= link_to "Grievance Types", grievance_types_path %></li>
     <li><%= link_to "Contract Types", contracts_path %></li>
-    <li><%= link_to "Rank Analysis", "#" %></li>
+    <li><%= link_to "Job Ranks", ranks_path %></li>
     <li><%= link_to "Joiner Actions", "#" %></li>
     <li><%= link_to "Leaver Actions", "#" %></li>
+    <li><%= link_to "Payroll Categories", pay_categories_path %></li>
     <li><%= link_to "Payroll Items", "#" %></li>
     <li><%= link_to "Loan Types", "#" %></li>
     <li><%= link_to "Advance Types", "#" %></li>
@@ -21,6 +22,7 @@
     <li><%= link_to "Leaving Reasons", leaving_reasons_path %></li>
     <li><%= link_to "Absence Types", absence_types_path %></li>
     <li><%= link_to "Disciplinary Categories", disciplinary_categories_path %></li>
+    <li><%= link_to "Grievance Types", grievance_types_path %></li>
   </div>
   
 </ul>

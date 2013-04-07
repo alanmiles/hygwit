@@ -1,0 +1,20 @@
+     <li class="list-header">
+        <span class="span1">(move)</span>
+        <span class="span2">Category</span>
+        <span class="span3">Description</span>
+        <span class="span1">Payslip</span>
+     </li>
+     
+     <% @paycats.each do |paycat| %>
+        <%= content_tag_for :li, paycat do %>
+          <span class="span1">
+            <span class="handle"><%= image_tag "dragdrop.png" %></span>
+            <%= render "shared/superuser_admin_notifications", model_name: paycat %>
+          </span>
+          <span class="span2"><%= paycat.category %></span>
+          <span class="span3"><%= paycat.description %></span>
+          <span class="span1"><%= paycat.on_payslip %></span>
+          | <%= link_to "edit", edit_pay_category_path(paycat) %>
+          <%= render "admin_deletes", paycat: paycat %>
+        <% end %>
+      <% end %>

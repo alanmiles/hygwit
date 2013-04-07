@@ -1,0 +1,9 @@
+      <% @ranks.each do |rank| %>
+        <%= content_tag_for :li, rank do %>
+          <%= render "shared/superuser_admin_notifications", model_name: rank %>
+          <span class="handle">[drag]</span>
+          <%= rank.rank %>
+          | <%= link_to "change", edit_rank_path(rank) %>
+          <%= render "shared/admin_deletes", model_name: rank %>
+        <% end %>
+      <% end %>
