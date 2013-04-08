@@ -1,5 +1,13 @@
 Hygwit::Application.routes.draw do
 
+  get "leaver_actions/index"
+
+  get "leaver_actions/new"
+
+  get "joiner_actions/index"
+
+  get "joiner_actions/new"
+
   resources :users
   resources :password_resets
   resources :nationalities
@@ -41,6 +49,12 @@ Hygwit::Application.routes.draw do
     collection { post :sort }
   end
   resources :pay_categories do
+    collection { post :sort }
+  end
+  resources :joiner_actions do
+    collection { post :sort }
+  end
+  resources :leaver_actions do
     collection { post :sort }
   end
   resources :country_admins

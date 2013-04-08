@@ -15,6 +15,8 @@ describe "AdminPages" do
     @contract = Contract.create(contract: "Seconded")
     @rank = Rank.create(rank: "Executives")
     @paycat = PayCategory.create(category: "Salary", description: "Standard salary", on_payslip: true)
+    @join_action = JoinerAction.create(action: "Pass interview")
+    @leave_action = LeaverAction.create(action: "Notify department head")
   end
   
   describe "when not logged in" do
@@ -271,6 +273,72 @@ describe "AdminPages" do
       
         describe "with a DELETE request" do
           before { delete pay_category_path(@paycat) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
+    end
+    
+    
+    describe "JoinerActions controller" do
+    
+      before { visit new_joiner_action_path }
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    
+      describe "when trying to access the index" do
+    
+        before { visit joiner_actions_path }
+      
+        it "should render the sign-in path" do
+          page.should have_selector('.alert', text: 'sign in')
+          page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the joiner action data" do
+      
+        describe "with a PUT request" do
+          before { put joiner_action_path(@join_action) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete joiner_action_path(@join_action) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
+    end
+    
+    
+    describe "LeaverActions controller" do
+    
+      before { visit new_leaver_action_path }
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    
+      describe "when trying to access the index" do
+    
+        before { visit leaver_actions_path }
+      
+        it "should render the sign-in path" do
+          page.should have_selector('.alert', text: 'sign in')
+          page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the leaver action data" do
+      
+        describe "with a PUT request" do
+          before { put leaver_action_path(@leave_action) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete leaver_action_path(@leave_action) }
           specify { response.should redirect_to(root_path) }        
         end
       end
@@ -586,6 +654,84 @@ describe "AdminPages" do
     
       describe "submitting a PUT request to the PayCategories#update action" do
         before { put pay_category_path(@paycat) }
+        specify { response.should redirect_to(root_path) }
+      end
+    end
+    
+    
+    describe "JoinerActions controller" do
+    
+      describe "when trying to access the index" do
+        
+        before { visit joiner_actions_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+      end
+      
+      describe "when trying to enter a new record" do
+      
+        before { visit new_joiner_action_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+
+      end
+      
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the JoinerActions#destroy action" do
+          before { delete joiner_action_path(@join_action) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the JoinerActions#update action" do
+        before { put joiner_action_path(@join_action) }
+        specify { response.should redirect_to(root_path) }
+      end
+    end
+    
+    
+    describe "LeaverActions controller" do
+    
+      describe "when trying to access the index" do
+        
+        before { visit leaver_actions_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+      end
+      
+      describe "when trying to enter a new record" do
+      
+        before { visit new_leaver_action_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+
+      end
+      
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the LeaverActions#destroy action" do
+          before { delete leaver_action_path(@leave_action) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the LeaverActions#update action" do
+        before { put leaver_action_path(@leave_action) }
         specify { response.should redirect_to(root_path) }
       end
     end
@@ -1512,6 +1658,236 @@ describe "AdminPages" do
         end
       end 
     end
+    
+    describe "JoinerActions controller" do
+    
+      describe "index" do
+      
+        before do  
+          @join_action_2 = JoinerAction.create(action: 'Provide uniform', created_by: @admin.id)
+          @join_action_3 = JoinerAction.create(action: 'Put on payroll', created_by: 999999)
+          visit joiner_actions_path
+        end
+      
+        it { should have_selector('title', text: 'Joiner Actions') }
+        it { should have_selector('h1', text: 'Joiner Actions') }
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+      
+        describe "list " do
+      
+          it { should have_link('edit', href: edit_joiner_action_path(@join_action)) }
+          it { should have_link('del', href: joiner_action_path(@join_action_2)) }
+          it { should_not have_link('del', href: joiner_action_path(@join_action_3)) }
+          it { should have_link('Add', href: new_joiner_action_path) }
+          
+        
+          describe "joiner action already in use" do
+        
+            it "should not have 'Delete' button"
+          end
+        
+          it "should be able to delete a joiner action - if not already in use" do
+            expect { click_link('del') }.to change(JoinerAction, :count).by(-1)
+          end
+          
+        end
+      end
+    
+      describe "accessing the 'new' page" do
+    
+        before { visit new_joiner_action_path }
+      
+        it { should have_selector('title', text: 'New Joiner Action') }
+        it { should have_selector('h1',    text: 'New Joiner Action') }
+        it { should have_link('Back', href: joiner_actions_path) }
+        it { should_not have_selector('input#joiner_action_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#joiner_action_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#joiner_action_updated_by', type: 'hidden', value: @admin.id) }
+    
+        describe "creating a new joiner action" do
+      
+          before do
+            fill_in "Action",  with: "Check references"
+          end
+        
+          it "should create a joiner action" do
+            expect { click_button "Create" }.to change(JoinerAction, :count).by(1)
+          end         
+        end
+      
+        describe "creating a record that fails validation" do
+      
+          before { fill_in "Action",  with: "" }
+        
+          it "should not create a Joiner action" do
+            expect { click_button "Create" }.not_to change(JoinerAction, :count)
+            page.should have_selector('h1', text: 'New Joiner Action')
+            page.should have_content('error')
+          end  
+      
+        end
+      end
+    
+      describe "edit" do
+    
+        before do
+          @join_action_3 = JoinerAction.create(action: 'Check availability', created_by: 999999)
+          visit edit_joiner_action_path(@join_action_3)
+        end
+    
+        it { should have_selector('title', text: 'Edit Joiner Action') }
+        it { should have_selector('h1',    text: 'Edit Joiner Action') }
+        it { should have_selector('input', value: @join_action_3.action) }
+        it { should have_selector('input', value: @join_action_3.contract) }
+        it { should have_selector('input', value: @join_action_3.residence) }
+        it { should have_selector('input', value: @join_action_3.nationality) }
+        it { should have_selector('input', value: @join_action_3.marital_status) }
+        it { should have_link('Back', href: joiner_actions_path) }
+        it { should have_selector('#joiner_action_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#joiner_action_updated_by', type: 'hidden', value: @admin.id) }
+    
+        describe "with invalid data" do
+          before do
+            fill_in 'Action', with: " "
+            click_button "Save change"
+          end
+        
+          it { should have_selector('title', text: 'Edit Joiner Action') }
+          it { should have_content('error') }
+          specify { @join_action_3.reload.action.should == 'Check availability' }
+        end
+      
+        describe "with valid data" do
+      
+          let(:new_action) { "Foobar" }
+          before do
+            fill_in 'Action', with: new_action
+            click_button "Save change"
+          end
+      
+          it { should have_selector('title', text: 'Joiner Actions') }
+          it { should have_selector('div.alert.alert-success') }
+          specify { @join_action_3.reload.action.should == new_action }
+        end
+      end 
+    end
+    
+    describe "LeaverActions controller" do
+    
+      describe "index" do
+      
+        before do  
+          @leave_action_2 = LeaverAction.create(action: 'Find reasons', created_by: @admin.id)
+          @leave_action_3 = LeaverAction.create(action: 'Recruit replacement', created_by: 999999)
+          visit leaver_actions_path
+        end
+      
+        it { should have_selector('title', text: 'Leaver Actions') }
+        it { should have_selector('h1', text: 'Leaver Actions') }
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+      
+        describe "list " do
+      
+          it { should have_link('edit', href: edit_leaver_action_path(@leave_action)) }
+          it { should have_link('del', href: leaver_action_path(@leave_action_2)) }
+          it { should_not have_link('del', href: leaver_action_path(@leave_action_3)) }
+          it { should have_link('Add', href: new_leaver_action_path) }
+          
+        
+          describe "leaver action already in use" do
+        
+            it "should not have 'Delete' button"
+          end
+        
+          it "should be able to delete a leaver_action - if not already in use" do
+            expect { click_link('del') }.to change(LeaverAction, :count).by(-1)
+          end
+          
+        end
+      end
+    
+      describe "accessing the 'new' page" do
+    
+        before { visit new_leaver_action_path }
+      
+        it { should have_selector('title', text: 'New Leaver Action') }
+        it { should have_selector('h1',    text: 'New Leaver Action') }
+        it { should have_link('Back', href: leaver_actions_path) }
+        it { should_not have_selector('input#leaver_action_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#leaver_action_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#leaver_action_updated_by', type: 'hidden', value: @admin.id) }
+    
+        describe "creating a new leaver_action" do
+      
+          before do
+            fill_in "Action",  with: "Final Appraisal"
+          end
+        
+          it "should create a new leaver action" do
+            expect { click_button "Create" }.to change(LeaverAction, :count).by(1)
+          end         
+        end
+      
+        describe "creating a record that fails validation" do
+      
+          before { fill_in "Action",  with: "" }
+        
+          it "should not create a leaver_action" do
+            expect { click_button "Create" }.not_to change(LeaverAction, :count)
+            page.should have_selector('h1', text: 'New Leaver Action')
+            page.should have_content('error')
+          end  
+      
+        end
+      end
+    
+      describe "edit" do
+    
+        before do
+          @leave_action_3 = LeaverAction.create(action: 'Write reference', created_by: 999999)
+          visit edit_leaver_action_path(@leave_action_3)
+        end
+    
+        it { should have_selector('title', text: 'Edit Leaver Action') }
+        it { should have_selector('h1',    text: 'Edit Leaver Action') }
+        it { should have_selector('input', value: @leave_action_3.action) }
+        it { should have_selector('input', value: @leave_action_3.contract) }
+        it { should have_selector('input', value: @leave_action_3.residence) }
+        it { should have_selector('input', value: @leave_action_3.nationality) }
+        it { should have_selector('input', value: @leave_action_3.marital_status) }
+        it { should have_link('Back', href: leaver_actions_path) }
+        it { should have_selector('#leaver_action_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#leaver_action_updated_by', type: 'hidden', value: @admin.id) }
+    
+        describe "with invalid data" do
+          before do
+            fill_in 'Action', with: " "
+            click_button "Save change"
+          end
+        
+          it { should have_selector('title', text: 'Edit Leaver Action') }
+          it { should have_content('error') }
+          specify { @leave_action_3.reload.action.should == 'Write reference' }
+        end
+      
+        describe "with valid data" do
+      
+          let(:new_action) { "Barbaz" }
+          before do
+            fill_in 'Action', with: new_action
+            click_button "Save change"
+          end
+      
+          it { should have_selector('title', text: 'Leaver Actions') }
+          it { should have_selector('div.alert.alert-success') }
+          specify { @leave_action_3.reload.action.should == new_action }
+        end
+      end 
+    end
   end
   
   describe "when logged in as superuser" do
@@ -2100,6 +2476,150 @@ describe "AdminPages" do
           
             specify { @paycat_2.reload.checked == true }
             specify { @paycat_2.reload.updated_by != @superuser.id }
+          end
+        end
+      end
+    end
+    
+    describe "JoinerActions controller" do
+    
+      describe "index" do
+      
+        before do  
+          @join_action_2 = JoinerAction.create(action: 'Accomodate', created_by: @superuser.id, checked: true)
+          @join_action_3 = JoinerAction.create(action: 'Initial training', created_by: 999999, checked: true)
+          visit joiner_actions_path
+        end
+      
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
+        it { should_not have_selector('.recent', text: "*") }
+        it { should have_link('del', href: joiner_action_path(@join_action_2)) }
+        it { should have_link('del', href: joiner_action_path(@join_action_3)) }
+      
+        describe "entering a new joiner action" do
+        
+          before { visit new_joiner_action_path }
+          it { should have_selector('input#joiner_action_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Action", with: "Foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(JoinerAction, :count).by(1) 
+              page.should have_selector('h1', text: 'Joiner Actions')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @join_action_2.toggle!(:checked)
+            visit edit_joiner_action_path(@join_action_2)
+          end
+          
+          it { should have_selector('input#joiner_action_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit joiner_actions_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the joiner action" do
+        
+            before do
+              fill_in "Action", with: "Barbuzz"
+              click_button "Save change"
+            end
+          
+            specify { @join_action_2.reload.checked == true }
+            specify { @join_action_2.reload.updated_by != @superuser.id }
+          end
+        end
+      end
+    end
+    
+    describe "LeaverActions controller" do
+    
+      describe "index" do
+      
+        before do  
+          @leave_action_2 = LeaverAction.create(action: 'Retrieve badge', created_by: @superuser.id, checked: true)
+          @leave_action_3 = LeaverAction.create(action: 'Debrief', created_by: 999999, checked: true)
+          visit leaver_actions_path
+        end
+      
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
+        it { should_not have_selector('.recent', text: "*") }
+        it { should have_link('del', href: leaver_action_path(@leave_action_2)) }
+        it { should have_link('del', href: leaver_action_path(@leave_action_3)) }
+      
+        describe "entering a new leaver_action" do
+        
+          before { visit new_leaver_action_path }
+          it { should have_selector('input#leaver_action_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Action", with: "Foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(LeaverAction, :count).by(1) 
+              page.should have_selector('h1', text: 'Leaver Actions')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @leave_action_2.toggle!(:checked)
+            visit edit_leaver_action_path(@leave_action_2)
+          end
+          
+          it { should have_selector('input#leaver_action_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit leaver_actions_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the leaver action" do
+        
+            before do
+              fill_in "Action", with: "Barbuzz"
+              click_button "Save change"
+            end
+          
+            specify { @leave_action_2.reload.checked == true }
+            specify { @leave_action_2.reload.updated_by != @superuser.id }
           end
         end
       end

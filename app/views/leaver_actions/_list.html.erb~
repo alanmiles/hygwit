@@ -1,0 +1,24 @@
+     <li class="list-header">
+        <span class="span1">(move)</span>
+        <span class="span2">Action</span>
+        <span class="span1">Contract</span>
+        <span class="span1">Nationality</span>
+        <span class="span1">Residence</span>
+        <span class="span1">Marital status</span>
+     </li>
+     
+     <% @leaveacts.each do |leaveact| %>
+        <%= content_tag_for :li, leaveact do %>
+          <span class="span1">
+            <span class="handle"><%= image_tag "dragdrop.png" %></span>
+            <%= render "shared/superuser_admin_notifications", model_name: leaveact %>
+          </span>
+          <span class="span2"><%= leaveact.action %></span>
+          <span class="span1"><%= leaveact.contract_status %></span>
+          <span class="span1"><%= leaveact.nationality_status %></span>
+          <span class="span1"><%= leaveact.residence_status %></span>
+          <span class="span1"><%= leaveact.mar_status %></span>
+          | <%= link_to "edit", edit_leaver_action_path(leaveact) %>
+          <%= render "admin_deletes", leaveact: leaveact %>
+        <% end %>
+      <% end %>

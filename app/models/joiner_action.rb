@@ -27,4 +27,50 @@ class JoinerAction < ActiveRecord::Base
   validates :residence, 			numericality: { only_integer: true }, inclusion: { in: 0..2 }
   validates :nationality, 		numericality: { only_integer: true }, inclusion: { in: 0..2 }
   validates :marital_status, 	numericality: { only_integer: true }, inclusion: { in: 0..2 }
+  
+  default_scope order: 'joiner_actions.position ASC'
+  
+  def self_ref
+    action
+  end
+  
+  def contract_status
+    if contract == 0
+      return "Contract"
+    elsif contract == 1
+      return "Non-contract"
+    else
+      return "Any"
+    end
+  end
+  
+  def nationality_status
+    if nationality == 0
+      return "National"
+    elsif nationality == 1
+      return "Expat"
+    else
+      return "Any"
+    end
+  end
+  
+  def residence_status
+    if residence == 0
+      return "Local"
+    elsif residence == 1
+      return "Overseas"
+    else
+      return "Any"
+    end
+  end
+  
+  def mar_status
+    if marital_status == 0
+      return "Single"
+    elsif marital_status == 1
+      return "Married"
+    else
+      return "Any"
+    end
+  end
 end

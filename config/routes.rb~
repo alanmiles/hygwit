@@ -1,8 +1,12 @@
 Hygwit::Application.routes.draw do
 
-  get "pay_categories/index"
+  get "leaver_actions/index"
 
-  get "pay_categories/new"
+  get "leaver_actions/new"
+
+  get "joiner_actions/index"
+
+  get "joiner_actions/new"
 
   resources :users
   resources :password_resets

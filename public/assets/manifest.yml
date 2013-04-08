@@ -1,16 +1,18 @@
 ---
 HR_2-0_logo.png: HR_2-0_logo-dc3f34a3e40c818c78c42cabef46c481.png
 HR_2-0_logo/index.png: HR_2-0_logo-dc3f34a3e40c818c78c42cabef46c481.png
+dragdrop.png: dragdrop-1fcfc16c6e59aea397e2612407f43ebd.png
+dragdrop/index.png: dragdrop-1fcfc16c6e59aea397e2612407f43ebd.png
 hroomph.jpg: hroomph-2aefecff260857b34efb81b974c71c97.jpg
 hroomph/index.jpg: hroomph-2aefecff260857b34efb81b974c71c97.jpg
 logo.png: logo-892d25609681070750b093bb7b9ba542.png
 logo/index.png: logo-892d25609681070750b093bb7b9ba542.png
 rails.png: rails-a3386665c05a2d82f711a4aaa72d247c.png
 rails/index.png: rails-a3386665c05a2d82f711a4aaa72d247c.png
-application.js: application-fd402774504a958d7060dcd2d2ea28be.js
-application/index.js: application-fd402774504a958d7060dcd2d2ea28be.js
-application.css: application-3b407ae3adb4415f29a5c7339e82093b.css
-application/index.css: application-3b407ae3adb4415f29a5c7339e82093b.css
+application.js: application-9edf3128c9e8735c648f667996e68f38.js
+application/index.js: application-9edf3128c9e8735c648f667996e68f38.js
+application.css: application-5bbcc02670eee2b960ff2e6ea8a6c62a.css
+application/index.css: application-5bbcc02670eee2b960ff2e6ea8a6c62a.css
 jquery-ui/ui-bg_flat_0_aaaaaa_40x100.png: jquery-ui/ui-bg_flat_0_aaaaaa_40x100-7d1197a52442bc56fcad60d0390f4b32.png
 jquery-ui/ui-bg_flat_0_aaaaaa_40x100/index.png: jquery-ui/ui-bg_flat_0_aaaaaa_40x100-7d1197a52442bc56fcad60d0390f4b32.png
 jquery-ui/ui-bg_flat_75_ffffff_40x100.png: jquery-ui/ui-bg_flat_75_ffffff_40x100-3c4b974defa5e8bdaf8a603034c4435e.png

@@ -1,0 +1,19 @@
+<% provide(:title, 'Leaver Actions') %>
+
+<div class="row">  
+  <aside class="span4">
+    <%= render "shared/admin_sidebar" %>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Leaver Actions</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add an action", new_leaver_action_path, class: "btn" %>
+    </div>
+    <ul id="leaveacts" class="itemlist" data-update-url="<%= sort_leaver_actions_url %>">
+      <%= render "list" %>
+    </ul>
+    
+  </div>
+</div>

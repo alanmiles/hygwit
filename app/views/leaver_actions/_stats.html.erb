@@ -1,0 +1,8 @@
+      <% if current_user.superuser? %>
+        <div id="recent-adds">
+          <%= recent_leaver_actions %>
+        </div>
+        <div id="recent-updates">
+          <%= updated_leaver_actions %>
+        </div>
+      <% end %>

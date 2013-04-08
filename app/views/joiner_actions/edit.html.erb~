@@ -1,0 +1,15 @@
+<% provide(:title, "Edit Joiner Action") %> 
+<h1>Edit Joiner Action</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@joinact) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      
+      <%= f.submit "Save change", class: "btn btn-primary" %>
+      <%= link_to 'Back', joiner_actions_path, class: "btn" if current_user.admin? %>
+    <% end %>
+  </div>
+</div>
+
