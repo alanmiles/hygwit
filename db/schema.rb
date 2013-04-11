@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130406082118) do
+ActiveRecord::Schema.define(:version => 20130409110732) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -308,6 +308,21 @@ ActiveRecord::Schema.define(:version => 20130406082118) do
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
     t.integer  "position"
+  end
+
+  create_table "pay_items", :force => true do |t|
+    t.string   "item"
+    t.integer  "pay_category_id"
+    t.string   "short_name"
+    t.boolean  "deduction",       :default => false
+    t.boolean  "taxable",         :default => false
+    t.boolean  "fixed",           :default => false
+    t.integer  "position"
+    t.integer  "created_by",      :default => 1
+    t.boolean  "checked",         :default => false
+    t.integer  "updated_by"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "qualities", :force => true do |t|

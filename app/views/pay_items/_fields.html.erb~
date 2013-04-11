@@ -1,0 +1,32 @@
+<div class= "line-space"> 
+  <%= f.label :item %>
+  <%= f.text_field :item %>
+</div>
+
+<div style="clear:both" class="line-space">
+   <%= f.label :pay_category_id, "Category" %>
+   <%= f.collection_select(:pay_category_id, PayCategory.all, :id, :category, prompt: true)  %></span>
+ 
+</div>
+
+<div class= "line-space"> 
+  <%= f.label :short_name, "Code (10 characters or less)" %>
+  <%= f.text_field :short_name %>
+</div>
+
+<div class= "line-space"> 
+  <span class="span1 r-float"><%= f.check_box :deduction %></span>
+  <span class="vert-down"><%= f.label :deduction, "Check if this item is a deduction ( - blank for additions/accruals)" %></span>
+</div>
+
+<div class= "line-space"> 
+  <span class="span1 r-float"><%= f.check_box :taxable %></span>
+  <span class="vert-down"><%= f.label :taxable, "Check if this item is included in the Gross Salary calculation" %></span>
+</div>
+
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>
+<%= f.hidden_field :created_by %>
+<%= f.hidden_field :fixed %>
+

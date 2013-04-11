@@ -1,0 +1,14 @@
+<% provide(:title, "Edit Payroll Item") %> 
+<h1>Edit Payroll Item</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@payitem) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      
+      <%= f.submit "Save change", class: "btn btn-primary" %>
+      <%= link_to 'Back', pay_items_path, class: "btn" if current_user.admin? %>
+    <% end %>
+  </div>
+</div>

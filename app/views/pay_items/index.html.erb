@@ -1,0 +1,19 @@
+<% provide(:title, 'Payroll Items') %>
+
+<div class="row">  
+  <aside class="span4">
+    <%= render "shared/admin_sidebar" %>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Payroll Items</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add an item", new_pay_item_path, class: "btn" %>
+    </div>
+    <ul id="payitems" class="itemlist" data-update-url="<%= sort_pay_items_url %>">
+      <%= render "list" %>
+    </ul>
+    
+  </div>
+</div>

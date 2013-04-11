@@ -11,6 +11,7 @@
 #  updated_by  :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  position    :integer
 #
 
 require 'spec_helper'
@@ -61,6 +62,16 @@ describe PayCategory do
   
   describe "when created_by is not an integer" do
     before { @cat.created_by = "Alan" }
+    it { should_not be_valid }
+  end
+  
+  describe "when description is left empty" do
+    before { @cat.description = nil }
+    it { should be_valid }
+  end
+  
+  describe "when description is too long" do
+    before { @cat.description = "a" * 255 }
     it { should_not be_valid }
   end
 end

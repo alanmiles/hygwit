@@ -15,6 +15,7 @@ describe "AdminPages" do
     @contract = Contract.create(contract: "Seconded")
     @rank = Rank.create(rank: "Executives")
     @paycat = PayCategory.create(category: "Salary", description: "Standard salary", on_payslip: true)
+    @payitem = PayItem.create(item: "Basic Salary", pay_category_id: @paycat.id, short_name: "Basic", taxable: true, fixed: true)
     @join_action = JoinerAction.create(action: "Pass interview")
     @leave_action = LeaverAction.create(action: "Notify department head")
   end
@@ -278,6 +279,37 @@ describe "AdminPages" do
       end
     end
     
+    describe "PayItems controller" do
+    
+      before { visit new_pay_item_path }
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    
+      describe "when trying to access the index" do
+    
+        before { visit pay_items_path }
+      
+        it "should render the sign-in path" do
+          page.should have_selector('.alert', text: 'sign in')
+          page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the pay_item data" do
+      
+        describe "with a PUT request" do
+          before { put pay_item_path(@payitem) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete pay_item_path(@payitem) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
+    end
     
     describe "JoinerActions controller" do
     
@@ -310,7 +342,6 @@ describe "AdminPages" do
         end
       end
     end
-    
     
     describe "LeaverActions controller" do
     
@@ -658,6 +689,43 @@ describe "AdminPages" do
       end
     end
     
+    describe "PayItems controller" do
+    
+      describe "when trying to access the index" do
+        
+        before { visit pay_items_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+      end
+      
+      describe "when trying to enter a new record" do
+      
+        before { visit new_pay_item_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+
+      end
+      
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the PayItems#destroy action" do
+          before { delete pay_item_path(@payitem) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the PayItems#update action" do
+        before { put pay_item_path(@payitem) }
+        specify { response.should redirect_to(root_path) }
+      end
+    end
     
     describe "JoinerActions controller" do
     
@@ -1659,6 +1727,134 @@ describe "AdminPages" do
       end 
     end
     
+    describe "PayItems controller" do
+    
+      before do
+        @paycat_2 = PayCategory.create(category: 'Benefits', description: 'Detail', on_payslip: true, created_by: @admin.id)
+      end
+      
+      describe "index" do
+      
+        before do  
+          
+          @payitem_2 = PayItem.create(item: 'Food allowance', pay_category_id: @paycat_2.id, short_name: "Food A", taxable: true,
+                        	fixed: true, created_by: @admin.id)
+          @payitem_3 = PayItem.create(item: "Attendance allowance", pay_category_id: @paycat_2.id, short_name: "Attend A", 
+          								taxable: true, fixed: true, created_by: 999999)              	
+          visit pay_items_path
+        end
+      
+        it { should have_selector('title', text: 'Payroll Items') }
+        it { should have_selector('h1', text: 'Payroll Items') }
+        it { should have_selector('#recent-adds', text: "in past 7 days") }
+        it { should have_selector('.recent', text: "*") }
+      
+        describe "list " do
+      
+          it { should have_link('edit', href: edit_pay_item_path(@payitem)) }
+          it { should have_link('del', href: pay_item_path(@payitem_2)) }
+          it { should_not have_link('del', href: pay_item_path(@payitem_3)) }
+          it { should have_link('Add', href: new_pay_item_path) }
+          
+        
+          describe "pay item already in use" do
+        
+            it "should not have 'Delete' button"
+          end
+        
+          it "should be able to delete a pay_item - if not already in use" do
+            expect { click_link('del') }.to change(PayItem, :count).by(-1)
+          end
+          
+        end
+      end
+    
+      describe "accessing the 'new' page" do
+    
+        before { visit new_pay_item_path }
+      
+        it { should have_selector('title', text: 'New Payroll Item') }
+        it { should have_selector('h1',    text: 'New Payroll Item') }
+        it { should have_link('Back', href: pay_items_path) }
+        it { should_not have_selector('input#pay_item_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#pay_item_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#pay_item_updated_by', type: 'hidden', value: @admin.id) }
+    
+        describe "creating a new pay_item" do
+      
+          before do
+            fill_in "Item",  with: "Lunch Allowance"
+            select "Benefits",  from: "Category"
+            fill_in "Code", with: "Lunch A"
+            check :taxable
+          end
+        
+          it "should create a payroll item" do
+            expect { click_button "Create" }.to change(PayItem, :count).by(1)
+          end         
+        end
+      
+        describe "creating a record that fails validation" do
+      
+          before { fill_in "Item",  with: "" }
+        
+          it "should not create a pay_item" do
+            expect { click_button "Create" }.not_to change(PayItem, :count)
+            page.should have_selector('h1', text: 'New Payroll Item')
+            page.should have_content('error')
+          end  
+      
+        end
+      end
+    
+      describe "edit" do
+    
+        before do
+          @payitem_3 = PayItem.create(item: 'Car Allowance', pay_category_id: @paycat_2.id, short_name: "Car A",
+           							taxable: true, fixed: true, created_by: 999999)
+          visit edit_pay_item_path(@payitem_3)
+        end
+    
+        it { should have_selector('title', text: 'Edit Payroll Item') }
+        it { should have_selector('h1',    text: 'Edit Payroll Item') }
+        it { should have_selector('input', value: @payitem_3.item) }
+        it { should have_selector('input', value: @payitem_3.pay_category_id) }
+        it { should have_selector('input', value: @payitem_3.short_name) }
+        it { should have_selector('input', value: @payitem_3.deduction) }
+        it { should have_selector('input', value: @payitem_3.taxable) }
+        it { should have_selector('input', value: @payitem_3.fixed) }
+        it { should have_link('Back', href: pay_items_path) }
+        it { should have_selector('#pay_item_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#pay_item_updated_by', type: 'hidden', value: @admin.id) }
+    
+        describe "with invalid data" do
+          before do
+            fill_in 'Item', with: " "
+            click_button "Save change"
+          end
+        
+          it { should have_selector('title', text: 'Edit Payroll Item') }
+          it { should have_content('error') }
+          specify { @payitem_3.reload.item.should == 'Car Allowance' }
+        end
+      
+        describe "with valid data" do
+      
+          let(:new_item) { "Bus Allowance" }
+          before do
+            fill_in 'Item', with: new_item
+            fill_in 'Code', with: "Bus A"
+            click_button "Save change"
+          end
+      
+          it { should have_selector('title', text: 'Payroll Items') }
+          it { should have_selector('div.alert.alert-success') }
+          specify { @payitem_3.reload.item.should == new_item }
+        end
+      end 
+    end
+    
     describe "JoinerActions controller" do
     
       describe "index" do
@@ -2476,6 +2672,88 @@ describe "AdminPages" do
           
             specify { @paycat_2.reload.checked == true }
             specify { @paycat_2.reload.updated_by != @superuser.id }
+          end
+        end
+      end
+    end
+    
+    describe "PayItems controller" do
+    
+      before do
+        @paycat_2 = PayCategory.create(category: 'Sal bens', created_by: @superuser.id, checked: true)  
+      end
+      
+      describe "index" do
+      
+        before do
+          @payitem_2 = PayItem.create(item: 'Bar Allowance', pay_category_id: @paycat_2.id, short_name: "Bar A",
+          							taxable: true, fixed: true, created_by: @superuser.id, checked: true)
+          @payitem_3 = PayItem.create(item: 'Baz Allowance', pay_category_id: @paycat_2.id, short_name: "Baz A",
+          							taxable: true, fixed: true, created_by: 999999, checked: true)							
+          visit pay_items_path
+        end
+      
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
+        it { should_not have_selector('.recent', text: "*") }
+        it { should have_link('del', href: pay_item_path(@payitem_2)) }
+        it { should have_link('del', href: pay_item_path(@payitem_3)) }
+      
+        describe "entering a new pay_item" do
+        
+          before { visit new_pay_item_path }
+          it { should have_selector('input#pay_item_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in "Item", with: "Foo Allowance"
+              select "Sal bens",  from: "Category"
+              fill_in "Code", with: "Foo A"
+              check "Taxable"
+              check "Fixed"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(PayItem, :count).by(1) 
+              page.should have_selector('h1', text: 'Payroll Items')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @payitem_2.toggle!(:checked)
+            visit edit_pay_item_path(@payitem_2)
+          end
+          
+          it { should have_selector('input#pay_item_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit pay_items_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the payroll item" do
+        
+            before do
+              fill_in "Item", with: "BuzzBar"
+              click_button "Save change"
+            end
+          
+            specify { @payitem_2.reload.checked == true }
+            specify { @payitem_2.reload.updated_by != @superuser.id }
           end
         end
       end

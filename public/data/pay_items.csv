@@ -1,0 +1,35 @@
+item;pay_category_id;short_name;deduction;taxable;fixed;position;created_by;checked;updated_by
+Basic Salary;Basic salary;Basic;false;true;true;1;1;true;1
+Salary Advance;Salary adjustments;Adv Pay;false;false;true;2;1;true;1
+Loan Advance;Salary adjustments;Loan Pay;false;false;true;3;1;true;1
+Salary Adjustment;Salary adjustments;Sal Adj;false;false;true;4;1;true;1
+Transport Allowance;Fixed benefits;Transport A;false;true;true;5;1;true;1
+Housing Allowance;Fixed benefits;House A;false;true;true;6;1;true;1
+Other Allowances;Fixed benefits;Other A;false;true;true;7;1;true;1
+Call-Out Adjustment;Variable benefits;CallOut A;false;false;true;8;1;true;1
+Vacation Encashment;Variable benefits;Vacation A;false;false;true;9;1;true;1
+Overtime (Ordinary Rate);Overtime;OT Std;false;true;true;10;1;true;1
+Overtime (Supplementary Rate);Overtime;OT Supp;false;true;true;11;1;true;1
+Overtime (Double Rate);Overtime;OT Dbl;false;true;true;12;1;true;1
+Fixed Overtime;Overtime;OT Fxd;false;true;true;13;1;true;1
+Bonus;Bonuses;Bonus;false;true;true;14;1;true;1
+Annual Bonus;Bonuses;Ann Bonus;false;true;true;15;1;true;1
+Loan Repayment;Fixed deductions;Loan D;true;false;true;16;1;true;1
+Pension Contribution;Fixed deductions;Pension D;true;false;true;17;1;true;1
+Other Fixed Deductions;Fixed deductions;Other D;true;false;true;18;1;true;1
+Absence Deduction;Variable deductions;Absence D;true;false;true;19;1;true;1
+Advance Deduction;Variable deductions;Advance D;true;false;true;20;1;true;1
+Bills Deduction;Variable deductions;Bills D;true;false;true;21;1;true;1
+Miscellaneous Deductions;Variable deductions;Misc D;true;false;true;22;1;true;1
+Social Insurance;Personal tax;Insurance;true;false;true;23;1;true;1
+Tax;Personal tax;Tax;true;false;true;24;1;true;1
+Social Insurance (Employer);Accruals;Ins Acc;false;false;true;25;1;true;1
+Tax (Employer);Accruals;Tax Acc;false;false;true;26;1;true;1
+Pension (Employer);Accruals;Pens Acc;false;false;true;27;1;true;1
+Leaving Gratuity;Accruals;Grat Acc;false;false;true;28;1;true;1
+Recruitment Costs;Accruals;Recrt Acc;false;false;true;29;1;true;1
+Vacation Accrual;Accruals;Vac Acc;false;false;true;30;1;true;1
+Bonus Provision;Accruals;Bonus Acc;false;false;true;31;1;true;1
+House Rent;3rd party payments - fixed;Rent Fix3;false;false;true;32;1;true;1
+Credit Card Payments;3rd party payments - variable;Card Var3;false;false;true;33;1;true;1
+Phone Co Payments;3rd party payments - variable;Phone Var3;false;false;true;34;1;true;1

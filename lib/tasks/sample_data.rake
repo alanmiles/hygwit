@@ -18,6 +18,7 @@ namespace :db do
     make_joiner_actions
     make_leaver_actions
     make_pay_categories
+    make_pay_items
   end
 end  
 
@@ -260,5 +261,29 @@ def make_pay_categories
       params[key] = values[i]
     end
     PayCategory.create!(params)
+  end
+end
+
+def make_pay_items
+  lines = File.new('public/data/pay_items.csv').readlines
+  header = lines.shift.strip
+  keys = header.split(';')
+  lines.each do |line|
+
+    values = line.strip.split(';')
+    @item = values[0]
+    @cat = values[1]
+    @short = values[2]
+    @ded = values[3] 
+    @tax = values[4]
+    @fix = values[5]
+    @pos = values[6]
+    @create = values[7]
+    @check = values[8]
+    @update = values[9]
+    @paycat = PayCategory.find_by_category(@cat)
+    @attr =  { item: @item, pay_category_id: @paycat.id, short_name: @short, deduction: @ded,
+               taxable: @tax, fixed: @fix, position: @pos, created_by: @create, checked: @check, updated_by: @update }
+    PayItem.create(@attr)
   end
 end
