@@ -18,6 +18,8 @@ describe "AdminPages" do
     @payitem = PayItem.create(item: "Basic Salary", pay_category_id: @paycat.id, short_name: "Basic", taxable: true, fixed: true)
     @join_action = JoinerAction.create(action: "Pass interview")
     @leave_action = LeaverAction.create(action: "Notify department head")
+    @loan = LoanType.create(name: "House")
+    @advance = AdvanceType.create(name: "Sal Advance")
   end
   
   describe "when not logged in" do
@@ -49,6 +51,71 @@ describe "AdminPages" do
       
         describe "with a DELETE request" do
           before { delete sector_path(@sector) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
+    end
+    
+    
+    describe "LoanTypes controller" do
+    
+      before { visit new_loan_type_path }
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    
+      describe "when trying to access the index" do
+    
+        before { visit loan_types_path }
+      
+        it "should render the sign-in path" do
+          page.should have_selector('.alert', text: 'sign in')
+          page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the loan_type data" do
+      
+        describe "with a PUT request" do
+          before { put loan_type_path(@loan) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete loan_type_path(@loan) }
+          specify { response.should redirect_to(root_path) }        
+        end
+      end
+    end
+    
+    describe "AdvanceTypes controller" do
+    
+      before { visit new_advance_type_path }
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    
+      describe "when trying to access the index" do
+    
+        before { visit advance_types_path }
+      
+        it "should render the sign-in path" do
+          page.should have_selector('.alert', text: 'sign in')
+          page.should have_selector('h1', text: 'Sign in')
+        end
+      end
+      
+      describe "when trying to change the advance_type data" do
+      
+        describe "with a PUT request" do
+          before { put advance_type_path(@advance) }
+          specify { response.should redirect_to(root_path) }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete advance_type_path(@advance) }
           specify { response.should redirect_to(root_path) }        
         end
       end
@@ -201,7 +268,7 @@ describe "AdminPages" do
         end
       end
       
-      describe "when trying to change the sector data" do
+      describe "when trying to change the contract data" do
       
         describe "with a PUT request" do
           before { put contract_path(@contract) }
@@ -417,6 +484,85 @@ describe "AdminPages" do
     
       describe "submitting a PUT request to the Sectors#update action" do
         before { put sector_path(@sector) }
+        specify { response.should redirect_to(root_path) }
+      end
+      
+    end
+    
+    
+    describe "LoanTypes controller" do
+    
+      describe "when trying to access the index" do
+        
+        before { visit loan_types_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+      end
+      
+      describe "when trying to enter a new record" do
+      
+        before { visit new_loan_type_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+
+      end
+      
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the LoanTypes#destroy action" do
+          before { delete loan_type_path(@loan) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the LoanTypes#update action" do
+        before { put loan_type_path(@loan) }
+        specify { response.should redirect_to(root_path) }
+      end
+      
+    end
+    
+    describe "AdvanceTypes controller" do
+    
+      describe "when trying to access the index" do
+        
+        before { visit advance_types_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+      end
+      
+      describe "when trying to enter a new record" do
+      
+        before { visit new_advance_type_path }
+      
+        it "should render the root-path" do
+          page.should have_selector('.alert', text: 'You must be a HROomph admin')
+          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        end
+
+      end
+      
+      describe "when trying to delete" do
+    
+        describe "submitting a DELETE request to the AdvanceTypes#destroy action" do
+          before { delete advance_type_path(@advance) }
+          specify { response.should redirect_to(root_path) }        
+        end
+    
+      end
+    
+      describe "submitting a PUT request to the AdvanceTypes#update action" do
+        before { put advance_type_path(@advance) }
         specify { response.should redirect_to(root_path) }
       end
       
@@ -899,7 +1045,7 @@ describe "AdminPages" do
         it { should have_selector('title', text: 'Edit Sector') }
         it { should have_selector('h1',    text: 'Edit Sector') }
         it { should have_selector('input', value: @sector_3.sector) }
-        it { should_not have_selector('input#nationality_checked') }
+        it { should_not have_selector('input#sector_checked') }
         it { should_not have_selector('#update-date', text: "Added") }
         it { should have_link('Back', href: sectors_path) }
         it { should have_selector('#sector_created_by', type: 'hidden', value: 999999) }
@@ -929,6 +1075,253 @@ describe "AdminPages" do
           specify { @sector_3.reload.sector.should == new_sector }
           specify { @sector_3.reload.checked.should == false }
           specify { @sector_3.reload.updated_by.should == @admin.id }
+        end
+      end 
+    end
+    
+    
+    describe "LoanTypes controller" do
+    
+      describe "index" do
+      
+        before do  
+          @loan = LoanType.create(name: 'Housing', created_by: @admin.id)
+          @loan_2 = LoanType.create(name: 'Personal', created_by: 999999)
+          @loan_3 = LoanType.create(name: 'Car', created_by: 999999)
+          visit loan_types_path
+        end
+      
+        it { should have_selector('title', text: 'Loan Types') }
+        it { should have_selector('h1', text: 'Loan Types') }
+        it { should have_selector('#recent-adds') }
+        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-add-checks') }
+        it { should_not have_selector('#recent-update-checks') }
+        it { should_not have_selector('.recent', text: "+") }
+      
+        describe "list " do
+      
+          it { should have_link('change', href: edit_loan_type_path(@loan)) }
+          it { should have_link('delete', href: loan_type_path(@loan)) }
+          it { should_not have_link('delete', href: loan_type_path(@loan_2)) }
+          it { should have_link('Add', href: new_loan_type_path) }
+          it { should have_selector('#loan-name', text: 'Personal') }
+          it { should have_selector('#amount', text: '1000') }
+          it { should have_selector('#xsalary', text: '12') }
+          it { should have_selector('#repayments', text: '12') }
+          it { should have_selector('#qualify', text: '12') }
+          it { should have_selector('#api', text: '0') }
+          
+        
+          describe "loan_type already in use" do
+        
+            it "should not have 'Delete' button"
+          end
+        
+          it "should be able to delete a loan_type" do
+            expect { click_link('delete') }.to change(LoanType, :count).by(-1)
+          end
+          
+        end
+      end
+    
+      describe "accessing the 'new' page" do
+    
+        before { visit new_loan_type_path }
+      
+        it { should have_selector('title', text: 'New Loan Type') }
+        it { should have_selector('h1',    text: 'New Loan Type') }
+        it { should have_link('Back', href: loan_types_path) }
+        it { should_not have_selector('input#loan_type_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#loan_type_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#loan_type_updated_by', type: 'hidden', value: @admin.id) }
+    
+        describe "creating a new loan_type" do
+      
+          before do
+            fill_in :name,  with: "foobuzz"
+            fill_in :qualifying_months, with: 3
+            fill_in :max_repayment_months, with: 24
+            fill_in :max_salary_multiplier, with: 6
+            fill_in :max_amount, with: 20000
+            fill_in :api, with: 2
+          end
+            
+          it "should create a loan_type" do
+            expect { click_button "Create" }.to change(LoanType, :count).by(1)
+          end         
+        end
+      
+        describe "creating a record that fails validation" do
+      
+          before { fill_in :name,  with: "" }
+        
+          it "should not create a loan_type" do
+            expect { click_button "Create" }.not_to change(LoanType, :count)
+            page.should have_selector('h1', text: 'New Loan Type')
+            page.should have_content('error')
+          end  
+      
+        end
+      end
+    
+      describe "edit" do
+    
+        before do
+          @loan_3 = LoanType.create(name: 'Season Ticket', checked: true, created_by: 999999)
+          visit edit_loan_type_path(@loan_3)
+        end
+    
+        it { should have_selector('title', text: 'Edit Loan Type') }
+        it { should have_selector('h1',    text: 'Edit Loan Type') }
+        it { should have_selector('input', value: @loan_3.name) }
+        it { should_not have_selector('input#loan_type_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_link('Back', href: loan_types_path) }
+        it { should have_selector('#loan_type_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#loan_type_updated_by', type: 'hidden', value: @admin.id) }
+    
+        describe "with invalid data" do
+          before do
+            fill_in :name, with: " "
+            click_button "Save change"
+          end
+        
+          it { should have_selector('title', text: 'Edit Loan Type') }
+          it { should have_content('error') }
+          specify { @loan_3.reload.name.should == 'Season Ticket' }
+        end
+      
+        describe "with valid data" do
+      
+          let(:new_loan) { "Seasonal Ticket" }
+          before do
+            fill_in :name, with: new_loan
+            click_button "Save change"
+          end
+      
+          it { should have_selector('title', text: 'Loan Types') }
+          it { should have_selector('div.alert.alert-success') }
+          specify { @loan_3.reload.name.should == new_loan }
+          specify { @loan_3.reload.checked.should == false }
+          specify { @loan_3.reload.updated_by.should == @admin.id }
+        end
+      end 
+    end
+    
+    describe "AdvanceTypes controller" do
+    
+      describe "index" do
+      
+        before do  
+          @advance = AdvanceType.create(name: 'New Hire', created_by: @admin.id)
+          @advance_2 = AdvanceType.create(name: 'Vac Advance', created_by: 999999)
+          @advance_3 = AdvanceType.create(name: 'Sal Advance', created_by: 999999)
+          visit advance_types_path
+        end
+      
+        it { should have_selector('title', text: 'Advance Types') }
+        it { should have_selector('h1', text: 'Advance Types') }
+        it { should have_selector('#recent-adds') }
+        it { should have_selector('.recent', text: "*") }
+        it { should_not have_selector('#recent-add-checks') }
+        it { should_not have_selector('#recent-update-checks') }
+        it { should_not have_selector('.recent', text: "+") }
+      
+        describe "list " do
+      
+          it { should have_link('change', href: edit_advance_type_path(@advance)) }
+          it { should have_link('delete', href: advance_type_path(@advance)) }
+          it { should_not have_link('delete', href: advance_type_path(@advance_2)) }
+          it { should have_link('Add', href: new_advance_type_path) }
+          it { should have_selector('ul.itemlist li:nth-child(3)', text: 'Vac Advance') }
+        
+          describe "advance_type already in use" do
+        
+            it "should not have 'Delete' button"
+          end
+        
+          it "should be able to delete an advance_type" do
+            expect { click_link('delete') }.to change(AdvanceType, :count).by(-1)
+          end
+        end
+      end
+    
+      describe "accessing the 'new' page" do
+    
+        before { visit new_advance_type_path }
+      
+        it { should have_selector('title', text: 'New Advance Type') }
+        it { should have_selector('h1',    text: 'New Advance Type') }
+        it { should have_link('Back', href: advance_types_path) }
+        it { should_not have_selector('input#advance_type_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_selector('#advance_type_created_by', type: 'hidden', value: @admin.id) }
+        it { should have_selector('#advance_type_updated_by', type: 'hidden', value: @admin.id) }
+    
+        describe "creating a new advance_type" do
+      
+          before { fill_in :name,  with: "Another" }
+        
+          it "should create an advance_type" do
+            expect { click_button "Create" }.to change(AdvanceType, :count).by(1)
+          end         
+        end
+      
+        describe "creating a record that fails validation" do
+      
+          before { fill_in :name,  with: "" }
+        
+          it "should not create an advance_type" do
+            expect { click_button "Create" }.not_to change(AdvanceType, :count)
+            page.should have_selector('h1', text: 'New Advance Type')
+            page.should have_content('error')
+          end  
+      
+        end
+      end
+    
+      describe "edit" do
+    
+        before do
+          @advance_3 = AdvanceType.create(name: 'Emergency', checked: true, created_by: 999999)
+          visit edit_advance_type_path(@advance_3)
+        end
+    
+        it { should have_selector('title', text: 'Edit Advance Type') }
+        it { should have_selector('h1',    text: 'Edit Advance Type') }
+        it { should have_selector('input', value: @advance_3.name) }
+        it { should_not have_selector('input#advance_type_checked') }
+        it { should_not have_selector('#update-date', text: "Added") }
+        it { should have_link('Back', href: advance_types_path) }
+        it { should have_selector('#advance_type_created_by', type: 'hidden', value: 999999) }
+        it { should have_selector('#advance_type_updated_by', type: 'hidden', value: @admin.id) }
+    
+        describe "with invalid data" do
+          before do
+            fill_in :name, with: " "
+            click_button "Save change"
+          end
+        
+          it { should have_selector('title', text: 'Edit Advance Type') }
+          it { should have_content('error') }
+          specify { @advance_3.reload.name.should == 'Emergency' }
+        end
+      
+        describe "with valid data" do
+      
+          let(:new_advance) { "Expenses" }
+          before do
+            fill_in :name, with: new_advance
+            click_button "Save change"
+          end
+      
+          it { should have_selector('title', text: 'Advance Types') }
+          it { should have_selector('div.alert.alert-success') }
+          specify { @advance_3.reload.name.should == new_advance }
+          specify { @advance_3.reload.checked.should == false }
+          specify { @advance_3.reload.updated_by.should == @admin.id }
         end
       end 
     end
@@ -2166,6 +2559,153 @@ describe "AdminPages" do
       end
     end
     
+    
+    describe "LoanTypes controller" do
+    
+      describe "index" do
+      
+        before do  
+          @loan = LoanType.create(name: 'National', created_by: @superuser.id, checked: true)
+          @loan_2 = LoanType.create(name: 'Piggyback', created_by: 999999, checked: true)
+          @loan_3 = LoanType.create(name: 'Bank', created_by: 999999, checked: true)
+          visit loan_types_path
+        end
+      
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
+        it { should_not have_selector('.recent', text: "*") }
+        it { should have_link('delete', href: loan_type_path(@loan)) }
+        it { should have_link('delete', href: loan_type_path(@loan_2)) }
+      
+        describe "entering a new loan_type" do
+        
+          before { visit new_loan_type_path }
+          it { should have_selector('input#loan_type_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in :name, with: "Foobar"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(LoanType, :count) 
+              page.should have_selector('h1', text: 'Loan Types')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @loan.toggle!(:checked)
+            visit edit_loan_type_path(@loan)
+          end
+          
+          it { should have_selector('input#loan_type_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit loan_types_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the name" do
+        
+            before do
+              fill_in :name, with: "BuzzBuzz"
+              click_button "Save change"
+            end
+          
+            specify { @loan.reload.checked == true }
+            specify { @loan.reload.updated_by != @superuser.id }
+          end
+        end
+      end
+    end
+    
+    describe "AdvanceTypes controller" do
+    
+      describe "index" do
+      
+        before do  
+          @advance = AdvanceType.create(name: 'Daily', created_by: @superuser.id, checked: true)
+          @advance_2 = AdvanceType.create(name: 'Weekly', created_by: 999999, checked: true)
+          @advance_3 = AdvanceType.create(name: 'Monthly', created_by: 999999, checked: true)
+          visit advance_types_path
+        end
+      
+        it { should_not have_selector('#recent-adds') }
+        it { should_not have_selector('#recent-updates') }
+        it { should have_selector('#recent-add-checks') }
+        it { should have_selector('#recent-update-checks') }
+        it { should have_selector('.recent', text: "+") }  #all records already checked
+        it { should_not have_selector('.recent', text: "*") }
+        it { should have_link('delete', href: advance_type_path(@advance)) }
+        it { should have_link('delete', href: advance_type_path(@advance_2)) }
+      
+        describe "entering a new advance_type" do
+        
+          before { visit new_advance_type_path }
+          it { should have_selector('input#advance_type_checked', value: 1) }
+          
+          describe "automatic checking of record entered by superuser" do
+            before do
+              fill_in :name, with: "Annual"
+            end
+            
+            it "should create the new record" do
+            
+              expect { click_button "Create" }.to change(AdvanceType, :count) 
+              page.should have_selector('h1', text: 'Advance Types')
+              page.should have_selector('.recent', text: "+") 
+            end
+          end
+        end
+        
+        describe "checking a new entry via Edit" do
+         
+          before do 
+            @advance.toggle!(:checked)
+            visit edit_advance_type_path(@advance)
+          end
+          
+          it { should have_selector('input#advance_type_checked') }
+          it { should have_selector('#update-date', text: "Added") }
+          
+          describe "checking the new entry in the index" do
+           
+            before { visit advance_types_path }
+            
+            it { should_not have_selector('#recent-adds') }
+            it { should_not have_selector('.recent', text: "*") }
+            it { should have_selector('#recent-add-checks') }
+            it { should have_selector('.recent', text: "+") }
+          end
+          
+          describe "not changing updated and checked status when superuser edits the advance" do
+        
+            before do
+              fill_in :name, with: "Quarterly"
+              click_button "Save change"
+            end
+          
+            specify { @advance.reload.checked == true }
+            specify { @advance.reload.updated_by != @superuser.id }
+          end
+        end
+      end
+    end
+    
     describe "jobfamilies controller" do
     
       describe "index" do
@@ -2712,8 +3252,7 @@ describe "AdminPages" do
               fill_in "Item", with: "Foo Allowance"
               select "Sal bens",  from: "Category"
               fill_in "Code", with: "Foo A"
-              check "Taxable"
-              check "Fixed"
+              check :taxable
             end
             
             it "should create the new record" do

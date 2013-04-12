@@ -19,6 +19,8 @@ namespace :db do
     make_leaver_actions
     make_pay_categories
     make_pay_items
+    make_loan_types
+    make_advance_types
   end
 end  
 
@@ -285,5 +287,33 @@ def make_pay_items
     @attr =  { item: @item, pay_category_id: @paycat.id, short_name: @short, deduction: @ded,
                taxable: @tax, fixed: @fix, position: @pos, created_by: @create, checked: @check, updated_by: @update }
     PayItem.create(@attr)
+  end
+end
+
+def make_loan_types
+  lines = File.new('public/data/loan_types.csv').readlines
+  header = lines.shift.strip
+  keys = header.split(';')
+  lines.each do |line|
+    params = {}
+    values = line.strip.split(';')
+    keys.each_with_index do |key, i|
+      params[key] = values[i]
+    end
+    LoanType.create!(params)
+  end
+end
+
+def make_advance_types
+  lines = File.new('public/data/advance_types.csv').readlines
+  header = lines.shift.strip
+  keys = header.split(';')
+  lines.each do |line|
+    params = {}
+    values = line.strip.split(';')
+    keys.each_with_index do |key, i|
+      params[key] = values[i]
+    end
+    AdvanceType.create!(params)
   end
 end

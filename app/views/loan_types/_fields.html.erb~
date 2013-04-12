@@ -1,0 +1,29 @@
+<div class = line-space">
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+</div>
+<div class = line-space">
+  <%= f.label :qualifying_months, "Minimum service months to qualify" %>
+  <%= f.text_field :qualifying_months %>
+</div>
+<div class = line-space">
+  <%= f.label :max_salary_multiplier, "Maximum multiplier of salary" %>
+  <%= f.text_field :max_salary_multiplier %>
+</div>
+<div class = line-space">
+  <%= f.label :max_repayment_months, "Maximum number of monthly repayments" %>
+  <%= f.text_field :max_repayment_months %>
+</div>
+<div class = line-space">
+  <%= f.label :max_amount, "Maximum amount loaned"  %>
+  <%= f.text_field :max_amount %>
+</div>
+<div class = line-space">
+  <%= f.label :api, "Annual percentage rate (0 if no interest charged)" %>
+  <%= f.text_field :api %>
+</div>
+
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>
+<%= f.hidden_field :created_by %>

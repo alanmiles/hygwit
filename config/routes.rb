@@ -52,6 +52,8 @@ Hygwit::Application.routes.draw do
   resources :leaver_actions do
     collection { post :sort }
   end
+  resources :loan_types
+  resources :advance_types
   resources :country_admins
 
   root to: 'static_pages#home'

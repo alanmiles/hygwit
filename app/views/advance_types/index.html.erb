@@ -1,0 +1,17 @@
+<% provide(:title, 'Advance Types') %>
+<div class="row">
+  <aside class="span4">
+    <%= render "shared/admin_sidebar" %>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Advance Types</h1>
+
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add an advance type", new_advance_type_path, class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <%= render "list" %>
+    </ul>
+  </div>
+</div>

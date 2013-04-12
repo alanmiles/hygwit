@@ -1,16 +1,12 @@
 Hygwit::Application.routes.draw do
 
-  get "pay_items/index"
+  get "advance_types/index"
 
-  get "pay_items/new"
+  get "advance_types/new"
 
-  get "leaver_actions/index"
+  get "loan_types/index"
 
-  get "leaver_actions/new"
-
-  get "joiner_actions/index"
-
-  get "joiner_actions/new"
+  get "loan_types/new"
 
   resources :users
   resources :password_resets
@@ -53,6 +49,9 @@ Hygwit::Application.routes.draw do
     collection { post :sort }
   end
   resources :pay_categories do
+    collection { post :sort }
+  end
+  resources :pay_items do
     collection { post :sort }
   end
   resources :joiner_actions do

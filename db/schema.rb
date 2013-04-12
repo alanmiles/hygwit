@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130409110732) do
+ActiveRecord::Schema.define(:version => 20130411132404) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -25,6 +25,15 @@ ActiveRecord::Schema.define(:version => 20130409110732) do
     t.datetime "updated_at",                                :null => false
     t.boolean  "checked",                :default => false
     t.integer  "updated_by",             :default => 1
+  end
+
+  create_table "advance_types", :force => true do |t|
+    t.string   "name"
+    t.integer  "created_by", :default => 1
+    t.boolean  "checked",    :default => false
+    t.integer  "updated_by"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   create_table "contracts", :force => true do |t|
@@ -285,6 +294,20 @@ ActiveRecord::Schema.define(:version => 20130409110732) do
     t.datetime "updated_at",                       :null => false
     t.boolean  "checked",       :default => false
     t.integer  "updated_by",    :default => 1
+  end
+
+  create_table "loan_types", :force => true do |t|
+    t.string   "name"
+    t.integer  "qualifying_months",                                   :default => 12
+    t.integer  "max_repayment_months",                                :default => 12
+    t.integer  "max_salary_multiplier",                               :default => 12
+    t.integer  "max_amount",                                          :default => 1000
+    t.decimal  "apr",                   :precision => 4, :scale => 2, :default => 0.0
+    t.integer  "created_by",                                          :default => 1
+    t.boolean  "checked",                                             :default => false
+    t.integer  "updated_by"
+    t.datetime "created_at",                                                             :null => false
+    t.datetime "updated_at",                                                             :null => false
   end
 
   create_table "nationalities", :force => true do |t|

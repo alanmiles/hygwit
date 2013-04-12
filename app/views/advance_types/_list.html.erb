@@ -1,0 +1,8 @@
+      <% @advances.each do |advance| %>
+        <li>
+          <%= render "shared/superuser_admin_notifications", model_name: advance %>
+          <%= advance.name %>
+          | <%= link_to "change", edit_advance_type_path(advance) %>
+          <%= render "shared/admin_deletes", model_name: advance %>
+        </li>
+      <% end %>

@@ -1,0 +1,12 @@
+<% provide(:title, 'New Loan Type') %>
+<h1>New Loan Type</h1>
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@loan) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'advance_types/fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "Back", loan_types_path, class: "btn" if current_user.admin? %>
+    <% end %>
+  </div>
+</div>

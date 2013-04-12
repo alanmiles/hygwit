@@ -7,7 +7,7 @@
     <li><%= link_to "Joiner Actions", joiner_actions_path %></li>
     <li><%= link_to "Leaver Actions", leaver_actions_path %></li>
     <li><%= link_to "Payroll Categories", pay_categories_path %></li>
-    <li><%= link_to "Payroll Items", "#" %></li>
+    <li><%= link_to "Payroll Items", pay_items_path %></li>
     <li><%= link_to "Loan Types", "#" %></li>
     <li><%= link_to "Advance Types", "#" %></li>
     <li><%= link_to "Country Administrators", country_admins_path if current_user.superuser? %></li>

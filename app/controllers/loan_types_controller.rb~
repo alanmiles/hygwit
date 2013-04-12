@@ -1,0 +1,7 @@
+class LoanTypesController < ApplicationController
+  def index
+  end
+
+  def new
+  end
+end
