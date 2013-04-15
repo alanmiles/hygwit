@@ -104,8 +104,8 @@ describe "InsurancePages" do
   
   describe "when logged in as non-admin" do
   
+    let(:user) { FactoryGirl.create(:user, name: "Non Admin", email: "nonadmin@example.com") }
     before do
-      user = FactoryGirl.create(:user, name: "Non Admin", email: "nonadmin@example.com") 
       sign_in user
     end
   
@@ -116,9 +116,9 @@ describe "InsurancePages" do
         before { visit new_country_insurance_setting_path(@country) }
       
         it { should_not have_selector('title', text: 'New Salary Threshold') }
-        it "should render the root_path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -126,9 +126,9 @@ describe "InsurancePages" do
     
         before { visit country_insurance_settings_path(@country) }
       
-        it "should render the root-path" do
+        it "should render the home page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -136,14 +136,14 @@ describe "InsurancePages" do
     
         describe "submitting a DELETE request to the InsuranceSetting#destroy action" do
           before { delete insurance_setting_path(@setting) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the InsuranceSetting#update action" do
         before { put insurance_setting_path(@setting) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -154,9 +154,9 @@ describe "InsurancePages" do
         before { visit new_country_insurance_code_path(@country) }
       
         it { should_not have_selector('title', text: 'New Insurance Code') }
-        it "should render the root_path" do
+        it "should render the home page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -164,9 +164,9 @@ describe "InsurancePages" do
     
         before { visit country_insurance_codes_path(@country) }
       
-        it "should render the root-path" do
+        it "should render the home page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -174,14 +174,14 @@ describe "InsurancePages" do
     
         describe "submitting a DELETE request to the InsuranceCodes#destroy action" do
           before { delete insurance_code_path(@code) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the InsuranceCodes#update action" do
         before { put insurance_code_path(@code) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     

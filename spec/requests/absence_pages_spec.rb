@@ -89,8 +89,8 @@ describe "AbsencePages" do
   
   describe "when logged in as non-admin" do
   
+    let(:user) { FactoryGirl.create(:user, name: "Abscheck", email: "abscheck@example.com") }
     before do
-      user = FactoryGirl.create(:user, name: "Abscheck", email: "abscheck@example.com") 
       sign_in user
     end
     
@@ -101,9 +101,9 @@ describe "AbsencePages" do
         before { visit new_absence_type_path }
       
         it { should_not have_selector('title', text: 'New Absence Type') }
-        it "should render the root_path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -111,9 +111,9 @@ describe "AbsencePages" do
     
         before { visit absence_types_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -121,14 +121,14 @@ describe "AbsencePages" do
     
         describe "submitting a DELETE request to the AbsenceTypes#destroy action" do
           before { delete absence_type_path(@absence) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the AbsenceTypes#update action" do
         before { put absence_type_path(@absence) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     
     end
@@ -142,9 +142,9 @@ describe "AbsencePages" do
         before { visit new_country_country_absence_path(@country) }
       
         it { should_not have_selector('title', text: 'New Absence Type') }
-        it "should render the root_path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -152,9 +152,9 @@ describe "AbsencePages" do
     
         before { visit country_country_absences_path(@country) }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -163,7 +163,7 @@ describe "AbsencePages" do
         describe "submitting a DELETE request to the CountryAbsences#destroy action" do
      
           before { delete country_absence_path(country_absence) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
@@ -171,7 +171,7 @@ describe "AbsencePages" do
       describe "submitting a PUT request to the CountryAbsences#update action" do
        
         before { put country_absence_path(country_absence) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     
     end

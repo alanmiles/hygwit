@@ -1,8 +1,8 @@
 class CountriesController < ApplicationController
   
-  before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :destroy]
   before_filter :illegal_action, only: [:update, :destroy]
+  before_filter :check_admin
   before_filter :check_superuser, only: :new
   
   def index

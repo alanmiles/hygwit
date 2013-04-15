@@ -83,6 +83,7 @@ describe "InsuranceUpdates" do
     
   describe "when the user is signed in but not as an administrator" do
   
+    let(:user) { FactoryGirl.create(:user, name: "Non Admin", email: "nonadmin@example.com") }
     before do
       @setting_1 = @country.insurance_settings.create(shortcode: "LEL", name: "Lower Earnings Limit", weekly_milestone: 100, 
     										monthly_milestone: 400, annual_milestone: 4800, effective_date: Date.today - 60.days)
@@ -94,7 +95,6 @@ describe "InsuranceUpdates" do
       @rate_2 = @country.insurance_rates.create(insurance_code_id: @code_1.id, threshold_id: @setting_2.id, 
     										contribution: 12, created_by: 999999, updated_by: 999999,
     										effective: Date.today - 60.days, checked: true, source_employee: true)	
-      user = FactoryGirl.create(:user, name: "Non Admin", email: "nonadmin@example.com") 
       sign_in user 
     end
       
@@ -104,7 +104,7 @@ describe "InsuranceUpdates" do
         
       it "should render the root_path" do
         page.should have_selector('.alert', text: 'You must be a HROomph admin')
-        page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        page.should have_selector('h1', text: 'User Home Page')
       end
     end
       
@@ -114,14 +114,14 @@ describe "InsuranceUpdates" do
     
         describe "submitting a DELETE request to the InsuranceThresold#destroy action" do
           before { delete insurance_threshold_path(@rate_1) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the InsuranceThreshold#update action" do
         before { put insurance_threshold_path(@rate_1) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
        
     end
@@ -132,7 +132,7 @@ describe "InsuranceUpdates" do
         
       it "should render the root_path" do
         page.should have_selector('.alert', text: 'You must be a HROomph admin')
-        page.should have_selector('h2', text: 'Less HR - More Achievement.')
+        page.should have_selector('h1', text: 'User Home Page')
       end
     end
       
@@ -142,14 +142,14 @@ describe "InsuranceUpdates" do
     
         describe "submitting a DELETE request to the InsuranceSet#destroy action" do
           before { delete insurance_set_path(@rate_1) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the InsuranceSet#update action" do
         before { put insurance_set_path(@rate_1) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
        
     end

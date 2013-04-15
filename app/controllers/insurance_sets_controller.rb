@@ -1,8 +1,8 @@
 class InsuranceSetsController < ApplicationController
   
-  before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :create, :destroy]
   before_filter :illegal_action, only: [:update, :create, :destroy]
+  before_filter :check_admin
   
   def index
     #displays all the records that have been created on the effective date, allowing values to be updated - html or js

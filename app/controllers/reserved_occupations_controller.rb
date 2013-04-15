@@ -1,8 +1,8 @@
 class ReservedOccupationsController < ApplicationController
   
-  before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :create, :destroy]
   before_filter :illegal_action, only: [:update, :create, :destroy]
+  before_filter :check_admin
   
   def index
     @country = Country.find(params[:country_id])

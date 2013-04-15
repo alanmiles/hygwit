@@ -89,8 +89,8 @@ describe "MasterQualitiesPages" do
   
   describe "when logged in as non-admin" do
   
+    let(:user) { FactoryGirl.create(:user, name: "Quality Man", email: "quality@example.com") }
     before do
-      user = FactoryGirl.create(:user, name: "Quality Man", email: "quality@example.com")
       sign_in user
     end
     
@@ -102,7 +102,7 @@ describe "MasterQualitiesPages" do
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       

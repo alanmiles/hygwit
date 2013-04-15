@@ -157,8 +157,8 @@ describe "InsuranceCalculations" do
   
   describe "when logged in as non-admin" do
     
+    let(:user) { FactoryGirl.create(:user, name: "Non Admin", email: "nonadmin@example.com") }
     before do
-      user = FactoryGirl.create(:user, name: "Non Admin", email: "nonadmin@example.com") 
       sign_in user
     end
     
@@ -170,9 +170,9 @@ describe "InsuranceCalculations" do
     
           before { visit new_country_insurance_rate_path(@country) }
                
-          it "should render the root_path" do
+          it "should render the home-page" do
             page.should have_selector('.alert', text: 'You must be a HROomph admin')
-            page.should have_selector('h2', text: 'Less HR - More Achievement.')
+            page.should have_selector('h1', text: 'User Home Page')
           end
         end
     
@@ -180,9 +180,9 @@ describe "InsuranceCalculations" do
     
           before { visit country_insurance_rates_path(@country) }
       
-          it "should render the root-path" do
+          it "should render the home-page" do
             page.should have_selector('.alert', text: 'You must be a HROomph admin')
-            page.should have_selector('h2', text: 'Less HR - More Achievement.')
+            page.should have_selector('h1', text: 'User Home Page')
           end
         end
     
@@ -190,14 +190,14 @@ describe "InsuranceCalculations" do
     
           describe "submitting a DELETE request to the InsuranceRate#destroy action" do
             before { delete insurance_rate_path(@rate) }
-            specify { response.should redirect_to(root_path) }        
+            specify { response.should redirect_to user_path(user) }        
           end
     
         end
     
         describe "submitting a PUT request to the InsuranceRate#update action" do
           before { put insurance_rate_path(@rate) }
-          specify { response.should redirect_to(root_path) }
+          specify { response.should redirect_to user_path(user) }
         end
       end
       
@@ -207,9 +207,9 @@ describe "InsuranceCalculations" do
     
           before { visit country_insurance_future_rates_path(@country) }
       
-          it "should render the root-path" do
+          it "should render the home-page" do
             page.should have_selector('.alert', text: 'You must be a HROomph admin')
-            page.should have_selector('h2', text: 'Less HR - More Achievement.')
+            page.should have_selector('h1', text: 'User Home Page')
           end
         end
       end
@@ -220,9 +220,9 @@ describe "InsuranceCalculations" do
     
           before { visit country_insurance_history_rates_path(@country) }
       
-          it "should render the root-path" do
+          it "should render the home page" do
             page.should have_selector('.alert', text: 'You must be a HROomph admin')
-            page.should have_selector('h2', text: 'Less HR - More Achievement.')
+            page.should have_selector('h1', text: 'User Home Page')
           end
         end
       end
@@ -236,9 +236,9 @@ describe "InsuranceCalculations" do
     
           before { visit country_insurance_employer_rates_path(@country) }
       
-          it "should render the root-path" do
+          it "should render the home-page" do
             page.should have_selector('.alert', text: 'You must be a HROomph admin')
-            page.should have_selector('h2', text: 'Less HR - More Achievement.')
+            page.should have_selector('h1', text: 'User Home Page')
           end
         end
       end
@@ -249,9 +249,9 @@ describe "InsuranceCalculations" do
     
           before { visit country_insurance_employer_future_rates_path(@country) }
       
-          it "should render the root-path" do
+          it "should render the home-page" do
             page.should have_selector('.alert', text: 'You must be a HROomph admin')
-            page.should have_selector('h2', text: 'Less HR - More Achievement.')
+            page.should have_selector('h1', text: 'User Home Page')
           end
         end
       end
@@ -262,9 +262,9 @@ describe "InsuranceCalculations" do
     
           before { visit country_insurance_employer_history_rates_path(@country) }
       
-          it "should render the root-path" do
+          it "should render the home-page" do
             page.should have_selector('.alert', text: 'You must be a HROomph admin')
-            page.should have_selector('h2', text: 'Less HR - More Achievement.')
+            page.should have_selector('h1', text: 'User Home Page')
           end
         end
       end

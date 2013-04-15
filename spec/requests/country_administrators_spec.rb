@@ -175,8 +175,8 @@ describe "CountryAdministrators" do
   
   describe "when logged in as non-admin" do
     
+    let(:user) { FactoryGirl.create(:user, name: "Non Admin", email: "nonadmin@example.com") }
     before do
-      user = FactoryGirl.create(:user, name: "Non Admin", email: "nonadmin@example.com") 
       sign_in user
     end
     
@@ -187,9 +187,9 @@ describe "CountryAdministrators" do
         before { visit new_country_holiday_path(@country) }
       
         it { should_not have_selector('title', text: 'New National Holiday') }
-        it "should render the root_path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -197,9 +197,9 @@ describe "CountryAdministrators" do
     
         before { visit country_holidays_path(@country) }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -207,14 +207,14 @@ describe "CountryAdministrators" do
     
         describe "submitting a DELETE request to the Holidays#destroy action" do
           before { delete holiday_path(@holiday) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Holidays#update action" do
         before { put holiday_path(@holiday) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -225,9 +225,9 @@ describe "CountryAdministrators" do
         before { visit new_country_gratuity_formula_path(@country) }
       
         it { should_not have_selector('title', text: 'New Gratuity Rule') }
-        it "should render the root_path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -235,9 +235,9 @@ describe "CountryAdministrators" do
     
         before { visit country_gratuity_formulas_path(@country) }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -245,14 +245,14 @@ describe "CountryAdministrators" do
     
         describe "submitting a DELETE request to the GratuityFormula#destroy action" do
           before { delete gratuity_formula_path(@gratuity_line) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the GratuityFormula#update action" do
         before { put gratuity_formula_path(@gratuity_line) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -263,9 +263,9 @@ describe "CountryAdministrators" do
         before { visit new_country_ethnic_group_path(@country) }
       
         it { should_not have_selector('title', text: 'New Ethnic Group') }
-        it "should render the root_path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -275,7 +275,7 @@ describe "CountryAdministrators" do
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -283,14 +283,14 @@ describe "CountryAdministrators" do
     
         describe "submitting a DELETE request to the EthnicGroup#destroy action" do
           before { delete ethnic_group_path(@group) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the EthnicGroup#update action" do
         before { put ethnic_group_path(@group) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -301,9 +301,9 @@ describe "CountryAdministrators" do
         before { visit new_country_reserved_occupation_path(@country) }
       
         it { should_not have_selector('title', text: 'New Reserved Occupation') }
-        it "should render the root_path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -311,9 +311,9 @@ describe "CountryAdministrators" do
     
         before { visit country_reserved_occupations_path(@country) }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -321,14 +321,14 @@ describe "CountryAdministrators" do
     
         describe "submitting a DELETE request to the ReservedOccupation#destroy action" do
           before { delete reserved_occupation_path(@rjob) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the ReservedOccupation#update action" do
         before { put reserved_occupation_path(@rjob) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     

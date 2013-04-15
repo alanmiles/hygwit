@@ -444,9 +444,9 @@ describe "AdminPages" do
   end
   
   describe "when logged in as non-admin" do
-  
+    let(:user) { FactoryGirl.create(:user, name: "A User", email: "auser@example.com") }
     before do
-      user = FactoryGirl.create(:user, name: "A User", email: "auser@example.com")
+      #user = FactoryGirl.create(:user, name: "A User", email: "auser@example.com")
       sign_in user
     end
     
@@ -456,9 +456,9 @@ describe "AdminPages" do
         
         before { visit sectors_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -466,9 +466,9 @@ describe "AdminPages" do
       
         before { visit new_sector_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -477,14 +477,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the Sectors#destroy action" do
           before { delete sector_path(@sector) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Sectors#update action" do
         before { put sector_path(@sector) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
       
     end
@@ -496,9 +496,9 @@ describe "AdminPages" do
         
         before { visit loan_types_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -506,9 +506,9 @@ describe "AdminPages" do
       
         before { visit new_loan_type_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -517,14 +517,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the LoanTypes#destroy action" do
           before { delete loan_type_path(@loan) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the LoanTypes#update action" do
         before { put loan_type_path(@loan) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
       
     end
@@ -535,9 +535,9 @@ describe "AdminPages" do
         
         before { visit advance_types_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -545,9 +545,9 @@ describe "AdminPages" do
       
         before { visit new_advance_type_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -556,14 +556,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the AdvanceTypes#destroy action" do
           before { delete advance_type_path(@advance) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the AdvanceTypes#update action" do
         before { put advance_type_path(@advance) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
       
     end
@@ -574,9 +574,9 @@ describe "AdminPages" do
         
         before { visit jobfamilies_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -584,9 +584,9 @@ describe "AdminPages" do
       
         before { visit new_jobfamily_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -595,14 +595,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the Jobfamilies#destroy action" do
           before { delete jobfamily_path(@jobfamily) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Jobfamilies#update action" do
         before { put jobfamily_path(@jobfamily) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
       
     end
@@ -613,9 +613,9 @@ describe "AdminPages" do
         
         before { visit leaving_reasons_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -623,9 +623,9 @@ describe "AdminPages" do
       
         before { visit new_leaving_reason_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -634,14 +634,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the LeavingReasons#destroy action" do
           before { delete leaving_reason_path(@leaving_reason) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Nationalities#update action" do
         before { put leaving_reason_path(@leaving_reason) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
       
@@ -651,9 +651,9 @@ describe "AdminPages" do
         
         before { visit disciplinary_categories_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -661,9 +661,9 @@ describe "AdminPages" do
       
         before { visit new_disciplinary_category_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -672,14 +672,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the DisciplinaryCategories#destroy action" do
           before { delete disciplinary_category_path(@disciplinary_cat) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Nationalities#update action" do
         before { put disciplinary_category_path(@disciplinary_cat) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -689,9 +689,9 @@ describe "AdminPages" do
         
         before { visit grievance_types_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -699,9 +699,9 @@ describe "AdminPages" do
       
         before { visit new_grievance_type_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -710,14 +710,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the GrievanceTypes#destroy action" do
           before { delete grievance_type_path(@grievance_type) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Nationalities#update action" do
         before { put grievance_type_path(@grievance_type) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -727,9 +727,9 @@ describe "AdminPages" do
         
         before { visit contracts_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -737,9 +737,9 @@ describe "AdminPages" do
       
         before { visit new_contract_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -748,14 +748,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the Contracts#destroy action" do
           before { delete contract_path(@contract) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Nationalities#update action" do
         before { put contract_path(@contract) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
      
@@ -765,9 +765,9 @@ describe "AdminPages" do
         
         before { visit ranks_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -775,9 +775,9 @@ describe "AdminPages" do
       
         before { visit new_rank_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -786,14 +786,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the Ranks#destroy action" do
           before { delete rank_path(@rank) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Ranks#update action" do
         before { put rank_path(@rank) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -803,9 +803,9 @@ describe "AdminPages" do
         
         before { visit pay_categories_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -813,9 +813,9 @@ describe "AdminPages" do
       
         before { visit new_pay_category_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -824,14 +824,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the PayCategories#destroy action" do
           before { delete pay_category_path(@paycat) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the PayCategories#update action" do
         before { put pay_category_path(@paycat) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -841,9 +841,9 @@ describe "AdminPages" do
         
         before { visit pay_items_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -851,9 +851,9 @@ describe "AdminPages" do
       
         before { visit new_pay_item_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -862,14 +862,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the PayItems#destroy action" do
           before { delete pay_item_path(@payitem) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the PayItems#update action" do
         before { put pay_item_path(@payitem) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -879,9 +879,9 @@ describe "AdminPages" do
         
         before { visit joiner_actions_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -889,9 +889,9 @@ describe "AdminPages" do
       
         before { visit new_joiner_action_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -900,14 +900,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the JoinerActions#destroy action" do
           before { delete joiner_action_path(@join_action) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the JoinerActions#update action" do
         before { put joiner_action_path(@join_action) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -918,9 +918,9 @@ describe "AdminPages" do
         
         before { visit leaver_actions_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
       
@@ -928,9 +928,9 @@ describe "AdminPages" do
       
         before { visit new_leaver_action_path }
       
-        it "should render the root-path" do
+        it "should render the home-page" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
 
       end
@@ -939,14 +939,14 @@ describe "AdminPages" do
     
         describe "submitting a DELETE request to the LeaverActions#destroy action" do
           before { delete leaver_action_path(@leave_action) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the LeaverActions#update action" do
         before { put leaver_action_path(@leave_action) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
   end

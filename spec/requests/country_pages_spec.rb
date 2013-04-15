@@ -115,8 +115,8 @@ describe "CountryPages" do
   
   describe "when logged in as non-admin" do
   
+    let(:user) { FactoryGirl.create(:user, name: "Country checker", email: "cchecker@example.com") }
     before do
-      user = FactoryGirl.create(:user, name: "Country checker", email: "cchecker@example.com")
       sign_in user
     end
     
@@ -129,7 +129,7 @@ describe "CountryPages" do
         it { should_not have_selector('title', text: 'New Nationality') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -139,7 +139,7 @@ describe "CountryPages" do
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -147,14 +147,14 @@ describe "CountryPages" do
     
         describe "submitting a DELETE request to the Nationalities#destroy action" do
           before { delete nationality_path(@example) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Nationalities#update action" do
         before { put nationality_path(@example) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -167,7 +167,7 @@ describe "CountryPages" do
         it { should_not have_selector('title', text: 'New Currency') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -177,7 +177,7 @@ describe "CountryPages" do
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -185,14 +185,14 @@ describe "CountryPages" do
     
         describe "submitting a DELETE request to the Currencies#destroy action" do
           before { delete currency_path(@currency) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Currencies#update action" do
         before { put currency_path(@currency) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     
@@ -207,7 +207,7 @@ describe "CountryPages" do
         it { should_not have_selector('title', text: 'New Country') }
         it "should render the root_path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -217,7 +217,7 @@ describe "CountryPages" do
       
         it "should render the root-path" do
           page.should have_selector('.alert', text: 'You must be a HROomph admin')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.')
+          page.should have_selector('h1', text: 'User Home Page')
         end
       end
     
@@ -225,14 +225,14 @@ describe "CountryPages" do
     
         describe "submitting a DELETE request to the Countries#destroy action" do
           before { delete country_path(@country) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to user_path(user) }        
         end
     
       end
     
       describe "submitting a PUT request to the Countries#update action" do
         before { put country_path(@country) }
-        specify { response.should redirect_to(root_path) }
+        specify { response.should redirect_to user_path(user) }
       end
     end
     

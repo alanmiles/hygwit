@@ -25,7 +25,11 @@
   </aside>
   
   <div class="span8">
-    <%= render 'administrator_menu' if @user.admin? %>
+    <% if @user.admin? %>
+      <%= render 'administrator_menu' %>
+    <% else %>
+      <%= render 'user_menu' %>
+    <% end %>
   </div>
 </div>
 

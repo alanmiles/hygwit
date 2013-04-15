@@ -46,14 +46,18 @@ module SessionsHelper
   end
    
   def check_admin
-    if signed_in? && !current_user.admin?
-      redirect_to root_path, notice: "You must be a HROomph admin to issue this instruction." 
+    if signed_in?
+      unless current_user.admin?
+        redirect_to user_path(current_user), notice: "You must be a HROomph admin to issue this instruction."
+      end 
+    else
+      redirect_to signin_url, notice: "You must be a HROomph admin to issue this instruction." 
     end
   end
   
   def check_superuser
     unless signed_in? 
-      redirect_to root_path, notice: "You must be a HROomph superuser to issue this instruction." 
+      redirect_to signin_url, notice: "You must sign in and be a HROomph superuser to issue this instruction." 
     else  
       unless current_user.superuser?
         redirect_to user_path(current_user), notice: "You must be a HROomph superuser to issue this instruction." 
@@ -75,7 +79,7 @@ module SessionsHelper
           flash[:notice] = "You must be a registered administrator for #{@country.country} to make changes."
           redirect_to user_path(current_user)
         end
-      end
+      end 
     end
   end
   

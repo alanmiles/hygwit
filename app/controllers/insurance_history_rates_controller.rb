@@ -1,7 +1,7 @@
 class InsuranceHistoryRatesController < ApplicationController
   
-  before_filter :check_admin
   before_filter :signed_in_user
+  before_filter :check_admin
   
   def index
     @country = Country.find(params[:country_id])

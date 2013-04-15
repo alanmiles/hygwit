@@ -193,12 +193,4 @@ class InsuranceSettingsController < ApplicationController
     end
   end
   
-  private
-    
-    #def check_permitted
-    #  unless @country.insurance?
-    #    flash[:notice] = "National Insurance is switched off for this country"
-    #    redirect_to user_path(current_user)
-    #  end
-    #end
 end

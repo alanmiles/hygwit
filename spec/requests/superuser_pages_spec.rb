@@ -19,9 +19,9 @@ describe "SuperuserPages" do
       
         before { visit new_country_admin_path }
         
-        it "should render the root path" do
-          page.should have_selector('.alert', text: 'You must be a HROomph superuser')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.') 
+        it "should render the sign-in page" do
+          page.should have_selector('.alert', text: 'be a HROomph superuser')
+          page.should have_selector('h1', text: 'Sign in') 
         end
       end
     
@@ -29,9 +29,9 @@ describe "SuperuserPages" do
     
         before { visit country_admins_path }
       
-        it "should render the root path" do
-          page.should have_selector('.alert', text: 'You must be a HROomph superuser')
-          page.should have_selector('h2', text: 'Less HR - More Achievement.') 
+        it "should render the sign-in page" do
+          page.should have_selector('.alert', text: 'be a HROomph superuser')
+          page.should have_selector('h1', text: 'Sign in') 
         end
       end
       
@@ -43,12 +43,12 @@ describe "SuperuserPages" do
         
         describe "with a PUT request" do
           before { put country_admin_path(@c_admin) }
-          specify { response.should redirect_to(root_path) }
+          specify { response.should redirect_to signin_url }
         end
       
         describe "with a DELETE request" do
           before { delete country_admin_path(@c_admin) }
-          specify { response.should redirect_to(root_path) }        
+          specify { response.should redirect_to signin_url }        
         end
       end
     end

@@ -1,7 +1,7 @@
 class InsuranceRatesController < ApplicationController
   
-  before_filter :check_admin
   before_filter :signed_in_user, except: [:update, :create, :destroy]
+  before_filter :check_admin
   before_filter :illegal_action, only: [:update, :create, :destroy]
   
   def index
@@ -237,12 +237,4 @@ class InsuranceRatesController < ApplicationController
     end
   end
   
-  private
-    
-    #def check_permitted
-    #  unless @country.insurance?
-    #    flash[:notice] = "National Insurance is switched off for this country"
-    #    redirect_to user_path(current_user)
-    #  end
-    #end
 end

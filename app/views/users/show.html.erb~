@@ -15,19 +15,21 @@
         <div class="line-space">
           <%= admin_notes_2 %>
         </div>
-        
-          <h5 class="line-space">Switch to</h5>
-          <div class="line-space"><%= link_to 'Company Administration', "#", class: "btn btn-primary" %></div>
-          <div>  
-            <%= link_to 'Personal Records', "#", class: "btn btn-primary" %>      
-          </div>  
-       
+        <h5 class="line-space">Switch to:</h5>
+        <div class="line-space"><%= link_to 'Company Administration', "#", class: "btn btn-primary" %></div>
+        <div>  
+          <%= link_to 'Personal Records', "#", class: "btn btn-primary" %>      
+        </div>  
       </div> 
     <% end %>
   </aside>
   
   <div class="span8">
-    <%= render 'administrator_menu' if @user.admin? %>
+    <% if user.admin? %>
+      <%= render 'administrator_menu' %>
+    <% else %>
+      <%= render 'user_menu' %>
+    <% end %>
   </div>
 </div>
 
