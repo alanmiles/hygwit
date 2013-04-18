@@ -1,0 +1,12 @@
+<% provide(:title, 'New Business') %>
+<h1>Set Up A New Business</h1>
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@business) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "All businesses", businesses_path, class: "btn" if current_user.admin? %>
+    <% end %>
+  </div>
+</div>

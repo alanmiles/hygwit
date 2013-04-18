@@ -127,10 +127,6 @@ class Country < ActiveRecord::Base
       end
     end
   end
-  
-  def self.ready_to_use
-    self.where("complete = ?", true)
-  end
    
   private
   

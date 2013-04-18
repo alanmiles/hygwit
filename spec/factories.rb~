@@ -55,10 +55,12 @@ FactoryGirl.define do
     sequence(:name)  { |n| "Business #{n}" }
     country
     sector
+    created_by 1
   end
   
   factory :business_admin do
     business
     user
+    created_by 1
   end
 end

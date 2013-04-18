@@ -28,8 +28,4 @@ class Sector < ActiveRecord::Base
     sector
   end
   
-  def self.ready_to_use
-    self.where("checked =?", true)
-  end
-  
 end

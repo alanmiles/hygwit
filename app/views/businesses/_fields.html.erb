@@ -1,0 +1,22 @@
+<div class="small-space"><span class="standout">* </span>Country</div>
+<%= f.collection_select :country_id, @countries, :id, :country, prompt: "Please select" %>
+
+<div class="small-space"><span class="standout">* </span>Business name</div>
+<%= f.text_field :name %>
+
+<%= f.label :address_1, "Address line 1" %>
+<%= f.text_field :address_1 %>
+
+<%= f.label :address_2, "Address line 2" %>
+<%= f.text_field :address_2 %>
+
+<%= f.label :city, "City/Town" %>
+<%= f.text_field :city %>
+
+<div class="small-space"><span class="standout small-space">* </span>Sector</div>
+<%= f.collection_select :sector_id, @sectors, :id, :sector, prompt: "Please select" %>
+
+<div class="line-space">
+  <%= f.hidden_field :created_by %>
+  <%= f.hidden_field :updated_by %>
+</div>

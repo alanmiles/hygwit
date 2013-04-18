@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130411132404) do
+ActiveRecord::Schema.define(:version => 20130417183654) do
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -34,6 +34,52 @@ ActiveRecord::Schema.define(:version => 20130411132404) do
     t.integer  "updated_by"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
+  end
+
+  create_table "business_admins", :force => true do |t|
+    t.integer  "business_id"
+    t.integer  "user_id"
+    t.integer  "created_by"
+    t.boolean  "main_contact", :default => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+  end
+
+  add_index "business_admins", ["business_id"], :name => "index_business_admins_on_business_id"
+  add_index "business_admins", ["user_id"], :name => "index_business_admins_on_user_id"
+
+  create_table "businesses", :force => true do |t|
+    t.string   "name"
+    t.integer  "country_id"
+    t.string   "address_1"
+    t.string   "address_2"
+    t.string   "city"
+    t.integer  "sector_id"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.string   "registration_number"
+    t.string   "bank",                                                :default => "(Name of your payroll bank)"
+    t.string   "bank_branch",                                         :default => "(Branch identifier)"
+    t.string   "iban",                                                :default => "(Business iban code)"
+    t.boolean  "calendar_days",                                       :default => true
+    t.decimal  "hours_per_day",         :precision => 4, :scale => 2, :default => 8.0
+    t.decimal  "hours_per_month",       :precision => 5, :scale => 2, :default => 160.0
+    t.integer  "weekend_day_1",                                       :default => 6
+    t.integer  "weekend_day_2",                                       :default => 7
+    t.decimal  "standard_ot_rate",      :precision => 3, :scale => 2, :default => 1.25
+    t.decimal  "supplementary_ot_rate", :precision => 3, :scale => 2, :default => 1.5
+    t.decimal  "double_ot_rate",        :precision => 3, :scale => 2, :default => 2.0
+    t.string   "standard_start_time",                                 :default => "08:00"
+    t.boolean  "autocalc_benefits",                                   :default => false
+    t.boolean  "pension_scheme",                                      :default => false
+    t.boolean  "bonus_provision",                                     :default => false
+    t.integer  "close_date",                                          :default => 15
+    t.date     "last_payroll_date"
+    t.string   "home_airport"
+    t.integer  "review_interval",                                     :default => 6
+    t.boolean  "setup_complete",                                      :default => false
+    t.datetime "created_at",                                                                                     :null => false
+    t.datetime "updated_at",                                                                                     :null => false
   end
 
   create_table "contracts", :force => true do |t|
@@ -403,5 +449,12 @@ ActiveRecord::Schema.define(:version => 20130411132404) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
+
+  create_table "weekdays", :force => true do |t|
+    t.string   "day"
+    t.string   "abbreviation"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
 end

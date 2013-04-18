@@ -1,12 +1,12 @@
 Hygwit::Application.routes.draw do
 
-  get "advance_types/index"
+  get "businesses/index"
 
-  get "advance_types/new"
+  get "businesses/new"
 
-  get "loan_types/index"
+  get "businesses/edit"
 
-  get "loan_types/new"
+  get "businesses/show"
 
   resources :users
   resources :password_resets
@@ -60,6 +60,8 @@ Hygwit::Application.routes.draw do
   resources :leaver_actions do
     collection { post :sort }
   end
+  resources :loan_types
+  resources :advance_types
   resources :country_admins
 
   root to: 'static_pages#home'

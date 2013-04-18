@@ -1,0 +1,73 @@
+# == Schema Information
+#
+# Table name: business_admins
+#
+#  id           :integer          not null, primary key
+#  business_id  :integer
+#  user_id      :integer
+#  created_by   :integer
+#  main_contact :boolean          default(FALSE)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
+require 'spec_helper'
+
+describe BusinessAdmin do
+  
+  before do
+    @user = FactoryGirl.create(:user)
+    @business = FactoryGirl.create(:business, created_by: @user.id) 
+    @bus_admin = BusinessAdmin.new(user_id: @user.id, business_id: @business.id, created_by: @user.id)
+  
+  end
+  
+  subject { @bus_admin }
+
+  it { should respond_to(:user_id) }
+  it { should respond_to(:business_id) }
+  it { should respond_to(:created_by) }
+  it { should respond_to(:main_contact) }
+  it { should be_valid }
+  
+  describe "when user_id is not present" do
+    before { @bus_admin.user_id = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when business_id is not present" do
+    before { @bus_admin.business_id = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when created_by is not present" do
+    before { @bus_admin.created_by = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when record duplicates user and business" do
+    before do
+      @dup = @bus_admin.dup
+      @dup.save
+    end
+    it { should_not be_valid }
+  end
+  
+  describe "when adding a second business for a user" do
+    before do
+      @business_2 = @business.dup
+      @business_2.name = "Business 2"
+      @business_2.save
+      @bus_admin_2 = BusinessAdmin.new(user_id: @user.id, business_id: @business_2.id, created_by: @user.id)
+    end
+    it { should be_valid }
+  end
+  
+  describe "when adding a second admin_user for a business" do
+    before do
+      @user_2 = FactoryGirl.create(:user, name: "Second User", email: "seconduser@example.com")
+      @bus_admin_2 = BusinessAdmin.create(user_id: @user_2.id, business_id: @business.id)
+    end
+    it { should be_valid }
+  end
+end

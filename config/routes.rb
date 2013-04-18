@@ -55,6 +55,7 @@ Hygwit::Application.routes.draw do
   resources :loan_types
   resources :advance_types
   resources :country_admins
+  resources :businesses
 
   root to: 'static_pages#home'
 

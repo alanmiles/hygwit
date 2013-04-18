@@ -21,6 +21,7 @@ namespace :db do
     make_pay_items
     make_loan_types
     make_advance_types
+    make_weekdays
   end
 end  
 
@@ -315,5 +316,19 @@ def make_advance_types
       params[key] = values[i]
     end
     AdvanceType.create!(params)
+  end
+end
+
+def make_weekdays
+  lines = File.new('public/data/weekdays.csv').readlines
+  header = lines.shift.strip
+  keys = header.split(';')
+  lines.each do |line|
+    params = {}
+    values = line.strip.split(';')
+    keys.each_with_index do |key, i|
+      params[key] = values[i]
+    end
+    Weekday.create!(params)
   end
 end

@@ -191,10 +191,6 @@ select {
   padding-top: 15px;
 }
  
-.small-space {
-  padding-bottom: 5px;
-}
- 
 .line-space {
   padding-bottom: 15px;
 }
