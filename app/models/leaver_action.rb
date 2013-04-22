@@ -34,6 +34,10 @@ class LeaverAction < ActiveRecord::Base
     action
   end
   
+  def self.all_checked
+    self.where("checked =?", true)
+  end 
+  
   def contract_status
     if contract == 0
       return "Contract"

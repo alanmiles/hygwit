@@ -6,6 +6,7 @@ describe "BusinessSetups" do
   describe "when not logged in" do
     
     before do
+      #@absence_type = FactoryGirl.create(:absence_type, checked: true)
       @business = FactoryGirl.create(:business, created_by: 1)
     end
     
@@ -24,6 +25,19 @@ describe "BusinessSetups" do
     
     before do
       @country = FactoryGirl.create(:country, complete: true)
+      @country_absence = FactoryGirl.create(:country_absence, country_id: @country.id, checked: true)
+      @leaving_reason = FactoryGirl.create(:leaving_reason, checked: true)
+      @disciplinary_category = FactoryGirl.create(:disciplinary_category, checked: true)
+      @grievance_type = FactoryGirl.create(:grievance_type, checked: true)
+      @contract = FactoryGirl.create(:contract, checked: true)
+      @rank = FactoryGirl.create(:rank, checked: true)
+      @joiner_action = FactoryGirl.create(:joiner_action, checked: true)
+      @leaver_action = FactoryGirl.create(:leaver_action, checked: true)
+      @pay_category = FactoryGirl.create(:pay_category, checked: true)
+      @pay_item = FactoryGirl.create(:pay_item, pay_category_id: @pay_category.id, checked: true)
+      @loan_type = FactoryGirl.create(:loan_type, checked: true)
+      @advance_type = FactoryGirl.create(:advance_type, checked: true)
+      @quality = FactoryGirl.create(:quality, checked: true)
       @incomplete_country = @country.dup
       @incomplete_country.country = "Country_2"
       @incomplete_country.complete = false
@@ -72,6 +86,7 @@ describe "BusinessSetups" do
         before do
           @business_count = Business.count
           @bus_admin_count = BusinessAdmin.count
+          @descriptors_count = QualityDescriptor.count
           fill_in "business_name", with: "Foo Ltd"
           fill_in :created_by, with: 1
           select "Qatar", from: "business[country_id]"
@@ -79,11 +94,42 @@ describe "BusinessSetups" do
           click_button "Create"
         end
         
-        it "should create a new business + BusinessAdmin record" do
+        it "should create a new business + records in associated tables" do
+          @business = Business.find_by_name("Foo Ltd")
           @new_business_count = Business.count
           @new_business_count.should == @business_count + 1
           @new_bus_admin_count = BusinessAdmin.count
           @new_bus_admin_count.should == @bus_admin_count + 1
+          @absences_count = @business.absence_cats.count
+          @absences_count.should >= 1
+          @leaving_cats_count = @business.leaving_cats.count
+          @leaving_cats_count.should >= 1
+          @disc_cats_count = @business.disciplinary_cats.count
+          @disc_cats_count.should >= 1
+          @grievance_cats_count = @business.grievance_cats.count
+          @grievance_cats_count.should >= 1
+          @contract_cats_count = @business.contract_cats.count
+          @contract_cats_count.should >= 1
+          @rank_cats_count = @business.rank_cats.count
+          @rank_cats_count.should >= 1
+          @join_activities_count = @business.joiner_activities.count
+          @join_activities_count.should >= 1
+          @leave_activities_count = @business.leaver_activities.count
+          @leave_activities_count.should >= 1
+          @payroll_cats_count = @business.payroll_cats.count
+          @payroll_cats_count.should >= 1
+          @payroll_items_count = @business.payroll_items.count
+          @payroll_items_count.should >= 1
+          @loan_cats_count = @business.loan_cats.count
+          @loan_cats_count.should >= 1
+          @advance_cats_count = @business.advance_cats.count
+          @advance_cats_count.should >= 1
+          @personal_qualities_count = @business.personal_qualities.count
+          @personal_qualities_count.should >= 1
+          @new_descriptors_count = QualityDescriptor.count
+          @added_descriptors = @new_descriptors_count - @descriptors_count
+          @added_descriptors.should == 5
+          
           page.should have_selector('h1', text: 'Your Business Settings')
         end
         

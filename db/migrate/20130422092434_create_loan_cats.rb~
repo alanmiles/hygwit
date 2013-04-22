@@ -1,0 +1,17 @@
+class CreateLoanCats < ActiveRecord::Migration
+  def change
+    create_table :loan_cats do |t|
+      t.integer :business_id
+      t.string :name
+      t.integer :qualifying_months
+      t.integer :max_repayment_months
+      t.integer :max_salary_multiplier
+      t.integer :max_amount
+      t.decimal :apr
+      t.integer :created_by
+      t.integer :updated_by
+
+      t.timestamps
+    end
+  end
+end

@@ -1,0 +1,125 @@
+# == Schema Information
+#
+# Table name: payroll_items
+#
+#  id             :integer          not null, primary key
+#  business_id    :integer
+#  item           :string(255)
+#  payroll_cat_id :integer
+#  short_name     :string(255)
+#  deduction      :boolean          default(FALSE)
+#  gross_salary   :boolean          default(FALSE)
+#  fixed          :boolean          default(FALSE)
+#  position       :integer
+#  created_by     :integer
+#  updated_by     :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
+
+require 'spec_helper'
+
+describe PayrollItem do
+  before do
+    @country = FactoryGirl.create(:country, created_by: 1, complete: true)
+    @pay_cat = FactoryGirl.create(:pay_category, created_by: 1, checked: true)
+    @pay_item = FactoryGirl.create(:pay_item, pay_category_id: @pay_cat.id, created_by: 1, checked: true)
+    @business = FactoryGirl.create(:business, country_id: @country.id, created_by: 1)
+    @payroll_cat = @business.payroll_cats.create(category: "Accruals")
+    @payroll_item = @business.payroll_items.build(item: "Vacation pay", payroll_cat_id: @payroll_cat.id,
+    					short_name: "Vac Acc")
+  end
+  
+  subject { @payroll_item }
+
+  it { should respond_to(:item) }
+  it { should respond_to(:business_id) }
+  its(:business) { should == @business }
+  it { should respond_to(:payroll_cat_id) }
+  its(:payroll_cat) { should == @payroll_cat }
+  it { should respond_to(:short_name) }
+  it { should respond_to(:deduction) }
+  it { should respond_to(:gross_salary) }
+  it { should respond_to(:fixed) }
+  it { should respond_to(:position) }
+  it { should respond_to(:created_by) }
+  it { should respond_to(:updated_by) }
+  
+  it { should be_valid }
+  
+  describe "accessible attributes" do
+    it "should not allow access to business_id" do
+      expect do
+        PayrollItem.new(business_id: @business.id)
+      end.to raise_error(ActiveModel::MassAssignmentSecurity::Error)
+    end    
+  end
+  
+  describe "when business_id is nil" do
+    before { @payroll_item.business_id = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when payroll_cat_id is nil" do
+    before { @payroll_item.payroll_cat_id = nil }
+    it { should_not be_valid }
+  end
+  
+  #integration test should make sure that payroll_cat_id belongs only to this business
+  
+  describe "when item is not present" do
+    before { @payroll_item.item = " " }
+    it { should_not be_valid }
+  end
+  
+  describe "when item is nil" do
+    before { @payroll_item.item = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when item is too long" do
+    before { @payroll_item.item = "a" * 36 }
+    it { should_not be_valid }
+  end
+  
+  describe "when item is a duplicate for the same business" do
+    before do
+      @duplicate = @payroll_item.dup
+      @duplicate.item.upcase
+      @duplicate.short_name = "Foo"
+      @duplicate.save
+    end
+    it { should_not be_valid }
+  end
+  
+  describe "when item is a duplicate but for a different business" do
+    before do
+      @business_2 = @business.dup
+      @business_2.name = "Business Foo"
+      @business_2.save
+      @non_duplicate = @payroll_item.dup
+      @non_duplicate.business_id = @business_2.id
+      @non_duplicate.save
+    end
+    it { should be_valid }
+  end
+  
+  describe "when short_name is left empty" do
+    before { @payroll_item.short_name = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when short_name is too long" do
+    before { @payroll_item.short_name = "a" * 11 }
+    it { should_not be_valid }
+  end
+  
+  describe "when short_name is a duplicate for the business" do
+    before do
+      @duplicate = @payroll_item.dup
+      @duplicate.item = "FooBar"
+      @duplicate.save
+    end
+    it { should_not be_valid }
+  end
+end

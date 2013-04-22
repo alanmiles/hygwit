@@ -25,7 +25,7 @@ class PayItem < ActiveRecord::Base
   
   validates :item, 		 				presence: true, length: { maximum: 35 },
                      					uniqueness: { case_sensitive: false }
-  validates :short_name, 		 				presence: true, length: { maximum: 10 },
+  validates :short_name, 		 	presence: true, length: { maximum: 10 },
                      					uniqueness: { case_sensitive: false }
   validates :pay_category_id, presence: true
   validates :created_by, 			presence: true, numericality: { only_integer: true }
@@ -34,5 +34,9 @@ class PayItem < ActiveRecord::Base
  
   def self_ref
     item
+  end
+  
+  def self.all_checked
+    self.where("checked =?", true)
   end
 end

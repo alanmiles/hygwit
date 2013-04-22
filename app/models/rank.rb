@@ -25,4 +25,8 @@ class Rank < ActiveRecord::Base
   def self_ref
     rank
   end
+  
+  def self.all_checked
+    self.where("checked =?", true)
+  end 
 end

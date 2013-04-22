@@ -24,4 +24,7 @@ class DisciplinaryCategory < ActiveRecord::Base
     category
   end
   
+  def self.all_checked
+    self.where("checked =?", true)
+  end 
 end

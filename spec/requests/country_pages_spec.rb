@@ -1050,17 +1050,18 @@ describe "CountryPages" do
           
             describe "automatic checking of record entered by superuser" do
               before do
-                5.times { FactoryGirl.create(:absence_type) }
+                5.times { FactoryGirl.create(:absence_type, checked: true) }
                 fill_in "Country", with: "Wales"
                 select "GBP (Pounds Sterling)",  from: "country_currency_id"
                 select "British", from: "Nationality"
               end
             
               it "should create the new record" do
-            
                 expect { click_button "Create" }.to change(Country, :count).by(1)
                 page.should have_selector('h1', text: 'Wales')
-      
+                @country = Country.find_by_country("Wales")
+                @absences_count = @country.country_absences.count
+                @absences_count.should >= 1
               end
             end
           end

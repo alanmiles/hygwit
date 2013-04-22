@@ -11,7 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130417183654) do
+ActiveRecord::Schema.define(:version => 20130422103258) do
+
+  create_table "absence_cats", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "absence_code"
+    t.integer  "paid",                   :default => 100
+    t.boolean  "sickness",               :default => false
+    t.integer  "maximum_days_year"
+    t.boolean  "documentation_required", :default => true
+    t.string   "notes"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "absence_cats", ["business_id", "absence_code", "sickness"], :name => "index_absence_cats_on_business_id_and_absence_code_and_sickness"
 
   create_table "absence_types", :force => true do |t|
     t.string   "absence_code"
@@ -26,6 +42,17 @@ ActiveRecord::Schema.define(:version => 20130417183654) do
     t.boolean  "checked",                :default => false
     t.integer  "updated_by",             :default => 1
   end
+
+  create_table "advance_cats", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "name"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "advance_cats", ["business_id", "name"], :name => "index_advance_cats_on_business_id_and_name"
 
   create_table "advance_types", :force => true do |t|
     t.string   "name"
@@ -81,6 +108,17 @@ ActiveRecord::Schema.define(:version => 20130417183654) do
     t.datetime "created_at",                                                                                     :null => false
     t.datetime "updated_at",                                                                                     :null => false
   end
+
+  create_table "contract_cats", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "contract"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "contract_cats", ["business_id", "contract"], :name => "index_contract_cats_on_business_id_and_contract"
 
   create_table "contracts", :force => true do |t|
     t.string   "contract"
@@ -190,6 +228,17 @@ ActiveRecord::Schema.define(:version => 20130417183654) do
     t.integer  "updated_by", :default => 1
   end
 
+  create_table "disciplinary_cats", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "category"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "disciplinary_cats", ["business_id", "category"], :name => "index_disciplinary_cats_on_business_id_and_category"
+
   create_table "ethnic_groups", :force => true do |t|
     t.integer  "country_id"
     t.string   "ethnic_group"
@@ -213,6 +262,17 @@ ActiveRecord::Schema.define(:version => 20130417183654) do
     t.integer  "updated_by",                                           :default => 1
     t.integer  "created_by",                                           :default => 1
   end
+
+  create_table "grievance_cats", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "grievance"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "grievance_cats", ["business_id", "grievance"], :name => "index_grievance_cats_on_business_id_and_grievance"
 
   create_table "grievance_types", :force => true do |t|
     t.string   "grievance"
@@ -318,6 +378,22 @@ ActiveRecord::Schema.define(:version => 20130417183654) do
     t.datetime "updated_at",                        :null => false
   end
 
+  create_table "joiner_activities", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "action"
+    t.integer  "contract",       :default => 2
+    t.integer  "residence",      :default => 2
+    t.integer  "nationality",    :default => 2
+    t.integer  "marital_status", :default => 2
+    t.integer  "position"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  add_index "joiner_activities", ["business_id", "action"], :name => "index_joiner_activities_on_business_id_and_action"
+
   create_table "leaver_actions", :force => true do |t|
     t.string   "action"
     t.integer  "contract",       :default => 2
@@ -332,6 +408,34 @@ ActiveRecord::Schema.define(:version => 20130417183654) do
     t.datetime "updated_at",                        :null => false
   end
 
+  create_table "leaver_activities", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "action"
+    t.integer  "position"
+    t.integer  "contract",       :default => 2
+    t.integer  "residence",      :default => 2
+    t.integer  "nationality",    :default => 2
+    t.integer  "marital_status", :default => 2
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  add_index "leaver_activities", ["business_id", "action"], :name => "index_leaver_activities_on_business_id_and_action"
+
+  create_table "leaving_cats", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "reason"
+    t.boolean  "full_benefits", :default => false
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+  end
+
+  add_index "leaving_cats", ["business_id", "reason"], :name => "index_leaving_cats_on_business_id_and_reason"
+
   create_table "leaving_reasons", :force => true do |t|
     t.string   "reason"
     t.boolean  "full_benefits", :default => false
@@ -341,6 +445,22 @@ ActiveRecord::Schema.define(:version => 20130417183654) do
     t.boolean  "checked",       :default => false
     t.integer  "updated_by",    :default => 1
   end
+
+  create_table "loan_cats", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "name"
+    t.integer  "qualifying_months",                                   :default => 12
+    t.integer  "max_repayment_months",                                :default => 12
+    t.integer  "max_salary_multiplier",                               :default => 12
+    t.integer  "max_amount",                                          :default => 1000
+    t.decimal  "apr",                   :precision => 4, :scale => 2, :default => 0.0
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",                                                            :null => false
+    t.datetime "updated_at",                                                            :null => false
+  end
+
+  add_index "loan_cats", ["business_id", "name"], :name => "index_loan_cats_on_business_id_and_name"
 
   create_table "loan_types", :force => true do |t|
     t.string   "name"
@@ -394,6 +514,48 @@ ActiveRecord::Schema.define(:version => 20130417183654) do
     t.datetime "updated_at",                         :null => false
   end
 
+  create_table "payroll_cats", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "category"
+    t.string   "description"
+    t.boolean  "on_payslip",  :default => false
+    t.integer  "position"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
+
+  add_index "payroll_cats", ["business_id", "category"], :name => "index_payroll_cats_on_business_id_and_category"
+
+  create_table "payroll_items", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "item"
+    t.integer  "payroll_cat_id"
+    t.string   "short_name"
+    t.boolean  "deduction",      :default => false
+    t.boolean  "gross_salary",   :default => false
+    t.boolean  "fixed",          :default => false
+    t.integer  "position"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
+  add_index "payroll_items", ["business_id", "payroll_cat_id", "item"], :name => "index_payroll_items_on_business_id_and_payroll_cat_id_and_item"
+
+  create_table "personal_qualities", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "quality"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "personal_qualities", ["business_id", "quality"], :name => "index_personal_qualities_on_business_id_and_quality"
+
   create_table "qualities", :force => true do |t|
     t.string   "quality"
     t.boolean  "approved",   :default => false
@@ -403,6 +565,30 @@ ActiveRecord::Schema.define(:version => 20130417183654) do
     t.boolean  "checked",    :default => false
     t.integer  "updated_by", :default => 1
   end
+
+  create_table "quality_descriptors", :force => true do |t|
+    t.integer  "personal_quality_id"
+    t.string   "grade"
+    t.string   "descriptor"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  add_index "quality_descriptors", ["personal_quality_id", "grade"], :name => "index_quality_descriptors_on_personal_quality_id_and_grade"
+
+  create_table "rank_cats", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "rank"
+    t.integer  "position"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "rank_cats", ["business_id", "rank"], :name => "index_rank_cats_on_business_id_and_rank"
 
   create_table "ranks", :force => true do |t|
     t.string   "rank"

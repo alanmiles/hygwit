@@ -18,7 +18,7 @@ class AdvanceType < ActiveRecord::Base
                      uniqueness: { case_sensitive: false }
   validates :created_by, presence: true
   
-  default_scope order: 'advances.name ASC'
+  default_scope order: 'advance_types.name ASC'
   
   def self_ref
     name

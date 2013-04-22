@@ -1,0 +1,19 @@
+class CreateJoinerActivities < ActiveRecord::Migration
+  def change
+    create_table :joiner_activities do |t|
+      t.integer :business_id
+      t.string :action
+      t.integer :contract, default: 2
+      t.integer :residence, default: 2
+      t.integer :nationality, default: 2
+      t.integer :marital_status, default: 2
+      t.integer :position
+      t.integer :created_by
+      t.integer :updated_by
+
+      t.timestamps
+    end
+    
+    add_index :joiner_activities, [:business_id, :action]
+  end
+end

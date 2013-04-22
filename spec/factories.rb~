@@ -30,6 +30,52 @@ FactoryGirl.define do
     sequence(:absence_code) { |n| "AB#{n}" }
   end
   
+  factory :leaving_reason do
+    reason "Resigned"
+  end
+  
+  factory :disciplinary_category do
+    category "Fighting"
+  end
+  
+  factory :grievance_type do
+    grievance "Unfair dismissal"
+  end
+  
+  factory :contract do
+    contract "Permanent"
+  end
+  
+  factory :rank do
+    rank "Senior"
+  end
+  
+  factory :joiner_action do
+    action "Sign contract"  
+  end
+  
+  factory :leaver_action do
+    action "Return equipment"
+  end
+  
+  factory :pay_category do
+    category "Payments"
+  end
+  
+  factory :pay_item do
+    item "Basic sal"
+    short_name "Basic"
+    pay_category
+  end
+  
+  factory :loan_type do
+    name "Housing"
+  end
+  
+  factory :advance_type do
+    name "New-hire"
+  end
+  
   factory :country do
     country "Qatar"
     nationality
@@ -55,12 +101,72 @@ FactoryGirl.define do
     sequence(:name)  { |n| "Business #{n}" }
     country
     sector
-    created_by 1
   end
   
   factory :business_admin do
     business
     user
-    created_by 1
+  end
+  
+  factory :absence_cat do
+    absence_code "BT"
+    business
+  end
+  
+  factory :leaving_cat do
+    reason "Retired"
+    business
+  end
+  
+  factory :disciplinary_cat do
+    category "Lateness"
+    business
+  end
+  
+  factory :grievance_cat do
+    grievance "Unfair appraisal"
+    business
+  end
+  
+  factory :contract_cat do
+    contract "Temporary"
+    business
+  end
+  
+  factory :rank_cat do
+    rank "Junior"
+    business
+  end
+  
+  factory :joiner_activity do
+    action "Buy tickets"
+    business
+  end
+  
+  factory :leaver_activity do
+    action "Exit interview"
+    business
+  end
+  
+  factory :payroll_cat do
+    category "Deductions"
+    business
+  end
+  
+  factory :payroll_item do
+    item "Housing Allowance"
+    short_name "House A"
+    business
+    payroll_cat
+  end
+ 
+  factory :loan_cat do
+    name "Personal"
+    business
+  end
+  
+  factory :advance_cat do
+    name "Vacation"
+    business
   end
 end

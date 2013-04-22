@@ -11,7 +11,7 @@ describe "AbsencePages" do
     @nationality = FactoryGirl.create(:nationality, nationality: "German")
     @currency = FactoryGirl.create(:currency, currency: "Marks", code: "DM")
     @country = FactoryGirl.create(:country, country: "Germany", nationality_id: @nationality.id, currency_id: @currency.id)
-   
+    @country_absence = FactoryGirl.create(:country_absence, country_id: @country.id, absence_code: "UL", checked: true)
   end
   
   describe "when not logged in" do

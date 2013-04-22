@@ -25,5 +25,8 @@ class GrievanceType < ActiveRecord::Base
     grievance
   end
   
+  def self.all_checked
+    self.where("checked =?", true)
+  end 
 
 end

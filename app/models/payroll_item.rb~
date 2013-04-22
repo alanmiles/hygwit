@@ -1,0 +1,35 @@
+# == Schema Information
+#
+# Table name: payroll_items
+#
+#  id             :integer          not null, primary key
+#  business_id    :integer
+#  item           :string(255)
+#  payroll_cat_id :integer
+#  short_name     :string(255)
+#  deduction      :boolean          default(FALSE)
+#  gross_salary   :boolean          default(FALSE)
+#  fixed          :boolean          default(FALSE)
+#  position       :integer
+#  created_by     :integer
+#  updated_by     :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
+
+class PayrollItem < ActiveRecord::Base
+  attr_accessible :created_by, :deduction, :fixed, :gross_salary, :item, :payroll_cat_id, :position, :short_name, :updated_by
+  acts_as_list
+  
+  belongs_to :business
+  belongs_to :payroll_cat
+  
+  validates :business_id,			presence: true
+  #validates :payroll_cat_id, 	presence: true
+  validates :item,			 			presence: true, length: { maximum: 35 },
+                     						uniqueness: { case_sensitive: false, scope: :business_id }
+  validates :short_name, 		 	presence: true, length: { maximum: 10 },
+                   					  uniqueness: { case_sensitive: false, scope: :business_id }
+                     
+  default_scope order: 'payroll_items.position ASC'
+end

@@ -131,15 +131,20 @@ class Country < ActiveRecord::Base
   def self.ready_to_use
     self.where("complete = ?", true)
   end
+  
+  def checked_absences
+    self.country_absences.where("checked = ?", true)
+  end
    
   private
   
     def add_absence_codes
-      @absences = AbsenceType.all
+      @absences = AbsenceType.all_checked
       @absences.each do |absence|
         self.country_absences.create(absence_code: absence.absence_code, paid: absence.paid, sickness: absence.sickness,
                                     maximum_days_year: absence.maximum_days_year, 
-                                    documentation_required: absence.documentation_required, notes: absence.notes, checked: true)  
+                                    documentation_required: absence.documentation_required, notes: absence.notes, 
+                                    checked: absence.checked)  
       end         
     end
     

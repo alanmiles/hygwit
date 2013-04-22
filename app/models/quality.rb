@@ -30,6 +30,10 @@ class Quality < ActiveRecord::Base
     quality
   end
   
+  def self.all_checked
+    self.where("checked =?", true)
+  end
+  
   private
   
     def build_descriptors

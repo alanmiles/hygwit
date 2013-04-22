@@ -25,5 +25,7 @@ class LeavingReason < ActiveRecord::Base
     reason
   end
   
-
+  def self.all_checked
+    self.where("checked =?", true)
+  end
 end

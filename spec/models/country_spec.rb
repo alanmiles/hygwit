@@ -225,7 +225,7 @@ describe Country do
   
   describe "automatic creation of country absence codes with new country" do
     before do
-      5.times { FactoryGirl.create(:absence_type) }
+      5.times { FactoryGirl.create(:absence_type, checked: true) }
       @country.country = "UAE"
       @country.save
       @absences = @country.country_absences

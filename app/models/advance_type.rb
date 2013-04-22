@@ -23,4 +23,8 @@ class AdvanceType < ActiveRecord::Base
   def self_ref
     name
   end
+  
+  def self.all_checked
+    self.where("checked =?", true)
+  end
 end

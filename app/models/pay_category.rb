@@ -20,7 +20,7 @@ class PayCategory < ActiveRecord::Base
   
   validates :category, 				presence: true, length: { maximum: 50 },
                      					uniqueness: { case_sensitive: false }
-  validates :description,			length: { maximum: 254, allow_nil: true }
+  validates :description,			length: { maximum: 254, allow_blank: true }
   validates :created_by, 			presence: true, numericality: { only_integer: true }
   
   has_many :pay_items
@@ -29,5 +29,9 @@ class PayCategory < ActiveRecord::Base
   
   def self_ref
     category
+  end
+  
+  def self.all_checked
+    self.where("checked =?", true)
   end
 end

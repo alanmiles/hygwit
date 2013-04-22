@@ -1,0 +1,17 @@
+# == Schema Information
+#
+# Table name: advance_cats
+#
+#  id          :integer          not null, primary key
+#  business_id :integer
+#  name        :string(255)
+#  created_by  :integer
+#  updated_by  :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
+class AdvanceCat < ActiveRecord::Base
+  attr_accessible :created_by, :name, :updated_by
+  belongs_to :business
+end

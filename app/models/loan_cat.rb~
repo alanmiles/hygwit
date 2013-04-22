@@ -1,0 +1,22 @@
+# == Schema Information
+#
+# Table name: loan_cats
+#
+#  id                    :integer          not null, primary key
+#  business_id           :integer
+#  name                  :string(255)
+#  qualifying_months     :integer          default(12)
+#  max_repayment_months  :integer          default(12)
+#  max_salary_multiplier :integer          default(12)
+#  max_amount            :integer          default(1000)
+#  apr                   :decimal(4, 2)    default(0.0)
+#  created_by            :integer
+#  updated_by            :integer
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#
+
+class LoanCat < ActiveRecord::Base
+  attr_accessible :apr, :created_by, :max_amount, :max_repayment_months, :max_salary_multiplier, :name, :qualifying_months, :updated_by
+  belongs_to :business
+end

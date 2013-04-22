@@ -18,7 +18,7 @@
 
 class LoanType < ActiveRecord::Base
   attr_accessible :checked, :created_by, :name, :updated_by, :qualifying_months, :max_repayment_months, :max_salary_multiplier,
-  								:max_amount, :api
+  								:max_amount, :apr
   
   validates :name, presence: true, length: { maximum: 20 },
                      uniqueness: { case_sensitive: false }
@@ -26,7 +26,7 @@ class LoanType < ActiveRecord::Base
   validates :max_repayment_months, 	presence: true, numericality: { only_integer: true }, inclusion: { in: 0..1000 }
   validates :max_salary_multiplier, 	presence: true, numericality: { only_integer: true }, inclusion: { in: 0..1000 }
   validates :max_amount, 	presence: true, numericality: { only_integer: true }, inclusion: { in: 0..1000000 }
-  validates :api, 	presence: true, numericality: { only_integer: true }, inclusion: { in: 0..100 }
+  validates :apr, 	presence: true, numericality: true, inclusion: { in: 0..100 }
   validates :created_by, presence: true
   
   default_scope order: 'loan_types.name ASC'

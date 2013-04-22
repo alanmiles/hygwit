@@ -1,0 +1,18 @@
+# == Schema Information
+#
+# Table name: quality_descriptors
+#
+#  id                  :integer          not null, primary key
+#  personal_quality_id :integer
+#  grade               :string(255)
+#  descriptor          :string(255)
+#  created_by          :integer
+#  updated_by          :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#
+
+class QualityDescriptor < ActiveRecord::Base
+  attr_accessible :created_by, :descriptor, :grade, :updated_by
+  belongs_to :personal_quality
+end
