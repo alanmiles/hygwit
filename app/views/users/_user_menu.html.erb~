@@ -1,4 +1,0 @@
-<h1 class="align-left">User Home Page</h1>
-<ul class="menulist">
-  <li><%= link_to "Set up a new business", "#" %></li>
-</ul>

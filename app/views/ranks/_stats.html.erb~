@@ -1,8 +1,0 @@
-      <% if current_user.superuser? %>
-        <div id="recent-adds">
-          <%= recent_ranks %>
-        </div>
-        <div id="recent-updates">
-          <%= updated_ranks %>
-        </div>
-      <% end %>

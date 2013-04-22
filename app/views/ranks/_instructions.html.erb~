@@ -1,5 +1,0 @@
-      <div class="instruction">  
-        <div class="line-space">
-          <%= rank_instruction_1 %>
-        </div>
-      </div>

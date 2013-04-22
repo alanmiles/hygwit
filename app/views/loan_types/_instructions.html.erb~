@@ -1,5 +1,0 @@
-      <div class="instruction">  
-        <div class="line-space">
-          <%= loan_instruction_1 %>
-        </div>
-      </div>
