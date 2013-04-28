@@ -10,9 +10,6 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
-    if @user.business_admin?
-      @businesses = BusinessAdmin.where("user_id =?", @user.id)
-    end
   end
   
   def new

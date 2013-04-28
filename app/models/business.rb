@@ -46,6 +46,7 @@ class Business < ActiveRecord::Base
                   
   belongs_to :country
   belongs_to :sector
+  has_many :business_admins, dependent: :destroy
   has_many :absence_cats, dependent: :destroy
   has_many :leaving_cats, dependent: :destroy
   has_many :disciplinary_cats, dependent: :destroy
@@ -59,6 +60,10 @@ class Business < ActiveRecord::Base
   has_many :loan_cats, dependent: :destroy
   has_many :advance_cats, dependent: :destroy
   has_many :personal_qualities, dependent: :destroy
+  has_many :divisions, dependent: :destroy
+  has_many :departments, dependent: :destroy
+  has_many :jobs, through: :departments
+  
   
   #belongs_to :weekday
   

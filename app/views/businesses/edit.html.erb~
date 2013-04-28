@@ -3,11 +3,11 @@
   <div class="row">
   <aside class="span3">
     <section>
-      <h1>
+      <h1 class="line-space">
         <%= @business.name %>
       </h1> 
       <div><%= @business.city unless @business.city.nil? %></div>
-      <div class="line-space"><%= @business.country.country %></div>
+      <%= @business.country.country %>
       </h1>
       <div class="instruction">
         <div class="line-space">

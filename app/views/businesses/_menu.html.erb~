@@ -1,0 +1,34 @@
+<h1 class="align-left">Your Business Settings</h1>
+<ul class="menulist">
+  <div class="r-float">
+    <li><%= link_to "Contract Types", "#" %></li>
+    
+    <li><%= link_to "Joiner Actions", "#" %></li>
+    <li><%= link_to "Leaver Actions", "#" %></li>
+    <li><%= link_to "General Payroll Settings", "#" %></li>
+    <li><%= link_to "Payroll Categories", "#" %></li>
+    <li><%= link_to "Payroll Items", "#" %></li>
+    <li><%= link_to "Cost Centers", "#" %></li>
+    <li><%= link_to "Payroll -> Accounts Transfer", "#" %></li>
+    <li><%= link_to "Loan Types", "#" %></li>
+    <li><%= link_to "Advance Types", "#" %></li>
+    <li><%= link_to "Performance Reviews", "#" %></li>
+    <li><%= link_to "Business Administrators", "#" %></li>
+  </div> 
+  <div>
+    <li><%= link_to "Key Business Details", edit_business_path(@business.id) %></li>
+    <li><%= link_to "Divisions", "#" %></li>
+    <li><%= link_to "Departments", "#" %></li>
+    <li><%= link_to "Jobs", "#" %></li>
+    <li><%= link_to "Job Ranks", "#" %></li>
+    <li><%= link_to "Employees", "#" %></li>
+    <li><%= link_to "Standard Timings", "#" %></li>
+    <li><%= link_to "Overtime", "#" %></li>
+    <li><%= link_to "Shift Timings", "#" %></li>
+    <li><%= link_to "Absence Types", "#" %></li>
+    <li><%= link_to "Leaving Reasons", "#" %></li>
+    <li><%= link_to "Disciplinary Categories", "#" %></li>
+    <li><%= link_to "Grievance Types", "#" %></li>
+  </div>
+  
+</ul>

@@ -38,7 +38,6 @@ describe "BusinessSetups" do
       @loan_type = FactoryGirl.create(:loan_type, checked: true)
       @advance_type = FactoryGirl.create(:advance_type, checked: true)
       @quality = FactoryGirl.create(:quality, checked: true)
-      @descriptors_count = QualityDescriptor.count
       @incomplete_country = @country.dup
       @incomplete_country.country = "Country_2"
       @incomplete_country.complete = false
@@ -87,6 +86,7 @@ describe "BusinessSetups" do
         before do
           @business_count = Business.count
           @bus_admin_count = BusinessAdmin.count
+          @descriptors_count = QualityDescriptor.count
           fill_in "business_name", with: "Foo Ltd"
           fill_in :created_by, with: 1
           select "Qatar", from: "business[country_id]"

@@ -14,9 +14,6 @@
 class BusinessAdmin < ActiveRecord::Base
   attr_accessible :business_id, :created_by, :user_id, :main_contact
   
-  belongs_to :business
-  belongs_to :user 
-  
   validates :user_id, 	  		presence: true
   validates :business_id, 		presence: true, uniqueness: { scope: :user_id }
   validates :created_by,			presence: true

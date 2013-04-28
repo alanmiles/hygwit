@@ -50,6 +50,10 @@ FactoryGirl.define do
     rank "Senior"
   end
   
+  factory :jobfamily do
+    job_family "Secretary"
+  end
+  
   factory :joiner_action do
     action "Sign contract"  
   end
@@ -177,5 +181,22 @@ FactoryGirl.define do
   factory :personal_quality do
     quality "Brain-power"
     business
+  end
+  
+  factory :division do
+    divison "Main"
+    business
+  end
+  
+  factory :department do
+    department "Dept A"
+    dept_code "DPTA"
+    business
+  end
+  
+  factory :job do
+    job_title "Secretary"
+    department
+    jobfamily
   end
 end

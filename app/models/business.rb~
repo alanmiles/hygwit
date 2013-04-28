@@ -46,6 +46,7 @@ class Business < ActiveRecord::Base
                   
   belongs_to :country
   belongs_to :sector
+  has_many :business_admins, dependent: :destroy
   has_many :absence_cats, dependent: :destroy
   has_many :leaving_cats, dependent: :destroy
   has_many :disciplinary_cats, dependent: :destroy
@@ -59,6 +60,9 @@ class Business < ActiveRecord::Base
   has_many :loan_cats, dependent: :destroy
   has_many :advance_cats, dependent: :destroy
   has_many :personal_qualities, dependent: :destroy
+  has_many :divisions, dependent: :destroy
+  has_many :departments, dependent: :destroy
+  
   
   #belongs_to :weekday
   
@@ -211,7 +215,7 @@ class Business < ActiveRecord::Base
         @descriptors = quality.descriptors
         @descriptors.each do |descriptor|
           @qd = QualityDescriptor.find_by_personal_quality_id_and_grade(@pq.id, descriptor.grade)
-          @qd.update_attribute(descriptor: descriptor.descriptor)
+          @qd.update_attributes(descriptor: descriptor.descriptor)
         end    
    		end
     end 

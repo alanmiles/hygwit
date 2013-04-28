@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130422103258) do
+ActiveRecord::Schema.define(:version => 20130427211128) do
 
   create_table "absence_cats", :force => true do |t|
     t.integer  "business_id"
@@ -208,6 +208,21 @@ ActiveRecord::Schema.define(:version => 20130422103258) do
 
   add_index "currencies", ["code"], :name => "index_currencies_on_code"
 
+  create_table "departments", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "department"
+    t.string   "dept_code"
+    t.integer  "division_id"
+    t.boolean  "current",     :default => true
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  add_index "departments", ["business_id", "department"], :name => "index_departments_on_business_id_and_department"
+  add_index "departments", ["division_id", "department"], :name => "index_departments_on_division_id_and_department"
+
   create_table "descriptors", :force => true do |t|
     t.integer  "quality_id"
     t.string   "grade"
@@ -238,6 +253,18 @@ ActiveRecord::Schema.define(:version => 20130422103258) do
   end
 
   add_index "disciplinary_cats", ["business_id", "category"], :name => "index_disciplinary_cats_on_business_id_and_category"
+
+  create_table "divisions", :force => true do |t|
+    t.integer  "business_id"
+    t.string   "division"
+    t.boolean  "current",     :default => true
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  add_index "divisions", ["business_id", "division"], :name => "index_divisions_on_business_id_and_division"
 
   create_table "ethnic_groups", :force => true do |t|
     t.integer  "country_id"
@@ -363,6 +390,21 @@ ActiveRecord::Schema.define(:version => 20130422103258) do
     t.boolean  "checked",    :default => false
     t.integer  "updated_by", :default => 1
   end
+
+  create_table "jobs", :force => true do |t|
+    t.integer  "department_id"
+    t.string   "job_title"
+    t.integer  "jobfamily_id"
+    t.integer  "positions",     :default => 1
+    t.boolean  "current",       :default => true
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+  end
+
+  add_index "jobs", ["department_id", "job_title"], :name => "index_jobs_on_department_id_and_job_title", :unique => true
+  add_index "jobs", ["jobfamily_id"], :name => "index_jobs_on_jobfamily_id"
 
   create_table "joiner_actions", :force => true do |t|
     t.string   "action"

@@ -1,0 +1,22 @@
+# == Schema Information
+#
+# Table name: jobs
+#
+#  id            :integer          not null, primary key
+#  department_id :integer
+#  job_title     :string(255)
+#  jobfamily_id  :integer
+#  positions     :integer          default(1)
+#  current       :boolean          default(TRUE)
+#  created_by    :integer
+#  updated_by    :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
+class Job < ActiveRecord::Base
+  attr_accessible :created_by, :current, :job_title, :jobfamily_id, :updated_by, :positions
+  
+  belongs_to :department
+  belongs_to :jobfamily
+end

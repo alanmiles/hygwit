@@ -17,7 +17,6 @@ class Jobfamily < ActiveRecord::Base
   attr_accessible :approved, :created_by, :job_family, :checked, :updated_by
   
   has_many :reserved_occupations, dependent: :destroy
-  has_many :jobs
   
   validates :job_family, presence: true, length: { maximum: 50 },
                      uniqueness: { case_sensitive: false }

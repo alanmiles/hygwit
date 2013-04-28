@@ -13,6 +13,6 @@
   <% end %>
   <li>Work with your PERSONAL RECORDS:</li>
   <hr />
-  <li><%= link_to "Register as an employee of an existing HR2.0 business", "#" %></li>
+  <li><%= link_to "Join an existing HR2.0 business", "#" %></li>
   <li><%= link_to "Set up a new HR2.0 business", new_business_path %></li>
 </ul>
