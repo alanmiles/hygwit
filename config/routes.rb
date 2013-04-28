@@ -1,5 +1,11 @@
 Hygwit::Application.routes.draw do
 
+  get "divisions/index"
+
+  get "divisions/new"
+
+  get "divisions/edit"
+
   resources :users
   resources :password_resets
   resources :nationalities
