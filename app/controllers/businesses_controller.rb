@@ -15,7 +15,9 @@ class BusinessesController < ApplicationController
   def create
     @business = Business.new(params[:business])
     if @business.save
-      BusinessAdmin.create(business_id: @business.id, user_id: current_user.id, created_by: current_user.id, main_contact: true)
+      BusinessAdmin.create(business_id: @business.id, user_id: current_user.id, created_by: current_user.id, main_contact: true,
+      			manager: true, staff: true, payroll: true, attendance: true, recruitment: true, performance: true, training: true,
+      			property: true, pro: true)
       flash[:success] = "'#{@business.name}' added"
       redirect_to @business
     else

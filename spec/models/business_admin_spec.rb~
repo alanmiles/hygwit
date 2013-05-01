@@ -37,15 +37,6 @@ describe BusinessAdmin do
   it { should respond_to(:business_id) }
   it { should respond_to(:created_by) }
   it { should respond_to(:main_contact) }
-  it { should respond_to(:manager) }
-  it { should respond_to(:staff) }
-  it { should respond_to(:payroll) }
-  it { should respond_to(:attendance) }
-  it { should respond_to(:recruitment) }
-  it { should respond_to(:performance) }
-  it { should respond_to(:training) }
-  it { should respond_to(:property) }
-  it { should respond_to(:pro) }
   it { should be_valid }
   
   describe "when user_id is not present" do

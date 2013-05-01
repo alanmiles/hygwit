@@ -5,8 +5,6 @@
       <h1 class="line-space">
         <%= @country.country %>
       </h1>
-    </section>
-    <section>
       <div class="instruction">
         <div>
           <%= absence_country_guidance %>

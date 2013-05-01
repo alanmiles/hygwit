@@ -10,8 +10,8 @@
     <li><%= link_to "Payroll Items", "#" %></li>
     <li><%= link_to "Cost Centers", "#" %></li>
     <li><%= link_to "Payroll -> Accounts Transfer", "#" %></li>
-    <li><%= link_to "Loan Types", "#" %></li>
-    <li><%= link_to "Advance Types", "#" %></li>
+    <li><%= link_to "Loan Arrangements", "#" %></li>
+    <li><%= link_to "Advance Arrangements", "#" %></li>
     <li><%= link_to "Performance Reviews", "#" %></li>
     <li><%= link_to "Business Administrators", "#" %></li>
   </div> 

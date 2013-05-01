@@ -9,10 +9,20 @@
 #  main_contact :boolean          default(FALSE)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  manager      :boolean          default(FALSE)
+#  staff        :boolean          default(FALSE)
+#  payroll      :boolean          default(FALSE)
+#  attendance   :boolean          default(FALSE)
+#  recruitment  :boolean          default(FALSE)
+#  performance  :boolean          default(FALSE)
+#  training     :boolean          default(FALSE)
+#  property     :boolean          default(FALSE)
+#  pro          :boolean          default(FALSE)
 #
 
 class BusinessAdmin < ActiveRecord::Base
-  attr_accessible :business_id, :created_by, :user_id, :main_contact
+  attr_accessible :business_id, :created_by, :user_id, :main_contact, :manager, :staff, :payroll, :attendance, :recruitment,
+  								:performance, :training, :property, :pro
   
   belongs_to :business
   belongs_to :user 

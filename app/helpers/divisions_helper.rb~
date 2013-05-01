@@ -16,6 +16,6 @@ module DivisionsHelper
   end
   
   def division_instruction_4
-    "This division is not in your current list.  To reinstate it, check the 'Current?' box, then 'Save changes'."    
+    "This division is not in your current list.  To reinstate it, check the 'Current' box, then 'Save changes'."    
   end
 end

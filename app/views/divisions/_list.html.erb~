@@ -1,0 +1,8 @@
+      <% @divisions.each do |division| %>
+        <li>
+          <span class="span3"><%= division.division %></span>
+          | <%= link_to "edit", edit_division_path(division) %>
+          | <%= link_to "del", division, method: :delete,
+                       data: { confirm: "Delete '#{division.division}'. Are you sure?" } %>
+        </li>
+      <% end %>

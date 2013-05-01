@@ -62,6 +62,7 @@ class Business < ActiveRecord::Base
   has_many :personal_qualities, dependent: :destroy
   has_many :divisions, dependent: :destroy
   has_many :departments, dependent: :destroy
+  has_many :jobs, through: :departments
   
   
   #belongs_to :weekday
@@ -93,6 +94,11 @@ class Business < ActiveRecord::Base
   validates :home_airport, 							length: { maximum: 35, allow_blank: true }
   validates :review_interval,						presence: true, numericality: { only_integer: true }, inclusion: { in: 1..12 }
   
+  default_scope order: 'businesses.name ASC'
+  
+  def current_divisions
+    Division.where("business_id =? and current =?", self.id, true)
+  end
   
   private
   

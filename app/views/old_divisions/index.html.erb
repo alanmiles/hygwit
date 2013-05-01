@@ -1,4 +1,4 @@
-<% provide(:title, "Divisions: #{@business.name}") %>
+<% provide(:title, "Old Divisions: #{@business.name}") %>
 <div class="row">
   <aside class="span4">
     <section>
@@ -11,22 +11,17 @@
         <%= division_instruction_1 %>  
       </div>
     </section>
-    <% if @business.has_former_divisions? %>
-      <section>
-        <%= link_to "View / reinstate old divisions", business_old_divisions_path(@business), class: "btn" %>  
-      </section>
-    <% end %>
   </aside>
   
   <div class="span8">
-    <h1 class="align-left">Divisions</h1>
+    <h1 class="align-left">Old Divisions</h1>
     
     <div style="padding-bottom: 10px">
-      <%= link_to "Add a division", new_business_division_path(@business), class: "btn" %>
+      <%= link_to "Current divisions", business_divisions_path(@business), class: "btn" %>
       <%= link_to "Back to Business Settings Menu", @business, class: "btn" %>
     </div>
     <ul class="itemlist">
-      <%= render "list" %>
+      <%= render "divisions/list" %>
     </ul>
   </div>
 </div>

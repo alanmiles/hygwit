@@ -42,6 +42,11 @@ class User < ActiveRecord::Base
     @records > 0
   end
   
+  def bizadmin?(business)
+    @records = BusinessAdmin.where("business_id =? and user_id =?", business.id, self.id).count
+    @records > 0
+  end
+  
   def count_management_roles
     BusinessAdmin.where("user_id =?", self.id).count
   end

@@ -170,7 +170,7 @@ describe "AuthenticationPages" do
       
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(@user) }
-        specify { response.should redirect_to(root_path) }        
+        specify { response.should redirect_to user_path(@non_admin) }        
       end
     end
   end

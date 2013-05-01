@@ -13,11 +13,6 @@
         </div> 
       </div>
     </section>
-    <% if @business.has_former_divisions? %>
-      <section>
-        <%= link_to "View / reinstate old divisions", business_old_divisions_path(@business), class: "btn" %>  
-      </section>
-    <% end %>
   </aside>
   <div class="span6 offset0">
     <h1>New Division</h1>

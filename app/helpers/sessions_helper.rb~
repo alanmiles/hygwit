@@ -44,6 +44,14 @@ module SessionsHelper
       redirect_to signin_url, notice: "Please sign in."
     end
   end
+  
+  def track_current(business)
+    session[:biz] = business.id
+  end
+  
+  def current_business
+    Business.find(session[:biz])
+  end
    
   def check_admin
     if signed_in?

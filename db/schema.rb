@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130427211128) do
+ActiveRecord::Schema.define(:version => 20130429111028) do
 
   create_table "absence_cats", :force => true do |t|
     t.integer  "business_id"
@@ -70,6 +70,15 @@ ActiveRecord::Schema.define(:version => 20130427211128) do
     t.boolean  "main_contact", :default => false
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
+    t.boolean  "manager",      :default => false
+    t.boolean  "staff",        :default => false
+    t.boolean  "payroll",      :default => false
+    t.boolean  "attendance",   :default => false
+    t.boolean  "recruitment",  :default => false
+    t.boolean  "performance",  :default => false
+    t.boolean  "training",     :default => false
+    t.boolean  "property",     :default => false
+    t.boolean  "pro",          :default => false
   end
 
   add_index "business_admins", ["business_id"], :name => "index_business_admins_on_business_id"

@@ -1,0 +1,16 @@
+<%= f.label :division %>
+<%= f.text_field :division %>
+
+
+<div class= "line-space">
+  <% if @formtype == "edit" %> 
+    <% unless @division.has_current_departments? %>
+      <span class="span5 r-float"><%= f.check_box :current %></span>
+      <span class="vert-down">Current?</span>
+    <% end %>
+  <% end %>
+</div>
+
+
+<div style="clear:both"><%= f.hidden_field :created_by %></div>
+<%= f.hidden_field :updated_by %>

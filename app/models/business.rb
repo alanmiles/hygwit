@@ -94,6 +94,20 @@ class Business < ActiveRecord::Base
   validates :home_airport, 							length: { maximum: 35, allow_blank: true }
   validates :review_interval,						presence: true, numericality: { only_integer: true }, inclusion: { in: 1..12 }
   
+  default_scope order: 'businesses.name ASC'
+  
+  def current_divisions
+    Division.where("business_id =? and current =?", self.id, true)
+  end
+  
+  def former_divisions
+    Division.where("business_id =? and current =?", self.id, false)
+  end
+  
+  def has_former_divisions?
+    @div_count = Division.where("business_id =? and current =?", self.id, false).count
+    @div_count > 0
+  end
   
   private
   

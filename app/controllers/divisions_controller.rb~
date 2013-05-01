@@ -6,7 +6,7 @@ class DivisionsController < ApplicationController
   def index
     @business = Business.find(params[:business_id])
     check_bizadmin
-    @divisions = @business.current_divisions
+    @division = @business.current_divisions
   end
 
   def new

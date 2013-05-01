@@ -59,7 +59,20 @@ module SessionsHelper
         redirect_to user_path(current_user), notice: "You must be a HROomph admin to issue this instruction."
       end 
     else
+      store_location
       redirect_to signin_url, notice: "You must be a HROomph admin to issue this instruction." 
+    end
+  end
+  
+  def check_bizadmin
+    if signed_in?
+      bizadmin_check = BusinessAdmin.find_by_user_id_and_business_id(current_user.id, @business.id)
+      if bizadmin_check.nil?
+        flash[:notice] = "Sorry, you're not a registered officer for #{@business.name}."
+        redirect_to user_path(current_user)
+      end
+    else
+      redirect_to signin_url, notice: "You must be a signed-in business officer to issue this instruction."
     end
   end
   
