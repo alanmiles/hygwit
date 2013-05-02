@@ -19,11 +19,30 @@ class Department < ActiveRecord::Base
   
   belongs_to :business
   belongs_to :division
+  has_many :jobs
+  
+  before_save	:upcase_deptcode
   
   validates :business_id,					presence: true
   validates :department,				  presence: true, length: { maximum: 25 }, 
   																	uniqueness: { case_sensitive: false, scope: :business_id }
-  validates :dept_code, 				  presence: true, length: { maximum: 4 }, 
+  validates :dept_code, 				  presence: true, length: { maximum: 5 }, 
   																	uniqueness: { case_sensitive: false, scope: :business_id }
   validates :division_id,					numericality: { only_integer: true, allow_nil: true }												
+
+  def has_jobs?		
+    @cnt = Job.where("department_id =?", self.id).count
+    @cnt > 0
+  end
+  
+  def has_current_jobs?
+  	@cnt = Job.where("department_id =? and current =?", self.id, true).count
+    @cnt > 0	
+  end
+  
+  private
+  
+    def upcase_deptcode
+      dept_code.upcase!
+    end
 end

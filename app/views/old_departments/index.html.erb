@@ -1,4 +1,4 @@
-<% provide(:title, "Old Divisions: #{@business.name}") %>
+<% provide(:title, "Old Departments: #{@business.name}") %>
 <div class="row">
   <aside class="span4">
     <section>
@@ -9,24 +9,24 @@
     <section>
       <div class="instruction">
         <div class="line-space">
-          <%= old_div_1 %>
+          <%= old_dept_1 %>
         </div>
         <div>
-          <%= old_div_2 %>
-        </div>  
+          <%= old_dept_2 %>
+        </div> 
       </div>
     </section>
   </aside>
   
   <div class="span8">
-    <h1 class="align-left">Old Divisions</h1>
+    <h1 class="align-left">Old Departments</h1>
     
     <div style="padding-bottom: 10px">
-      <%= link_to "Current divisions", business_divisions_path(@business), class: "btn" %>
+      <%= link_to "Current departments", business_departments_path(@business), class: "btn" %>
       <%= link_to "Back to Business Settings Menu", @business, class: "btn" %>
     </div>
     <ul class="itemlist">
-      <%= render "divisions/list" %>
+      <%= render "departments/list" %>
     </ul>
   </div>
 </div>

@@ -1,0 +1,40 @@
+<% provide(:title, "Departments: #{@business.name}") %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= @business.name %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <div class="line-space">
+          <%= department_instruction_1 %>
+        </div>
+        <div class="line-space">
+          <%= department_instruction_1a %>
+        </div>
+        <% if @business.no_current_divisions? %>
+          <div class="standout">You must enter at least one division before you continue with departments.</div>
+        <% end %>  
+      </div>
+    </section>
+    <% if @business.has_former_departments? %>
+      <section>
+        <%= link_to "View / reinstate old departments", business_old_departments_path(@business), class: "btn" %>  
+      </section>
+    <% end %>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Departments</h1>
+    
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a department", new_business_department_path(@business), class: "btn" unless @business.no_current_divisions? %>
+      <%= link_to "Back to Business Settings Menu", @business, class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <%= render "list" %>
+    </ul>
+  </div>
+</div>

@@ -20,7 +20,7 @@ describe Department do
   before do
     @country = FactoryGirl.create(:country, created_by: 1, complete: true)
     @business = FactoryGirl.create(:business, country_id: @country.id, created_by: 1)
-    @division = @business.divisions.create
+    @division = @business.divisions.create(division: "Div")
     @department = @business.departments.build(department: "Dept B", dept_code: "DPTB", division_id: @division.id)
   end
   
@@ -52,7 +52,7 @@ describe Department do
   
   describe "when division_id is nil" do
     before { @department.division_id = nil }
-    it { should be_valid }
+    it { should_not be_valid }
   end
   
   describe "when division_id is not an integer" do
@@ -86,7 +86,7 @@ describe Department do
   end
   
   describe "when dept_code field is too long" do
-    before { @department.dept_code = "a" * 5 }
+    before { @department.dept_code = "a" * 6 }
     it { should_not be_valid }
   end
   
@@ -115,7 +115,7 @@ describe Department do
       @business_2 = @business.dup
       @business_2.name = "Business Foo"
       @business_2.save      
-      non_dup = @business_2.departments.create(department: "Dept B", dept_code: "DPTB")
+      non_dup = @business_2.departments.create(department: "Dept B", dept_code: "DPTB", division_id: @division.id)
     end
     it { should be_valid }  
   end

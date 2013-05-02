@@ -370,7 +370,7 @@ describe "DivisionPages" do
       describe "edit page when division is not current" do
        
         before do
-          visit edit_division_path(@division)
+          visit edit_division_path(@division_3)  #@division_3 is not current
         end
         
         it { should have_selector(".instruction", text: "This division is not in your current list") }

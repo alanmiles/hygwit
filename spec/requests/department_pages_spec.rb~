@@ -1,0 +1,426 @@
+require 'spec_helper'
+
+describe "DepartmentPages" do
+  
+  subject { page }
+  
+  before do
+    @user = FactoryGirl.create(:user)
+    @country = FactoryGirl.create(:country, created_by: 1, checked: true)
+    @sector = FactoryGirl.create(:sector, created_by: 1, checked: true)
+    @business = FactoryGirl.create(:business, country_id: @country.id, sector_id: @sector.id, created_by: @user.id)
+    @division = @business.divisions.create(division: "Sales")
+    @department = @business.departments.create(department: "Dept One", dept_code: "ONE", division_id: @division.id)
+  end
+  
+  describe "not logged in" do
+  
+    describe "index page" do
+      
+      before { visit business_departments_path(@business) }
+      
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    end
+      
+    describe "new page" do
+      
+      before { visit new_business_department_path(@business) }
+      
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    end
+      
+    describe "edit page" do
+      
+      before do 
+        visit edit_department_path(@division)
+      end
+              
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    end
+    
+    describe "when trying to change the Department data" do
+      
+      describe "with a PUT request" do
+        before { put department_path(@department) }
+        specify { response.should redirect_to(root_path) }
+      end
+      
+      describe "with a DELETE request" do
+        before { delete department_path(@department) }
+        specify { response.should redirect_to(root_path) }        
+      end
+    end
+  end
+  
+  describe "logged in"do
+  
+    before { sign_in @user }
+    
+    describe "not business admin" do
+    
+      describe "index page" do
+      
+        before { visit business_departments_path(@business) }
+      
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+      
+      describe "new page" do
+      
+        before { visit new_business_department_path(@business) }
+      
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+      
+      describe "edit page" do
+      
+        before do 
+          visit edit_department_path(@department)
+        end
+              
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+    
+      describe "when trying to change the Department data" do
+      
+        describe "with a PUT request" do
+          before { put department_path(@department) }
+          specify { response.should redirect_to @user }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete department_path(@department) }
+          specify { response.should redirect_to @user }        
+        end
+      end
+    end
+  
+    describe "business admin, but without access to Settings" do
+     
+      before do
+        @business_2 = FactoryGirl.create(:business, name: "Biz 2", country_id: @country.id, sector_id: 
+        									@sector.id, created_by: @user.id)    
+        @bizadmin = FactoryGirl.create(:business_admin, business_id: @business_2.id, user_id: @user.id, created_by: 1)
+      end
+      
+      describe "index page" do
+      
+        before { visit business_departments_path(@business) }
+      
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+      
+      describe "new page" do
+      
+        before { visit new_business_department_path(@business) }
+      
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+      
+      describe "edit page" do
+      
+        before do 
+          visit edit_department_path(@department)
+        end
+              
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+    
+      describe "when trying to change the Department data" do
+      
+        describe "with a PUT request" do
+          before { put department_path(@department) }
+          specify { response.should redirect_to @user }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete department_path(@department) }
+          specify { response.should redirect_to @user }        
+        end
+      end
+      
+    end
+  
+    describe "business admin, with access to Settings" do
+  
+      before do
+        @bizadmin = FactoryGirl.create(:business_admin, business_id: @business.id, user_id: @user.id, created_by: 1)
+        @jobfamily = FactoryGirl.create(:jobfamily, created_by: 1, checked: true)
+        @nojob_department = @business.departments.create(department: "Admin", dept_code: "SALAD", division_id: @division.id, current: true)
+        @old_department = @business.departments.create(department: "Old", dept_code: "OLD", 
+        								division_id: @division.id, current: false)
+        @job = FactoryGirl.create(:job, department_id: @department.id, jobfamily_id: @jobfamily.id)								
+      end
+    
+      describe "index page" do
+      
+        before { visit business_departments_path(@business) }
+      
+        it { should have_selector('h1', text: 'Departments') }
+        it { should have_selector('h1', text: @business.name) }
+        it { should have_selector('.span3', text: @department.department) }
+        it { should have_selector('.span3', text: @nojob_department.department) }
+        it { should have_selector('.span1', text: @department.dept_code) }
+        it { should have_selector('.span3', text: @department.division.division) }
+        it { should have_link('edit', href: edit_department_path(@department)) }
+        it { should have_link('edit', href: edit_department_path(@nojob_department)) }
+        it { should have_link('del', href: department_path(@nojob_department)) }
+        it { should have_link('Add a department', href: new_business_department_path(@business)) }
+        it { should have_link('Back to Business Settings Menu', href: business_path(@business)) }
+        it { should have_link('View / reinstate old departments', href: business_old_departments_path(@business)) }
+        it { should_not have_selector('.standout', text: "You must enter at least one division") }
+        
+        describe "no listing if the department is not current" do
+          it { should_not have_selector('.span3', text: @old_department.department) }
+        end
+        
+        describe "no delete link for departments with a linked job" do
+          it { should_not have_link('del', href: department_path(@department)) }
+        end
+        
+        it "should delete department (when delete button is shown)" do
+          expect { click_link('del') }.to change(@business.departments, :count).by(-1)
+        end
+      end
+      
+      describe "index page with no former departments" do
+      
+        before do
+          @old_department.toggle!(:current)
+          visit business_departments_path(@business)
+        end
+        
+        it { should_not have_link('View / reinstate old departments', href: business_old_departments_path(@business)) }
+      end
+      
+      describe "old departments index" do
+      
+        before do
+          @job.toggle!(:current)   #job no longer current
+          @department.toggle!(:current)   #make not current, though still has attached jobs 
+          visit business_old_departments_path(@business)
+        end
+      
+        it { should have_selector('h1', text: 'Old Departments') }
+        it { should have_selector('h1', text: @business.name) }
+        it { should_not have_selector('.span3', text: @nojob_department.department) }
+        it { should have_selector('.span3', text: @old_department.department) }
+        it { should have_selector('.span1', text: @old_department.dept_code) }
+        it { should have_selector('.span3', text: @old_department.division.division) }
+        it { should have_link('edit', href: edit_department_path(@old_department)) }
+        it { should have_link('del', href: department_path(@old_department)) }
+        it { should have_link('Back to Business Settings Menu', href: business_path(@business)) }
+        it { should have_link('Current departments', href: business_departments_path(@business)) }
+        
+        describe "no delete link for departments with a linked job, even if job not current" do
+          it { should_not have_link('del', href: department_path(@department)) }
+        end
+        
+        it "should delete department (when delete button is shown)" do
+          expect { click_link('del') }.to change(@business.departments, :count).by(-1)
+        end
+      
+      end
+      
+      describe "new page" do
+      
+        before { visit new_business_department_path(@business) }
+      
+        it { should have_selector('h1', text: 'New Department') }
+        it { should have_selector('h1', text: @business.name) }
+        it { should have_selector("input#department_department") }
+        it { should have_selector("input#department_dept_code") }
+        it { should have_selector("select#department_division_id") }
+        it { should_not have_selector("input#department_current") }
+        it { should have_link("All departments", href: business_departments_path(@business)) }
+        it { should have_link("Business settings", href: business_path(@business)) }
+        it { should have_link('View / reinstate old departments', href: business_old_departments_path(@business)) }
+      
+        describe "creating a new department" do
+      
+          before do
+            fill_in "Department",  with: "New Dept"
+            fill_in "department_dept_code", with: "New"
+            select "#{@division.division}",  from: "department_division_id"
+          end
+        
+          it "should create a department" do
+            expect { click_button "Create" }.to change(@business.departments, :count).by(1)
+            page.should have_selector('h1', text: "Departments")
+            page.should have_selector('h1', text: @business.name)
+            page.should have_selector('div.alert.alert-success', text: "'New Dept' has been added")
+          end         
+        end
+      
+        describe "creating a record that fails validation" do
+      
+          before { fill_in "Department",  with: "" }
+        
+          it "should not create a Department" do
+            expect { click_button "Create" }.not_to change(Department, :count)
+            page.should have_selector('h1', text: 'New Department')
+            page.should have_content('error')
+          end  
+      
+        end
+      
+      end
+      
+      describe "new page with no former departments" do
+      
+        before do
+          @old_department.toggle!(:current)
+          visit new_business_department_path(@business)
+        end
+        
+        it { should_not have_link('View / reinstate old departments', href: business_old_departments_path(@business)) }
+      
+      end
+      
+      describe "edit page" do
+      
+        before { visit edit_department_path(@nojob_department) }
+      
+        it { should have_selector('h1', text: 'Edit Department') }
+        it { should have_selector('h1', text: @business.name) }
+        it { should have_selector("input#department_department") }
+        it { should have_selector("input#department_dept_code") }
+        it { should have_selector("select#department_division_id") }
+        it { should have_selector("input#department_current") }
+        it { should have_link("All departments", href: business_departments_path(@business)) }
+        it { should have_link("Business settings", href: business_path(@business)) }
+        it { should have_selector(".instruction", text: "This department has no related current jobs") }
+        it { should_not have_selector(".instruction", text: "This department is not in your current list") }
+        it { should have_link('View / reinstate old departments', href: business_old_departments_path(@business)) }
+      
+        describe "editing the department name" do
+      
+          let(:new_dept) { "Jobless" }
+          before do
+            fill_in 'Department', with: new_dept
+            click_button "Save change" 
+          end
+          
+          it { should have_selector('title', text: 'Departments') }
+          it { should have_selector('div.alert.alert-success') }
+          specify { @nojob_department.reload.department.should == new_dept }
+          specify { @nojob_department.reload.updated_by.should == @user.id }
+               
+        end
+      
+        describe "department name that fails validation" do
+      
+          let(:new_dept) { " " }
+          before do
+            fill_in 'Department', with: new_dept
+            click_button "Save change" 
+          end
+        
+          it { should have_selector('title', text: 'Edit Department') }
+          it { should have_content('error') }
+          specify { @nojob_department.reload.department.should == @nojob_department.department }
+        end
+      
+        describe "declaring that the department is no longer current" do
+        
+          before do
+            uncheck "department_current"
+            click_button "Save change" 
+          end
+          
+          it { should have_selector('title', text: 'Departments') }
+          it { should have_selector('div.alert.alert-success') }
+          it { should_not have_selector('.span3', text: @nojob_department.department) }
+        end
+      end
+      
+      describe "edit page with no former departments" do
+      
+        before do
+          @old_department.toggle!(:current)  #@old department becomes current
+          visit edit_department_path(@department)
+        end
+        
+        it { should_not have_link('View / reinstate old departments', href: business_old_departments_path(@business)) }
+      
+      end
+      
+      describe "edit page when department has related jobs" do
+      
+        before do
+          #@department.toggle!(:current) #@division is current
+          visit edit_department_path(@department)
+        end
+      
+        it { should_not have_selector("input#department_current") }
+        it { should_not have_selector(".instruction", text: "This department has no related current jobs") }        
+      end
+      
+      describe "edit page when department has related jobs, but they're not current" do
+      
+        before do
+          @job.toggle!(:current) #@job is no longer current
+          visit edit_department_path(@department)
+        end
+      
+        it { should have_selector("input#department_current") }
+        it { should have_selector(".instruction", text: "This department has no related current jobs") }        
+      end
+      
+      describe "edit page when department is not current" do
+       
+        before do
+          visit edit_department_path(@old_department)
+        end
+        
+        it { should have_selector("input#department_current") }
+        it { should have_selector(".instruction", text: "This department is not in your current list") }
+      end
+    end
+    
+    describe "business admin, with access to Settings, but no divisions set" do
+    
+      before do
+        @business_2 = FactoryGirl.create(:business, name: "Biz 2", country_id: @country.id, sector_id: @sector.id, created_by: @user.id)
+        @bizadmin_2 = FactoryGirl.create(:business_admin, business_id: @business_2.id, user_id: @user.id, created_by: 1)
+      end
+    
+      describe "index page" do
+      
+        before { visit business_departments_path(@business_2) }
+      
+        it { should have_selector('h1', text: 'Departments') }
+        it { should_not have_link('Add a department', href: new_business_department_path(@business)) }
+        it { should have_link('Back to Business Settings Menu', href: business_path(@business)) }
+        it { should have_selector('.standout', text: "You must enter at least one division") }
+      end
+    end
+  end
+end

@@ -8,10 +8,15 @@
     </section>
     <section>
       <div class="instruction">
-        <%= division_instruction_1 %>  
+        <div class="line-space">
+          <%= division_instruction_1 %>
+        </div>
+        <div>
+          <%= division_instruction_5 %>
+        </div>  
       </div>
     </section>
-    <% unless @business.has_former_divisions? %>
+    <% if @business.has_former_divisions? %>
       <section>
         <%= link_to "View / reinstate old divisions", business_old_divisions_path(@business), class: "btn" %>  
       </section>

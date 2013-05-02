@@ -17,7 +17,7 @@
     <h1 class="align-left">Old Divisions</h1>
     
     <div style="padding-bottom: 10px">
-      <%= link_to "Current Divisions", business_divisions_path(@business), class: "btn" %>
+      <%= link_to "Current divisions", business_divisions_path(@business), class: "btn" %>
       <%= link_to "Back to Business Settings Menu", @business, class: "btn" %>
     </div>
     <ul class="itemlist">

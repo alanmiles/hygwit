@@ -100,6 +100,11 @@ class Business < ActiveRecord::Base
     Division.where("business_id =? and current =?", self.id, true)
   end
   
+  def no_current_divisions?
+    div_count = Division.where("business_id =? and current =?", self.id, true).count
+    div_count == 0
+  end
+  
   def former_divisions
     Division.where("business_id =? and current =?", self.id, false)
   end
@@ -108,6 +113,20 @@ class Business < ActiveRecord::Base
     @div_count = Division.where("business_id =? and current =?", self.id, false).count
     @div_count > 0
   end
+  
+  def current_departments
+    Department.where("business_id =? and current =?", self.id, true)
+  end
+  
+  def former_departments
+    Department.where("business_id =? and current =?", self.id, false)
+  end
+  
+  def has_former_departments?
+    @dept_count = Department.where("business_id =? and current =?", self.id, false).count
+    @dept_count > 0
+  end
+  
   
   private
   

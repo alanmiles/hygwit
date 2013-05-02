@@ -1196,7 +1196,55 @@ describe "CountryAdministrators" do
               page.should have_selector('h1', text: 'Occupations reserved for nationals')
             end
         
+            #it { should have_selector('h1', text: @country.country) }
+            #it { should have_selector('title', text: "Edit Ethnic Group") }
+            #it { should have_selector('h1', text: 'Edit Ethnic Group') }
+            #it { should have_link('All ethnic groups', href: country_ethnic_groups_path(@country)) }
+            #it { should have_link('Country set-up page', href: country_path(@country)) }
+            #it { should have_selector('#ethnic_group_created_by', type: 'hidden', value: 999999) }
+            #it { should have_selector('#ethnic_group_updated_by', type: 'hidden', value: @admin.id) }   
+            #it { should have_selector('#ethnic_group_cancellation_date') }
+            #it { should_not have_selector('#ethnic_group_checked') } 
+            #it { should_not have_selector('#update-date', text: "Added") }        
+      
+            #describe "updating with valid data" do
+          
+            #  before do
+            #    fill_in "Ethnic group", with: "Black African"
+            #    click_button "Save changes"
+            #  end
+         
+            #  it { should have_selector('h1', text: @country.country) }
+            #  it { should have_selector('title', text: "Ethnic Groups - #{@country.country}") }
+            #  it { should have_selector('h1', text: 'Ethnic Groups') }
+            #  specify { @group.reload.ethnic_group.should == "Black African" }    
+            #  specify { @group.reload.checked.should == false} 
+            #  specify { @group.reload.updated_by.should == @admin.id}    
+            #end
+        
+            #describe "updating with invalid data" do
+        
+            #  before do
+            #    fill_in "Ethnic group", with: " "
+            #    click_button "Save changes"
+            #  end
+          
+            #  it { should have_selector('h1', text: @country.country) }
+            #  it { should have_selector('title', text: 'Edit Ethnic Group') }
+            #  it { should have_content('error') }
+            #  specify { @group.reload.ethnic_group == @group.ethnic_group }
+            #end
             
+            #describe "when cancelling an ethnic group" do
+              
+            #  before do
+            #    fill_in "Cancellation date", with: (Date.today + 20.days)
+            #    click_button "Save changes"
+            #  end
+             
+            #  it { should have_selector('h1', text: 'Ethnic Groups') }
+            #  it { should have_selector('.standout', text: 'CANCELLED from') }
+            #end   
           end
         end
       end

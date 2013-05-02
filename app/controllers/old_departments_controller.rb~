@@ -1,0 +1,4 @@
+class OldDepartmentsController < ApplicationController
+  def index
+  end
+end

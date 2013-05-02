@@ -1,0 +1,24 @@
+<div class= "line-space"> 
+  <%= f.label :department %>
+  <%= f.text_field :department %>
+</div>
+<div class= "line-space"> 
+  <%= f.label :dept_code, "Department code %>
+  <%= f.text_field :dept_code %>
+</div>
+<div style="clear:both" class="line-space">
+  <%= f.label :division_id %>
+  <%= f.collection_select(:division_id, @divisions, :id, :division) %>
+</div>
+<div class= "line-space">
+  <% if @formtype == "edit" %> 
+    <% unless @department.has_current_jobs? %>
+      <span class="span5 r-float"><%= f.check_box :current %></span>
+      <span class="vert-down">Current?</span>
+    <% end %>
+  <% end %>
+</div>
+
+
+<div style="clear:both"><%= f.hidden_field :created_by %></div>
+<%= f.hidden_field :updated_by %>

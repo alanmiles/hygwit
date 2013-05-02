@@ -1,5 +1,13 @@
 Hygwit::Application.routes.draw do
 
+  get "old_departments/index"
+
+  get "departments/index"
+
+  get "departments/new"
+
+  get "departments/edit"
+
   get "old_divisions/index"
 
   get "divisions/index"
@@ -66,6 +74,8 @@ Hygwit::Application.routes.draw do
   resources :businesses do
     resources :divisions, shallow: true
     resources :old_divisions, only: :index
+    resources :departments, shallow: true
+    resources :old_departments, only: :index
   end
 
   root to: 'static_pages#home'

@@ -1,0 +1,24 @@
+      <li class="list-header">
+        <span class="span3 pagination-centered">Department</span>
+        <span class="span1 pagination-centered">Code</span>
+        <span class="span3 pagination-centered">Division</span>
+      </li>
+      
+      <% @departments.each do |department| %>
+        <li>
+          <span class="span3"><%= department.department %></span>
+          <span class="span1"><%= department.dept_code %></span>
+          <span class="span3">
+            <% if department.division_id.nil? %>
+              &nbsp;
+            <% else %>
+              <%= department.division.division %>
+            <% end %>
+          </span>
+          | <%= link_to "edit", edit_department_path(department) %>
+          <% unless department.has_jobs? %>
+            | <%= link_to "del", department, method: :delete,
+                       data: { confirm: "Delete '#{department.department}'. Are you sure?" } %>
+          <% end %>
+        </li>
+      <% end %>

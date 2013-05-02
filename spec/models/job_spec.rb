@@ -21,7 +21,8 @@ describe Job do
     @country = FactoryGirl.create(:country, created_by: 1, complete: true)
     @jobfamily = FactoryGirl.create(:jobfamily, created_by: 1, checked: true)
     @business = FactoryGirl.create(:business, country_id: @country.id, created_by: 1)
-    @department = @business.departments.create(department: "Dept B", dept_code: "DPTB")
+    @division = @business.divisions.create(division: "Main")
+    @department = @business.departments.create(department: "Dept B", dept_code: "DPTB", division_id: @division.id)
     @job = @department.jobs.build(job_title: "Executive Secretary", jobfamily_id: @jobfamily.id)
   end
   

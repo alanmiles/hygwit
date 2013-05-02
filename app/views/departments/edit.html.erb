@@ -1,0 +1,41 @@
+<% provide(:title, "Edit Department") %> 
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @business.name %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <div class="line-space">
+          <%= department_instruction_3 %>
+        </div> 
+        <% unless @department.has_current_jobs? %>
+          <div>
+            <% if @department.current? %>
+              <%= department_instruction_2 %>
+            <% else %>
+              <%= department_instruction_4 %>
+            <% end %>
+          </div>
+        <% end %> 
+      </div>
+    </section>
+    <% if @business.has_former_departments? %>
+      <section>
+        <%= link_to "View / reinstate old departments", business_old_departments_path(@business), class: "btn" %>  
+      </section>
+    <% end %>
+  </aside>
+  <div class="span6 offset0">
+    <h1>Edit Department</h1>
+    <%= form_for(@department) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Save changes", class: "btn btn-primary" %>
+      <%= link_to "All departments", business_departments_path(@business), class: "btn" %>
+      <%= link_to "Business settings", @business, class: "btn" %>
+    <% end %>
+  </div>
+</div>
