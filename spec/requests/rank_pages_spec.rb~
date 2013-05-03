@@ -210,7 +210,7 @@ describe "RankPages" do
         it { should have_selector('h1', text: 'New Rank') }
         it { should have_selector('h1', text: @business.name) }
         it { should have_selector("input#rank_cat_rank") }
-        it { should have_link("Rank list", href: business_job_rank_path(@business)) }
+        it { should have_link("Rank list", href: business_job_ranks_path(@business)) }
         it { should have_link("Business settings", href: business_path(@business)) }
       
         describe "creating a new rank" do
@@ -280,4 +280,4 @@ describe "RankPages" do
       end
     end
   end
-end
+
