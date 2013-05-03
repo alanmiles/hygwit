@@ -198,4 +198,5 @@ FactoryGirl.define do
     job_title "Secretary"
     department
     jobfamily
+  end
 end

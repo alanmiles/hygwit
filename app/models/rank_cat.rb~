@@ -26,7 +26,7 @@ class RankCat < ActiveRecord::Base
   default_scope order: 'rank_cats.position ASC'
   
   def has_jobs?
-    count_jobs = Job.where("rank_cat_id =?", self.id).count
+    count_jobs = Job.where("job_cat_id =?", self.id).count
     count_jobs > 0
   end
 end

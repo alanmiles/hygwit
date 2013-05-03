@@ -404,6 +404,7 @@ ActiveRecord::Schema.define(:version => 20130429111028) do
     t.integer  "department_id"
     t.string   "job_title"
     t.integer  "jobfamily_id"
+    t.integer  "rank_cat_id"
     t.integer  "positions",     :default => 1
     t.boolean  "current",       :default => true
     t.integer  "created_by"
@@ -414,6 +415,7 @@ ActiveRecord::Schema.define(:version => 20130429111028) do
 
   add_index "jobs", ["department_id", "job_title"], :name => "index_jobs_on_department_id_and_job_title", :unique => true
   add_index "jobs", ["jobfamily_id"], :name => "index_jobs_on_jobfamily_id"
+  add_index "jobs", ["rank_cat_id"], :name => "index_jobs_on_rank_cat_id"
 
   create_table "joiner_actions", :force => true do |t|
     t.string   "action"

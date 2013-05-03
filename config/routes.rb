@@ -1,21 +1,5 @@
 Hygwit::Application.routes.draw do
 
-  get "old_departments/index"
-
-  get "departments/index"
-
-  get "departments/new"
-
-  get "departments/edit"
-
-  get "old_divisions/index"
-
-  get "divisions/index"
-
-  get "divisions/new"
-
-  get "divisions/edit"
-
   resources :users
   resources :password_resets
   resources :nationalities
@@ -76,6 +60,9 @@ Hygwit::Application.routes.draw do
     resources :old_divisions, only: :index
     resources :departments, shallow: true
     resources :old_departments, only: :index
+    resources :job_ranks, shallow: true do
+      collection { post :sort }
+    end
   end
 
   root to: 'static_pages#home'

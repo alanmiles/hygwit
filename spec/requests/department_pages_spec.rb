@@ -173,10 +173,12 @@ describe "DepartmentPages" do
       before do
         @bizadmin = FactoryGirl.create(:business_admin, business_id: @business.id, user_id: @user.id, created_by: 1)
         @jobfamily = FactoryGirl.create(:jobfamily, created_by: 1, checked: true)
+        @rank_cat = @business.rank_cats.create(rank: "Officer")
         @nojob_department = @business.departments.create(department: "Admin", dept_code: "SALAD", division_id: @division.id, current: true)
         @old_department = @business.departments.create(department: "Old", dept_code: "OLD", 
         								division_id: @division.id, current: false)
-        @job = FactoryGirl.create(:job, department_id: @department.id, jobfamily_id: @jobfamily.id)								
+        @job = FactoryGirl.create(:job, department_id: @department.id, jobfamily_id: @jobfamily.id, 
+        								rank_cat_id: @rank_cat.id)								
       end
     
       describe "index page" do

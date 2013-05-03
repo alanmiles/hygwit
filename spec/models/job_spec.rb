@@ -12,6 +12,7 @@
 #  updated_by    :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  rank_cat_id   :integer
 #
 
 require 'spec_helper'
@@ -21,9 +22,10 @@ describe Job do
     @country = FactoryGirl.create(:country, created_by: 1, complete: true)
     @jobfamily = FactoryGirl.create(:jobfamily, created_by: 1, checked: true)
     @business = FactoryGirl.create(:business, country_id: @country.id, created_by: 1)
+    @rank_cat = @business.rank_cats.create(rank: "Officer")
     @division = @business.divisions.create(division: "Main")
     @department = @business.departments.create(department: "Dept B", dept_code: "DPTB", division_id: @division.id)
-    @job = @department.jobs.build(job_title: "Executive Secretary", jobfamily_id: @jobfamily.id)
+    @job = @department.jobs.build(job_title: "Executive Secretary", jobfamily_id: @jobfamily.id, rank_cat_id: @rank_cat.id)
   end
   
   
@@ -37,6 +39,7 @@ describe Job do
   it { should respond_to(:current) }
   it { should respond_to(:updated_by) }
   it { should respond_to(:created_by) }
+  it { should respond_to(:rank_cat_id) }
   it { should be_valid }
   
   describe "accessible attributes" do
@@ -53,7 +56,12 @@ describe Job do
   end
   
   describe "when jobfamily_id is nil" do
-    before { @job.jobfamily = nil }
+    before { @job.jobfamily_id = nil }
+    it { should_not be_valid }
+  end
+  
+  describe "when rank_cat_id is nil" do
+    before { @job.rank_cat_id = nil }
     it { should_not be_valid }
   end
   

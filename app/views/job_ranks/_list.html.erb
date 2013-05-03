@@ -1,0 +1,11 @@
+      <% @ranks.each do |rank| %>
+        <%= content_tag_for :li, rank do %>
+          <span class="handle"><%= image_tag "dragdrop.png" %></span>
+          <%= rank.rank %>
+          | <%= link_to "edit", edit_job_rank_path(rank) %>
+          <% unless rank.has_jobs? %>
+            | <%= link_to "del", job_rank_path(rank), method: :delete,
+                       data: { confirm: "Delete '#{rank.rank}'. Are you sure?" } %>
+          <% end %>
+        <% end %>
+      <% end %>

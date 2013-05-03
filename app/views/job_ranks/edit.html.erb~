@@ -1,0 +1,31 @@
+<% provide(:title, "Edit Rank") %> 
+
+<div class="row">
+
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @business.name %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+         
+      </div>
+    </section>
+  </aside>
+  
+  <div class="span6 offset0">
+    <h1>Edit Rank</h1>
+
+    <%= form_for(@rank, url: job_rank_path(@rank)) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      
+      <%= f.submit "Save change", class: "btn btn-primary" %>
+      <%= link_to 'Rank list', business_job_ranks_path(@business), class: "btn" %>
+      <%= link_to "Business settings", @business, class: "btn" %>
+    <% end %>
+  </div>
+</div>
+

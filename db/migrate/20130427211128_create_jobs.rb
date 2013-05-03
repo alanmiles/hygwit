@@ -4,6 +4,7 @@ class CreateJobs < ActiveRecord::Migration
       t.integer :department_id
       t.string :job_title
       t.integer :jobfamily_id
+      t.integer :rank_cat_id
       t.integer :positions, default: 1
       t.boolean :current, default: true
       t.integer :created_by
@@ -14,5 +15,6 @@ class CreateJobs < ActiveRecord::Migration
     
     add_index :jobs, [:department_id, :job_title], unique: true
     add_index :jobs, :jobfamily_id
+    add_index :jobs, :rank_cat_id
   end
 end

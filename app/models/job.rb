@@ -12,13 +12,15 @@
 #  updated_by    :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  rank_cat_id   :integer
 #
 
 class Job < ActiveRecord::Base
-  attr_accessible :created_by, :current, :job_title, :jobfamily_id, :updated_by, :positions
+  attr_accessible :created_by, :current, :job_title, :jobfamily_id, :updated_by, :positions, :rank_cat_id
   
   belongs_to :department
   belongs_to :jobfamily
+  belongs_to :rank_cat
   
   validates :department_id,				presence: true
   validates :jobfamily_id,				presence: true
@@ -26,5 +28,6 @@ class Job < ActiveRecord::Base
   																	uniqueness: { case_sensitive: false, scope: :department_id }
   validates :positions, 				  presence: true, numericality: { only_integer: true }, 
   																	inclusion: { in: 0..1000 }
+  validates :rank_cat_id,					presence: true																	
   	
 end

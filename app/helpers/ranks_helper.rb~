@@ -1,7 +1,7 @@
 module RanksHelper
 
   def rank_instruction_1
-    "HR2.0 uses JOB RANKS for analysis.  With each job assigned to a rank, company administrators are
+    "Optionally, company administrators can use JOB RANKS for deeper analysis.  With each job assigned to a rank, they'll be
      able to group categories of employees for the purpose of headcount studies, payroll analysis, absence issues, and so forth."
   end
   

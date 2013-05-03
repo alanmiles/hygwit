@@ -4,8 +4,8 @@ class CreateJobs < ActiveRecord::Migration
       t.integer :department_id
       t.string :job_title
       t.integer :jobfamily_id
-      t.integer :vacancies
-      t.boolean :current
+      t.integer :positions, default: 1
+      t.boolean :current, default: true
       t.integer :created_by
       t.integer :updated_by
 

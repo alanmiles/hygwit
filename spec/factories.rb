@@ -198,5 +198,6 @@ FactoryGirl.define do
     job_title "Secretary"
     department
     jobfamily
+    rank_cat
   end
 end

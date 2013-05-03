@@ -417,8 +417,8 @@ describe "DepartmentPages" do
         before { visit business_departments_path(@business_2) }
       
         it { should have_selector('h1', text: 'Departments') }
-        it { should_not have_link('Add a department', href: new_business_department_path(@business)) }
-        it { should have_link('Back to Business Settings Menu', href: business_path(@business)) }
+        it { should_not have_link('Add a department', href: new_business_department_path(@business_2)) }
+        it { should have_link('Back to Business Settings Menu', href: business_path(@business_2)) }
         it { should have_selector('.standout', text: "You must enter at least one division") }
       end
     end
