@@ -177,7 +177,7 @@ describe "DepartmentPages" do
         @nojob_department = @business.departments.create(department: "Admin", dept_code: "SALAD", division_id: @division.id, current: true)
         @old_department = @business.departments.create(department: "Old", dept_code: "OLD", 
         								division_id: @division.id, current: false)
-        @job = FactoryGirl.create(:job, department_id: @department.id, jobfamily_id: @jobfamily.id, 
+        @job = @business.jobs.create(job_title: "Job Name", department_id: @department.id, jobfamily_id: @jobfamily.id, 
         								rank_cat_id: @rank_cat.id)								
       end
     
@@ -404,6 +404,18 @@ describe "DepartmentPages" do
         
         it { should have_selector("input#department_current") }
         it { should have_selector(".instruction", text: "This department is not in your current list") }
+        it { should_not have_selector(".standout", text: "Was '#{@old_department.division.division}', but this is not current") }
+      end
+      
+      describe "edit page when both department and its division are not current" do
+      
+        before do
+          @division.toggle!(:current)
+          visit edit_department_path(@old_department)
+        end
+        
+        it { should have_selector(".standout", text: "Was '#{@old_department.division.division}', but this is not current") }
+      
       end
     end
     

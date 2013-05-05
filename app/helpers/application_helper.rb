@@ -63,4 +63,8 @@ module ApplicationHelper
   def extra_help
     "For extra help, click on" 
   end
+  
+  def help_text
+    "Click on the icon for more guidance.  Click again to hide it."
+  end
 end

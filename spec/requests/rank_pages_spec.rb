@@ -175,7 +175,8 @@ describe "RankPages" do
         @division = @business.divisions.create(division: "Div") 
         @department = @business.departments.create(department: "Sales", dept_code: "SAL", 
         								division_id: @division.id)
-        @job = @department.jobs.create(job_title: "Manager", jobfamily_id: @jobfamily.id, rank_cat_id: @rank_cat.id, current: false)
+        @job = @business.jobs.create(job_title: "Manager", department_id: @department.id, jobfamily_id: @jobfamily.id, 
+        								rank_cat_id: @rank_cat.id, current: false)
         @rank_cat_2 = @business.rank_cats.create(rank: "Support")
       end
     

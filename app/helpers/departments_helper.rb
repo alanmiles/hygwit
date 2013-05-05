@@ -1,7 +1,7 @@
 module DepartmentsHelper
 
   def department_instruction_1
-    "Each job (and therefore each employee) needs to be allocated to a department. This means you could have a secretary in
+    "Each job (and therefore each employee) needs to be allocated to a DEPARTMENT. This means you could have a secretary in
      the sales department and a secretary in the legal department too - HR2.0 will identify them as two different jobs."
   end
   
@@ -17,7 +17,7 @@ module DepartmentsHelper
   end
   
   def department_instruction_3
-    "Department names must be no longer than 25 characters.  Department codes should be five characters or less.  If you've
+    "Department names must be no longer than 25 characters.  Department codes should be 5 characters or fewer.  If you've
      entered divisions, then allocate the department to its division too - which will be useful for analysis later."    
   end
   

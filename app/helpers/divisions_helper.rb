@@ -1,7 +1,7 @@
 module DivisionsHelper
 
   def division_instruction_1
-    "Use divisions to group a number of departments together for analysis purposes.
+    "Use DIVISIONS to group a number of departments together for analysis purposes.
      For example, you'll be able to total the headcount or the employment costs for a group of related departments in
      'Administration' or 'Production'."
   end

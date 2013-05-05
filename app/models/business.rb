@@ -62,7 +62,7 @@ class Business < ActiveRecord::Base
   has_many :personal_qualities, dependent: :destroy
   has_many :divisions, dependent: :destroy
   has_many :departments, dependent: :destroy
-  has_many :jobs, through: :departments
+  has_many :jobs, dependent: :destroy
   
   
   #belongs_to :weekday
@@ -118,6 +118,11 @@ class Business < ActiveRecord::Base
     Department.where("business_id =? and current =?", self.id, true)
   end
   
+  def no_current_departments?
+    dept_count = Department.where("business_id =? and current =?", self.id, true).count
+    dept_count == 0
+  end
+  
   def former_departments
     Department.where("business_id =? and current =?", self.id, false)
   end
@@ -127,6 +132,23 @@ class Business < ActiveRecord::Base
     @dept_count > 0
   end
   
+  def current_jobs
+    Job.joins(:department).where("jobs.business_id =? and jobs.current =?", self.id, true).order("departments.dept_code, jobs.job_title")
+  end
+  
+  def no_current_jobs?
+    job_count = Job.where("business_id =? and current =?", self.id, true).count
+    job_count == 0
+  end
+  
+  def former_jobs
+    Job.joins(:department).where("jobs.business_id =? and jobs.current =?", self.id, false).order("departments.dept_code, jobs.job_title")
+  end
+  
+  def has_former_jobs?
+    @job_count = Job.where("business_id =? and current =?", self.id, false).count
+    @job_count > 0
+  end
   
   private
   

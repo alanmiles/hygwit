@@ -280,4 +280,4 @@ describe "RankPages" do
       end
     end
   end
-
+end

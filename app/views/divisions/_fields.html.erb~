@@ -3,7 +3,7 @@
 
 
 <div class= "line-space">
-  <% unless @formtype == "edit" %> 
+  <% if @formtype == "edit" %> 
     <% unless @division.has_current_departments? %>
       <span class="span5 r-float"><%= f.check_box :current %></span>
       <span class="vert-down">Current?</span>

@@ -1,7 +1,7 @@
 module DepartmentsHelper
 
   def department_instruction_1
-    "Each job (and therefore each employee) needs to be allocated to a department. This means you could have a secretary in
+    "Each job (and therefore each employee) needs to be allocated to a DEPARTMENT. This means you could have a secretary in
      the sales department and a secretary in the legal department too - HR2.0 will identify them as two different jobs."
   end
   
@@ -22,6 +22,7 @@ module DepartmentsHelper
   end
   
   def department_instruction_4
-    "This department is not in your current list.  To reinstate it, check the 'Current?' box, then 'Save changes'."    
+    "This department is not in your current list.  To reinstate it, check the 'Current?' box, then 'Save changes'.  (Note 
+     that the division you select must also be current for this to work.)"    
   end
 end

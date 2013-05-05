@@ -1,0 +1,45 @@
+<% provide(:title, "Jobs: #{@business.name}") %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= @business.name %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <div class="line-space">
+          <%= job_instruction_1 %>
+        </div>
+        <div class="line-space">
+          <%= job_instruction_2 %>
+        </div>
+        <div">
+          <%= job_instruction_3 %>
+        </div>
+        <% if @business.no_current_departments? %>
+          <div class="standout">You must enter at least one department before you continue with jobs.</div>
+        <% end %>  
+      </div>
+    </section>
+    <% if @business.has_former_jobs? %>
+      <section>
+        <%= link_to "View / reinstate old jobs", business_old_jobs_path(@business), class: "btn" %>  
+      </section>
+    <% end %>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Jobs</h1>
+    
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a job", new_business_job_path(@business), class: "btn" unless @business.no_current_departments? %>
+      <%= link_to "Back to Business Settings Menu", @business, class: "btn" %>
+    </div>
+    <%= will_paginate %>
+    <ul class="itemlist">
+      <%= render "list" %>
+    </ul>
+    <%= will_paginate %>
+  </div>
+</div>

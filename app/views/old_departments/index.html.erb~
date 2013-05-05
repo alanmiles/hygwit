@@ -9,10 +9,10 @@
     <section>
       <div class="instruction">
         <div class="line-space">
-          <%= old_div_1 %>
+          <%= old_dept_1 %>
         </div>
         <div>
-          <%= old_div_2 %>
+          <%= old_dept_2 %>
         </div> 
       </div>
     </section>

@@ -24,4 +24,10 @@ module DivisionsHelper
      single division called 'Main'.  This will then be the default division when you add your departments."
   
   end
+  
+  def division_delete   
+     "If no departments (both current and historic) are related to the division, it can be deleted.  Otherwise it cannot, 
+      although if none of its departments are current, you can select the 'Edit' option and declare that it's also no longer current: 
+      it will then no longer be displayed in this list."
+  end
 end

@@ -3,16 +3,17 @@
 # Table name: jobs
 #
 #  id            :integer          not null, primary key
+#  business_id   :integer
 #  department_id :integer
 #  job_title     :string(255)
 #  jobfamily_id  :integer
+#  rank_cat_id   :integer
 #  positions     :integer          default(1)
 #  current       :boolean          default(TRUE)
 #  created_by    :integer
 #  updated_by    :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  rank_cat_id   :integer
 #
 
 require 'spec_helper'
@@ -25,14 +26,16 @@ describe Job do
     @rank_cat = @business.rank_cats.create(rank: "Officer")
     @division = @business.divisions.create(division: "Main")
     @department = @business.departments.create(department: "Dept B", dept_code: "DPTB", division_id: @division.id)
-    @job = @department.jobs.build(job_title: "Executive Secretary", jobfamily_id: @jobfamily.id, rank_cat_id: @rank_cat.id)
+    @job = @business.jobs.build(job_title: "Executive Secretary", department_id: @department.id, 
+    									jobfamily_id: @jobfamily.id, rank_cat_id: @rank_cat.id)
   end
   
   
   subject { @job }
   
+  it { should respond_to(:business_id) }
+  its(:business) { should == @business }
   it { should respond_to(:department_id) }
-  its(:department) { should == @department }
   it { should respond_to(:job_title) }
   it { should respond_to(:jobfamily_id) }
   it { should respond_to(:positions) }
@@ -43,11 +46,16 @@ describe Job do
   it { should be_valid }
   
   describe "accessible attributes" do
-    it "should not allow access to department_id" do
+    it "should not allow access to business_id" do
       expect do
-        Job.new(department_id: @department.id)
+        Job.new(business_id: @business.id)
       end.to raise_error(ActiveModel::MassAssignmentSecurity::Error)
     end    
+  end
+  
+  describe "when business_id is nil" do
+    before { @job.business_id = nil }
+    it { should_not be_valid }
   end
   
   describe "when department_id is nil" do

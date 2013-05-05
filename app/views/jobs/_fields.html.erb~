@@ -1,0 +1,43 @@
+<div class= "line-space"> 
+  <%= f.label :job_title %>
+  <%= f.text_field :job_title, maxlength: 50 %>
+</div>
+
+<div style="clear:both" class="line-space">
+  <%= f.label :department_id %>
+  <%= f.collection_select(:department_id, @departments, :id, :department, prompt: "(Please select)") %>
+</div>
+
+<div class= "line-space"> 
+  <i class ="icon-question-sign help-button" id="positions-click" style="float:right"></i>
+  <%= f.label :positions, "Number of positions for this job" %>
+  <%= f.text_field :positions %>
+  <div id="job-positions" class="help-inline"><%= job_positions %></div>
+</div>
+
+<div style="clear:both" class="line-space">
+  <i class ="icon-question-sign help-button" id="occupation-click" style="float:right"></i>
+  <%= f.label :jobfamily_id, "Occupation" %>
+  <%= f.collection_select(:jobfamily_id, @jobfamilies, :id, :job_family, prompt: "(Please select)") %>
+  <div id="job-occupations" class="help-inline"><%= job_occupations %></div>
+</div>
+
+<div style="clear:both" class="line-space">
+  <i class ="icon-question-sign help-button" id="rank-click" style="float:right"></i>
+  <%= f.label :rank_cat_id, "Rank" %>
+  <%= f.collection_select(:rank_cat_id, @rank_cats, :id, :rank, prompt: "(Please select)") %>
+  <div id="job-ranks" class="help-inline"><%= job_ranks %></div>
+</div>
+
+<div class= "line-space">
+  <% if @formtype == "edit" %> 
+      <i class ="icon-question-sign help-button" id="curr-job-click" style="float:right"></i>
+      <span class="span4 r-float"><%= f.check_box :current %></span>
+      <span class="vert-down">Current?</span>
+      <div id="job-current" class="help-inline"><%= job_current %></div>
+  <% end %>
+</div>
+
+
+<div style="clear:both"><%= f.hidden_field :created_by %></div>
+<%= f.hidden_field :updated_by %>

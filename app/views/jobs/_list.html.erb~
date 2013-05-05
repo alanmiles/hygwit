@@ -1,0 +1,25 @@
+      <li class="list-header">
+        <span class="span1">Dept</span>
+        <span class="span2">Job title</span>
+        <span class="span2">Occupation</span>
+        <span class="span1">Rank</span>
+      </li>
+      
+      <% @jobs.each do |job| %>
+        <li>
+          <% if job.department.current.false? %>
+            <span class="span1 standout">
+          <% else %>
+            <span class="span1">
+          <% end %>
+          <%= job.department.dept_code %></span>
+          <span class="span2"><%= job.job_title %></span>
+          <span class="span2"><%= job.jobfamily.job_family %></span>
+          <span class="span2"><%= job.rank_cat.rank %></span>
+          <span class = "r-float">  
+          | <%= link_to "edit", edit_job_path(job) %>
+          | <%= link_to "del", job, method: :delete,
+                       data: { confirm: "Delete '#{job.job_title}'. Are you sure?" } %>
+          </span>
+        </li>
+      <% end %>

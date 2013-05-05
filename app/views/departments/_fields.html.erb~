@@ -3,11 +3,16 @@
   <%= f.text_field :department %>
 </div>
 <div class= "line-space"> 
-  <%= f.label :dept_code, "Department code %>
+  <%= f.label :dept_code, "Department code" %>
   <%= f.text_field :dept_code %>
 </div>
 <div style="clear:both" class="line-space">
   <%= f.label :division_id %>
+  <% if @formtype == "edit" %>
+    <% unless @department.division.current? %>
+      <div class="standout">Was '<%= @department.division.division %>', but this is not current.</div>
+    <% end %>
+  <% end %>
   <%= f.collection_select(:division_id, @divisions, :id, :division) %>
 </div>
 <div class= "line-space">

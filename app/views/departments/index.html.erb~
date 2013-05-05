@@ -30,7 +30,7 @@
     <h1 class="align-left">Departments</h1>
     
     <div style="padding-bottom: 10px">
-      <%= link_to "Add a department", new_business_department_path(@business), class: "btn" %>
+      <%= link_to "Add a department", new_business_department_path(@business), class: "btn" unless @business.no_current_departments? %>
       <%= link_to "Back to Business Settings Menu", @business, class: "btn" %>
     </div>
     <ul class="itemlist">

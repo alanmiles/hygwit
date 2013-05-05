@@ -1,7 +1,7 @@
       <li class="list-header">
-        <span class="span3 pagination-centered">Department</span>
-        <span class="span1 pagination-centered">Code</span>
-        <span class="span3 pagination-centered">Division</span>
+        <span class="span3">Department</span>
+        <span class="span1">Code</span>
+        <span class="span3">Division</span>
       </li>
       
       <% @departments.each do |department| %>
@@ -9,11 +9,19 @@
           <span class="span3"><%= department.department %></span>
           <span class="span1"><%= department.dept_code %></span>
           <span class="span3">
-            <% if department.division_id.nil? %>
+          
+          <% if department.division_id.nil? %>
+            <span class="span3">
               &nbsp;
+          <% else %>
+            <% if department.division.current? %>
+              <span class="span3">
             <% else %>
-              <%= department.division.division %>
+              <span class="span3 standout">
             <% end %>
+                <%= department.division.division %>
+             
+          <% end %>
           </span>
           | <%= link_to "edit", edit_department_path(department) %>
           <% unless department.has_jobs? %>

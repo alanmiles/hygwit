@@ -276,6 +276,14 @@ select {
   display: none;
 }
 
+.char-count {
+  color:#AAA; 
+  visibility: hidden; 
+  font-size: 80%;
+  padding-left: 1em;
+  margin-top: 0.25em;
+}
+
 .menulist {
   list-style: none;
   margin: 0;

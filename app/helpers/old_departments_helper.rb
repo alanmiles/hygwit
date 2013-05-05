@@ -6,7 +6,12 @@ module OldDepartmentsHelper
   end
   
   def old_dept_2
-    "To reactivate a department, simply check the 'Current?' button and then 'Save changes'.  Note that its division must also 
-     be current for this to work."
+    "If the division appears in red, then it is also no longer current.  If you decide to reactivate the department,
+     you'll either need to reactivate the division too, or choose a new division."
+  end
+  
+  def reactivate_dept
+    "To reactivate a department, go to the 'Edit' page, check the 'Current?' box, and save.  (Remember that its division must also 
+     be current for this to work.)"
   end
 end

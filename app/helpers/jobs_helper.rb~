@@ -1,0 +1,63 @@
+module JobsHelper
+
+  def job_instruction_1
+    "This is a list of your current JOBS. Each job will have its own set of responsibilities and targets when we build an HR2.0 
+     Achievement Plan.  So if you expect the same work outcomes from two (or more) employees they should share a job title - otherwise
+     they should have different jobs."
+  end
+  
+  def job_instruction_2
+    "You can have the same job title in different departments - e.g. a secretary in both the legal and the sales
+     department.  But HR2.0 won't let you duplicate a job title in the same department."
+  end
+  
+  def job_instruction_3   
+     "If no employees have ever been employed in a job, it can be deleted.  Otherwise it cannot, 
+      although if none of its employees are current, you can select the 'Edit' option and declare that it's also no longer current: 
+      the job will then no longer be displayed in this list."
+  end
+  
+  def job_no_employees
+    "This job has no current employees, so perhaps it is no longer used.  If so, then uncheck the 'Current?' 
+     box to remove it from the Jobs listing. Later, if you want to, you'll be able to re-activate the job."
+  end
+  
+  def job_fields
+    "The job title must be 50 characters or fewer." 
+  end
+  
+  def job_not_current
+    "This job is not in your current list.  To reinstate it, check the 'Current?' box, then 'Save changes'.  (Note 
+     that the department you select must also be current for this to work.)"    
+  end
+  
+  def job_positions
+    "Enter here the number of people you expect to employ for this job.  Although the figure doesn't appear in your list of 
+     jobs, it will appear when you're involved in manpower planning and recruitment.  HR2.0 will work out the number of
+     people currently employed and show you whether or not you have vacancies for the job.  You'll be able to change the
+     number of positions at any time."
+  end
+  
+  def job_occupations
+    "We know a business where their receptionist is called 'Director of First Impressions'. Great job title! But if you used this
+     job-title in a recruitment ad, would you find the right people - would outsiders know what you were talking about?  That's why
+     we ask you to choose an 'occupation' from our list of generic job-titles, which everyone will understand.  We'll use this
+     when you use HR2.0 for recruitment.  If you feel we need to add another occupation to the list, mail us on support@hroomph.com 
+     with your suggestion."
+  end
+  
+  def job_ranks
+    "Assigning each job to a 'rank' in your business will help when you come to analysis - if for example, you wanted to
+     find how employment costs break down between management, office staff, and support, or perhaps whether your shop-floor staff
+     have a higher incidence of absence than other groups, etc."
+  end
+  
+  def job_current
+    "While 'Current?' is checked, the job will appear on your current job-lists, and you'll be able to assign new employees to 
+    the department/job.  Uncheck the box and the job will be hidden - so you will no longer be able to assign employees to it.  You'll
+    only be allowed to uncheck the box if no current employees in the department have this job title.  Later, if you want to, you'll 
+    be able to reinstate an old job title.  Note that hiding a job title will not affect your historic records: former employees will
+    remain linked to the job title they had at the time."
+  end
+  
+end

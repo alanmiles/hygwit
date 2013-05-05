@@ -401,6 +401,7 @@ ActiveRecord::Schema.define(:version => 20130429111028) do
   end
 
   create_table "jobs", :force => true do |t|
+    t.integer  "business_id"
     t.integer  "department_id"
     t.string   "job_title"
     t.integer  "jobfamily_id"
@@ -413,7 +414,7 @@ ActiveRecord::Schema.define(:version => 20130429111028) do
     t.datetime "updated_at",                      :null => false
   end
 
-  add_index "jobs", ["department_id", "job_title"], :name => "index_jobs_on_department_id_and_job_title", :unique => true
+  add_index "jobs", ["business_id", "department_id", "job_title"], :name => "index_jobs_on_business_id_and_department_id_and_job_title", :unique => true
   add_index "jobs", ["jobfamily_id"], :name => "index_jobs_on_jobfamily_id"
   add_index "jobs", ["rank_cat_id"], :name => "index_jobs_on_rank_cat_id"
 

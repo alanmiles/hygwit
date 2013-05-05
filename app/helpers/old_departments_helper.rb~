@@ -1,2 +1,17 @@
 module OldDepartmentsHelper
+
+  def old_dept_1
+    "If the delete ('del') link appears, then the department has no links to any jobs, so it can be removed completely.  If 'del'
+     does not appear, then the department is still attached to a job - one no longer in use - and that's why it can't be deleted."
+  end
+  
+  def old_dept_2
+    "If the division appears is red, then it is also no longer current.  If you decide to reactivate the department,
+     you'll either need to reactivate the division too, or choose a new division."
+  end
+  
+  def reactivate_dept
+    "To reactivate a department, go to the 'Edit' page, check the 'Current?' box, and save.  (Remember that its division must also 
+     be current for this to work.)"
+  end
 end
