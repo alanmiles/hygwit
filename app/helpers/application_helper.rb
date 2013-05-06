@@ -67,4 +67,38 @@ module ApplicationHelper
   def help_text
     "Click on the icon for more guidance.  Click again to hide it."
   end
+  
+  def biz_abscodes
+    "Enter a memorable, obvious code - up to 4 characters long - for this type of absence."  
+  end
+  
+  def pay_percent
+    "Enter a whole number which is the percentage of pay the employee receives when absent for this reason.  For example, if the
+     employee still receives full pay, you'd enter 100; for half pay, enter 50; for zero pay, enter 0.  Your settings will be
+     the default values, but deductions can be modified on a case-by-case basis as employee absences are entered.  
+     Any deductions apply to basic salary ... but the same deductions can also apply to payroll benefits, depending on their settings 
+     in 'Payroll items'."
+  end
+  
+  def abs_sick
+    "Sickness is distinguished from other types of absence.  Check the box if this absence should be included in 
+     sickness calculations."
+  end
+  
+  def max_absence
+    "When 'maximum number of days per year' is set for an absence-type, HR2.0 monitors the number of days taken by each
+     employee in a 12-month rolling period, and warn if someone tries to enter more absence days of this type than the maximum.  (It
+     doesn't prevent extra days being added, but will issue a clear warning.)  If there's no maximum, just leave
+     the box empty."
+  end
+  
+  def docs_reqd
+    "Check the box if the employee needs to provide documentary evidence for this type of absence before being paid for it.
+     HR2.0 will then check that the document has been seen before payroll is finalized."
+  end
+  
+  def abs_note
+    "In fewer than 140 characters (and preferably much shorter), define this type of absence in fuil"
+  end
+  
 end

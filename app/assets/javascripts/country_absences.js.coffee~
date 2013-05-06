@@ -20,8 +20,4 @@ $(document).ready ->
     
 $(document).ready ->
   $('#docmnts-click').click ->
-    $('#docmnts-reqd').toggle "fast", ->
-    
-$(document).ready ->
-  $('#c-absencenote-click').click ->
-    $('#c-absence-note').toggle "fast", ->   
+    $('#docmnts-reqd').toggle "fast", ->   

@@ -21,7 +21,3 @@ $(document).ready ->
 $(document).ready ->
   $('#docmts-click').click ->
     $('#docmts-reqd').toggle "fast", ->
-    
-$(document).ready ->
-  $('#absencenote-click').click ->
-    $('#absence-note').toggle "fast", ->

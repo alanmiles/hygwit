@@ -1,9 +1,8 @@
 # == Schema Information
 #
-# Table name: country_absences
+# Table name: absence_types
 #
 #  id                     :integer          not null, primary key
-#  country_id             :integer
 #  absence_code           :string(255)
 #  paid                   :integer          default(100)
 #  sickness               :boolean          default(FALSE)
@@ -17,25 +16,23 @@
 #  updated_by             :integer          default(1)
 #
 
-class CountryAbsence < ActiveRecord::Base
-
-  attr_accessible :absence_code, :documentation_required, :maximum_days_year, :notes, :paid, :sickness, :created_by, :updated_by, :checked
+class AbsenceType < ActiveRecord::Base
   
-  belongs_to :country
+  attr_accessible :absence_code, :documentation_required, :maximum_days_year, :notes, :paid, :sickness, :checked, :updated_by, :created_by
   
-  before_save	:upcase_absence
-  
-  validates :country_id,				presence: true
-  validates :absence_code,		  presence: true, length: { maximum: 4 }, uniqueness: { case_sensitive: true, scope: :country_id }
+  validates :absence_code,		  presence: true, length: { maximum: 4 }, uniqueness: { case_sensitive: true }
   validates :paid,							presence: true, numericality: { only_integer: true }, inclusion: 0..100
-  validates :maximum_days_year,	inclusion: { in: 1..100, allow_nil: true }, numericality: { only_integer: true, allow_nil: true }
+  validates :maximum_days_year,	inclusion: { in: 1..365, allow_nil: true }, numericality: { only_integer: true, allow_nil: true }
   validates :notes,							length: { maximum: 140 }
+  validates :created_by,				presence: true
   
-  default_scope order: 'country_absences.absence_code ASC'
+  default_scope order: 'absence_types.absence_code ASC'
   
-  private
+  def self_ref
+    absence_code
+  end
   
-    def upcase_absence
-      absence_code.upcase!
-    end
+  def self.all_checked
+    self.where("checked =?", true)
+  end
 end

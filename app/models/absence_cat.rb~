@@ -23,8 +23,6 @@ class AbsenceCat < ActiveRecord::Base
   								
   belongs_to :business
   
-  before_save	:upcase_abscode
-  
   validates :business_id,				presence: true
   validates :absence_code,		  presence: true, length: { maximum: 4 }, uniqueness: { case_sensitive: true, scope: :business_id }
   validates :paid,							presence: true, numericality: { only_integer: true }, inclusion: 0..100
@@ -33,10 +31,4 @@ class AbsenceCat < ActiveRecord::Base
   validates :created_by,				numericality: { only_integer: true, allow_blank: true }
   
   default_scope order: 'absence_cats.absence_code ASC'
-  
-  private
-  
-    def upcase_abscode
-      absence_code.upcase!
-    end
 end

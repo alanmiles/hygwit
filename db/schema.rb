@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130429111028) do
+ActiveRecord::Schema.define(:version => 20130506065915) do
 
   create_table "absence_cats", :force => true do |t|
     t.integer  "business_id"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20130429111028) do
     t.integer  "updated_by"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.boolean  "current",                :default => true
   end
 
   add_index "absence_cats", ["business_id", "absence_code", "sickness"], :name => "index_absence_cats_on_business_id_and_absence_code_and_sickness"

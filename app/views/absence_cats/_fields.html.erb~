@@ -1,0 +1,53 @@
+<div class="line-space">
+  <i class ="icon-question-sign help-button" id="abscode-click" style="float:right"></i>
+  <%= f.label :absence_code, "Absence code" %>
+  <%= f.text_field :absence_code, maxlength: 4 %>
+  <div id="biz-abscodes" class="help-inline"><%= biz_abscodes %></div>
+</div>
+
+<div class="line-space">
+  <i class ="icon-question-sign help-button" id="paypercent-click" style="float:right"></i>
+  <%= f.label :paid, "Percentage of salary paid" %>
+  <%= f.text_field :paid %>
+  <div id="pay-percent" class="help-inline"><%= pay_percent %></div>
+</div>
+
+<div class= "line-space">
+  <i class ="icon-question-sign help-button" id="sickness-click" style="float:right"></i> 
+  <span class="span2 r-float"><%= f.check_box :sickness %></span>
+  <span class="vert-down">Is this absence counted as sickness?</span>
+  <div id="abs-sick" class="help-inline"><%= abs_sick %></div>
+</div>
+
+<div class="line-space">
+  <i class ="icon-question-sign help-button" id="maxdays-click" style="float:right"></i> 
+  <%= f.label :maximum_days_year %>
+  <%= f.text_field :maximum_days_year %>
+  <div id="max-absence" class="help-inline"><%= max_absence %></div>
+</div>
+
+<div class= "line-space">
+  <i class ="icon-question-sign help-button" id="docs-click" style="float:right"></i>  
+  <span class="span3 r-float"><%= f.check_box :documentation_required %></span>
+  <span class="vert-down">Documentary evidence required?</span>
+  <div id="docs-reqd" class="help-inline"><%= docs_reqd %></div>
+</div>
+
+<div class="line-space">
+  <i class ="icon-question-sign help-button" id="absnote-click" style="float:right"></i>  
+  <%= f.label :notes %>
+  <%= f.text_area :notes, rows: "2", maxlength: 140 %>
+  <div id="abs-note" class="help-inline"><%= abs_note %></div>
+</div>
+
+<div class= "line-space">
+  <% if @formtype == "edit" %> 
+    <i class ="icon-question-sign help-button" id="abscurrent-click" style="float:right"></i>  
+    <span class="span5 r-float"><%= f.check_box :current %></span>
+    <span class="vert-down">Current?</span>
+    <div id="abs-current" class="help-inline"><%= abs_current %></div>
+  <% end %>
+</div>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>
+<%= f.hidden_field :created_by %>

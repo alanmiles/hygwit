@@ -20,9 +20,11 @@ class AbsenceType < ActiveRecord::Base
   
   attr_accessible :absence_code, :documentation_required, :maximum_days_year, :notes, :paid, :sickness, :checked, :updated_by, :created_by
   
+  before_save	:upcase_abs
+  
   validates :absence_code,		  presence: true, length: { maximum: 4 }, uniqueness: { case_sensitive: true }
   validates :paid,							presence: true, numericality: { only_integer: true }, inclusion: 0..100
-  validates :maximum_days_year,	inclusion: { in: 0..365, allow_nil: true }, numericality: { only_integer: true, allow_nil: true }
+  validates :maximum_days_year,	inclusion: { in: 1..365, allow_nil: true }, numericality: { only_integer: true, allow_nil: true }
   validates :notes,							length: { maximum: 140 }
   validates :created_by,				presence: true
   
@@ -35,4 +37,10 @@ class AbsenceType < ActiveRecord::Base
   def self.all_checked
     self.where("checked =?", true)
   end
+  
+  private
+  
+    def upcase_abs
+      absence_code.upcase!
+    end
 end

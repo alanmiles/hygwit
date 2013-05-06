@@ -150,6 +150,24 @@ class Business < ActiveRecord::Base
     @job_count > 0
   end
   
+  def current_absence_cats
+    AbsenceCat.where("business_id =? and current =?", self.id, true)
+  end
+  
+  def no_current_absence_cats?
+    abs_count = AbsenceCat.where("business_id =? and current =?", self.id, true).count
+    abs_count == 0
+  end
+  
+  def former_absence_cats
+    AbsenceCat.where("business_id =? and current =?", self.id, false)
+  end
+  
+  def has_former_absence_cats?
+    @abs_count = AbsenceCat.where("business_id =? and current =?", self.id, false).count
+    @abs_count > 0
+  end
+  
   private
   
     def add_associated

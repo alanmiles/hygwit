@@ -34,10 +34,8 @@
 </div>
 
 <div class="line-space">
-  <i class ="icon-question-sign help-button" id="c-absencenote-click" style="float:right"></i>  
   <%= f.label :notes %>
   <%= f.text_area :notes, rows: "2" %>
-  <div id="c-absence-note" class="help-inline"><%= abs_note %></div>
 </div>
 
 <%= render "shared/superuser_check", {f: f, object: f.object} %>

@@ -23,8 +23,6 @@ class CountryAbsence < ActiveRecord::Base
   
   belongs_to :country
   
-  before_save	:upcase_absence
-  
   validates :country_id,				presence: true
   validates :absence_code,		  presence: true, length: { maximum: 4 }, uniqueness: { case_sensitive: true, scope: :country_id }
   validates :paid,							presence: true, numericality: { only_integer: true }, inclusion: 0..100
@@ -33,9 +31,5 @@ class CountryAbsence < ActiveRecord::Base
   
   default_scope order: 'country_absences.absence_code ASC'
   
-  private
-  
-    def upcase_absence
-      absence_code.upcase!
-    end
+
 end

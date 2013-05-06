@@ -404,6 +404,7 @@ describe "DepartmentPages" do
         
         it { should have_selector("input#department_current") }
         it { should have_selector(".instruction", text: "This department is not in your current list") }
+        it { should_not have_selector(".standout", text: "Was '#{@old_department.division.division}', but this is not current") }
       end
       
       describe "edit page when both department and its division are not current" do
@@ -436,4 +437,4 @@ describe "DepartmentPages" do
       end
     end
   end
-end
+

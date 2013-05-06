@@ -130,6 +130,11 @@ describe CountryAbsence do
     it { should_not be_valid }
   end
   
+  describe "when maximum_days_year is set to 0" do
+    before { @absence.maximum_days_year = 0 }
+    it { should_not be_valid }
+  end
+  
   describe "when notes is empty" do
     before { @absence.notes = " " }
     it { should be_valid }

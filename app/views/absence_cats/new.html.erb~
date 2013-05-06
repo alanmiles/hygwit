@@ -1,0 +1,32 @@
+<% provide(:title, 'New Absence Type') %>
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @business.name %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <div class="line-space">
+         
+        </div> 
+      </div>
+    </section>
+    <% if @business.has_former_absence_cats? %>
+      <section>
+        <%= link_to "View / reinstate old absence types", business_old_absence_cats_path(@business), class: "btn" %>  
+      </section>
+    <% end %>
+  </aside>
+  <div class="span6 offset0">
+    <h1>New Absence Type</h1>
+    <%= form_for([@business, @absence_cat]) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "Current absence types", business_absence_cats_path(@business), class: "btn" %>
+      <%= link_to "Business settings", @business, class: "btn" %>
+    <% end %>
+  </div>
+</div>
