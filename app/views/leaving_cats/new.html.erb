@@ -1,0 +1,30 @@
+<% provide(:title, 'New Leaving Reason') %>
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @business.name %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <div class="line-space">
+          <%= leavingcat_instruction_3 %>
+        </div>
+        <div class="line-space">
+          <%= leavingcat_instruction_4 %>
+        </div> 
+      </div>
+    </section>
+  </aside>
+  <div class="span6 offset0">
+    <h1>New Leaving Reason</h1>
+    <%= form_for([@business, @leaving_cat]) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "All leaving reasons", business_leaving_cats_path(@business), class: "btn" %>
+      <%= link_to "Business settings", @business, class: "btn" %>
+    <% end %>
+  </div>
+</div>
