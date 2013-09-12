@@ -6,7 +6,7 @@ module DisciplinaryCatsHelper
   end
   
   def disciplinarycat_instruction_2
-    "Add a DISCIPLINARY CATEGORY - not more than 50 characters long.  HR2.0 will prevent you from adding duplicate entries."  
+    "Enter a DISCIPLINARY CATEGORY - not more than 50 characters long.  HR2.0 will prevent you from adding duplicate entries."  
   end
   
 end

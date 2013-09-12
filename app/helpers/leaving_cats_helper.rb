@@ -12,7 +12,7 @@ module LeavingCatsHelper
   end
   
   def leavingcat_instruction_3
-    "Add a LEAVING REASON - not more than 25 characters long.  No duplicate reasons are allowed."  
+    "Enter a LEAVING REASON - not more than 25 characters long.  No duplicate reasons are allowed."  
   end
   
   def leavingcat_instruction_4

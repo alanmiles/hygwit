@@ -1,0 +1,29 @@
+<% provide(:title, "Contract Types: #{@business.name}") %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= @business.name %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <div class="line-space">
+          <%= contractcat_instruction_1 %>
+        </div>
+      </div>
+    </section>
+  </aside>
+  
+  <div class="span8">
+    <h1 class="align-left">Contract Types</h1>
+    
+    <div style="padding-bottom: 10px">
+      <%= link_to "Add a contract type", new_business_contract_cat_path(@business), class: "btn" %>
+      <%= link_to "Back to Business Settings Menu", @business, class: "btn" %>
+    </div>
+    <ul class="itemlist">
+      <%= render "list" %>
+    </ul>
+  </div>
+</div>

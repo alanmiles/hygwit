@@ -6,6 +6,6 @@ module GrievanceCatsHelper
   end
   
   def grievancecat_instruction_2
-    "Add a GRIEVANCE TYPE - not more than 50 characters long.  HR2.0 will prevent you from adding duplicate entries."  
+    "Enter a GRIEVANCE TYPE - not more than 50 characters long.  HR2.0 will prevent you from adding duplicate entries."  
   end
 end
