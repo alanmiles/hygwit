@@ -1,0 +1,278 @@
+require 'spec_helper'
+
+describe "GrievancePages" do
+  subject { page }
+  
+  before do
+    @user = FactoryGirl.create(:user)
+    @country = FactoryGirl.create(:country, created_by: 1, checked: true)
+    @sector = FactoryGirl.create(:sector, created_by: 1, checked: true)
+    @business = FactoryGirl.create(:business, country_id: @country.id, sector_id: @sector.id, created_by: @user.id)
+    @grievance_cat = @business.grievance_cats.create(reason: "No reviews")
+  end
+  
+  describe "not logged in" do
+  
+    describe "index page" do
+      
+      before { visit business_grievance_cats_path(@business) }
+      
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    end
+      
+    describe "new page" do
+      
+      before { visit new_business_grievance_cat_path(@business) }
+      
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    end
+      
+    describe "edit page" do
+      
+      before do 
+        visit edit_grievance_cat_path(@grievance_cat)
+      end
+              
+      it "should render the home page" do
+        page.should have_selector('.alert', text: 'Please sign in')
+        page.should have_selector('h1', text: 'Sign in') 
+      end
+    end
+    
+    describe "when trying to change the grievance_cat data" do
+      
+      describe "with a PUT request" do
+        before { put grievance_cat_path(@grievance_cat) }
+        specify { response.should redirect_to(root_path) }
+      end
+      
+      describe "with a DELETE request" do
+        before { delete grievance_cat_path(@grievance_cat) }
+        specify { response.should redirect_to(root_path) }        
+      end
+    end
+  end
+  
+  describe "logged in"do
+  
+    before { sign_in @user }
+    
+    describe "not business admin" do
+    
+      describe "index page" do
+      
+        before { visit business_grievance_cats_path(@business) }
+      
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+      
+      describe "new page" do
+      
+        before { visit new_business_grievance_cat_path(@business) }
+      
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+      
+      describe "edit page" do
+      
+        before do 
+          visit edit_grievance_cat_path(@grievance_cat)
+        end
+              
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+    
+      describe "when trying to change the grievance_cats data" do
+      
+        describe "with a PUT request" do
+          before { put grievance_cat_path(@grievance_cat) }
+          specify { response.should redirect_to @user }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete grievance_cat_path(@grievance_cat) }
+          specify { response.should redirect_to @user }        
+        end
+      end
+    end
+  
+    describe "business admin, but without access to Settings" do
+     
+      before do
+        @business_2 = FactoryGirl.create(:business, name: "Biz 2", country_id: @country.id, sector_id: 
+        									@sector.id, created_by: @user.id)    
+        @bizadmin = FactoryGirl.create(:business_admin, business_id: @business_2.id, user_id: @user.id, created_by: 1)
+      end
+      
+      describe "index page" do
+      
+        before { visit business_grievance_cats_path(@business) }
+      
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+      
+      describe "new page" do
+      
+        before { visit new_business_grievance_cat_path(@business) }
+      
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+      
+      describe "edit page" do
+      
+        before do 
+          visit edit_grievance_cat_path(@grievance_cat)
+        end
+              
+        it "should render the home page" do
+          page.should have_selector('.alert', text: "Sorry, you're not a registered officer")
+          page.should have_selector('h1', text: 'User Home Page') 
+        end
+      end
+    
+      describe "when trying to change the grievance_cats data" do
+      
+        describe "with a PUT request" do
+          before { put grievance_cat_path(@grievance_cat) }
+          specify { response.should redirect_to @user }
+        end
+      
+        describe "with a DELETE request" do
+          before { delete grievance_cat_path(@grievance_cat) }
+          specify { response.should redirect_to @user }        
+        end
+      end
+      
+    end
+  
+    describe "business admin, with access to Settings" do
+  
+      before do
+        @bizadmin = FactoryGirl.create(:business_admin, business_id: @business.id, user_id: @user.id, created_by: 1)
+        @grievance_cat_2 = @business.grievance_cats.create(reason: "Underpaid") 
+        #add employee records - then prevent deletion if already used.
+      end
+    
+      describe "index page" do
+      
+        before { visit business_grievance_cats_path(@business) }
+      
+        it { should have_selector('h1', text: 'Grievance Types') }
+        it { should have_selector('h1', text: @business.name) }
+        it { should have_selector('li', text: @grievance_cat.grievance) }
+        it { should have_selector('li', text: @grievance_cat_2.grievance) }
+        it { should have_link('edit', href: edit_grievance_cat_path(@grievance_cat)) }
+        it { should have_link('edit', href: edit_grievance_cat_path(@grievance_cat_2)) }
+        it { should have_link('del', href: grievance_cat_path(@grievance_cat)) }
+        it { should have_link('Add a grievance type', href: new_business_grievance_cat_path(@business)) }
+        it { should have_link('Back to Business Settings Menu', href: business_path(@business)) }
+        
+        describe "no delete link for grievance_cats that have already been used" do
+          pending "Add when employee records are in place"
+          #it { should_not have_link('del', href: leaving_cat_path(@leaving_cat_2)) }
+        end
+        
+        it "should delete grievance_cat (when delete button is shown)" do
+          expect { click_link('del') }.to change(@business.grievance_cats, :count).by(-1)
+        end
+      end
+      
+      
+      describe "new page" do
+      
+        before { visit new_business_grievance_cat_path(@business) }
+      
+        it { should have_selector('h1', text: 'New Grievance Type') }
+        it { should have_selector('h1', text: @business.name) }
+        it { should have_selector("input#grievance_cat_grievance") }
+        it { should have_link("All grievance types", href: business_grievance_cats_path(@business)) }
+        it { should have_link("Business settings", href: business_path(@business)) }
+      
+        describe "creating a new grievance reason" do
+      
+          before { fill_in "Grievance",  with: "Colleague dispute" }
+        
+          it "should create a grievance type" do
+            expect { click_button "Create" }.to change(@business.grievance_cats, :count).by(1)
+            page.should have_selector('h1', text: "Grievance Types")
+            page.should have_selector('h1', text: @business.name)
+            page.should have_selector('div.alert.alert-success', text: "'Colleague dispute' has been added")
+          end         
+        end
+      
+        describe "creating a record that fails validation" do
+      
+          before { fill_in "Grievance",  with: "" }
+        
+          it "should not create a grievance type" do
+            expect { click_button "Create" }.not_to change(GrievanceCat, :count)
+            page.should have_selector('h1', text: 'New Grievance Type')
+            page.should have_content('error')
+          end  
+      
+        end
+      
+      end
+      
+      describe "edit page" do
+      
+        before { visit edit_grievance_cat_path(@grievance_cat) }
+      
+        it { should have_selector('h1', text: 'Edit Grievance Type') }
+        it { should have_selector('h1', text: @business.name) }
+        it { should have_selector("input#grievance_cat_grievance") }
+        it { should have_link("All grievance types", href: business_grievance_cats_path(@business)) }
+        it { should have_link("Business settings", href: business_path(@business)) }
+      
+        describe "editing the grievance type" do
+      
+          let(:new_grievance) { "foobar" }
+          before do
+            fill_in 'Grievance', with: new_grievance
+            click_button "Save change" 
+          end
+          
+          it { should have_selector('title', text: 'Grievance Types') }
+          it { should have_selector('div.alert.alert-success') }
+          specify { @grievance_cat.reload.grievance.should == new_grievance }
+          specify { @grievance_cat.reload.updated_by.should == @user.id }
+               
+        end
+      
+        describe "grievance type that fails validation" do
+      
+          let(:new_grievance) { " " }
+          before do
+            fill_in 'Grievance', with: new_grievance
+            click_button "Save change" 
+          end
+        
+          it { should have_selector('title', text: 'Edit Grievance Type') }
+          it { should have_content('error') }
+          specify { @grievance_cat.reload.grievance.should == @grievance_cat.grievance }
+        end
+      end
+    end
+  end
+end

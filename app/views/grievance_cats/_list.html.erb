@@ -1,0 +1,9 @@
+      <% @grievance_cats.each do |grievance| %>
+        <li>
+          <%= grievance.grievance %>
+          
+          | <%= link_to "edit", edit_grievance_cat_path(grievance) %>
+          | <%= link_to "del", grievance_cat_path(grievance), method: :delete,
+                       data: { confirm: "Delete '#{grievance.grievance}'. Are you sure?" } %>
+        </li>
+      <% end %>

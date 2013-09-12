@@ -1,5 +1,11 @@
 Hygwit::Application.routes.draw do
 
+  get "grievance_cats/index"
+
+  get "grievance_cats/new"
+
+  get "grievance_cats/edit"
+
   resources :users
   resources :password_resets
   resources :nationalities
@@ -69,6 +75,7 @@ Hygwit::Application.routes.draw do
     resources :old_absence_cats, only: :index
     resources :leaving_cats, shallow: true
     resources :disciplinary_cats, shallow: true
+    resources :grievance_cats, shallow: true
   end
 
   root to: 'static_pages#home'

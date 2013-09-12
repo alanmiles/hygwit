@@ -1,0 +1,29 @@
+<% provide(:title, 'New Grievance Type') %>
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @business.name %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+       <div class="instruction">
+        <div class="line-space">
+          <%= grievance_cat_instruction_2 %>
+        </div>
+      </div>
+      </div>
+    </section>
+  </aside>
+  <div class="span6 offset0">
+    <h1>New Grievance Type</h1>
+    <%= form_for([@business, @grievance_cat]) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Create", class: "btn btn-primary" %>
+      <%= link_to "All grievance types", business_grievance_cats_path(@business), class: "btn" %>
+      <%= link_to "Business settings", @business, class: "btn" %>
+    <% end %>
+  </div>
+</div>
