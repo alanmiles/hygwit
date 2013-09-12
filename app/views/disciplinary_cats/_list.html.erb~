@@ -1,0 +1,11 @@
+      <% @leaving_cats.each do |reason| %>
+        <li>
+          <%= reason.reason %>
+          <% if reason.full_benefits? %>
+            | Full leaving benefits
+          <% end %>
+          | <%= link_to "edit", edit_leaving_cat_path(reason) %>
+          | <%= link_to "del", leaving_cat_path(reason), method: :delete,
+                       data: { confirm: "Delete '#{reason.reason}'. Are you sure?" } %>
+        </li>
+      <% end %>

@@ -1,27 +1,5 @@
 Hygwit::Application.routes.draw do
 
-  get "leaving_cats/index"
-
-  get "leaving_cats/new"
-
-  get "leaving_cats/edit"
-
-  get "old_absence_cats/index"
-
-  get "absence_cats/index"
-
-  get "absence_cats/new"
-
-  get "absence_cats/edit"
-
-  get "old_jobs/index"
-
-  get "jobs/index"
-
-  get "jobs/new"
-
-  get "jobs/edit"
-
   resources :users
   resources :password_resets
   resources :nationalities
@@ -90,6 +68,7 @@ Hygwit::Application.routes.draw do
     resources :absence_cats, shallow: true
     resources :old_absence_cats, only: :index
     resources :leaving_cats, shallow: true
+    resources :disciplinary_cats, shallow: true
   end
 
   root to: 'static_pages#home'

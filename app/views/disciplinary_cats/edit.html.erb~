@@ -1,0 +1,30 @@
+<% provide(:title, "Edit Disciplinary Category") %> 
+<div class="row">
+  <aside class="span3">
+    <section>
+      <h1 class="line-space">
+        <%= @business.name %>
+      </h1>
+    </section>
+    <section>
+      <div class="instruction">
+        <div class="line-space">
+          
+        </div>
+        <div class="line-space">
+          
+        </div> 
+      </div>
+    </section>
+  </aside>
+  <div class="span6 offset0">
+    <h1>Edit Disciplinary Category</h1>
+    <%= form_for(@disciplinary_cat) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
+      <%= render 'fields', f: f %>
+      <%= f.submit "Save changes", class: "btn btn-primary" %>
+      <%= link_to "All disciplinary categories", business_disciplinary_cats_path(@business), class: "btn" %>
+      <%= link_to "Business settings", @business, class: "btn" %>
+    <% end %>
+  </div>
+</div>

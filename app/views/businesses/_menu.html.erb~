@@ -25,7 +25,7 @@
     <li><%= link_to "Overtime", "#" %></li>
     <li><%= link_to "Shift Timings", "#" %></li>
     <li><%= link_to "Absence Types", business_absence_cats_path(@business) %></li>
-    <li><%= link_to "Leaving Reasons", "#" %></li>
+    <li><%= link_to "Leaving Reasons", business_leaving_cats_path(@business) %></li>
     <li><%= link_to "Disciplinary Categories", "#" %></li>
     <li><%= link_to "Grievance Types", "#" %></li>
   </div>
