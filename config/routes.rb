@@ -1,5 +1,11 @@
 Hygwit::Application.routes.draw do
 
+  get "joiner_activities/index"
+
+  get "joiner_activities/new"
+
+  get "joiner_activities/edit"
+
   get "contract_cats/index"
 
   get "contract_cats/new"
@@ -83,6 +89,9 @@ Hygwit::Application.routes.draw do
     resources :disciplinary_cats, shallow: true
     resources :grievance_cats, shallow: true
     resources :contract_cats, shallow: true
+    resources :joiner_activities, shallow: true do
+      collection { post :sort }
+    end
   end
 
   root to: 'static_pages#home'

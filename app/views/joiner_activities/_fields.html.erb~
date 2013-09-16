@@ -1,0 +1,29 @@
+<div class= "line-space"> 
+  <%= f.label :action %>
+  <%= f.text_field :action %>
+</div>
+<h5>APPLIES TO:</h5>
+<div style="clear:both" class="line-space"> 
+  <span class="span4 r-float"><%= f.select :contract, CONTRACTS %></span>
+  <%= f.label :contract, class: "vert-down" %>          
+</div>
+
+<div class= "line-space" style= "clear:both">
+  <span class="span4 r-float"><%= f.select :nationality, NATIONALITY %></span> 
+  <%= f.label :nationality, class: "vert-down" %>
+</div>
+
+<div class= "line-space" style= "clear:both"> 
+  <span class="span4 r-float" ><%= f.select :residence, RESIDENCE %></span>
+  <%= f.label :residence, "Hiring point", class: "vert-down" %>
+</div>
+
+<div class= "line-space", style="clear:both">
+  <span class="span4 r-float"><%= f.select :marital_status, MARITAL_STATUS %></span> 
+  <%= f.label :marital_status, class: "vert-down" %>
+</div>
+
+<%= render "shared/superuser_check", {f: f, object: f.object} %>
+
+<div style="clear:both"><%= f.hidden_field :updated_by %></div>
+<%= f.hidden_field :created_by %>
