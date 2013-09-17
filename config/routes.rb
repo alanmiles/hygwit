@@ -1,5 +1,11 @@
 Hygwit::Application.routes.draw do
 
+  get "leaver_activities/index"
+
+  get "leaver_activities/new"
+
+  get "leaver_activities/edit"
+
   get "joiner_activities/index"
 
   get "joiner_activities/new"
@@ -90,6 +96,9 @@ Hygwit::Application.routes.draw do
     resources :grievance_cats, shallow: true
     resources :contract_cats, shallow: true
     resources :joiner_activities, shallow: true do
+      collection { post :sort }
+    end
+    resources :leaver_activities, shallow: true do
       collection { post :sort }
     end
   end

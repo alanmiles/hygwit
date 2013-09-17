@@ -1,0 +1,25 @@
+     <li class="list-header">
+        <span class="span1">(move)</span>
+        <span class="span2">Action</span>
+        <span class="span1">Contract</span>
+        <span class="span1">Nationality</span>
+        <span class="span1">Hiring point</span>
+        <span class="span1">Marital status</span>
+     </li>
+     
+     <% @leaver_activities.each do |activity| %>
+        <%= content_tag_for :li, activity do %>
+          <span class="span1">
+            <span class="handle"><%= image_tag "dragdrop.png" %></span>
+          </span>
+          <span class="span2"><%= activity.action %></span>
+          <span class="span1"><%= activity.contract_status %></span>
+          <span class="span1"><%= activity.nationality_status %></span>
+          <span class="span1"><%= activity.residence_status %></span>
+          <span class="span1"><%= activity.mar_status %></span>
+          | <%= link_to "edit", edit_leaver_activity_path(activity) %>
+          | <%= link_to "del", activity, method: :delete,
+                       data: { confirm: "Delete '#{activity.action}'. Are you sure?" } %>
+          
+        <% end %>
+      <% end %>
